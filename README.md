@@ -1,14 +1,14 @@
 # Projet site web jeux JS
 
-L'objectid de ce projet est de réaliser un site web avec 3 jeux :
+L'objectif de ce projet est de réaliser un site web avec 3 jeux :
 
-## *I/ Game on the web*
+## *I/ Game on Web*
 
 ### Titre :
 
 ### Objectif et concept du jeu :
 
-Jake un jeune enfant doit récupérer les 5 anneaux olympiques présent sur 5 continents.
+Jake (nom temporaire), est un jeune enfant qui doit récupérer les 5 anneaux olympiques présent sur 5 continents. Le jeu est un plateformeur 3D
 
 
 ### Fonctionnalité de base du joueur :
@@ -19,7 +19,13 @@ Saut, Déplacement
 
 Attaque, Parade, Ruée, Double saut, Arc (Attaque à distance)
 
+### Liste des succès :
 
+- Mon précieux : Récupérer le premier anneau
+- Les Deux font la Paire : Récupérer le deuxième anneau
+- Jamais 2 sans 3 : Récupérer le troisième anneau
+- Les 4 Fantastiques : Récupérer le quatrième anneau
+- Les 5 Doigts de la Fin : Récupérer le 5ème et dernier anneau
 
 ## *II/ Snake*
 
@@ -40,6 +46,9 @@ Système de boutique - Personnalisation des paramètres de la partie - Possibili
 - Salade de fruit : Atteindre un score de 10
 - ENCORE PLUS ! : Atteindre un score de 20
 - Plus rapide que son ombre : Jouer une partie avec la vitesse au maximum
+- Faux Départ : Mourir avec un score de 0
+- Fashionista : Débloquer tous les skins
+- Ouroboros : Obtenir le nombre maximum de fruit en mode classique
 
 ## III/ Puissance 4
 
@@ -60,3 +69,6 @@ Possibilité de mettre le jeu en pause - Possibilité d'activer et de désactive
 - C'est parti : Jouer une partie
 - Aligné : Gagner une partie en alignant 4 jetons sur la première ligne
 - Trop fort : Faire un puissance 5
+- Perfection : Faire un puissance 6
+- La Fin ? : Faire un puissance 7
+- GG ! : Faire une égalité (grille pleine sans puissance 4)
