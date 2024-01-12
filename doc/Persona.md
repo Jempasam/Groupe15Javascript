@@ -60,3 +60,35 @@ Bobby est un collégien en 3ème, qui adore faire rire les autres. Il est très 
 ### Le matériel utilisé :
 - Ordinateur
 - Téléphone
+
+# III/ Henry MULPO
+
+   O <br>
+  /|\ <br>
+  / \ <br>
+
+
+### Nom : MULPO
+### Prénom : Henry
+### Âge : 57 ans                             
+### Situation : Marié
+### Domicile : Pogny
+
+### Informations :
+
+Henry est professeur d'histoire dans un collège. Il a des problèmes de vue et une légère forme de daltonisme. Il aime pouvoir jouer aux jeux de sociétés avec ces petits enfants.
+
+
+### Ses attentes : 
+- Il souhaite pouvoir jouer avec sa famille
+- Il aime quand les interfaces sont simple et lisible
+- Il aime découvrir des nouvelles histoires
+
+### Ses frustrations :
+- Il n’aime pas quand il ne peut pas distinguer les couleurs
+- Il n’aime pas quand il ne comprend pas les règles
+- 
+
+
+### Le matériel utilisé :
+- Ordinateur
