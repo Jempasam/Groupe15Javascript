@@ -2,7 +2,7 @@
 
 L'objectif de ce projet est de réaliser un site web avec 3 jeux :
 
-## *I/ Game on Web*
+## *I/ Games on Web*
 
 ### Titre :
 
