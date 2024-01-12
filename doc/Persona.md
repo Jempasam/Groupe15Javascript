@@ -87,7 +87,7 @@ Henry est professeur d'histoire dans un collège. Il a des problèmes de vue et 
 ### Ses frustrations :
 - Il n’aime pas quand il ne peut pas distinguer les couleurs
 - Il n’aime pas quand il ne comprend pas les règles
-- 
+- Il aime les gameplay simple.
 
 
 ### Le matériel utilisé :
