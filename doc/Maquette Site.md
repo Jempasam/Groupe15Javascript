@@ -37,5 +37,9 @@ Si il souhaite s'inscrire il devra aller sur une nouvelle page.
 
 ### Maquettes
 
-
 Pour pouvoir mieux visualiser le tout, nous avons effectués 2 maquettes différentes permettant d'avoir plusieurs choix d'interface et plusieurs points de vues. Cela nous permet donc de voir les points positifs et négatifs et d'effectuer l'interface la plus agréable et pratique possible pour les utilisateurs
+
+
+Maquette 1 : https://www.figma.com/file/rbdteylDrWFGHsrtoZw0ru/Site-Web?type=design&node-id=0%3A1&mode=design&t=6A1qoGpCLqAPshtO-1
+
+Maquette 2 : https://www.figma.com/file/E3m5h25pNZvFeseEOoxU9Y/Untitled?type=design&node-id=0%3A1&mode=design&t=qSJwzc4S7ib8H8xr-1
