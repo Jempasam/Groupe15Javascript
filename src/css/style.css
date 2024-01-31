@@ -1,5 +1,3 @@
-body {
-    background-color: #808080; /* Code couleur gris (en hexadécimal) */
-    /* Ou utilise le nom de couleur : background-color: gray; */
-    /* Ou utilise le code RGB : background-color: rgb(128, 128, 128); */
-}
+#myCanvas {
+    border:1px solid black;
+  }
