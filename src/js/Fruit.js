@@ -56,4 +56,6 @@ export default class Fruit {
         ctx.restore();
         this.nbFruitsSpawn ++;
       }
+
+    
 }

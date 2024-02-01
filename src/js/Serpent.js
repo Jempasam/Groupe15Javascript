@@ -4,12 +4,21 @@ export default class Serpent {
         this.x = 50;
         this.y = 50;
         this.nbFruits = 0;
+        this.segments = [];
+
     }
 
-    move(posX, posY)
-    {
+    move(posX, posY) {
+        // Ajouter la nouvelle position en tant que premier segment
+        this.segments.unshift({ x: this.x, y: this.y });
+    
+        // Supprimer les anciennes coordonnées si la longueur des segments dépasse nbFruits * 10
+        while (this.segments.length > this.nbFruits * 1) {
+            this.segments.pop();
+        }
+    
         this.x += posX;
-        this.y += posY
+        this.y += posY;
     }
 
     getPositionX()
@@ -39,7 +48,7 @@ export default class Serpent {
     AddNbFruits()
     {
         this.nbFruits ++;
-    }
+    }    
 
     drawSerpent(ctx, zoom, angle)
     {
@@ -54,34 +63,25 @@ export default class Serpent {
         ctx.rotate(angle);
 
         // On dessine le serpent en 0, 0
-  
         ctx.fillStyle = 'red';
         ctx.fillRect(0, -25, 75, 50);
-        ctx.fillStyle = 'green';
-        ctx.fillRect(-25, -25, 50, 50);
   
         ctx.restore();
     }
 
-    drawGrossir(ctx, zoom, angle)
-    {
-        for (let i = 0 ; i < this.nbFruits; i++)
-        {
-            let grossirX = -50 * (i + 1);
+    // On le fait grossir en fonction de la taille du serpent
 
+    drawGrossir(ctx, zoom, angle) {
+        for (let i = 0; i < this.nbFruits * 1; i++) {
+            let segment = this.segments[i];
             ctx.save();
-
-            ctx.translate(this.x, this.y)
-    
-            ctx.scale(zoom,zoom);
-    
-            ctx.rotate(angle)
-    
+            ctx.translate(segment.x, segment.y);
+            ctx.scale(zoom, zoom);
+            ctx.rotate(angle);
             ctx.fillStyle = 'blue';
-            ctx.fillRect(grossirX,-25, 55, 50);
-    
+            ctx.fillRect(0, -25, 55, 50);
             ctx.restore();
         }
-
     }
+
 }
