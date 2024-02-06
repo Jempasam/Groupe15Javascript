@@ -64,6 +64,8 @@ export class Player extends Entities {
         });
     }
 
+    
+
     detectWarpZone(listeWarpZones){
         listeWarpZones.forEach(warpZone => {
             if (this.mesh.intersectsMesh(warpZone.mesh, true)){
@@ -142,28 +144,23 @@ export class Player extends Entities {
         this.detectKillZone(listes[3], listes[0]);
         
         //avance dans la direction du mouvement
-        if (keyState['z'] || keyState['Z']) {
+        if (keyState['KeyW']) {
             console.log("z");
             this.vectorSpeed.z-= this.playerSpeed;
         }
-        if (keyState['s'] || keyState['S']) {
+        if (keyState['KeyS']) {
             console.log("s");
             this.vectorSpeed.z+= this.playerSpeed;
         }
-        if (keyState['q'] || keyState['Q']) {
+        if (keyState['KeyA']) {
             console.log("q");
             this.vectorSpeed.x+= this.playerSpeed;
         }
-        if (keyState['d'] || keyState['D']) {
+        if (keyState['KeyD']) {
             console.log("d");
             this.vectorSpeed.x-= this.playerSpeed;
         }
-        if (keyState[' '] && this.canJump) {
-            console.log("space");
-            this.vectorSpeed.y+= this.jumpPower;
-        }
-
-        if (keyState[' '] && this.canJump) {
+        if (keyState['Space'] && this.canJump) {
             console.log("space");
             this.vectorSpeed.y+= this.jumpPower;
         }

@@ -30,6 +30,7 @@ export class LvlTest {
     const ground5 = new Ground("Ground5",-9, 0, -1, 4, 1, 4,this.scene);
     //tourner le sol
     ground5.mesh.rotation.x = Math.PI/6;
+
     //actualiser les collisions
     ground5.mesh.refreshBoundingInfo();
     listes[1].push(ground5);
