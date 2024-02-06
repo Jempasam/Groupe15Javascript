@@ -21,31 +21,32 @@ let listeWalls = [];
 let listeKillZones = [];
 let listeWarpZones = [];
 let listeLvlWarps = [];
-
+let listes;
+let decor;
 let nbLevel = -1;
 
 
 var createScene = function() {
     scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color3.Black;
-    const camY = 15;
+    const camY = 10;
     const camZ = 10;
 
     //créer une camera qui regarde en 0,0,0
     camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, camY, camZ), scene);
-    
+    camera.setTarget(BABYLON.Vector3.Zero());
     camera.attachControl(canvas, true);
 
     //créer une lumière
     const light1 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 5,6));
 
     //créer un joueur
-    player = new Player("Player",0, 0, 0, 1, 1, 1, 0.005, 0.1, scene);
+    player = new Player("Player",0, 0, 0, 1, 1, 1, 0.01, 0.1, scene);
     //player = scene.player;
     camera.lockedTarget = player.mesh;
-    let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
     //appeler le niveau
-    let test = new LvlTest(player, listes);
+    decor = new LvlTest(player, listes);
     
 
     definitEcouteurs();
@@ -71,67 +72,70 @@ function definitEcouteurs() {
 
 //déplacer le joueur
 function movePlayer(){
-    player.move(keyState, listeMonstres);
+    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
+    player.move(keyState, listes);
+    detectLvlWarp();
     camera.position.x = player.mesh.position.x;
     
 }
 
-//collisions avec tout les objets
-player.mesh.onCollideObservable.add((collidedMesh)=>{
-    let touche = collidedMesh;
-    //console.log(touche.name);
-    if (touche.name.includes("lvlWarp")) {
-        nbLevel = touche.nbLevel;
-        //enlever les monstres
-        listeMonstres.forEach(monstre => {
-            monstre.mesh.dispose();
-        });
-        listeMonstres = [];
-        //enlever les sols
-        listeGrounds.forEach(ground => {
-            ground.mesh.dispose();
-        });
-        listeGrounds = [];
-        //enlever les murs
-        listeWalls.forEach(wall => {
-            wall.mesh.dispose();
-        });
-        listeWalls = [];
-        //enlever les killZones
-        listeKillZones.forEach(killZone => {
-            killZone.mesh.dispose();
-        });
-        listeKillZones = [];
-        //enlever les warpZones
-        listeWarpZones.forEach(warpZone => {
-            warpZone.mesh.dispose();
-        });
-        listeWarpZones = [];
-        //enlever les lvlWarps
-        listeLvlWarps.forEach(lvlWarp => {
-            lvlWarp.mesh.dispose();
-        });
-        listeLvlWarps = [];
-        let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
-        let test;
-        switch (nbLevel) {
-            case -1:
-                test = new LvlTest(player, listes);
-                break;
-            case 0:
-                test = new LvlAccueil(player, listes);
-                break;
-            default:
-                break;
+//detecter la collision entre le joueur et un LvLWarp
+function detectLvlWarp(){
+    listeLvlWarps.forEach(lvlWarp => {
+        if (player.mesh.intersectsMesh(lvlWarp.mesh, false)){
+            nbLevel = lvlWarp.nbLevel;
+            console.log("lvlWarp");
+            console.log(nbLevel);
+            changeLevel();
         }
-        console.log(nbLevel);
+    });
+}
 
+//changer de niveau
+function changeLevel(){
+    //supprimer les anciens éléments
+    listeMonstres.forEach(monstre => {
+        monstre.mesh.dispose();
+        monstre = null;
+    });
+    listeMonstres = [];
+    listeGrounds.forEach(ground => {
+        ground.mesh.dispose();
+        ground = null;
+    });
+    listeGrounds = [];
+    listeWalls.forEach(wall => {
+        wall.mesh.dispose();
+        wall = null;
+    });
+    listeWalls = [];
+    listeKillZones.forEach(killZone => {
+        killZone.mesh.dispose();
+        killZone = null;
+    });
+    listeKillZones = [];
+    listeWarpZones.forEach(warpZone => {
+        warpZone.mesh.dispose();
+        warpZone = null;
+    });
+    listeWarpZones = [];
+    listeLvlWarps.forEach(lvlWarp => {
+        lvlWarp.mesh.dispose();
+        lvlWarp = null;
+    });
+    listeLvlWarps = [];
 
-    } else {
-        player.collisionCheck(touche, listeMonstres); 
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
+    //supprimer le décor
+    //changer de niveau
+    if (nbLevel == -1){
+        decor = new LvlTest(player, listes);
     }
-});
-
+    if (nbLevel == 0){
+        
+        decor = new LvlAccueil(player, listes);
+    }
+}
 
 
 //boucle de rendu
@@ -140,16 +144,15 @@ engine.runRenderLoop(function () {
     movePlayer();
     //faire chercher le joueur par les monstres
     listeMonstres.forEach(monstre => {
-        monstre.chercheJoueur(player);
-        monstre.collisionCheck(player, listeMonstres);
+        monstre.chercheJoueur(player, listeMonstres, listeGrounds);
         //si le monstre touche un sol, arrete de tomber
-        monstre.mesh.onCollideObservable.add((collidedMesh)=>{
+        /*monstre.mesh.onCollideObservable.add((collidedMesh)=>{
             let touche = collidedMesh;
             monstre.auSol(touche);
-        })
-        monstre.move();
+        })*/
     });
+    //afficher les pv actuels du joueur
+    document.getElementById("pv").innerHTML = "PV: " + player.pv;
 
 
 });
-

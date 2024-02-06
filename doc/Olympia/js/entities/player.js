@@ -14,68 +14,133 @@ export class Player extends Entities {
         this.canJump = false;
         this.direction = new BABYLON.Vector3(0,0,0);
         console.log(this.mesh.ellipsoidOffset);
+        this.canTakeDamage = true;
+        this.pvMax = 5;
+        this.pv = this.pvMax;
 
-        /*this.pvMax = 5;
-        this.pv = this.pvMax;*/
+        //temps d'invincibilité après avoir pris des dégats
+        this.immortalTime = 1000;
 
         //afficher l'ellipsoide
         //this.mesh.showBoundingBox = true;
 
     }
     // Autres méthodes de la classe Player
-    //agit en fonction des collisions avec les murs, les sols et les killzones
-    collisionCheck(touche,listeMonstres){
-        if (touche.name.includes("Ground")) {
-            //pose le joueur sur le sol lorsqu'il tombe dessus et redonne un saut
-            if (this.vectorSpeed.y < 0 && this.mesh.position.y > (touche.position.y + touche.scaling.y/2+this.mesh.scaling.y/2)){
-                this.vectorSpeed.y = 0;
-                this.canJump = true;
-            }
-    
-        }
-        if (touche.name.includes("Wall")) {
-            //pose le joueur sur le sol lorsqu'il tombe dessus
-            if (this.vectorSpeed.y < 0 && this.mesh.position.y > touche.position.y + touche.scaling.y/2){
-                this.mesh.position.y = touche.position.y + touche.scaling.y/2 + this.mesh.scaling.y/2;
-                this.vectorSpeed.y = 0;
-            }
-        }
-        if (touche.name.includes("KillZone")) {
-            //tue le joueur
-            console.log("kill");
-            this.mesh.position.x = 0;
-            this.mesh.position.y = 0;
-            this.mesh.position.z = 0;
-            this.vectorSpeed.x = 0;
-            this.vectorSpeed.y = 0;
-            this.vectorSpeed.z = 0;
-            //repositionne tout les  monstres
-            listeMonstres.forEach(monstre => {
-                monstre.mesh.position.x = monstre.positionDepart.x;
-                monstre.mesh.position.y = monstre.positionDepart.y;
-                monstre.mesh.position.z = monstre.positionDepart.z;
-                monstre.vectorSpeed.x = 0;
-                monstre.vectorSpeed.y = 0;
-                monstre.vectorSpeed.z = 0;
-            });
-        }
-        if (touche.name.includes("warpZone")) {
-            this.mesh.position.x = touche.xOut;
-            this.mesh.position.y = touche.yOut;
-            this.mesh.position.z = touche.zOut;
-            console.log("warp");
-            console.log(this.mesh.position);
+    //detecter si un sol est juste en dessous de nous
+    detectGround(listeSol){
+        //this.canJump = false;
+        //créer un point juste sous le joueur
+        let point = new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y-0.51, this.mesh.position.z);
+        //affiche le point
+        /*let pointMesh = BABYLON.MeshBuilder.CreateSphere("point", {diameter: 0.1}, this.scene);
+        pointMesh.position = point;
+        pointMesh.material = new BABYLON.StandardMaterial("pointMaterial", this.scene);
+        pointMesh.material.diffuseColor = BABYLON.Color3.Blue();
+        pointMesh.showBoundingBox = true;*/
 
+        //console.log("point créé");
+        //console.log(point);
+
+        //pour chaque sol
+        listeSol.forEach(sol => {
+            //si le point est dans le sol (attention aux sols en pente)
+            if (sol.mesh.rotation.z != 0 || sol.mesh.rotation.x != 0){
+            if (this.mesh.intersectsMesh(sol.mesh, true) ){
+                //on peut sauter
+                this.canJump = true;
+                //on arrête de tomber
+                this.vectorSpeed.y = 0;
+            }
+        } else {
+            if (sol.mesh.intersectsPoint(point)){
+                //on peut sauter
+                this.canJump = true;
+                //on arrête de tomber
+                this.vectorSpeed.y = 0;
+                this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2);
+            }
+        }
+        //pointMesh.dispose();
+        });
+    }
+
+    detectWarpZone(listeWarpZones){
+        listeWarpZones.forEach(warpZone => {
+            if (this.mesh.intersectsMesh(warpZone.mesh, true)){
+                this.mesh.position.x = warpZone.mesh.xOut;
+                this.mesh.position.y = warpZone.mesh.yOut;
+                this.mesh.position.z = warpZone.mesh.zOut;
+                this.vectorSpeed.x = 0;
+                this.vectorSpeed.y = 0;
+                this.vectorSpeed.z = 0;
+                this.x = warpZone.xOut;
+                this.y = warpZone.yOut+ this.mesh.ySize;
+                this.z = warpZone.zOut;
+                console.log("warp");
+                console.log(this.mesh.position.x, this.mesh.position.y, this.mesh.position.z)
+            }
+        });
+    }
+
+    detectKillZone(listeKillZones, listeMonstres){
+        //si le joueur touche une killZone et qu'il peut prendre des dégats
+        if (this.canTakeDamage && this.pv > 0){
+            listeKillZones.forEach(killZone => {
+                if (this.mesh.intersectsMesh(killZone.mesh, true)){
+                    this.takeDamage();
+                }
+            });
+        } else if (this.pv <= 0){
+            this.killPlayer();
+            listeMonstres.forEach(monstre => {
+                monstre.resetPosition();
+            });
         }
     }
 
+    takeDamage(){
+        this.pv -= 1;
+        this.canTakeDamage = false;
+        //changer la couleur du joueur
+        this.mesh.material.diffuseColor = BABYLON.Color3.White();
+        //attendre 1 seconde avant de pouvoir reprendre des dégats
+        setTimeout(() => {
+            //changer la couleur du joueur
+            this.mesh.material.diffuseColor = BABYLON.Color3.Red();
+            this.canTakeDamage = true;
+            
+        }, this.immortalTime);
+    }
+
+    killPlayer(){
+        this.pv = this.pvMax;
+        this.resetPosition();
+    }
+
+    resetPosition(){
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        this.mesh.position = new BABYLON.Vector3(this.x, this.y, this.z);
+        this.vectorSpeed.x = 0;
+        this.vectorSpeed.y = 0;
+        this.vectorSpeed.z = 0;
+
+    }
+
+
     //bouge
-    move(keyState, listeMonstres){
+    move(keyState, listes){
         this.vectorSpeed.x*=0.9;
         this.vectorSpeed.y-=0.005;
         this.vectorSpeed.z*=0.9;
         //tourne vers la direction du mouvement
         this.mesh.lookAt(new BABYLON.Vector3(this.mesh.position.x+this.vectorSpeed.x,this.mesh.position.y,this.mesh.position.z+this.vectorSpeed.z));
+        //detecter si un sol est juste en dessous de nous
+        this.detectGround(listes[1]);
+        this.detectWarpZone(listes[4]);
+        this.detectKillZone(listes[3], listes[0]);
+        
         //avance dans la direction du mouvement
         if (keyState['z'] || keyState['Z']) {
             console.log("z");
@@ -106,27 +171,15 @@ export class Player extends Entities {
     
         this.canJump = false;
         this.mesh.moveWithCollisions(this.vectorSpeed);
-        this.collisionCheck(this.mesh, listeMonstres);
         this.x= this.mesh.position.x;
         this.y= this.mesh.position.y;
         this.z= this.mesh.position.z;
 
         if(this.y < -1000){
-            this.x = 0;
-            this.y = 0;
-            this.z = 0;
-            this.mesh.position = new BABYLON.Vector3(this.x, this.y, this.z);
+            this.resetPosition();
             //repositionne tout les  monstres
-            listeMonstres.forEach(monstre => {
-                monstre.mesh.position.x = monstre.positionDepart.x;
-                monstre.mesh.position.y = monstre.positionDepart.y;
-                monstre.mesh.position.z = monstre.positionDepart.z;
-                monstre.x = monstre.positionDepart.x;
-                monstre.y = monstre.positionDepart.y;
-                monstre.z = monstre.positionDepart.z;
-                monstre.vectorSpeed.x = 0;
-                monstre.vectorSpeed.y = 0;
-                monstre.vectorSpeed.z = 0;
+            listes[0].forEach(monstre => {
+                monstre.resetPosition();
             });
         }
     }

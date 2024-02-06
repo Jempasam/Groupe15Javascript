@@ -7,6 +7,7 @@ export class warpZone extends Entities {
         this.mesh.xOut = xOut;
         this.mesh.yOut = yOut;
         this.mesh.zOut = zOut;
+        this.mesh.checkCollisions = false;
     }
 
     

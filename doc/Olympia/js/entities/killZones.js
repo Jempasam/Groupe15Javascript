@@ -4,6 +4,8 @@ import Entities from "./entities.js";
 export class killZone extends Entities {
     constructor(name,x,y,z,xSize,ySize,zSize, scene) {
         super(name,x,y,z,xSize,ySize,zSize, BABYLON.Color3.Purple(), scene);
-        
+        this.mesh.checkCollisions = false;
+        //rendre un peu transparent
+        this.mesh.visibility = 0.5;
     }
 }

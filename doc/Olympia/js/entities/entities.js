@@ -20,6 +20,8 @@ class Entities {
         this.mesh.scaling.x = this.xSize;
         this.mesh.scaling.y = this.ySize;
         this.mesh.scaling.z = this.zSize;
+        //update la hitbox
+        this.mesh.refreshBoundingInfo();
         this.mesh.position = new BABYLON.Vector3(this.x, this.y, this.z);
         this.mesh.material = new BABYLON.StandardMaterial("entityMaterial", scene);
         this.mesh.material.diffuseColor = this.color;

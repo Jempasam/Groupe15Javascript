@@ -4,7 +4,8 @@ import Entities from "./entities.js";
 export class lvlWarp extends Entities {
     constructor(name,x,y,z,xSize,ySize,zSize, nbLevel, scene) {
         super(name,x,y,z,xSize,ySize,zSize, BABYLON.Color3.White(), scene);
-        this.mesh.nbLevel = nbLevel;
+        this.nbLevel = nbLevel;
+        this.mesh.checkCollisions = false;
     }
     
 }
