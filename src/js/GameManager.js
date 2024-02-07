@@ -31,7 +31,7 @@ function traiteKeyDown(event)
         inputStates.left = true;
         inputStates.down = false;
         inputStates.up = false;
-        angle = Math.PI;
+        angle = 0;
     }
 
     else if (key === "ArrowDown") 
@@ -40,7 +40,7 @@ function traiteKeyDown(event)
         inputStates.left = false;
         inputStates.down = true;
         inputStates.up = false;
-        angle = 1.5708;
+        angle = 0;
     }
 
     else if (key === "ArrowUp") 
@@ -49,7 +49,7 @@ function traiteKeyDown(event)
         inputStates.left = false;
         inputStates.down = false;
         inputStates.up = true;
-        angle = -1.5708;
+        angle = 0;
     }
 }
 
@@ -84,9 +84,9 @@ function init()
 
 function drawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    serpent.drawGrossir(ctx, 0.5, angle);
     serpent.drawSerpent(ctx, 0.5, angle);
     fruit.drawFruit(ctx, 0.5);
-    serpent.drawGrossir(ctx, 0.5, angle);
 }
 
 

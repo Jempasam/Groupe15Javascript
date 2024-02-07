@@ -50,27 +50,25 @@ export default class Serpent {
         this.nbFruits ++;
     }    
 
-    drawSerpent(ctx, zoom, angle)
-    {
+    drawSerpent(ctx, zoom, angle) {
         ctx.save();  
-
+    
         // Déplacement du serpent à la position (x, y)
         ctx.translate(this.x, this.y);
-
+    
         // Zoom du serpent
         ctx.scale(zoom, zoom);
-
+    
+        // Rotation de la tête du serpent
         ctx.rotate(angle);
-
-        // On dessine le serpent en 0, 0
+    
+        // On dessine la tête du serpent en 0, 0
         ctx.fillStyle = 'red';
-        ctx.fillRect(0, -25, 75, 50);
-  
+        ctx.fillRect(0, -25, 50, 50);
+    
         ctx.restore();
     }
-
-    // On le fait grossir en fonction de la taille du serpent
-
+    
     drawGrossir(ctx, zoom, angle) {
         for (let i = 0; i < this.nbFruits * 1; i++) {
             let segment = this.segments[i];
@@ -79,9 +77,10 @@ export default class Serpent {
             ctx.scale(zoom, zoom);
             ctx.rotate(angle);
             ctx.fillStyle = 'blue';
-            ctx.fillRect(0, -25, 55, 50);
+            ctx.fillRect(0, -25, 50, 50);
             ctx.restore();
         }
     }
+    
 
 }
