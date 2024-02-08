@@ -5,6 +5,8 @@ let inputStates = {};
 let vitesse = 5;
 let angle = 0;
 let debugGameOver = 0;
+let PremierCoup = false;
+let Pause = false;
 
 function definirEcouteurs() {
     document.addEventListener("keydown", traiteKeyDown);
@@ -16,7 +18,21 @@ function traiteKeyDown(event)
 {
     const key = event.code;
 
-    if (key === "ArrowRight") 
+        // Ajouter la gestion de la touche "p"
+        if (key === "KeyP") {
+            pause();
+
+        }
+
+    if (key === "ArrowRight" && PremierCoup == false) 
+    {
+        inputStates.right = true;
+        PremierCoup = true;
+    }
+
+    if (inputStates.left == false || inputStates.up == true || inputStates.down == true)
+    {
+        if (key === "ArrowRight") 
     {
         inputStates.right = true;
         inputStates.left = false;
@@ -24,32 +40,43 @@ function traiteKeyDown(event)
         inputStates.up = false;
         angle = 0;
     }
-
-    else if (key === "ArrowLeft") 
-    {
-        inputStates.right = false;
-        inputStates.left = true;
-        inputStates.down = false;
-        inputStates.up = false;
-        angle = 0;
     }
 
-    else if (key === "ArrowDown") 
+    if (inputStates.right == false || inputStates.up == true || inputStates.down == true)
     {
-        inputStates.right = false;
-        inputStates.left = false;
-        inputStates.down = true;
-        inputStates.up = false;
-        angle = 0;
+        if (key === "ArrowLeft") 
+        {
+            inputStates.right = false;
+            inputStates.left = true;
+            inputStates.down = false;
+            inputStates.up = false;
+            angle = 0;
+        }
     }
 
-    else if (key === "ArrowUp") 
+    if (inputStates.right == true || inputStates.up == false || inputStates.left == true)
     {
-        inputStates.right = false;
-        inputStates.left = false;
-        inputStates.down = false;
-        inputStates.up = true;
-        angle = 0;
+        if (key === "ArrowDown") 
+        {
+            inputStates.right = false;
+            inputStates.left = false;
+            inputStates.down = true;
+            inputStates.up = false;
+            angle = 0;
+        }
+    }
+
+
+    if (inputStates.right == true || inputStates.down == false || inputStates.left == true)
+    {
+        if (key === "ArrowUp") 
+        {
+            inputStates.right = false;
+            inputStates.left = false;
+            inputStates.down = false;
+            inputStates.up = true;
+            angle = 0;
+        }
     }
 }
 
@@ -92,29 +119,32 @@ function drawCanvas() {
 
 function mainloop()
 {
-
-    if (inputStates.right)
+    if (Pause == false)
     {
-        serpent.move(vitesse,0);
-    }
+        if (inputStates.right)
+        {
+            serpent.move(vitesse,0);
+        }
 
-    if (inputStates.left)
-    {
-        serpent.move(- vitesse, 0);
-    }
+        if (inputStates.left)
+        {
+            serpent.move(- vitesse, 0);
+        }
 
-    if (inputStates.up)
-    {
-        serpent.move(0, - vitesse);
-    }
+        if (inputStates.up)
+        {
+            serpent.move(0, - vitesse);
+        }
 
-    if (inputStates.down)
-    {
-        serpent.move(0, vitesse);
-    }
+        if (inputStates.down)
+        {
+            serpent.move(0, vitesse);
+        }
 
-    drawCanvas();
     hitbox();
+        
+    }
+    drawCanvas();
     requestAnimationFrame(mainloop);
 }
 
@@ -139,7 +169,7 @@ function hitbox() {
 
         // On détecte une collision entre le serpent et sa queue
 
-        if ( serpentX >= segment.x && serpentX <= segment.x && serpentY >= segment.y && serpentY <= segment.y )
+        if ( serpentX == segment.x && serpentY == segment.y )
         {
             gameOver();
         }
@@ -151,14 +181,28 @@ function hitbox() {
     // On check si le serpent est dans la hitbox du fruit
     if (Math.abs(serpentX - fruitX) <= margin && Math.abs(serpentY - fruitY) <= margin) 
     {
+        TeleportationFruit();
         mangerFruit();
+        hitbox();
+        setTimeout(() => {
+            mangerFruit();
+          }, 1000);
+          TeleportationFruit();
     }
 
 }
 
+
+
 function mangerFruit() 
 {
     serpent.AddNbFruits();
+    serpent.positionQueue();
+    afficherScore()
+}
+
+function TeleportationFruit()
+{
     fruit.setPositionX(getRandomInt(100, 400));
     fruit.setPositionY(getRandomInt(100, 400));
 }
@@ -179,4 +223,23 @@ function gameOver()
 }
 
 
+function pause()
+{
+            if (Pause)
+            {
+                vitesse = 5;
+                Pause = false;
+            }
+            else
+            {
+                vitesse = 0;
+                Pause = true;
+            }
 
+}
+
+
+function afficherScore()
+{
+    document.getElementById("score").innerHTML = "Score : " + Math.round(serpent.segments.length / 2); 
+}

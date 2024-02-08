@@ -9,16 +9,22 @@ export default class Serpent {
     }
 
     move(posX, posY) {
-        // Ajouter la nouvelle position en tant que premier segment
-        this.segments.unshift({ x: this.x, y: this.y });
-    
-        // Supprimer les anciennes coordonnées si la longueur des segments dépasse nbFruits * 10
-        while (this.segments.length > this.nbFruits * 1) {
-            this.segments.pop();
-        }
-    
+
+        this.positionQueue();
         this.x += posX;
         this.y += posY;
+    }
+
+
+    positionQueue()
+    {
+        // Ajouter la nouvelle position en tant que premier segment
+            this.segments.unshift({ x: this.x, y: this.y });
+    
+        // Supprimer les anciennes coordonnées si la longueur des segments dépasse nbFruits * 10
+        while (this.segments.length > this.nbFruits) {
+            this.segments.pop();
+        }
     }
 
     getPositionX()
@@ -70,15 +76,19 @@ export default class Serpent {
     }
     
     drawGrossir(ctx, zoom, angle) {
-        for (let i = 0; i < this.nbFruits * 1; i++) {
-            let segment = this.segments[i];
-            ctx.save();
-            ctx.translate(segment.x, segment.y);
-            ctx.scale(zoom, zoom);
-            ctx.rotate(angle);
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(0, -25, 50, 50);
-            ctx.restore();
+
+        for (let i = 0; i < this.nbFruits; i++) {
+            if (i <= this.nbFruits)
+            {
+                ctx.save();
+                 ctx.translate(this.segments[i].x, this.segments[i].y);
+                 ctx.scale(zoom, zoom);
+                 ctx.rotate(angle);
+                 ctx.fillStyle = 'blue';
+                 ctx.fillRect(0, -25, 50, 50);
+                 ctx.restore();
+
+            }
         }
     }
     
