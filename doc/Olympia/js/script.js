@@ -41,7 +41,7 @@ var createScene = function() {
     const light1 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 5,6));
 
     //créer un joueur
-    player = new Player("Player",0, 0, 0, 1, 1, 1, 0.01, 0.2, scene);
+    player = new Player("Player",0, 0, 0, 1, 1, 1, 0.008, 0.2, scene);
     //player = scene.player;
     camera.lockedTarget = player.mesh;
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];

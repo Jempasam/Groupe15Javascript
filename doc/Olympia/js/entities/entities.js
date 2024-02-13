@@ -1,5 +1,5 @@
 class Entities {
-    constructor(name, x,y,z,xSize,ySize,zSize,color,scene) {
+    constructor(name, x,y,z,xSize,ySize,zSize, baseMesh) {
         // Code for entity constructor
         this.name = name;
         this.x = x;
@@ -8,23 +8,21 @@ class Entities {
         this.xSize = xSize;
         this.ySize = ySize;
         this.zSize = zSize;
-        this.color = color;
 
-        this.mesh = this.createMesh(scene);
+        this.mesh = this.createMesh(baseMesh);
 
     }
-
     //créer le mesh de l'entité
-    createMesh(scene){
-        this.mesh = BABYLON.MeshBuilder.CreateBox(this.name, {height: 1, width: 1, depth: 1}, scene);
+    createMesh(baseMesh){
+        this.mesh = baseMesh.createInstance(this.name);
         this.mesh.scaling.x = this.xSize;
         this.mesh.scaling.y = this.ySize;
         this.mesh.scaling.z = this.zSize;
+
         //update la hitbox
         this.mesh.refreshBoundingInfo();
         this.mesh.position = new BABYLON.Vector3(this.x, this.y, this.z);
-        this.mesh.material = new BABYLON.StandardMaterial("entityMaterial", scene);
-        this.mesh.material.diffuseColor = this.color;
+        
         this.mesh.checkCollisions = true;
         console.log(this.mesh.name+" mesh créé");
         this.x = this.mesh.position.x;

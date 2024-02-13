@@ -1,7 +1,20 @@
 import Entities from "./entities.js";
+
+let mesh;
+function getMesh(scene){
+    if(!mesh){
+        mesh = BABYLON.MeshBuilder.CreateBox("wall", {height: 1, width: 1, depth: 1}, scene);
+        mesh.isVisible = false;
+        mesh.material = new BABYLON.StandardMaterial("wallMaterial", scene);
+        mesh.material.diffuseColor = BABYLON.Color3.Yellow();
+        mesh.checkCollisions = false;
+    }
+    return mesh;
+}
+
 export class Monster extends Entities {
     constructor(name,x,y,z,xSize,ySize,zSize, MonsterSpeed,scene) {
-        super(name,x,y,z,xSize,ySize,zSize, BABYLON.Color3.Yellow(),scene);
+        super(name,x,y,z,xSize,ySize,zSize, getMesh(scene));
         this.vectorSpeed = new BABYLON.Vector3(0,0,0);
         this.MonsterSpeed = MonsterSpeed;
         this.mesh.ellipsoid = new BABYLON.Vector3(0.5, 1, 0.5);
@@ -47,16 +60,16 @@ export class Monster extends Entities {
         this.y = this.mesh.position.y;
         this.z = this.mesh.position.z;
     }
-
+     
     groundCheck(listeSol){
         let point = new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y-(this.ySize/2)-0.1, this.mesh.position.z);
         let pointIn = new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y-(this.ySize/2), this.mesh.position.z);
         //affiche le point
-        let pointMesh = BABYLON.MeshBuilder.CreateSphere("point", {diameter: 0.1}, this.scene);
-        pointMesh.position = point;
+        //let pointMesh = BABYLON.MeshBuilder.CreateSphere("point", {diameter: 0.1}, this.scene);
+        //pointMesh.position = point;
         //pointMesh.showBoundingBox = true;
-        let pointInMesh = BABYLON.MeshBuilder.CreateSphere("point", {diameter: 0.1}, this.scene);
-        pointInMesh.position = pointIn;
+        //let pointInMesh = BABYLON.MeshBuilder.CreateSphere("point", {diameter: 0.1}, this.scene);
+        //pointInMesh.position = pointIn;
         //pointInMesh.showBoundingBox = true;
 
         //pour chaque sol
@@ -72,17 +85,13 @@ export class Monster extends Entities {
                 if (sol.mesh.intersectsPoint(point)){
                     //on arrête de tomber
                     this.vectorSpeed.y = 0;
-                    if (sol.mesh.intersectsPoint(pointIn)){
-                        //poser le monstre sur le sol
-                        //this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2)-0.01;
-                        this.vectorSpeed.y = 0.15;
-                    }
+                    this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2);
                 }
             }
         
         });
-        pointMesh.dispose();
-        pointInMesh.dispose();
+        //pointMesh.dispose();
+        //pointInMesh.dispose();
     }
 
     playerCheck(player, listeMonstres){
@@ -118,17 +127,17 @@ export class Monster extends Entities {
             
         }*/
 
-        if(player.canTakeDamage && BABYLON.Vector2.Distance(new BABYLON.Vector2(player.mesh.position.x, player.mesh.position.z), new BABYLON.Vector2(this.mesh.position.x, this.mesh.position.z)) < player.xSize/2 + this.xSize/2+0.1 && Math.abs(player.mesh.position.y-this.mesh.position.y) < player.ySize/2 + this.ySize/2+0.1){
-
-            if(player.pv > 0){
+        if(BABYLON.Vector2.Distance(new BABYLON.Vector2(player.mesh.position.x, player.mesh.position.z), new BABYLON.Vector2(this.mesh.position.x, this.mesh.position.z)) < player.xSize/2 + this.xSize/2+0.1 && Math.abs(player.mesh.position.y-this.mesh.position.y) < player.ySize/2 + this.ySize/2+0.1){
+            //reculer le joueur
+            player.vectorSpeed.x = this.vectorSpeed.x*8;
+            player.vectorSpeed.z = this.vectorSpeed.z*8;
+            //reculer le monstre
+            this.vectorSpeed.x = -this.vectorSpeed.x*40;
+            this.vectorSpeed.z = -this.vectorSpeed.z*40;
+            if(player.canTakeDamage && player.pv > 0){
                 player.takeDamage();
-                //reculer le joueur
-                player.vectorSpeed.x = this.vectorSpeed.x*8;
-                player.vectorSpeed.z = this.vectorSpeed.z*8;
-                //reculer le monstre
-                this.vectorSpeed.x = -this.vectorSpeed.x*40;
-                this.vectorSpeed.z = -this.vectorSpeed.z*40;
-            }else {
+                
+            }else if(player.canTakeDamage && player.pv <= 0){
                 player.killPlayer();
                 listeMonstres.forEach(monstre => {
                     monstre.resetPosition();

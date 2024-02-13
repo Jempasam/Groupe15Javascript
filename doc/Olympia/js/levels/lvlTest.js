@@ -19,21 +19,61 @@ export class LvlTest {
     //créer un sol en hauteur
     const ground3 = new Ground("Ground3",-9, 0.5, -10, 10, 2, 15,this.scene);
     listes[1].push(ground3);
-    //créer une rampe en tournant le sol
-    const ground4 = new Ground("Ground4",-2, 2, -5, 10, 1, 5,this.scene);
-    //tourner le sol
-    ground4.mesh.rotation.z = -Math.PI/6;
-    //actualiser les collisions
-    ground4.mesh.refreshBoundingInfo();
-    listes[1].push(ground4);
-    //créer une rampe en tournant le sol
-    const ground5 = new Ground("Ground5",-9, 0, -1, 4, 1, 4,this.scene);
-    //tourner le sol
-    ground5.mesh.rotation.x = Math.PI/6;
 
+    //créer une rampe en tournant le sol
+    //const ground4 = new Ground("Ground4",-2, 2, -5, 10, 1, 5,this.scene);
+    //tourner le sol
+    //ground4.mesh.rotation.z = -Math.PI/6;
     //actualiser les collisions
-    ground5.mesh.refreshBoundingInfo();
-    listes[1].push(ground5);
+    //ground4.mesh.refreshBoundingInfo();
+    //listes[1].push(ground4);
+
+    //créer une rampe en tournant le sol
+    //const ground5 = new Ground("Ground5",-9, 0, -1, 4, 1, 4,this.scene);
+    //tourner le sol
+    //ground5.mesh.rotation.x = Math.PI/6;
+    //actualiser les collisions
+    //ground5.mesh.refreshBoundingInfo();
+    //listes[1].push(ground5);
+
+    //ajouter un escalier à gauche du sol en hauteur
+    //créer un sol
+    const groundE11 = new Ground("GroundE11",-2, -1, -5, 4, 1, 5,this.scene);
+    listes[1].push(groundE11);
+    //créer un sol
+    const groundE12 = new Ground("GroundE12",-2, -0.5, -6, 4, 1, 5,this.scene);
+    listes[1].push(groundE12);
+    //créer un sol
+    const groundE13 = new Ground("Groun9E13",-2, 0, -7, 4, 1, 5,this.scene);
+    listes[1].push(groundE13);
+    //créer un sol
+    const groundE14 = new Ground("GroundE14",-2, 0.5, -8, 4, 1, 5,this.scene);
+    listes[1].push(groundE14);
+    //créer un sol
+    const groundE15 = new Ground("GroundE15",-2, 1, -9, 4, 1, 5,this.scene);
+    listes[1].push(groundE15);
+
+    //ajouter un escalier à gauche du sol en hauteur
+    //créer un sol
+    const groundE21 = new Ground("GroundE21",-17, -1, -15, 4, 1, 5,this.scene);
+    listes[1].push(groundE21);
+    //créer un sol
+    const groundE22 = new Ground("GroundE22",-16, -0.5, -15, 4, 1, 5,this.scene);
+    listes[1].push(groundE22);
+    //créer un sol
+    const groundE23 = new Ground("GroundE23",-15, 0, -15, 4, 1, 5,this.scene);
+    listes[1].push(groundE23);
+    //créer un sol
+    const groundE24 = new Ground("GroundE24",-14, 0.5, -15, 4, 1, 5,this.scene);
+    listes[1].push(groundE24);
+    //créer un sol
+    const groundE25 = new Ground("GroundE25",-13, 1, -15, 4, 1, 5,this.scene);
+    listes[1].push(groundE25);
+    
+
+    
+
+
 
 
     //créer une warpZone

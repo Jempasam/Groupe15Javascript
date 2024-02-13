@@ -2,10 +2,22 @@ import Entities from "./entities.js";
 import {Monster} from "./monsters.js";
 import {warpZone} from "./warpZones.js";
 
+let mesh;
+function getMesh(scene){
+    if(!mesh){
+        mesh = BABYLON.MeshBuilder.CreateBox("player", {height: 1, width: 1, depth: 1}, scene);
+        mesh.isVisible = false;
+        mesh.material = new BABYLON.StandardMaterial("playerMaterial", scene);
+        mesh.material.diffuseColor = BABYLON.Color3.Red();
+        mesh.checkCollisions = false;
+    }
+    return mesh;
+}
+
 //Personnage à controller
 export class Player extends Entities {
-    constructor(name,x,y,z,xSize,ySize,zSize, playerSpeed, jumpPower,scene) {
-        super(name,x,y,z,xSize,ySize,zSize, BABYLON.Color3.Red(),scene);
+    constructor(name,x,y,z,xSize,ySize,zSize, playerSpeed, jumpPower, scene) {
+        super(name,x,y,z,xSize,ySize,zSize, getMesh(scene));
         this.vectorSpeed = new BABYLON.Vector3(0,0,0);
         this.jumpPower = jumpPower;
         this.playerSpeed = playerSpeed;
@@ -104,7 +116,7 @@ export class Player extends Entities {
         this.pv -= 1;
         this.canTakeDamage = false;
         //changer la couleur du joueur
-        this.mesh.material.diffuseColor = BABYLON.Color3.White();
+        this.mesh.material.diffuseColor = BABYLON.Color3.Gray();
         //attendre 1 seconde avant de pouvoir reprendre des dégats
         setTimeout(() => {
             //changer la couleur du joueur
