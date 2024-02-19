@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My HTML File</title>
+    <script type="importmap">
+        {
+          "imports": {
+            "babylonjs": "./src/js/babylon.js"
+          }
+        }
+    </script>
+    <!-- https://cdn.babylonjs.com/babylon.js -->
+    <link rel="stylesheet" href="src/css/simple.css">  
+    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/victor/1.1.0/victor.min.js"></script>
+    <script type="module" src="src/js/main.mjs"></script>
+</head>
+<body>
+    <canvas id="target" style="background: black; margin-left: auto; margin-right:auto; width: min(95vw,95vh); height: min(95vw,95vh);"></canvas>
+    <div>
+      <select id="selector" multiple></select>
+      <button id="start">Start</button>
+    </div>
+  </body>
+</html>

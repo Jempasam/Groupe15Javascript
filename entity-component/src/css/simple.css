@@ -1,0 +1,21 @@
+
+select{
+    flex-direction: row;
+    margin: 0;
+    option{
+        background-color: red;
+        color: white;
+        &::after{
+            content: " X";
+            font-weight: bolder;
+        }
+        &:checked{
+            background-color: green;
+            &::after{
+                content: " ✓";
+                font-weight: bolder;
+            }
+        }
+    }
+    height: fit-content;
+}
