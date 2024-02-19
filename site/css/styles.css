@@ -1,11 +1,38 @@
-#myCanvas {
-    border:1px solid black;
-    text-align: center;
-  }
+body {
+  margin: 0;
+}
 
-  #score {
-    font-family: 'PixelFont', sans-serif; /* Utilise la police pixelisée définie précédemment */
-    font-size: 24px; /* Taille de la police en pixels */
-    text-align: center; /* Centre le texte horizontalement */
-    margin-top: 20px; /* Marge supérieure pour l'espace */
-  }
+
+.ecranjeu {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 130vh; /* Utilisez 100vh au lieu de 130vh */
+}
+
+#myCanvas {
+  border: 1px solid black;
+  text-align: center;
+  width: 30%;
+  max-width: 500px;
+}
+
+#score {
+  border: 1px solid black;
+  padding: 1vw;
+  text-align: left;
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  width: 20%;
+  max-width: 200px;
+}
+
+
+.bouton-active {
+  /* Ajoutez ici vos styles de brillance */
+  /* Par exemple : */
+  box-shadow: 0 0 10px #F0C300; /* Ombre bleue */
+}
