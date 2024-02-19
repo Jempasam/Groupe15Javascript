@@ -16,7 +16,7 @@ function getMesh(scene){
 //même si le nom est trompeur
 export class Wall extends Entities {
     constructor(name,x,y,z,xSize,ySize,zSize, scene) {
-        super(name,x,y,z,xSize,ySize,zSize, getMes(scene));
+        super(name,x,y,z,xSize,ySize,zSize, getMesh(scene));
         
     }
 }

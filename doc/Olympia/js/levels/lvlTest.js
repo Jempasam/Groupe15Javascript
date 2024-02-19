@@ -71,9 +71,6 @@ export class LvlTest {
     listes[1].push(groundE25);
     
 
-    
-
-
 
 
     //créer une warpZone
