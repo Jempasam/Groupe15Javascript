@@ -70,12 +70,6 @@ export class LvlTest {
     const groundE25 = new Ground("GroundE25",-13, 1, -15, 4, 1, 5,this.scene);
     listes[1].push(groundE25);
     
-
-    
-
-
-
-
     //créer une warpZone
     const warpZone1 = new warpZone("warpZone1",-9, 2, -5, 1, 1, 1, -21.5, 0, -9,this.scene);
     listes[4].push(warpZone1);
