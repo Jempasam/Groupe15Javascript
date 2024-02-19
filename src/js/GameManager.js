@@ -184,10 +184,6 @@ function hitbox() {
         TeleportationFruit();
         mangerFruit();
         hitbox();
-        setTimeout(() => {
-            mangerFruit();
-          }, 1000);
-          TeleportationFruit();
     }
 
 }
@@ -199,6 +195,13 @@ function mangerFruit()
     serpent.AddNbFruits();
     serpent.positionQueue();
     afficherScore()
+    
+    setTimeout(() => {
+        serpent.AddNbFruits();
+        serpent.positionQueue();;
+        afficherScore()
+      }, 100);
+
 }
 
 function TeleportationFruit()
