@@ -1,3 +1,4 @@
+import { Transform } from "../transform/Transform.mjs";
 import { BaseDTarget } from "./BaseDTarget.mjs";
 import { DShape, DShapeDef } from "./Display.mjs";
 
@@ -9,15 +10,15 @@ import { DShape, DShapeDef } from "./Display.mjs";
 export default class CanvasDTarget extends BaseDTarget {
     #ctx;
 
-    constructor(ctx, x, y, z, rx, ry, rz, sx, sy, sz) {
-        if(x===undefined){
-            x=0; y=0; z=0
-            rx=0; ry=0; rz=0
-            sx=ctx.width
-            sy=ctx.height
-            sz=1
+    constructor(ctx, transform) {
+        if(!transform){
+            transform=new Transform(
+                0, 0, 0,
+                0, 0, 0,
+                ctx.width, ctx.height, 1
+            )
         }
-        super(x, y, z, rx, ry, rz, sx, sy, sz);
+        super(transform);
 
         if(ctx instanceof HTMLCanvasElement){
             this.#ctx=ctx.getContext("2d")
@@ -34,12 +35,12 @@ export default class CanvasDTarget extends BaseDTarget {
      */
     draw(object) {
         this.#ctx.save();
-        this.#ctx.translate(this._x, this._y);
+        this.#ctx.translate(this.transform.x, this.transform.y);
 
-        this.#ctx.scale(this._sx, this._sy);
+        this.#ctx.scale(this.transform.sx, this.transform.sy);
 
         //this.#ctx.translate(0.5, 0.5);
-        this.#ctx.rotate(this._rz);
+        this.#ctx.rotate(this.transform.sz);
         //this.#ctx.translate(-0.5, -0.5);
 
         if(object["drawOnCanvas"]){
@@ -71,6 +72,6 @@ export default class CanvasDTarget extends BaseDTarget {
     }
     
     clone(){
-        return new CanvasDTarget(this.#ctx, this._x, this._y, this._z, this._rx, this._ry, this._rz, this._sx, this._sy, this._sz);
+        return new CanvasDTarget(this.#ctx, this.transform.clone());
     }
 }

@@ -261,13 +261,23 @@ export class World{
         for(let object of /** @type {any[]} */(this.objects_list)){
             if(object.dshape){
                 let shape=object.dshape
-                let size=object.size/this.width
-                let ox=object.x/this.width-size/2
-                let oy=object.y/this.height-size/2
-                let oz=object.z/this.depth-size/2
+
+                let size=object.size || 1
+                let width=object.width||object.size
+                let height=object.height||object.size
+                let depth=object.depth||object.size
+
+                width/=this.width
+                height/=this.height
+                depth/=this.depth
+
+                let ox=object.x/this.width-width/2
+                let oy=object.y/this.height-height/2
+                let oz=object.z/this.depth-depth/2
+                
                 target.push()
                 target.move(ox,oy,oz)
-                target.scale(size,size,size)
+                target.scale(width,height,depth)
                 target.draw(shape)
                 target.pop()
             }

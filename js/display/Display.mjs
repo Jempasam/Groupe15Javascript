@@ -1,3 +1,4 @@
+import { Transform } from "../transform/Transform.mjs";
 
 
 /**
@@ -6,59 +7,11 @@
 export class DTarget{
 
     /**
-     * Move the display target in part of the width, height and depth of the display.
-     * @param {number} x 
-     * @param {number} y 
-     * @param {number} z 
+     * Get the transformation of the display target
+     * @returns {Transform}
      */
-    move(x,y,z){
+    get transform(){
         throw new Error("Undefined method")
-    }
-
-    /**
-     * Rotate the display target in radian
-     * @param {number} x 
-     * @param {number} y 
-     * @param {number} z 
-     */
-    rotate(x,y,z){
-        throw new Error("Undefined method")
-    }
-
-    /**
-     * Rotate the display target around a specified point in radian
-     * @param {number} x 
-     * @param {number} y 
-     * @param {number} z 
-     * @param {number} centerX 
-     * @param {number} centerY 
-     * @param {number} centerZ 
-     */
-    rotateAround(x, y, z, centerX, centerY, centerZ) {
-        throw new Error("Undefined method");
-    }
-
-    /**
-     * Scale the display target, in part of the current scale
-     * @param {number} x 
-     * @param {number} y 
-     * @param {number} z 
-     */
-    scale(x,y,z){
-        throw new Error("Undefined method")
-    }
-
-    /**
-     * Scale the display target around a specified point, in part of the current scale
-     * @param {number} x 
-     * @param {number} y 
-     * @param {number} z 
-     * @param {number} centerX 
-     * @param {number} centerY 
-     * @param {number} centerZ 
-     */
-    scaleAround(x, y, z, centerX, centerY, centerZ) {
-        throw new Error("Undefined method");
     }
 
     /**

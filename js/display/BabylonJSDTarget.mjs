@@ -69,8 +69,8 @@ export default class BabylonJSDTarget extends BaseDTarget {
     #scene
     #engine
 
-    constructor(parent_canvas, x, y, z, rx, ry, rz, sx, sy, sz) {
-        super(x, y, z, rx, ry, rz, sx, sy, sz);
+    constructor(parent_canvas, transform) {
+        super(transform);
 
         if(parent_canvas instanceof BabylonJSDTarget){
             this.#engine = parent_canvas.#engine
@@ -83,6 +83,9 @@ export default class BabylonJSDTarget extends BaseDTarget {
             this.#object_pools = {}
 
             // Camera
+            let sy=transform.sy
+            let sx=transform.sx
+            let sz=transform.sz
             const camera = new BABYLON.ArcRotateCamera("cam", 0, 0, sy*2, new BABYLON.Vector3(sx/2, sy/2, -sz), this.#scene);
             camera.setTarget(new BABYLON.Vector3(sx/2, sy/2, sz/2));
             camera.attachControl(parent_canvas, true);
@@ -162,15 +165,15 @@ export default class BabylonJSDTarget extends BaseDTarget {
             this.#object_pools[id]=pool
         }
         let obj=pool.get()
-        obj.position.x=this._x
-        obj.position.y=this._y
-        obj.position.z=this._z
-        obj.scaling.x=this._sx
-        obj.scaling.y=this._sy
-        obj.scaling.z=this._sz
-        obj.rotation.x=this._rx
-        obj.rotation.y=this._ry
-        obj.rotation.z=this._rz
+        obj.position.x=this.transform.x
+        obj.position.y=this.transform.y
+        obj.position.z=this.transform.z
+        obj.scaling.x=this.transform.sx
+        obj.scaling.y=this.transform.sy
+        obj.scaling.z=this.transform.sz
+        obj.rotation.x=this.transform.rx
+        obj.rotation.y=this.transform.ry
+        obj.rotation.z=this.transform.rz
     }
     
     start(){
@@ -186,6 +189,6 @@ export default class BabylonJSDTarget extends BaseDTarget {
     }
     
     clone(){
-        return new BabylonJSDTarget(this, this._x, this._y, this._z, this._rx, this._ry, this._rz, this._sx, this._sy, this._sz);
+        return new BabylonJSDTarget(this, this.transform.clone());
     }
 }
