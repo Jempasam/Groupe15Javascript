@@ -5,21 +5,25 @@ function getMesh(scene){
     if(!mesh){
         mesh = BABYLON.MeshBuilder.CreateBox("wall", {height: 1, width: 1, depth: 1}, scene);
         mesh.isVisible = false;
+        mesh.registerInstancedBuffer("color", 4);
         mesh.material = new BABYLON.StandardMaterial("wallMaterial", scene);
-        mesh.material.diffuseColor = BABYLON.Color3.Yellow();
+        mesh.material.diffuseColor = BABYLON.Color3.White();
         mesh.checkCollisions = false;
     }
     return mesh;
 }
 
 export class Monster extends Entities {
-    constructor(name,x,y,z,xSize,ySize,zSize, MonsterSpeed,scene) {
+    constructor(name,x,y,z,xSize,ySize,zSize, MonsterSpeed, pv, scene) {
         super(name,x,y,z,xSize,ySize,zSize, getMesh(scene));
         this.vectorSpeed = new BABYLON.Vector3(0,0,0);
         this.MonsterSpeed = MonsterSpeed;
         this.mesh.ellipsoid = new BABYLON.Vector3(0.5, 1, 0.5);
         this.mesh.ellipsoidOffset = new BABYLON.Vector3(0, 0.5, 0);
+        this.mesh.instancedBuffers.color = BABYLON.Color3.Yellow();
         this.positionDepart = new BABYLON.Vector3(x,y,z);
+        this.pv = pv;
+        this.canTakeDamage = true;
     }
 
     //chercher si le joueur est dans le champ de vision
@@ -54,11 +58,50 @@ export class Monster extends Entities {
         this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
 
         this.groundCheck(listeSol);
+        this.detectAttack(listeMonstres);
         this.playerCheck(player, listeMonstres);
         this.mesh.moveWithCollisions(this.vectorSpeed);
         this.x = this.mesh.position.x;
         this.y = this.mesh.position.y;
         this.z = this.mesh.position.z;
+    }
+
+    detectAttack(listeMonstres){
+        //si on touche le mesh attaque
+        if (this.mesh.getScene().getMeshByName("attaque") && this.mesh.intersectsMesh(this.mesh.getScene().getMeshByName("attaque"))){
+        //if (this.mesh.intersectsMesh(this.mesh.getScene().getMeshByName("attaque"))){
+            //enlever un point de vie
+            this.takeDamage(listeMonstres);
+        }
+    }
+
+    takeDamage(listeMonstres){
+        if (this.canTakeDamage){
+        this.pv -= 1;
+        //reculer le monstre et l'empecher de prendre des dégats pendant 2 secondes
+        this.vectorSpeed.x = -this.vectorSpeed.x*80;
+        this.vectorSpeed.y = 0.1;
+        this.vectorSpeed.z = -this.vectorSpeed.z*80;
+        this.canTakeDamage = false;
+        this.mesh.instancedBuffers.color = BABYLON.Color3.Red();
+
+        setTimeout(() => {
+            this.canTakeDamage = true;
+            this.mesh.instancedBuffers.color = BABYLON.Color3.Yellow();
+        }, 1000);
+    }
+
+        //si le monstre n'a plus de pv, le tuer
+        if (this.pv <= 0){
+            this.mesh.dispose();
+            //le supprimer de la liste
+            let index = listeMonstres.indexOf(this);
+            if (index > -1){
+                listeMonstres.splice(index, 1);
+            }
+
+        }
+
     }
      
     groundCheck(listeSol){
