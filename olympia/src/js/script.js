@@ -21,6 +21,7 @@ let listeWalls = [];
 let listeKillZones = [];
 let listeWarpZones = [];
 let listeLvlWarps = [];
+let listeBreakableWalls = [];
 let listes;
 let decor;
 let nbLevel = 0;
@@ -44,7 +45,7 @@ var createScene = function() {
     player = new Player("Player",0, 0, 0, 1, 1, 1, 0.008, 0.2, scene);
     //player = scene.player;
     camera.lockedTarget = player.mesh;
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
     //appeler le niveau
     changeLevel();
     
@@ -68,11 +69,16 @@ function definitEcouteurs() {
             evt.preventDefault();
         }
     });
+    //detecter un clic gauche
+    window.addEventListener("click", function(evt){
+        player.attaquer();
+    });
+    
 }
 
 //déplacer le joueur
 function movePlayer(){
-    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
+    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
     player.move(keyState, listes);
     detectLvlWarp();
     camera.position.x = player.mesh.position.x;
@@ -124,8 +130,13 @@ function changeLevel(){
         lvlWarp = null;
     });
     listeLvlWarps = [];
+    listeBreakableWalls.forEach(breakableWall => {
+        breakableWall.mesh.dispose();
+        breakableWall = null;
+    });
+    listeBreakableWalls = [];
 
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
     //supprimer le décor
     //changer de niveau
     if (nbLevel == -1){
@@ -151,6 +162,11 @@ engine.runRenderLoop(function () {
             monstre.auSol(touche);
         })*/
     });
+    //detecter si on tape un breakableWall
+    listeBreakableWalls.forEach(breakableWall => {
+        breakableWall.detectAttack(listeBreakableWalls);
+    }
+    );
     //afficher les pv actuels du joueur
     document.getElementById("pv").innerHTML = "PV: " + player.pv;
 
