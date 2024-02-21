@@ -6,16 +6,19 @@
   <link rel="stylesheet" href="../css/styles.css">
   <script src="../../snake/js/Serpent.js" type="module"></script>
   <script src="../../snake/js/GameManager.js" type="module"></script>
+  <script src="../../snake/js/Menu.js" type="module"></script>
 </head>
 <body>
-  <div class="ecranjeu">
-    <button id="modeVitesse">
-      <img src="../../snake/assets/modeVitesse.png" alt="Icône">
-    </button>
-    <button id="modeInversion">
-      <img src="../../snake/assets/modeInversion.png" alt="Icône">
-    </button>
 
+  <div id="menuJeu">
+    <canvas id="menuPrincipal" width=500 height="500"></canvas>
+    <button id="toggleMenuButton"><img src="../../snake/assets/depart.png" alt="Icône"></button>
+    <button id="modeVitesse"><img src="../../snake/assets/modeVitesse.png" alt="Icône"></button>
+    <button id="modeInversion"><img src="../../snake/assets/modeInversion.png" alt="Icône"></button>
+    <p>Snake 2.0</p>
+  </div>
+
+    <div id="ecranjeu">
     <canvas id="myCanvas" width=500 height=500></canvas>
     <div id="score">Votre score : 0</div>
   </div>

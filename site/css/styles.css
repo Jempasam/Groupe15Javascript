@@ -1,21 +1,21 @@
 body {
   margin: 0;
-}
-
-
-.ecranjeu {
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 130vh; /* Utilisez 100vh au lieu de 130vh */
+  height: 100vh;
+}
+
+#ecranjeu {
+  display: none; /* Le menu est initialement caché */
+  position: relative;
 }
 
 #myCanvas {
   border: 1px solid black;
   text-align: center;
-  width: 30%;
-  max-width: 500px;
+  width: 500px;
+  height: 500px;
 }
 
 #score {
@@ -30,9 +30,50 @@ body {
   max-width: 200px;
 }
 
+#menuJeu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+#menuPrincipal {
+  background-color: aqua;
+}
+
+#toggleMenuButton {
+  position: absolute;
+  bottom: 50%;
+  width : 8%;
+  height : 11%;
+}
+
+#toggleMenuButton img{
+  width : 60%;
+  height : 100%;
+}
+
+#modeVitesse {
+  position: absolute;
+  left : 37%;
+  margin-bottom: 2%;
+}
+
+#modeInversion {
+  position: absolute;
+  left : 37%;
+  margin-top: 2%; /* Pour espacer les boutons de mode */
+}
+
+p {
+  position: absolute;
+  bottom: 70%;
+}
 
 .bouton-active {
-  /* Ajoutez ici vos styles de brillance */
-  /* Par exemple : */
-  box-shadow: 0 0 10px #F0C300; /* Ombre bleue */
+  box-shadow: 0 0 10px yellow; /* Ombre jaune */
 }
+

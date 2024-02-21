@@ -60,8 +60,6 @@ function definirEcouteurs() {
     });
 }
 
-// La fonction permet de détecter les touches enfoncées
-
 function traiteKeyDown(event)
 {
     const key = event.code;
@@ -77,7 +75,9 @@ function traiteKeyDown(event)
         PremierCoup = true;
     }
 
-    if (inputStates.left == false || inputStates.up == true || inputStates.down == true)
+
+
+    if (inputStates.left == false && !InversionTouche || inputStates.left == true && InversionTouche || inputStates.up == true || inputStates.down == true)
     {
         if (key === "ArrowRight") 
         {
@@ -104,7 +104,7 @@ function traiteKeyDown(event)
         }
     }
 
-    if (inputStates.right == false || inputStates.up == true || inputStates.down == true)
+    if (inputStates.right == false && !InversionTouche || inputStates.right == true && InversionTouche || inputStates.up == true || inputStates.down == true)
     {
         if (key === "ArrowLeft") 
         {
@@ -131,7 +131,7 @@ function traiteKeyDown(event)
         }
     }
 
-    if (inputStates.right == true || inputStates.up == false || inputStates.left == true)
+    if (inputStates.right == true  || inputStates.up == false && !InversionTouche || inputStates.up == true && InversionTouche || inputStates.left == true)
     {
         if (key === "ArrowDown") 
         {
@@ -161,7 +161,7 @@ function traiteKeyDown(event)
     }
 
 
-    if (inputStates.right == true || inputStates.down == false || inputStates.left == true)
+    if (inputStates.right == true || inputStates.down == false && !InversionTouche || inputStates.down == true && InversionTouche || inputStates.left == true)
     {
         if (key === "ArrowUp") 
         {
