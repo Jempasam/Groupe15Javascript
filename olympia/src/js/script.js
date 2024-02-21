@@ -25,7 +25,7 @@ let listeLvlWarps = [];
 let listeBreakableWalls = [];
 let listes;
 let decor;
-let nbLevel = 0;
+let nbLevel = -1;
 
 
 var createScene = function() {
