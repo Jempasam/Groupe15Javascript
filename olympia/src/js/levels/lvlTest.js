@@ -90,6 +90,11 @@ export class LvlTest {
     listes[0].push(monster);
     const monster2 = new Monster("Monster2",-23, 1.5, -5, 3, 3, 3, player.playerSpeed*2, 15, this.scene);
     listes[0].push(monster2);
+
+    //créer un monstre volant
+    const monster3 = new Monster("Monster3",-20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+    listes[0].push(monster3);
+    monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
     
     //créer un mur cassable
     const breakableWall = new BreakableWall("BreakableWall1",-9, 2, -7, 5, 1, 1, this.scene);

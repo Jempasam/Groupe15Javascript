@@ -66,6 +66,58 @@ export class Monster extends Entities {
         this.z = this.mesh.position.z;
     }
 
+    flyingChercheJoueur(player, listeMonstres, listeSol){
+        // regarde si le joueur est à moins de 10 unités de distance en x et z
+        if (Math.abs(player.mesh.position.x-this.mesh.position.x) < 10 && Math.abs(player.mesh.position.z-this.mesh.position.z) < 10){
+            //si oui, se tourner vers lui (pas vers le haut)
+            //console.log("joueur trouvé");
+            this.mesh.lookAt(new BABYLON.Vector3(player.mesh.position.x,this.mesh.position.y,player.mesh.position.z));
+            //se déplacer vers lui
+            this.flyingMove(player, listeMonstres, listeSol, true);
+
+        } else {
+            //si non, se tourner vers le point de départ (pas vers le haut)
+            //console.log("joueur perdu");
+            this.mesh.lookAt(new BABYLON.Vector3(this.positionDepart.x,this.mesh.position.y,this.positionDepart.z));
+            //se déplacer vers le point de départ
+            this.flyingMove(player, listeMonstres, listeSol, false);
+            
+        }
+
+
+    }
+
+    flyingMove(player, listeMonstres, listeSol, playerFound){
+        this.vectorSpeed.x=0;
+        this.vectorSpeed.y=0;
+        this.vectorSpeed.z=0;
+        if (playerFound){
+            this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
+            this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
+            if(player.mesh.position.y > this.mesh.position.y){
+                this.vectorSpeed.y = this.MonsterSpeed;
+            } else {
+                this.vectorSpeed.y = -this.MonsterSpeed;
+            }
+        } else {
+            this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
+            this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
+            if(this.positionDepart.y > this.mesh.position.y){
+                this.vectorSpeed.y = this.MonsterSpeed;
+            } else {
+                this.vectorSpeed.y = -this.MonsterSpeed;
+            }
+        }
+
+        this.flyingGroundCheck(listeSol);
+        this.detectAttack(listeMonstres);
+        this.playerCheck(player, listeMonstres);
+        this.mesh.moveWithCollisions(this.vectorSpeed);
+        this.x = this.mesh.position.x;
+        this.y = this.mesh.position.y;
+        this.z = this.mesh.position.z;
+    }
+
     detectAttack(listeMonstres){
         //si on touche le mesh attaque
         if (this.mesh.getScene().getMeshByName("attaque") && this.mesh.intersectsMesh(this.mesh.getScene().getMeshByName("attaque"))){
@@ -136,6 +188,40 @@ export class Monster extends Entities {
         //pointMesh.dispose();
         //pointInMesh.dispose();
     }
+
+    flyingGroundCheck(listeSol){
+        let point = new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y-(this.ySize/2)-0.1, this.mesh.position.z);
+        let pointIn = new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y-(this.ySize/2), this.mesh.position.z);
+        //affiche le point
+        //let pointMesh = BABYLON.MeshBuilder.CreateSphere("point", {diameter: 0.1}, this.scene);
+        //pointMesh.position = point;
+        //pointMesh.showBoundingBox = true;
+        //let pointInMesh = BABYLON.MeshBuilder.CreateSphere("point", {diameter: 0.1}, this.scene);
+        //pointInMesh.position = pointIn;
+        //pointInMesh.showBoundingBox = true;
+
+        //pour chaque sol
+        listeSol.forEach(sol => {
+            //si le point est dans le sol (attention aux sols en pente)
+            if (sol.mesh.rotation.z != 0 || sol.mesh.rotation.x != 0){
+                if (this.mesh.intersectsMesh(sol.mesh, true)){
+                    //on arrête de tomber
+                    this.vectorSpeed.y = 0;
+                    return;
+                }
+            } else {
+                if (sol.mesh.intersectsPoint(point)){
+                    //on arrête de tomber
+                    this.vectorSpeed.y = this.MonsterSpeed;
+                    this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2)+0.1;
+                }
+            }
+        
+        });
+        //pointMesh.dispose();
+        //pointInMesh.dispose();
+    }
+
 
     playerCheck(player, listeMonstres){
         //si le monstre touche presque le joueur, le tuer
