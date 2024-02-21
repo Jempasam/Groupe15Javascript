@@ -31,7 +31,7 @@ var createScene = function() {
     scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color3.Black;
     const camY = 10;
-    const camZ = 10;
+    const camZ = -10;
 
     //créer une camera qui regarde en 0,0,0
     camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, camY, camZ), scene);
@@ -81,7 +81,18 @@ function movePlayer(){
     //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
     player.move(keyState, listes);
     detectLvlWarp();
-    camera.position.x = player.mesh.position.x;
+    
+    //si on est dans le niveau d'accueil, la camera suit le joueur en z
+    switch (nbLevel){
+        case 0:
+            camera.position.x = player.mesh.position.x;
+            camera.position.z = 10;
+            break;
+        default:
+            camera.position.x = player.mesh.position.x;
+            camera.position.z = player.mesh.position.z+10;
+            break;
+    }
     
 }
 
