@@ -17,13 +17,25 @@ export class LvlAccueil {
         const ground = new Ground("Ground1",-2, -1, -5, 20, 1, 20,this.scene);
         listes[1].push(ground);
 
+        // Création d'un sol de départ
+        const groundL1P1 = new Ground("GroundL1P1",13, -1, 2, 10, 1, 9,this.scene);
+        listes[1].push(groundL1P1);
+
         // PosX, PosY, PosZ, TailleX, TailleY, Taille Z
         const wall = new Wall("Wall1",-23, 6, -3, 5, 20, 15,this.scene);
         listes[2].push(wall);
 
         // PosX, PosY, PosZ, TailleX, TailleY, Taille Z
-        const wall2 = new Wall("Wall2", 10, 6, -3, 5, 20, 15,this.scene);
-        listes[2].push(wall2);
+        const wallL1P1 = new Wall("WallL1P1", 10, 6, -5, 5, 20, 5,this.scene);
+        listes[2].push(wallL1P1);
+
+        // PosX, PosY, PosZ, TailleX, TailleY, Taille Z
+        const wallL1P2 = new Wall("WallL1P2", 10, 6, 5, 5, 20, 5,this.scene);
+        listes[2].push(wallL1P2);
+
+        // PosX, PosY, PosZ, TailleX, TailleY, Taille Z
+        const wallL1P3 = new Wall("WallL1P3", 10, 11, 0, 5, 10, 8,this.scene);
+        listes[2].push(wallL1P3);
 
         // PosX, PosY, PosZ, TailleX, TailleY, Taille Z
         const wall3 = new Wall("Wall3",-8, 6, -9, 35, 20, 3,this.scene);
@@ -74,9 +86,6 @@ export class LvlAccueil {
     listes[1].push(ground4);
     
         
-
-
-
     }
 }
 

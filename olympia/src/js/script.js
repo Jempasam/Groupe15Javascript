@@ -23,7 +23,7 @@ let listeWarpZones = [];
 let listeLvlWarps = [];
 let listes;
 let decor;
-let nbLevel = -1;
+let nbLevel = 0;
 
 
 var createScene = function() {
@@ -46,7 +46,7 @@ var createScene = function() {
     camera.lockedTarget = player.mesh;
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
     //appeler le niveau
-    decor = new LvlTest(player, listes);
+    changeLevel();
     
 
     definitEcouteurs();
