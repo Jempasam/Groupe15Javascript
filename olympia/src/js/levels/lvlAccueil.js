@@ -46,7 +46,7 @@ export class LvlAccueil {
         listes[1].push(ground2);
 
         //ajouter un lvlWarp
-        const lvlWarp0 = new lvlWarp("lvlWarp0",-18, 0, -7, 1, 1, 1, -1,this.scene);
+        const lvlWarp0 = new lvlWarp("lvlWarp0",10, 2, 0, 0.5, 3, 3, 1,this.scene);
         listes[5].push(lvlWarp0);
 
         

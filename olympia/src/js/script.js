@@ -7,6 +7,7 @@ import { warpZone } from "./entities/warpZones.js";
 import { lvlWarp } from "./entities/lvlWarp.js";
 import { LvlTest } from "./levels/lvlTest.js";
 import { LvlAccueil } from "./levels/lvlAccueil.js";
+import { Lvl1} from "./levels/lvl1.js";
 
 const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true);
@@ -75,7 +76,19 @@ function movePlayer(){
     //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
     player.move(keyState, listes);
     detectLvlWarp();
-    camera.position.x = player.mesh.position.x;
+
+    switch(nbLevel)
+    {
+        case 0:
+            camera.position.x = player.mesh.position.x;
+            camera.position.z = 10;
+            break;
+
+        case 1:
+            camera.position.x = player.mesh.position.x;
+            camera.position.z = player.mesh.position.z + 10;
+            break;
+    }
     
 }
 
@@ -134,6 +147,10 @@ function changeLevel(){
     if (nbLevel == 0){
         
         decor = new LvlAccueil(player, listes);
+    }
+    if (nbLevel == 1){
+
+        decor = new Lvl1(player,listes);
     }
 }
 
