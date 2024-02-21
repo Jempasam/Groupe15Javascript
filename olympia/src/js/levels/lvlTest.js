@@ -6,11 +6,13 @@ import { Wall } from "../entities/walls.js";
 import { killZone } from "../entities/killZones.js";
 import { warpZone } from "../entities/warpZones.js";
 import { lvlWarp } from "../entities/lvlWarp.js";
+import { BreakableWall } from "../entities/breakableWalls.js";
 
 // Constructeur de niveau
 export class LvlTest {
     constructor(player, listes) {
-        //créer un sol de départ
+    //listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
+    //créer un sol de départ
     const ground = new Ground("Ground1",-9, -1, 0, 20, 1, 5,this.scene);
     listes[1].push(ground);
     //créer un mur au bout du premier sol en -x et tourné de 90°
@@ -84,10 +86,19 @@ export class LvlTest {
     listes[1].push(ground6);
 
     //créer des monstres
-    const monster = new Monster("Monster1",-20, 0, 0, 1, 1, 1, player.playerSpeed*3,this.scene);
+    const monster = new Monster("Monster1",-20, 0, 0, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
     listes[0].push(monster);
-    const monster2 = new Monster("Monster2",-23, 1.5, -5, 3, 3, 3, player.playerSpeed*2,this.scene);
+    const monster2 = new Monster("Monster2",-23, 1.5, -5, 3, 3, 3, player.playerSpeed*2, 15, this.scene);
     listes[0].push(monster2);
+
+    //créer un monstre volant
+    const monster3 = new Monster("Monster3",-20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+    listes[0].push(monster3);
+    monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
+    
+    //créer un mur cassable
+    const breakableWall = new BreakableWall("BreakableWall1",-9, 2, -7, 5, 1, 1, this.scene);
+    listes[6].push(breakableWall);
 
     player.resetPosition();
 
