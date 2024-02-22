@@ -40,7 +40,7 @@ export class Player extends Entities {
     }
     // Autres méthodes de la classe Player
     //detecter si un sol est juste en dessous de nous
-    detectGround(listeSol){
+    detectGround(listeSol, listeMoveGrounds){
         //this.canJump = false;
         //créer un point juste sous le joueur
         let point = new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y-0.51, this.mesh.position.z);
@@ -71,6 +71,41 @@ export class Player extends Entities {
                 //on arrête de tomber
                 this.vectorSpeed.y = 0;
                 this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2);
+            }
+        }
+        //pointMesh.dispose();
+        });
+
+        //pour chaque sol mobile
+        listeMoveGrounds.forEach(sol => {
+            //si le point est dans le sol (attention aux sols en pente)
+            if (sol.mesh.rotation.z != 0 || sol.mesh.rotation.x != 0){
+            if (this.mesh.intersectsMesh(sol.mesh, true) ){
+                //on peut sauter
+                this.canJump = true;
+                //on arrête de tomber
+                this.vectorSpeed.y = 0;
+            }
+        } else {
+            //si la plateforme monte
+            if (sol.direction.y > 0){
+                if (sol.mesh.intersectsPoint(point)){
+                    //on peut sauter
+                    this.canJump = true;
+                    //on arrête de tomber
+                    this.vectorSpeed.y = 0;
+                    this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2);
+                }
+            } else {
+                //detecter le sol dans une zone rectangulaire sous le joueur
+                if (this.mesh.position.x > sol.mesh.position.x - sol.xSize/2 && this.mesh.position.x < sol.mesh.position.x + sol.xSize/2 && this.mesh.position.z > sol.mesh.position.z - sol.zSize/2 && this.mesh.position.z < sol.mesh.position.z + sol.zSize/2 && this.mesh.position.y < sol.mesh.position.y + sol.ySize/2 + this.ySize && this.mesh.position.y > sol.mesh.position.y + sol.ySize/2){
+                    //on peut sauter
+                    this.canJump = true;
+                    //on arrête de tomber
+                    this.vectorSpeed.y = 0;
+                    //this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2);
+                }
+            
             }
         }
         //pointMesh.dispose();
@@ -200,7 +235,7 @@ export class Player extends Entities {
         this.direction = new BABYLON.Vector3(this.mesh.position.x+this.vectorSpeed.x,this.mesh.position.y,this.mesh.position.z+this.vectorSpeed.z);
         this.mesh.lookAt(this.direction);
         //detecter si un sol est juste en dessous de nous
-        this.detectGround(listes[1]);
+        this.detectGround(listes[1], listes[7]);
         this.detectWarpZone(listes[4]);
         this.detectKillZone(listes[3], listes[0]);
         //this.attaquer(keyState, listes[0]);

@@ -7,11 +7,12 @@ import { killZone } from "../entities/killZones.js";
 import { warpZone } from "../entities/warpZones.js";
 import { lvlWarp } from "../entities/lvlWarp.js";
 import { BreakableWall } from "../entities/breakableWalls.js";
+import { MovingGround } from "../entities/movingGrounds.js";
 
 // Constructeur de niveau
 export class LvlTest {
     constructor(player, listes) {
-    //listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
+    //listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds];
     //créer un sol de départ
     const ground = new Ground("Ground1",-9, -1, 0, 20, 1, 5,this.scene);
     listes[1].push(ground);
@@ -99,6 +100,11 @@ export class LvlTest {
     //créer un mur cassable
     const breakableWall = new BreakableWall("BreakableWall1",-9, 2, -7, 5, 1, 1, this.scene);
     listes[6].push(breakableWall);
+
+    //créer un sol qui bouge
+    const movingGround = new MovingGround("MovingGround1",4, 5, -10, 5, 1, 5, 4, -1, 0, this.scene);
+    //listes[1].push(movingGround);
+    listes[7].push(movingGround);
 
     player.resetPosition();
 

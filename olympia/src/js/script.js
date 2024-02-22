@@ -1,10 +1,4 @@
 import { Player } from "./entities/player.js";
-import { Monster } from "./entities/monsters.js";
-import { Ground } from "./entities/grounds.js";
-import { Wall } from "./entities/walls.js";
-import { killZone } from "./entities/killZones.js";
-import { warpZone } from "./entities/warpZones.js";
-import { lvlWarp } from "./entities/lvlWarp.js";
 import { LvlTest } from "./levels/lvlTest.js";
 import { LvlAccueil } from "./levels/lvlAccueil.js";
 import { Lvl1} from "./levels/lvl1.js";
@@ -23,6 +17,7 @@ let listeKillZones = [];
 let listeWarpZones = [];
 let listeLvlWarps = [];
 let listeBreakableWalls = [];
+let listeMoveGrounds = [];
 let listes;
 let decor;
 let nbLevel = -1;
@@ -46,7 +41,7 @@ var createScene = function() {
     player = new Player("Player",0, 0, 0, 1, 1, 1, 0.008, 0.2, scene);
     //player = scene.player;
     camera.lockedTarget = player.mesh;
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds];
     //appeler le niveau
     changeLevel();
     
@@ -79,7 +74,7 @@ function definitEcouteurs() {
 
 //déplacer le joueur
 function movePlayer(){
-    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
+    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds];
     player.move(keyState, listes);
     detectLvlWarp();
     
@@ -154,8 +149,12 @@ function changeLevel(){
         breakableWall = null;
     });
     listeBreakableWalls = [];
+    listeMoveGrounds.forEach(moveGround => {
+        moveGround.mesh.dispose();
+        moveGround = null;
+    });
 
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds];
     //supprimer le décor
     //changer de niveau
     if (nbLevel == -1){
@@ -190,6 +189,9 @@ engine.runRenderLoop(function () {
         breakableWall.detectAttack(listeBreakableWalls);
     }
     );
+    listeMoveGrounds.forEach(moveGround => {
+        moveGround.move();
+    });
     //afficher les pv actuels du joueur
     document.getElementById("pv").innerHTML = "PV: " + player.pv;
 
