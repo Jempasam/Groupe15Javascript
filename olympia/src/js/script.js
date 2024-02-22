@@ -92,8 +92,10 @@ function movePlayer(){
 
         case 1:
             camera.position.x = player.mesh.position.x;
-            camera.position.z = player.mesh.position.z + 10;
-            break;
+            camera.position.z = player.mesh.position.z + 15;
+            camera.position.y = player.mesh.position.y + 10;
+            break
+
         default:
             camera.position.x = player.mesh.position.x;
             camera.position.z = 10;

@@ -26,15 +26,15 @@ export class LvlAccueil {
         listes[2].push(wall);
 
         // PosX, PosY, PosZ, TailleX, TailleY, Taille Z
-        const wallL1P1 = new Wall("WallL1P1", 10, 6, -5, 5, 20, 5,this.scene);
+        const wallL1P1 = new Wall("WallL1P1", 10, 6, -5, 8, 20, 5,this.scene);
         listes[2].push(wallL1P1);
 
         // PosX, PosY, PosZ, TailleX, TailleY, Taille Z
-        const wallL1P2 = new Wall("WallL1P2", 10, 6, 5, 5, 20, 5,this.scene);
+        const wallL1P2 = new Wall("WallL1P2", 10, 6, 5, 8, 20, 5,this.scene);
         listes[2].push(wallL1P2);
 
         // PosX, PosY, PosZ, TailleX, TailleY, Taille Z
-        const wallL1P3 = new Wall("WallL1P3", 10, 11, 0, 5, 10, 8,this.scene);
+        const wallL1P3 = new Wall("WallL1P3", 10, 11, 0, 8, 10, 8,this.scene);
         listes[2].push(wallL1P3);
 
         // PosX, PosY, PosZ, TailleX, TailleY, Taille Z
