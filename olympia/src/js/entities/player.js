@@ -80,35 +80,44 @@ export class Player extends Entities {
         listeMoveGrounds.forEach(sol => {
             //si le point est dans le sol (attention aux sols en pente)
             if (sol.mesh.rotation.z != 0 || sol.mesh.rotation.x != 0){
-            if (this.mesh.intersectsMesh(sol.mesh, true) ){
-                //on peut sauter
-                this.canJump = true;
-                //on arrête de tomber
-                this.vectorSpeed.y = 0;
-            }
-        } else {
-            //si la plateforme monte
-            if (sol.direction.y > 0){
-                if (sol.mesh.intersectsPoint(point)){
+                if (this.mesh.intersectsMesh(sol.mesh, true) ){
                     //on peut sauter
                     this.canJump = true;
                     //on arrête de tomber
                     this.vectorSpeed.y = 0;
-                    this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2);
+
+                    this.mesh.position.x += sol.direction.x*sol.speed;
+                    this.mesh.position.z += sol.direction.z*sol.speed;
                 }
             } else {
-                //detecter le sol dans une zone rectangulaire sous le joueur
-                if (this.mesh.position.x > sol.mesh.position.x - sol.xSize/2 && this.mesh.position.x < sol.mesh.position.x + sol.xSize/2 && this.mesh.position.z > sol.mesh.position.z - sol.zSize/2 && this.mesh.position.z < sol.mesh.position.z + sol.zSize/2 && this.mesh.position.y < sol.mesh.position.y + sol.ySize/2 + this.ySize && this.mesh.position.y > sol.mesh.position.y + sol.ySize/2){
-                    //on peut sauter
-                    this.canJump = true;
-                    //on arrête de tomber
-                    this.vectorSpeed.y = 0;
-                    //this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2);
+                //si la plateforme monte
+                if (sol.direction.y > 0){
+                    if (sol.mesh.intersectsPoint(point)){
+                        //on peut sauter
+                        this.canJump = true;
+                        //on arrête de tomber
+                        this.vectorSpeed.y = 0;
+                        this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2);
+
+                        this.mesh.position.x += sol.direction.x*sol.speed;
+                        this.mesh.position.z += sol.direction.z*sol.speed;
+                    }
+                } else {
+                    //detecter le sol dans une zone rectangulaire sous le joueur
+                    if (this.mesh.position.x > sol.mesh.position.x - sol.xSize/2 && this.mesh.position.x < sol.mesh.position.x + sol.xSize/2 && this.mesh.position.z > sol.mesh.position.z - sol.zSize/2 && this.mesh.position.z < sol.mesh.position.z + sol.zSize/2 && this.mesh.position.y < sol.mesh.position.y + sol.ySize/2 + this.ySize && this.mesh.position.y > sol.mesh.position.y + sol.ySize/2){
+                        //on peut sauter
+                        this.canJump = true;
+                        //on arrête de tomber
+                        this.vectorSpeed.y = 0;
+                        this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2)+0.3;
+                        this.mesh.position.x += sol.direction.x*sol.speed;
+                        this.mesh.position.z += sol.direction.z*sol.speed;
+                    }
+                
                 }
-            
             }
-        }
-        //pointMesh.dispose();
+            //pointMesh.dispose();
+            console.log(sol.direction.x*sol.speed, sol.direction.y*sol.speed, sol.direction.z*sol.speed);
         });
     }
 

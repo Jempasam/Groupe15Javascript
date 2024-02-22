@@ -26,14 +26,13 @@ export class MovingGround extends Ground {
         this.y2 = y2;
         this.z2 = z2;
         this.direction = new BABYLON.Vector3(0,0,0);
+        this.speed = 0.01;
 
         
     }
 
     //fonction de déplacement, fait des aller retour entre 2 points en entrant les coordonnées des points
     move(){
-        //set la vitesse de déplacement
-        let speed = 0.01;
         //si on est à la position 1
         if (Math.abs(this.mesh.position.x - this.x1) < 0.1 && Math.abs(this.mesh.position.y - this.y1) < 0.1 && Math.abs(this.mesh.position.z - this.z1) < 0.1){
             //calculer la direction
@@ -49,9 +48,9 @@ export class MovingGround extends Ground {
             this.direction = this.direction.normalize();
         }
         //déplacer le sol
-        this.mesh.position.x += this.direction.x * speed;
-        this.mesh.position.y += this.direction.y * speed;
-        this.mesh.position.z += this.direction.z * speed;
+        this.mesh.position.x += this.direction.x * this.speed;
+        this.mesh.position.y += this.direction.y * this.speed;
+        this.mesh.position.z += this.direction.z * this.speed;
         
     }
 
