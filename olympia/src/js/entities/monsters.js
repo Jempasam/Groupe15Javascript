@@ -135,7 +135,8 @@ export class Monster extends Entities {
         this.vectorSpeed.y = 0.1;
         this.vectorSpeed.z = -this.vectorSpeed.z*80;
         this.canTakeDamage = false;
-        this.mesh.instancedBuffers.color = BABYLON.Color3.Red();
+        //this.mesh.instancedBuffers.color = BABYLON.Color3.Red();
+        this.mesh.instancedBuffers.color = new BABYLON.Color3(1,0,1);
 
         setTimeout(() => {
             this.canTakeDamage = true;

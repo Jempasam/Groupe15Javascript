@@ -57,7 +57,7 @@ export class LvlTest {
     const groundE15 = new Ground("GroundE15",-2, 1, -9, 4, 1, 5,this.scene);
     listes[1].push(groundE15);
 
-    //ajouter un escalier à gauche du sol en hauteur
+    //ajouter un escalier
     //créer un sol
     const groundE21 = new Ground("GroundE21",-17, -1, -15, 4, 1, 5,this.scene);
     listes[1].push(groundE21);
@@ -108,7 +108,7 @@ export class LvlTest {
     listes[7].push(movingGround);*/
 
     //créer un sol qui bouge
-    const movingGround2 = new MovingGround("MovingGround2",4, 8, -0, 10, 1, 10, 4, -2, 0, this.scene);
+    const movingGround2 = new MovingGround("MovingGround2",0, 1, -15.5, 8, 1, 8, 10, 5, -15.5, 0.01 ,this.scene);
     listes[1].push(movingGround2);
     listes[7].push(movingGround2);
 

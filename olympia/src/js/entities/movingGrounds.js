@@ -15,7 +15,7 @@ function getMesh(scene){
 
 // Atterir sur un sol arrete la chute et permet de ressauter
 export class MovingGround extends Ground {
-    constructor(name,x,y,z,xSize,ySize,zSize, x2, y2, z2, scene) {
+    constructor(name,x,y,z,xSize,ySize,zSize, x2, y2, z2, speed, scene) {
         super(name,x,y,z,xSize,ySize,zSize, getMesh(scene));
         //afficher les collisions
         //this.mesh.showBoundingBox = true;
@@ -26,7 +26,7 @@ export class MovingGround extends Ground {
         this.y2 = y2;
         this.z2 = z2;
         this.direction = new BABYLON.Vector3(0,0,0);
-        this.speed = 0.01;
+        this.speed = speed;
 
         
     }
