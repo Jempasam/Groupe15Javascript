@@ -185,8 +185,25 @@ export class Player extends Entities {
     killPlayer(){
         this.pv = this.pvMax;
         this.resetPosition();
+        //message dans le div
+        document.getElementById("infoJoueur").innerHTML = "Vous êtes mort! Vous avez été renvoyé au début du niveau!";
+        //ajouter une bordure violette au div
+        document.getElementById("infoJoueur").style.border = "2px solid black";
+        //arrondir les coins du div
+        document.getElementById("infoJoueur").style.borderRadius = "10px";
+        //ajouter un fond blanc au div
+        document.getElementById("infoJoueur").style.backgroundColor = "white";
+        //afficher le div
+        document.getElementById("infoJoueur").style.display = "block";
+        //afficher le div pendant 3 secondes
+        setTimeout(function(){
+            document.getElementById("infoJoueur").style.display = "none";
+        }, 3000);
+        //cacher le div
+
     }
 
+    //fonction pour réinitialiser la position du joueur
     resetPosition(){
         this.x = 0;
         this.y = 0;
@@ -296,10 +313,27 @@ export class Player extends Entities {
 
         if(this.y < -1000){
             this.resetPosition();
+            this.pv -= 1;
             //repositionne tout les  monstres
             listes[0].forEach(monstre => {
                 monstre.resetPosition();
             });
+            //message dans le div
+            document.getElementById("infoJoueur").innerHTML = "Ne sautez pas dans le vide! Vous risqueriez de vous blesser très fort!";
+            //ajouter une bordure violette au div
+            document.getElementById("infoJoueur").style.border = "2px solid purple";
+            //arrondir les coins du div
+            document.getElementById("infoJoueur").style.borderRadius = "10px";
+            //ajouter un fond blanc au div
+            document.getElementById("infoJoueur").style.backgroundColor = "white";
+            //afficher le div
+            document.getElementById("infoJoueur").style.display = "block";
+            //afficher le div pendant 3 secondes
+            setTimeout(function(){
+                document.getElementById("infoJoueur").style.display = "none";
+            }, 3000);
+            //cacher le div
+
         }
     }
 }
