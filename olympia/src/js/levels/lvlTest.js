@@ -97,6 +97,7 @@ export class LvlTest {
     const monster3 = new Monster("Monster3",-20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
     listes[0].push(monster3);
     monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
+    monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);
     
     //créer un mur cassable
     const breakableWall = new BreakableWall("BreakableWall1",-9, 2, -7, 5, 1, 1, this.scene);

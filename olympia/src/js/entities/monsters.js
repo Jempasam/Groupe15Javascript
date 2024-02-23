@@ -58,7 +58,7 @@ export class Monster extends Entities {
         this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
 
         this.groundCheck(listeSol);
-        this.detectAttack(listeMonstres);
+        this.detectAttack(listeMonstres, false);
         this.playerCheck(player, listeMonstres);
         this.mesh.moveWithCollisions(this.vectorSpeed);
         this.x = this.mesh.position.x;
@@ -110,7 +110,7 @@ export class Monster extends Entities {
         }
 
         this.flyingGroundCheck(listeSol);
-        this.detectAttack(listeMonstres);
+        this.detectAttack(listeMonstres, true);
         this.playerCheck(player, listeMonstres);
         this.mesh.moveWithCollisions(this.vectorSpeed);
         this.x = this.mesh.position.x;
@@ -118,16 +118,16 @@ export class Monster extends Entities {
         this.z = this.mesh.position.z;
     }
 
-    detectAttack(listeMonstres){
+    detectAttack(listeMonstres, isFlying){
         //si on touche le mesh attaque
         if (this.mesh.getScene().getMeshByName("attaque") && this.mesh.intersectsMesh(this.mesh.getScene().getMeshByName("attaque"))){
         //if (this.mesh.intersectsMesh(this.mesh.getScene().getMeshByName("attaque"))){
             //enlever un point de vie
-            this.takeDamage(listeMonstres);
+            this.takeDamage(listeMonstres, isFlying);
         }
     }
 
-    takeDamage(listeMonstres){
+    takeDamage(listeMonstres, isFlying){
         if (this.canTakeDamage){
         this.pv -= 1;
         //reculer le monstre et l'empecher de prendre des dégats pendant 2 secondes
@@ -135,12 +135,15 @@ export class Monster extends Entities {
         this.vectorSpeed.y = 0.1;
         this.vectorSpeed.z = -this.vectorSpeed.z*80;
         this.canTakeDamage = false;
-        //this.mesh.instancedBuffers.color = BABYLON.Color3.Red();
         this.mesh.instancedBuffers.color = new BABYLON.Color3(1,0,1);
 
         setTimeout(() => {
             this.canTakeDamage = true;
+            if(isFlying){
+            this.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);
+            } else {
             this.mesh.instancedBuffers.color = BABYLON.Color3.Yellow();
+            }
         }, 1000);
     }
 
