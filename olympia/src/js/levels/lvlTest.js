@@ -8,11 +8,12 @@ import { warpZone } from "../entities/warpZones.js";
 import { lvlWarp } from "../entities/lvlWarp.js";
 import { BreakableWall } from "../entities/breakableWalls.js";
 import { MovingGround } from "../entities/movingGrounds.js";
+import { Unlocker } from "../entities/unlocker.js";
 
 // Constructeur de niveau
 export class LvlTest {
     constructor(player, listes) {
-    //listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds];
+    //listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker];
     //créer un sol de départ
     const ground = new Ground("Ground1",-9, -1, 0, 20, 1, 5,this.scene);
     listes[1].push(ground);
@@ -110,6 +111,13 @@ export class LvlTest {
     const movingGround2 = new MovingGround("MovingGround2",4, 8, -0, 10, 1, 10, 4, -2, 0, this.scene);
     listes[1].push(movingGround2);
     listes[7].push(movingGround2);
+
+    //créer un débloqueur d'attaque
+    const unlocker = new Unlocker("Unlocker1",-10, 2, -15, 1, 1, 1, 1, this.scene);
+    listes[8].push(unlocker);
+    //créer un débloqueur de saut
+    const unlocker2 = new Unlocker("Unlocker2",-10, 2, -10, 1, 1, 1, 2, this.scene);
+    listes[8].push(unlocker2);
 
 
     player.resetPosition();

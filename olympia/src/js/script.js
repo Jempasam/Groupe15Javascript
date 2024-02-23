@@ -18,6 +18,7 @@ let listeWarpZones = [];
 let listeLvlWarps = [];
 let listeBreakableWalls = [];
 let listeMoveGrounds = [];
+let listeUnlocker = [];
 let listes;
 let decor;
 let nbLevel = -1;
@@ -41,7 +42,7 @@ var createScene = function() {
     player = new Player("Player",0, 0, 0, 1, 1, 1, 0.008, 0.2, scene);
     //player = scene.player;
     camera.lockedTarget = player.mesh;
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker];
     //appeler le niveau
     changeLevel();
     
@@ -74,7 +75,7 @@ function definitEcouteurs() {
 
 //déplacer le joueur
 function movePlayer(){
-    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds];
+    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker];
     player.move(keyState, listes);
     detectLvlWarp();
     
@@ -154,8 +155,13 @@ function changeLevel(){
         moveGround = null;
     });
     listeMoveGrounds = [];
+    listeUnlocker.forEach(unlocker => {
+        unlocker.mesh.dispose();
+        unlocker = null;
+    });
+    listeUnlocker = [];
 
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker];
     //supprimer le décor
     //changer de niveau
     if (nbLevel == -1){

@@ -4,7 +4,7 @@ import { Ground } from "./grounds.js";
 let mesh;
 function getMesh(scene){
     if(!mesh){
-        mesh = BABYLON.MeshBuilder.CreateBox("ground", {height: 1, width: 1, depth: 1}, scene);
+        mesh = BABYLON.MeshBuilder.CreateBox("movingGround", {height: 1, width: 1, depth: 1}, scene);
         mesh.isVisible = false;
         mesh.material = new BABYLON.StandardMaterial("groundMaterial", scene);
         mesh.material.diffuseColor = BABYLON.Color3.Green();

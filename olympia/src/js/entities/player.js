@@ -23,10 +23,12 @@ export class Player extends Entities {
         this.playerSpeed = playerSpeed;
         this.mesh.ellipsoid = new BABYLON.Vector3(0.5, 1, 0.5);
         this.mesh.ellipsoidOffset = new BABYLON.Vector3(0, 0.5, 0);
+        this.maxJump = 0;
         this.canJump = false;
         this.direction = new BABYLON.Vector3(0,0,0);
         console.log(this.mesh.ellipsoidOffset);
         this.canTakeDamage = true;
+        this.unlockAttack = false;
         this.canAttack = true;
         this.pvMax = 5;
         this.pv = this.pvMax;
@@ -157,6 +159,16 @@ export class Player extends Entities {
         }
     }
 
+    detectUnlocker(listeUnlockers){
+        listeUnlockers.forEach(unlocker => {
+            if (this.mesh.intersectsMesh(unlocker.mesh, true)){
+                unlocker.unlock(this);
+                unlocker.mesh.dispose();
+                unlocker = null;
+            }
+        });
+    }
+
     takeDamage(){
         this.pv -= 1;
         this.canTakeDamage = false;
@@ -188,7 +200,8 @@ export class Player extends Entities {
     }
 
     attaquer(){
-        //si le joueur appuie sur la touche d'attaque
+        //si le joueur a débloqué l'attaque
+        if (this.unlockAttack){
             //si il n'y a pas déjà une attaque en cours
             if(this.canAttack){
             //créer un mesh en demi sphere devant le joueur
@@ -232,6 +245,7 @@ export class Player extends Entities {
             //rendre le mesh de moins en moins visible
             attaque.visibility -= 0.05;
             }*/
+        }
     }
 
 
@@ -247,6 +261,7 @@ export class Player extends Entities {
         this.detectGround(listes[1], listes[7]);
         this.detectWarpZone(listes[4]);
         this.detectKillZone(listes[3], listes[0]);
+        this.detectUnlocker(listes[8]);
         //this.attaquer(keyState, listes[0]);
         
         //avance dans la direction du mouvement
@@ -267,8 +282,10 @@ export class Player extends Entities {
             this.vectorSpeed.x-= this.playerSpeed;
         }
         if (keyState['Space'] && this.canJump) {
+            if (this.maxJump > 0){
             console.log("space");
             this.vectorSpeed.y+= this.jumpPower;
+            }
         }
     
     

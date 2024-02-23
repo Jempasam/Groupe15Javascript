@@ -7,6 +7,7 @@ import { BreakableWall } from "../entities/breakableWalls.js";
 import { killZone } from "../entities/killZones.js";
 import { warpZone } from "../entities/warpZones.js";
 import { lvlWarp } from "../entities/lvlWarp.js";
+import { Unlocker } from "../entities/unlocker.js";
 
 // Constructeur de niveau
 export class Lvl1 {
@@ -56,6 +57,10 @@ export class Lvl1 {
         // Création d'un sol de départ
         const ground2 = new Ground("Ground2",33, -4, 30, 75, 1, 15,this.scene);
         listes[1].push(ground2);
+
+        // Création d'un débloqueur d'attaque
+        const unlocker = new Unlocker("Unlocker1",0, 0, 10, 1, 1, 1, 1, this.scene);
+        listes[8].push(unlocker);
         
     }
 }

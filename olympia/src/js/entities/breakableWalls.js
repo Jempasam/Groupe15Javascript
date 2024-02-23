@@ -3,7 +3,7 @@ import Entities from "./entities.js";
 let mesh;
 function getMesh(scene){
     if(!mesh){
-        mesh = BABYLON.MeshBuilder.CreateBox("wall", {height: 1, width: 1, depth: 1}, scene);
+        mesh = BABYLON.MeshBuilder.CreateBox("breakableWall", {height: 1, width: 1, depth: 1}, scene);
         mesh.isVisible = false;
         mesh.material = new BABYLON.StandardMaterial("wallMaterial", scene);
         mesh.material.diffuseColor = new BABYLON.Color3(0.5,0.5,0.5);
