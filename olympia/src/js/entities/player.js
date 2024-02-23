@@ -27,6 +27,7 @@ export class Player extends Entities {
         this.direction = new BABYLON.Vector3(0,0,0);
         console.log(this.mesh.ellipsoidOffset);
         this.canTakeDamage = true;
+        this.canAttack = true;
         this.pvMax = 5;
         this.pv = this.pvMax;
 
@@ -142,6 +143,53 @@ export class Player extends Entities {
 
     }
 
+    attaquer(){
+        //si le joueur appuie sur la touche d'attaque
+            //si il n'y a pas déjà une attaque en cours
+            if(this.canAttack){
+            //créer un mesh en demi sphere devant le joueur
+            let attaque = BABYLON.MeshBuilder.CreateSphere("attaque", {diameter: 0.5, segments: 16}, this.scene);
+            //couper la sphere en deux
+            attaque.scaling.x = 6;
+            attaque.scaling.y = 0.5;
+            attaque.scaling.z = 4;
+            //normaliser le vecteur vitesse
+            let normeVitesse = Math.sqrt(this.vectorSpeed.x*this.vectorSpeed.x + this.vectorSpeed.z*this.vectorSpeed.z);
+            //diviser la vitesse par sa norme
+            let vecteurNormalise = new BABYLON.Vector3(this.vectorSpeed.x/normeVitesse, 0, this.vectorSpeed.z/normeVitesse);
+            attaque.position = vecteurNormalise.scale(1).add(this.mesh.position);
+            //tourner l'attaque dans la direction du joueur
+            attaque.lookAt(this.direction);
+            attaque.material = new BABYLON.StandardMaterial("attaqueMaterial", this.scene);
+            attaque.material.diffuseColor = BABYLON.Color3.Blue();
+            attaque.checkCollisions = false;
+            this.canAttack = false;
+            //attendre 1 seconde avant de faire disparaitre l'attaque
+            setTimeout(() => {
+                attaque.dispose();
+                setTimeout(() => {
+                this.canAttack = true;
+                }, 200);
+            }, 300);
+            /*listeMonstres.forEach(monstre => {
+                //si le monstre est touché
+                if (attaque.intersectsMesh(monstre.mesh, true)){
+                    monstre.takeDamage();
+                    console.log("touché");
+                }
+            });*/
+        }
+        //}
+        //si une attaque est en cours
+        /*if(this.mesh.getScene().getMeshByName("attaque")){
+            let attaque = this.mesh.getScene().getMeshByName("attaque");
+            //faire se déplacer l'attaque avec le joueur
+            //attaque.position = new BABYLON.Vector3(this.mesh.position.x+this.vectorSpeed.x*20, this.mesh.position.y, this.mesh.position.z+this.vectorSpeed.z*20);
+            //rendre le mesh de moins en moins visible
+            attaque.visibility -= 0.05;
+            }*/
+    }
+
 
     //bouge
     move(keyState, listes){
@@ -149,11 +197,13 @@ export class Player extends Entities {
         this.vectorSpeed.y-=0.005;
         this.vectorSpeed.z*=0.9;
         //tourne vers la direction du mouvement
-        this.mesh.lookAt(new BABYLON.Vector3(this.mesh.position.x+this.vectorSpeed.x,this.mesh.position.y,this.mesh.position.z+this.vectorSpeed.z));
+        this.direction = new BABYLON.Vector3(this.mesh.position.x+this.vectorSpeed.x,this.mesh.position.y,this.mesh.position.z+this.vectorSpeed.z);
+        this.mesh.lookAt(this.direction);
         //detecter si un sol est juste en dessous de nous
         this.detectGround(listes[1]);
         this.detectWarpZone(listes[4]);
         this.detectKillZone(listes[3], listes[0]);
+        //this.attaquer(keyState, listes[0]);
         
         //avance dans la direction du mouvement
         if (keyState['KeyW']) {

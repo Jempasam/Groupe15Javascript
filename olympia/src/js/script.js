@@ -7,6 +7,7 @@ import { warpZone } from "./entities/warpZones.js";
 import { lvlWarp } from "./entities/lvlWarp.js";
 import { LvlTest } from "./levels/lvlTest.js";
 import { LvlAccueil } from "./levels/lvlAccueil.js";
+import { Lvl1} from "./levels/lvl1.js";
 
 const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true);
@@ -21,6 +22,7 @@ let listeWalls = [];
 let listeKillZones = [];
 let listeWarpZones = [];
 let listeLvlWarps = [];
+let listeBreakableWalls = [];
 let listes;
 let decor;
 let nbLevel = -1;
@@ -30,7 +32,7 @@ var createScene = function() {
     scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color3.Black;
     const camY = 10;
-    const camZ = 10;
+    const camZ = -10;
 
     //créer une camera qui regarde en 0,0,0
     camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, camY, camZ), scene);
@@ -44,9 +46,9 @@ var createScene = function() {
     player = new Player("Player",0, 0, 0, 1, 1, 1, 0.008, 0.2, scene);
     //player = scene.player;
     camera.lockedTarget = player.mesh;
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
     //appeler le niveau
-    decor = new LvlTest(player, listes);
+    changeLevel();
     
 
     definitEcouteurs();
@@ -68,14 +70,37 @@ function definitEcouteurs() {
             evt.preventDefault();
         }
     });
+    //detecter un clic gauche
+    window.addEventListener("click", function(evt){
+        player.attaquer();
+    });
+    
 }
 
 //déplacer le joueur
 function movePlayer(){
-    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
+    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
     player.move(keyState, listes);
     detectLvlWarp();
-    camera.position.x = player.mesh.position.x;
+    
+    //si on est dans le niveau d'accueil, la camera suit le joueur en z
+    switch (nbLevel){
+        case 0:
+            camera.position.x = player.mesh.position.x;
+            camera.position.z = 10;
+            break;
+
+        case 1:
+            camera.position.x = player.mesh.position.x;
+            camera.position.z = player.mesh.position.z + 15;
+            camera.position.y = player.mesh.position.y + 10;
+            break
+
+        default:
+            camera.position.x = player.mesh.position.x;
+            camera.position.z = 10;
+            break;
+    }
     
 }
 
@@ -124,8 +149,13 @@ function changeLevel(){
         lvlWarp = null;
     });
     listeLvlWarps = [];
+    listeBreakableWalls.forEach(breakableWall => {
+        breakableWall.mesh.dispose();
+        breakableWall = null;
+    });
+    listeBreakableWalls = [];
 
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls];
     //supprimer le décor
     //changer de niveau
     if (nbLevel == -1){
@@ -134,6 +164,10 @@ function changeLevel(){
     if (nbLevel == 0){
         
         decor = new LvlAccueil(player, listes);
+    }
+    if (nbLevel == 1){
+
+        decor = new Lvl1(player,listes);
     }
 }
 
@@ -151,6 +185,11 @@ engine.runRenderLoop(function () {
             monstre.auSol(touche);
         })*/
     });
+    //detecter si on tape un breakableWall
+    listeBreakableWalls.forEach(breakableWall => {
+        breakableWall.detectAttack(listeBreakableWalls);
+    }
+    );
     //afficher les pv actuels du joueur
     document.getElementById("pv").innerHTML = "PV: " + player.pv;
 
