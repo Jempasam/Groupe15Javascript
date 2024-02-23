@@ -10,10 +10,14 @@
 </head>
 <body>
     <h1>Test de mise en place d'une scene 3D sur une page web</h1>
-    <!-- Add your content here -->
-    <canvas id="renderCanvas" width="800" height="500"></canvas>
+    <!-- canva au milieu de l'écran-->
+    <canvas id="renderCanvas" width="800" height="500" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></canvas>
     <!-- affichage des pv du joueur -->
-    <div id="pv"></div>
+    <div id="pv" style="position: absolute; top: 25%; left: 32%; transform: translate(-50%, -50%); background-color: white; padding: 5px; border-radius: 5px; border-color: black;"></div>
+    <!-- affichage des pv alternatifs-->
+    <!-- <div id="pv" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>-->
+    <!--créer un div vide au milieu du canva "renderCanvas" pour afficher les informations du joueur-->
+    <div id="infoJoueur" style="position: absolute; top: 75%; left: 50%; transform: translate(-50%, -50%);"></div>
 </body>
 </html>
 

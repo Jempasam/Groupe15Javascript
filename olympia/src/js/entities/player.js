@@ -26,7 +26,7 @@ export class Player extends Entities {
         this.maxJump = 0;
         this.canJump = false;
         this.direction = new BABYLON.Vector3(0,0,0);
-        console.log(this.mesh.ellipsoidOffset);
+        //console.log(this.mesh.ellipsoidOffset);
         this.canTakeDamage = true;
         this.unlockAttack = false;
         this.canAttack = true;
@@ -119,7 +119,6 @@ export class Player extends Entities {
                 }
             }
             //pointMesh.dispose();
-            console.log(sol.direction.x*sol.speed, sol.direction.y*sol.speed, sol.direction.z*sol.speed);
         });
     }
 
@@ -138,7 +137,7 @@ export class Player extends Entities {
                 this.y = warpZone.yOut+ this.mesh.ySize;
                 this.z = warpZone.zOut;
                 console.log("warp");
-                console.log(this.mesh.position.x, this.mesh.position.y, this.mesh.position.z)
+                //console.log(this.mesh.position.x, this.mesh.position.y, this.mesh.position.z)
             }
         });
     }
