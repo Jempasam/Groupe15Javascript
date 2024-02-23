@@ -107,6 +107,9 @@ export default class BabylonJSDTarget extends BaseDTarget {
             back.position.y=sy/2
             back.position.x=sx/2
             back.rotation.x=-Math.PI/2
+
+            transform.scale(1,-1,1)
+            transform.move(0,-1,0)
         }
     }
 

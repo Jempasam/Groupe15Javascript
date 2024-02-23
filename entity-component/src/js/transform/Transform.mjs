@@ -14,13 +14,36 @@ export class Transform{
     sy;
     sz;
 
+    cosX
+    sinX
+    cosY
+    sinY
+    cosZ
+    sinZ
+    precalculatedLast=0
+    changeLast=1
+
+    precalculate(){
+        if(this.precalculatedLast!=this.changeLast){
+            this.precalculatedLast=this.changeLast
+            this.cosX = Math.cos(this.rx);
+            this.sinX = Math.sin(this.rx);
+            this.cosY = Math.cos(this.ry);
+            this.sinY = Math.sin(this.ry);
+            this.cosZ = Math.cos(this.rz);
+            this.sinZ = Math.sin(this.rz);
+        }
+    }
+
     constructor(x,y,z,rx,ry,rz,sx,sy,sz){
         this.x = x;
         this.y = y;
         this.z = z;
+
         this.rx = rx;
         this.ry = ry;
         this.rz = rz;
+
         this.sx = sx;
         this.sy = sy;
         this.sz = sz;
@@ -39,13 +62,15 @@ export class Transform{
             this.z += dz * this.sz;
             return
         }
+
+        this.precalculate()
         
-        const cosX = Math.cos(this.rx);
-        const sinX = Math.sin(this.rx);
-        const cosY = Math.cos(this.ry);
-        const sinY = Math.sin(this.ry);
-        const cosZ = Math.cos(this.rz);
-        const sinZ = Math.sin(this.rz);
+        const cosX = this.cosX;
+        const sinX = this.sinX;
+        const cosY = this.cosY;
+        const sinY = this.sinY;
+        const cosZ = this.cosZ;
+        const sinZ = this.sinZ;
 
         const newX = this.x + (dx * cosY * cosZ - dy * (cosX * sinZ + sinX * sinY * cosZ) + dz * (sinX * sinZ - cosX * sinY * cosZ)) * this.sx;
         const newY = this.y + (dx * cosY * sinZ + dy * (cosX * cosZ - sinX * sinY * sinZ) - dz * (sinX * cosZ + cosX * sinY * sinZ)) * this.sy;
@@ -66,6 +91,7 @@ export class Transform{
         this.rx += rx;
         this.ry += ry;
         this.rz += rz;
+        this.changeLast++
     }
 
     /**
@@ -124,15 +150,76 @@ export class Transform{
      * A transformation B such that Id=A*B with A this transformation, and Id the identity transformation.
      */
     inverse(){
-        this.x=-this.x;
-        this.y=-this.y;
-        this.z=-this.z;
-        this.rx=-this.rx;
-        this.ry=-this.ry;
-        this.rz=-this.rz;
-        this.sx=1/this.sx;
-        this.sy=1/this.sy;
-        this.sz=1/this.sz;
+        this.rx = -this.rx;
+        this.ry = -this.ry;
+        this.rz = -this.rz;
+        this.changeLast++;
+
+        /* LOCATION */
+        this.precalculate()
+        let nx = (this.x * this.cosY * this.cosZ - this.y * (this.cosX * this.sinZ + this.sinX * this.sinY * this.cosZ) + this.z * (this.sinX * this.sinZ - this.cosX * this.sinY * this.cosZ)) / this.sx;
+        let ny = (this.x * this.cosY * this.sinZ + this.y * (this.cosX * this.cosZ - this.sinX * this.sinY * this.sinZ) - this.z * (this.sinX * this.cosZ + this.cosX * this.sinY * this.sinZ)) / this.sy;
+        let nz = (this.x * -this.sinY + this.y * this.sinX * this.cosY + this.z * this.cosX * this.cosY) / this.sz;
+        this.x = -nx;
+        this.y = -ny;
+        this.z = -nz;
+
+        /* SIZE */
+        this.sx = 1 / this.sx;
+        this.sy = 1 / this.sy;
+        this.sz = 1 / this.sz;
+        this.changeLast++
+    }
+    
+    /**
+     * Apply this transform to a pair point-vector.
+     * and size.
+     * @param {[number,number,number]} point
+     */
+    apply(point){
+        if(this.rx!=0 || this.ry!=0 || this.rz!=0){
+            this.precalculate()
+            const cosX = this.cosX;
+            const sinX = this.sinX;
+            const cosY = this.cosY;
+            const sinY = this.sinY;
+            const cosZ = this.cosZ;
+            const sinZ = this.sinZ;
+            let nx = (point[0] * cosY * cosZ - point[1] * (cosX * sinZ + sinX * sinY * cosZ) + point[2] * (sinX * sinZ - cosX * sinY * cosZ)) * this.sx;
+            let ny = (point[0] * cosY * sinZ + point[1] * (cosX * cosZ - sinX * sinY * sinZ) - point[2] * (sinX * cosZ + cosX * sinY * sinZ)) * this.sy;
+            let nz = (point[0] * -sinY + point[1] * sinX * cosY + point[2] * cosX * cosY) * this.sz;
+            point[0]=nx
+            point[1]=ny
+            point[2]=nz
+        }
+        else{
+            point[0]*=this.sx;
+            point[1]*=this.sy;
+            point[2]*=this.sz;
+        }
+        point[0]+=this.x;
+        point[1]+=this.y;
+        point[2]+=this.z;
+    }
+
+    /**
+     * Set as the the offset between the two transforms.
+     * Set as A such as this+A=other
+     * @param {Transform} other
+     */
+    offset(other){
+        this.rx = other.rx - this.rx;
+        this.ry = other.ry - this.ry;
+        this.rz = other.rz - this.rz;
+        this.changeLast++;
+
+        this.x = other.x - this.x;
+        this.y = other.y - this.y;
+        this.z = other.z - this.z;
+
+        this.sx = other.sx / this.sx;
+        this.sy = other.sy / this.sy;
+        this.sz = other.sz / this.sz;
     }
 
     /**
@@ -141,6 +228,28 @@ export class Transform{
      */
     clone(){
         return new Transform(this.x, this.y, this.z, this.rx, this.ry, this.rz, this.sx, this.sy, this.sz);
+    }
+
+    /**
+     * Copy the values of another transform into this transform
+     * @param {Transform} other 
+     */
+    copy(other){
+        this.x = other.x;
+        this.y = other.y;
+        this.z = other.z;
+        this.rx = other.rx;
+        this.ry = other.ry;
+        this.rz = other.rz;
+        this.sx = other.sx;
+        this.sy = other.sy;
+        this.sz = other.sz;
+        this.cosX = other.cosX;
+        this.sinX = other.sinX;
+        this.cosY = other.cosY;
+        this.sinY = other.sinY;
+        this.cosZ = other.cosZ;
+        this.sinZ = other.sinZ;
     }
 
     /**

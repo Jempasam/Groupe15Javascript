@@ -12,8 +12,11 @@ export class SphereBound extends Bound{
      * @returns {[number,number,number]}
      */
     getNearestPoint(direction){
-        let distance=Math.sqrt(direction[0]**2 + direction[1]**2 + direction[2]**2);
-        return [direction[0]/distance, direction[1]/distance, direction[2]/distance];
+        const dx=direction[0]-0.5;
+        const dy=direction[1]-0.5;
+        const dz=direction[2]-0.5;
+        let distance=Math.sqrt(dx**2 + dy**2 + dz**2)*2;
+        return [dx/distance+.5, dy/distance+.5, dz/distance+.5];
     }
 
     /**
@@ -26,3 +29,5 @@ export class SphereBound extends Bound{
     }
     
 }
+
+export const SPHERE_BOUND=new SphereBound();

@@ -12,25 +12,40 @@ export class BoxBound extends Bound{
      * @returns {[number,number,number]}
      */
     getNearestPoint(point){
-        let ox=Math.abs(point[0]);
-        let oy=Math.abs(point[1]);
-        let oz=Math.abs(point[2]);
+        let px=point[0];
+        let py=point[1];
+        let pz=point[2];
+        if(px>1) px=1;
+        if(px<0) px=0;
+        if(py>1) py=1;
+        if(py<0) py=0;
+        if(pz>1) pz=1;
+        if(pz<0) pz=0;
+        px-=.5;
+        py-=.5;
+        pz-=.5;
+        const ox=Math.abs(px);
+        const oy=Math.abs(py);
+        const oz=Math.abs(pz);
         let multiplier
         if(ox>oy){
             if(ox>oz){
-                multiplier=1/ox;
+                multiplier=.5/ox;
             }else{
-                multiplier=1/oz;
+                multiplier=.5/oz;
             }
         }
         else{
             if(oy>oz){
-                multiplier=1/oy;
+                multiplier=.5/oy;
             }else{
-                multiplier=1/oz;
+                multiplier=.5/oz;
             }
         }
-        return [point[0]*multiplier, point[1]*multiplier, point[2]*multiplier];
+        const fx=px*multiplier+.5
+        const fy=py*multiplier+.5
+        const fz=pz*multiplier+.5
+        return [fx,fy,fz];
     }
 
     /**
@@ -59,3 +74,5 @@ export class BoxBound extends Bound{
     }
 
 }
+
+export const BOX_BOUND=new BoxBound();
