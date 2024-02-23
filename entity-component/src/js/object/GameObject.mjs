@@ -276,8 +276,8 @@ export class World{
                 let oz=object.z/this.depth-depth/2
                 
                 target.push()
-                target.move(ox,oy,oz)
-                target.scale(width,height,depth)
+                target.transform.move(ox,oy,oz)
+                target.transform.scale(width,height,depth)
                 target.draw(shape)
                 target.pop()
             }
