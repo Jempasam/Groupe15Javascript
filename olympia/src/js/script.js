@@ -153,6 +153,7 @@ function changeLevel(){
         moveGround.mesh.dispose();
         moveGround = null;
     });
+    listeMoveGrounds = [];
 
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds];
     //supprimer le décor

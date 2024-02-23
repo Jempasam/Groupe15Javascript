@@ -101,10 +101,16 @@ export class LvlTest {
     const breakableWall = new BreakableWall("BreakableWall1",-9, 2, -7, 5, 1, 1, this.scene);
     listes[6].push(breakableWall);
 
+    /*//créer un sol qui bouge
+    const movingGround = new MovingGround("MovingGround1",4, 5, -10, 5, 1, 5, 4, -2, 0, this.scene);
+    listes[1].push(movingGround);
+    listes[7].push(movingGround);*/
+
     //créer un sol qui bouge
-    const movingGround = new MovingGround("MovingGround1",4, 5, -10, 5, 1, 5, 4, -1, 0, this.scene);
-    //listes[1].push(movingGround);
-    listes[7].push(movingGround);
+    const movingGround2 = new MovingGround("MovingGround2",4, 8, -0, 10, 1, 10, 4, -2, 0, this.scene);
+    listes[1].push(movingGround2);
+    listes[7].push(movingGround2);
+
 
     player.resetPosition();
 
