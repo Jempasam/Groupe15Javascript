@@ -163,6 +163,8 @@ export class Player extends Entities {
             if (this.mesh.intersectsMesh(unlocker.mesh, true)){
                 unlocker.unlock(this);
                 unlocker.mesh.dispose();
+                //le supprimer de la liste
+                listeUnlockers.splice(listeUnlockers.indexOf(unlocker), 1);
                 unlocker = null;
             }
         });
