@@ -30,6 +30,7 @@ ul{
     margin-left: 0;
     width: 40em;
     list-style: none;
+    counter-reset: enfer;
 }
 li{
     cursor: pointer;
@@ -40,9 +41,13 @@ li{
     color: white;
     font-size: 1.5em;
     font-weight: bold;
-    transition: margin-left 1s;
+    transition: padding-left 1s;
     &:hover{
-        margin-left: 1em;
+        padding-left: 7em;
+    }
+    &:before{
+        counter-increment: enfer;
+        content: "Enfer " counter(enfer) ": ";
     }
 }
 
@@ -53,7 +58,9 @@ p{
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 3em;
     text-align: left;
+    animation: floating 8s infinite ease-in-out;
 }
 h2{
     position: absolute;
@@ -82,5 +89,17 @@ h2{
     }
     100%{
         backdrop-filter: brightness(1);
+    }
+}
+
+@keyframes floating {
+    0%{
+        transform: translateY(-1em);
+    }
+    50%{
+        transform: translateY(1em);
+    }
+    100%{
+        transform: translateY(-1em);
     }
 }
