@@ -88,7 +88,7 @@ export default class BabylonJSDTarget extends BaseDTarget {
             let sz=transform.sz
             const camera = new BABYLON.ArcRotateCamera("cam", 0, 0, sy*2, new BABYLON.Vector3(sx/2, sy/2, -sz), this.#scene);
             camera.setTarget(new BABYLON.Vector3(sx/2, sy/2, sz/2));
-            camera.attachControl(parent_canvas, true);
+            camera.attachControl(parent_canvas, false);
             const ssao = new BABYLON.SSAO2RenderingPipeline("ssao",this.#scene, 0.75,[camera])
 
             

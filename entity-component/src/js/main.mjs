@@ -25,7 +25,6 @@ let plugins={
 const canvas = document.getElementById("target")
 if(!(canvas instanceof HTMLCanvasElement))throw new Error("Canvas not found")
 let transform=new Transform(0,0,0, 0,0,0, 100,100,100)
-transform.scale(1,1,1)
 const target=new CanvasDTarget(canvas)
 //const target=new BabylonJSDTarget(canvas, transform)
 
@@ -77,7 +76,7 @@ let purple={
 }
 
 
-let point=[0.8,0.5,0]
+let point=[0.8,0.5,-0.1]
 let pt1
 let pt2
 let view=new Transform(0,0,0, 0,0,0, 1,1,1)
@@ -100,13 +99,26 @@ document.onkeydown=(e)=>{
     if(e.code=="ArrowLeft")second.move(-0.01,0,0)
     if(e.code=="ArrowRight")second.move(0.01,0,0)
     if(e.code=="KeyP")second.rotate(0,0,0.01)
+    if(e.code=="KeyO")second.rotate(0,0,-0.01)
+    if(e.code=="KeyL")second.scaleAround(1.01,1,1, 0.5,0.5,0.5)
+    if(e.code=="KeyK")second.scaleAround(0.99,1,1, 0.5,0.5,0.5)
+    if(e.code=="KeyM")second.scaleAround(1,1.01,1, 0.5,0.5,0.5)
+    if(e.code=="KeyN")second.scaleAround(1,0.99,1, 0.5,0.5,0.5)
 }
 
 setInterval((e)=>{
     target.start()
+
     target.push()
     target.transform.compose(view)
-    target.draw(gray)
+
+    {
+        target.push()
+        target.transform.scale(1,1,0.01)
+        target.transform.move(0,0,100)
+        target.draw(gray)
+        target.pop()
+    }
 
     let draw_rect=(transform,style)=>{
         target.push()
@@ -125,7 +137,7 @@ setInterval((e)=>{
     draw_point(point, red)
 
     draw_rect(first, green)
-    draw_rect(second, blue)
+    draw_rect(second, blue_circle)
 
     // Test hitbox
     {
@@ -138,7 +150,7 @@ setInterval((e)=>{
     let offset=first.clone()
     offset.inverse()
     offset.compose(second)
-    let result=doCollide(BOX_BOUND,offset,BOX_BOUND)
+    let result=doCollide(BOX_BOUND,offset,SPHERE_BOUND)
 
     if(result){
         pt1=result[0]
@@ -152,7 +164,7 @@ setInterval((e)=>{
         draw_point(pt2, red)
         draw_point(result[2], red)
     }
-
+    
     target.pop()
     target.end()
 }, 100)

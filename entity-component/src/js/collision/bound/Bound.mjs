@@ -66,18 +66,31 @@ export function doCollide(bounda, transform, boundb){
     const inversed=transform.clone();
     inversed.inverse()
 
-    // Get border point of A bound to B bound center
+    /* -- NEAREST A FOR A -- */
     /** @type {[number,number,number]} */
     let bCenterForA=[0.5,0.5,0.5];
     transform.apply(bCenterForA);
-    let aNearestForA=bounda.getNearestPoint(bCenterForA);
 
-    // Get border point of B bound to A bound nearest point
+    let aCenterNearestForA=bounda.getNearestPoint(bCenterForA);
+
     /** @type {[number,number,number]} */
-    let aNearestForB=[aNearestForA[0],aNearestForA[1],aNearestForA[2]];
-    inversed.apply(aNearestForB);
-    let bNearestForA=boundb.getNearestPoint(aNearestForB);
+    let aCenterNearestForB=[...aCenterNearestForA]
+    inversed.apply(aCenterNearestForB);
+
+    let bNearestForA=boundb.getNearestPoint(aCenterNearestForB);
     transform.apply(bNearestForA);
+
+    /** @type {[number,number,number]} */
+    let aCenterForB=[0.5, 0.5, 0.5]
+    inversed.apply(aCenterForB);
+
+    let bCenterNearestForB=boundb.getNearestPoint(aCenterForB);
+
+    /** @type {[number,number,number]} */
+    let bCenterNearestForA=[...bCenterNearestForB];
+    transform.apply(bCenterNearestForA);
+
+    let aNearestForA=bounda.getNearestPoint(bCenterNearestForA);
 
     // Distance between borders
     let distanceACenterBNearest=
@@ -91,14 +104,14 @@ export function doCollide(bounda, transform, boundb){
         (bCenterForA[2]-aNearestForA[2])**2
     
     let distanceACenterANearest=
-        (0.5-aNearestForA[0])**2+
-        (0.5-aNearestForA[1])**2+
-        (0.5-aNearestForA[2])**2
+        (0.5-aCenterNearestForA[0])**2+
+        (0.5-aCenterNearestForA[1])**2+
+        (0.5-aCenterNearestForA[2])**2
     
     let distanceBCenterBNearest=
-        (bCenterForA[0]-bNearestForA[0])**2+
-        (bCenterForA[1]-bNearestForA[1])**2+
-        (bCenterForA[2]-bNearestForA[2])**2
+        (bCenterForA[0]-bCenterNearestForA[0])**2+
+        (bCenterForA[1]-bCenterNearestForA[1])**2+
+        (bCenterForA[2]-bCenterNearestForA[2])**2
     
     if(distanceACenterBNearest<distanceACenterANearest || distanceBCenterANearest<distanceBCenterBNearest){
         return [aNearestForA,bNearestForA,bCenterForA]

@@ -36,12 +36,8 @@ export default class CanvasDTarget extends BaseDTarget {
     draw(object) {
         this.#ctx.save();
         this.#ctx.translate(this.transform.x, this.transform.y);
-
         this.#ctx.scale(this.transform.sx, this.transform.sy);
-
-        //this.#ctx.translate(0.5, 0.5);
         this.#ctx.rotate(this.transform.rz);
-        //this.#ctx.translate(-0.5, -0.5);
 
         if(object["drawOnCanvas"]){
             object["drawOnCanvas"](this.#ctx);
