@@ -5,7 +5,7 @@ function getMesh(scene){
     if(!mesh){
         mesh = BABYLON.MeshBuilder.CreateBox("breakableWall", {height: 1, width: 1, depth: 1}, scene);
         mesh.isVisible = false;
-        mesh.material = new BABYLON.StandardMaterial("wallMaterial", scene);
+        mesh.material = new BABYLON.StandardMaterial("breakableWallMaterial", scene);
         mesh.material.diffuseColor = new BABYLON.Color3(0.5,0.5,0.5);
         mesh.checkCollisions = false;
     }
@@ -21,12 +21,10 @@ export class BreakableWall extends Entities {
     }
 
     detectAttack(listeBreakableWalls){
-        listeBreakableWalls.forEach(wall => {
             if (this.mesh.getScene().getMeshByName("attaque") && this.mesh.intersectsMesh(this.mesh.getScene().getMeshByName("attaque"))){
-                wall.mesh.dispose();
-                listeBreakableWalls.splice(listeBreakableWalls.indexOf(wall),1);
+                this.mesh.dispose();
+                listeBreakableWalls.splice(listeBreakableWalls.indexOf(this),1);
             }
-        });
     }
 }
 

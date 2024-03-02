@@ -9,11 +9,12 @@ import { lvlWarp } from "../entities/lvlWarp.js";
 import { BreakableWall } from "../entities/breakableWalls.js";
 import { MovingGround } from "../entities/movingGrounds.js";
 import { Unlocker } from "../entities/unlocker.js";
+import { Canon } from "../entities/canons.js";
 
 // Constructeur de niveau
 export class LvlTest {
     constructor(player, listes) {
-    //listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker];
+    //listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, ListeCanons];
     //créer un sol de départ
     const ground = new Ground("Ground1",-9, -1, 0, 20, 1, 5,this.scene);
     listes[1].push(ground);
@@ -120,6 +121,13 @@ export class LvlTest {
     const unlocker2 = new Unlocker("Unlocker2",-10, 2, -10, 1, 1, 1, 2, this.scene);
     listes[8].push(unlocker2);
 
+    //créer un lvlWarp vers le boss1
+    const lvlWarpBoss1 = new lvlWarp("lvlWarpBoss1",-12, 2, -18, 1, 1, 1, -2,this.scene);
+    listes[5].push(lvlWarpBoss1);
+
+    //créer un canon
+    const canon = new Canon("Canon1",-5, 2, -15, 1, 1, 1, new BABYLON.Vector3(1,0.3,0), this.scene);
+    listes[9].push(canon);
 
     player.resetPosition();
 
