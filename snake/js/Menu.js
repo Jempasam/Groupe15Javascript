@@ -10,9 +10,9 @@ const divJeu = document.getElementById('ecranjeu');
 let isMenuVisible = true;
 
 // Fonction pour changer la visibilité du canvas
+
 function toggleMenuVisibility() {
-  // Inverse la valeur du booléen
-  //isMenuVisible = !isMenuVisible;
+
   
   // Change la visibilité du canvas en fonction du booléen
   divMenu.style.display = 'none';

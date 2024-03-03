@@ -8,6 +8,7 @@ let angle = 0;
 let debugGameOver = 0;
 let PremierCoup = false;
 let Pause = false;
+let choixSkin = 0;
 
 // Mode de jeu alternatifs
 
@@ -18,6 +19,7 @@ let InversionTouche = false;
 
 const bouton1 = document.getElementById("modeVitesse");
 const bouton2 = document.getElementById("modeInversion");
+const bouton3 = document.getElementById("boutonSkin");
 
 function definirEcouteurs() {
 
@@ -44,6 +46,28 @@ function definirEcouteurs() {
         else
         {
             bouton2.classList.remove("bouton-active"); // Ajoute la classe pour la brillance
+        }
+    });
+
+    document.getElementById("boutonSkin").addEventListener("click", function()
+    {        
+        if (choixSkin < 1)
+        {
+            choixSkin ++;
+        }
+        else
+        {
+            choixSkin = 0;
+        }
+
+        // Mettre à jour l'image en fonction du choixSkin
+        const img = document.getElementById("boutonSkin").querySelector("img");
+        if (choixSkin === 0) 
+        {
+            img.src = "../../snake/assets/serpentManchot.png";
+        } else 
+        {
+            img.src = "../../snake/assets/serpentCanard.png";
         }
     });
 
@@ -199,8 +223,8 @@ function init()
 
 function drawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    serpent.drawGrossir(ctx, 0.5, angle);
-    serpent.drawSerpent(ctx, 0.5, angle);
+    serpent.drawGrossir(ctx, 0.5, angle, choixSkin);
+    serpent.drawSerpent(ctx, 0.5, angle, choixSkin);
     fruit.drawFruit(ctx, 0.5);
 }
 
@@ -286,6 +310,7 @@ function hitbox() {
 
 function mangerFruit() 
 {
+    //audio.play();
     serpent.AddNbFruits();
     serpent.positionQueue();
     afficherScore()

@@ -74,6 +74,21 @@ body {
   cursor: pointer;
 }
 
+#boutonSkin {
+  position: absolute;
+  transform : translateY(350%);
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  width : 125px;
+  height : 50px;
+}
+
+#boutonSkin img{
+  width: 50px;
+
+}
+
 .TitreJeu {
   text-transform: uppercase;
   font-size: calc(12px + 2vw);
