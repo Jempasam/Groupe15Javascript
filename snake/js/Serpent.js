@@ -69,9 +69,15 @@ export default class Serpent {
         ctx.rotate(angle);
     
         // On dessine la tête du serpent en 0, 0
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = 'black';
         ctx.fillRect(0, -25, 50, 50);
-    
+  
+        ctx.fillStyle = 'red';
+        ctx.fillRect(50, -5, 15,10)
+        
+        ctx.fillStyle = 'yellow';
+        ctx.fillRect(25, -15, 10,10)
+          
         ctx.restore();
     }
     
@@ -84,8 +90,8 @@ export default class Serpent {
                  ctx.translate(this.segments[i].x, this.segments[i].y);
                  ctx.scale(zoom, zoom);
                  ctx.rotate(angle);
-                 ctx.fillStyle = 'blue';
-                 ctx.fillRect(0, -25, 50, 50);
+                 ctx.fillStyle = '#F5F5DC';
+                 ctx.fillRect(-25, -25, 50, 50);
                  ctx.restore();
 
             }

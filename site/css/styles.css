@@ -9,6 +9,7 @@ body {
 #ecranjeu {
   display: none; /* Le menu est initialement caché */
   position: relative;
+  background-color: green;
 }
 
 #myCanvas {
@@ -24,8 +25,7 @@ body {
   text-align: left;
   position: absolute;
   top: 50%;
-  right: 5%;
-  transform: translateY(-50%);
+  right: -27.5%;
   width: 20%;
   max-width: 200px;
 }
@@ -37,40 +37,85 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 800px;
 }
 
 #menuPrincipal {
-  background-color: aqua;
+  background: linear-gradient(to bottom, cyan 60%, green 40%);
+  border-radius : 10%;
 }
 
 #toggleMenuButton {
   position: absolute;
-  bottom: 50%;
-  width : 8%;
-  height : 11%;
+  border-radius : 50%;
+  margin-bottom: 80px;
+  padding : 20px;
 }
 
-#toggleMenuButton img{
-  width : 60%;
-  height : 100%;
+#toggleMenuButton img {
+  width : 40px;
+  height : 40px;
 }
 
 #modeVitesse {
   position: absolute;
-  left : 37%;
-  margin-bottom: 2%;
+  transform: translateX(-575%);
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 80px;
 }
 
 #modeInversion {
   position: absolute;
-  left : 37%;
-  margin-top: 2%; /* Pour espacer les boutons de mode */
+  transform: translateX(-575%);
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-p {
+.TitreJeu {
+  text-transform: uppercase;
+  font-size: calc(12px + 2vw);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: #ff5c00;
+  font-family: 'Arial Black', sans-serif;
+  /*animation: shake 0.5s infinite alternate; /* Animation (exemple : secousse) */
+
   position: absolute;
-  bottom: 70%;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  /*bottom: 70%;*/
+
+}
+
+.ScoreAffichage img
+{
+  margin-left: 25%;
+  margin-top : -20px;
+  width : 50px;
+  height: 50px;
+}
+
+.NombrePoints
+{
+  text-transform: uppercase;
+  font-size: calc(12px + 2vw);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Arial Black', sans-serif;
+
+  text-align: center;
+  margin-top : -10px;
+}
+
+
+
+
+
+@keyframes shake {
+  from { transform: translateX(-5px); }
+  to { transform: translateX(5px); }
 }
 
 .bouton-active {

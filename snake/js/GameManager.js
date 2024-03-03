@@ -84,23 +84,18 @@ function traiteKeyDown(event)
             if (!InversionTouche)
             {
                 inputStates.right = true;
+                inputStates.left = false;
+                angle = 0;
             }
             else
             {
                 inputStates.right = false;
+                inputStates.left = true;
+                angle = Math.PI;
             }
             inputStates.up = false;
             inputStates.down = false;
 
-            if (!InversionTouche)
-            {
-                inputStates.left = false;
-            }
-            else
-            {
-                inputStates.left = true;
-            }
-            angle = 0;
         }
     }
 
@@ -112,22 +107,16 @@ function traiteKeyDown(event)
             if (!InversionTouche)
             {
                 inputStates.left = true;
+                inputStates.right = false;
+                angle = Math.PI;
             }
             else
             {
                 inputStates.left = false;
-            }
-
-            if (!InversionTouche)
-            {
-            inputStates.right = false;
-            }
-            else
-            {
                 inputStates.right = true;
+                angle = 0;
             }
             inputStates.up = false;
-            angle = 0;
         }
     }
 
@@ -138,25 +127,20 @@ function traiteKeyDown(event)
             if (!InversionTouche)
             {
                 inputStates.up = false;
+                inputStates.down = true;
+                angle = Math.PI /2;
             }
             else
             {
                 inputStates.up = true;
+                inputStates.down = false;
+                angle = - Math.PI /2;
             }
 
             inputStates.left = false;
 
-            if (!InversionTouche)
-            {
-                inputStates.down = true;
-            }
-            else
-            {
-                inputStates.down = false;
-            }
-
             inputStates.right = false;
-            angle = 0;
+
         }
     }
 
@@ -169,24 +153,17 @@ function traiteKeyDown(event)
             if (!InversionTouche)
             {
                 inputStates.down = false;
+                inputStates.up = true;
+                angle = - Math.PI /2;
             }
             else
             {
                 inputStates.down = true;
+                inputStates.up = false;
+                angle = Math.PI /2;
             }
             
             inputStates.left = false;
-
-            if (!InversionTouche)
-            {
-                inputStates.up = true;
-            }
-            else
-            {
-                inputStates.up = false;
-            }
-
-            angle = 0;
         }
     }
 }
@@ -382,5 +359,6 @@ function pause()
 
 function afficherScore()
 {
-    document.getElementById("score").innerHTML = "Score : " + Math.round(serpent.segments.length / 2); 
+    document.querySelector(".NombrePoints").textContent = Math.round(serpent.segments.length / 2);
+
 }
