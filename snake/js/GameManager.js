@@ -289,18 +289,37 @@ function mangerFruit()
     serpent.AddNbFruits();
     serpent.positionQueue();
     afficherScore()
-    
-   setTimeout(() => {
-        serpent.AddNbFruits();
-        serpent.positionQueue();;
-        afficherScore()
-      }, 10);
 
-    if (mangerVitesse)
+    if (!mangerVitesse)
     {
-        vitesse = vitesse + 0.1;
-        vitesseP = vitesse;
+        setTimeout(() => {
+            serpent.AddNbFruits();
+            serpent.positionQueue();;
+            afficherScore()
+          }, 10);
+
     }
+
+    else
+    {
+        for (let i = 0; i < 3; i++) {
+            setTimeout(() => {
+                serpent.AddNbFruits();
+                serpent.positionQueue();;
+                afficherScore()
+              }, 10);
+        }
+
+    }
+
+
+
+    //Changement du mode de jeu alternatif
+    //if (mangerVitesse)
+    //{
+    //    vitesse = vitesse + 0.1;
+    //    vitesseP = vitesse;
+    //}
     
     if (mangerInversion)
     {
@@ -359,6 +378,15 @@ function pause()
 
 function afficherScore()
 {
-    document.querySelector(".NombrePoints").textContent = Math.round(serpent.segments.length / 2);
+    if (!mangerVitesse)
+    {
+        document.querySelector(".NombrePoints").textContent = Math.round(serpent.segments.length / 2);
+    }
+    else
+    {
+        document.querySelector(".NombrePoints").textContent = Math.round(serpent.segments.length / 4);
+    }
+
+
 
 }
