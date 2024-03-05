@@ -2,6 +2,7 @@ import { Player } from "./entities/player.js";
 import { LvlTest } from "./levels/lvlTest.js";
 import { LvlAccueil } from "./levels/lvlAccueil.js";
 import { Lvl1} from "./levels/lvl1.js";
+import { LvlBoss1} from "./levels/lvlBoss1.js";
 
 const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true);
@@ -19,6 +20,9 @@ let listeLvlWarps = [];
 let listeBreakableWalls = [];
 let listeMoveGrounds = [];
 let listeUnlocker = [];
+let listeCanons = [];
+let Boss = [];
+let listeBombes = [];
 let listes;
 let decor;
 let nbLevel = -1;
@@ -42,7 +46,7 @@ var createScene = function() {
     player = new Player("Player",0, 0, 0, 1, 1, 1, 0.008, 0.2, scene);
     //player = scene.player;
     camera.lockedTarget = player.mesh;
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
     //appeler le niveau
     changeLevel();
     
@@ -75,7 +79,7 @@ function definitEcouteurs() {
 
 //déplacer le joueur
 function movePlayer(){
-    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker];
+    //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
     player.move(keyState, listes);
     detectLvlWarp();
     
@@ -90,7 +94,13 @@ function movePlayer(){
             camera.position.x = player.mesh.position.x;
             camera.position.z = player.mesh.position.z + 15;
             camera.position.y = player.mesh.position.y + 10;
-            break
+            break;
+        
+        case -2:
+            camera.position.x = player.mesh.position.x;
+            camera.position.z = player.mesh.position.z + 20;
+            camera.position.y = player.mesh.position.y + 10;
+            break;
 
         default:
             camera.position.x = player.mesh.position.x;
@@ -160,8 +170,24 @@ function changeLevel(){
         unlocker = null;
     });
     listeUnlocker = [];
+    listeCanons.forEach(canon => {
+        canon.mesh.dispose();
+        canon.destroyVoyant();
+        canon = null;
+    });
+    listeCanons = [];
+    Boss.forEach(boss => {
+        boss.breakBoss();
+        boss = null;
+    });
+    Boss = [];
+    listeBombes.forEach(bombe => {
+        bombe.mesh.dispose();
+        bombe = null;
+    });
+    listeBombes = [];
 
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker];
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
     //supprimer le décor
     //changer de niveau
     if (nbLevel == -1){
@@ -174,6 +200,10 @@ function changeLevel(){
     if (nbLevel == 1){
 
         decor = new Lvl1(player,listes);
+    }
+    if (nbLevel == -2){
+
+        decor = new LvlBoss1(player,listes);
     }
 }
 
@@ -196,8 +226,26 @@ engine.runRenderLoop(function () {
         breakableWall.detectAttack(listeBreakableWalls);
     }
     );
+    //detecter si on tape un canon
+    listeCanons.forEach(canon => {
+        canon.detectAttack();
+    }
+    );
     listeMoveGrounds.forEach(moveGround => {
         moveGround.move();
+    });
+    Boss.forEach(boss => {
+        boss.act(listes, player);
+        if (!boss.enVie){
+            boss.postDeath(listes);
+            boss = null;
+            //enlever le boss de la liste
+            let index = Boss.indexOf(boss);
+            Boss.splice(index, 1);
+        }
+    });
+    listeBombes.forEach(bombe => {
+        bombe.detectTarget(player, listeBombes);
     });
     //afficher les pv actuels du joueur
     document.getElementById("pv").innerHTML = "PV: " + player.pv;

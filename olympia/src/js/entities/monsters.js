@@ -6,7 +6,7 @@ function getMesh(scene){
         mesh = BABYLON.MeshBuilder.CreateBox("monster", {height: 1, width: 1, depth: 1}, scene);
         mesh.isVisible = false;
         mesh.registerInstancedBuffer("color", 4);
-        mesh.material = new BABYLON.StandardMaterial("wallMaterial", scene);
+        mesh.material = new BABYLON.StandardMaterial("monsterMaterial", scene);
         mesh.material.diffuseColor = BABYLON.Color3.White();
         mesh.checkCollisions = false;
     }

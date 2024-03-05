@@ -5,7 +5,7 @@ function getMesh(scene){
     if(!mesh){
         mesh = BABYLON.MeshBuilder.CreateBox("unlocker", {height: 1, width: 1, depth: 1}, scene);
         mesh.isVisible = false;
-        mesh.material = new BABYLON.StandardMaterial("wallMaterial", scene);
+        mesh.material = new BABYLON.StandardMaterial("unlockerMaterial", scene);
         mesh.material.diffuseColor = new BABYLON.Color3(0.5,1,1);
         mesh.checkCollisions = false;
     }
