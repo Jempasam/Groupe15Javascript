@@ -155,6 +155,7 @@ export class BossBasket extends Entities {
                 //créer un projectile au dessus du joueur
                 let playerPos = player.mesh.position;
                 bombe = new Bombe("bombe", playerPos.x, playerPos.y+5, playerPos.z, 1, 1, 1, 5, this.mesh.getScene());
+                listeBombes.push(bombe);
                 bombe.start(listeGrounds, listeMoveGrounds);
                 break;
 
