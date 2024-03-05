@@ -1,7 +1,7 @@
 import { BoxShape, CircleShape } from "../collision/Shape.mjs";
 import { eatKeyPress, isKeyPressed } from "../controls/Keyboard.mjs";
 import { MovementBehaviour } from "../object/behaviour/MovementBehaviour.mjs";
-import { ShapeBehaviour } from "../object/behaviour/ShapeBehaviour.mjs";
+import { ShapeBehaviour } from "../object/behaviour/BoundBehaviour.mjs";
 import { CollisionBehaviour } from "../object/behaviour/collision/CollisionBehaviour.mjs";
 import { WorldLimitBehaviour } from "../object/behaviour/collision/WorldLimitBehaviour.mjs";
 import { ControlDashBehaviour } from "../object/behaviour/controls/ControlDashBehaviour.mjs";

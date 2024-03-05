@@ -1,5 +1,28 @@
 
 /**
+ * Create a new transform
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} z 
+ * @param {number=} sx 
+ * @param {number=} sy 
+ * @param {number=} sz 
+ * @param {number=} rx 
+ * @param {number=} ry 
+ * @param {number=} rz 
+ * @returns 
+ */
+export function transform(x, y, z, sx, sy, sz, rx, ry, rz) {
+    if(sx===undefined)sx=1;
+    if(sy===undefined)sy=sx;
+    if(sz===undefined)sz=sy;
+    if(rx===undefined)rx=0;
+    if(ry===undefined)ry=0;
+    if(rz===undefined)rz=0;
+    return new Transform(x, y, z, rx, ry, rz, sx, sy, sz);
+}
+
+/**
  * A transformation in 3D space.
  */
 export class Transform{
