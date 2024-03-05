@@ -54,21 +54,24 @@ export class BoxBound extends Bound{
      * @returns {[number,number,number]}
      */
     getNormal(point){
-        let ox=Math.abs(point[0]);
-        let oy=Math.abs(point[1]);
-        let oz=Math.abs(point[2]);
+        let x=point[0]-0.5;
+        let y=point[1]-0.5;
+        let z=point[2]-0.5;
+        let ox=Math.abs(x);
+        let oy=Math.abs(y);
+        let oz=Math.abs(z);
         if(ox>oy){
             if(ox>oz){
-                return [Math.sign(point[0]), 0, 0];
+                return [Math.sign(x), 0, 0];
             }else{
-                return [0, 0, Math.sign(point[2])];
+                return [0, 0, Math.sign(z)];
             }
         }
         else{
             if(oy>oz){
-                return [0, Math.sign(point[1]), 0];
+                return [0, Math.sign(y), 0];
             }else{
-                return [0, 0, Math.sign(point[2])];
+                return [0, 0, Math.sign(z)];
             }
         }
     }

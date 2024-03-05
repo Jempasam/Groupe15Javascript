@@ -3,14 +3,14 @@
  * Les couleurs du site sont définies ici.
  */
 body{
-    --back-color: white;
-    --front-color: black;
+    --back-color: rgb(253, 221, 173);
+    --front-color: rgb(77, 3, 3);
 
-    --back-color-alt: rgb(201, 201, 201);
-    --front-color-alt: darkblue;
+    --back-color-alt: rgb(69, 45, 45);
+    --front-color-alt: rgb(255, 187, 92);
 
-    --back-color-other: darkblue;
-    --front-color-other: white;
+    --back-color-other: rgb(182, 94, 39);
+    --front-color-other: rgb(69, 45, 45);
 }
 
 img{
@@ -35,7 +35,7 @@ html, body{
 }
 
 body{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
 
 

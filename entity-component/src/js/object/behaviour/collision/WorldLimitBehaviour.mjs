@@ -20,25 +20,31 @@ export class WorldLimitBehaviour extends Behaviour{
             let vx=0
             let vy=0
             let vz=0
-            if(object.x < object.size/2){
-                vx=object.size/2-object.x
+            let x=object.transform.x
+            let y=object.transform.y
+            let z=object.transform.z
+            let sx=object.transform.sx
+            let sy=object.transform.sy
+            let sz=object.transform.sz
+            if(x < 0){
+                vx=x
             }
-            if(object.x > world.width-object.size/2){
-                vx=world.width-(object.x+object.size/2)
+            if(x > world.width-sx){
+                vx=world.width-x+sx
             }
-            if(object.y < object.size/2){
-                vy=object.size/2-object.y
+            if(y < 0){
+                vy=y
             }
-            if(object.y > world.height-object.size/2){
-                vy=world.height-(object.y+object.size/2)
+            if(y > world.height-sy){
+                vy=world.height-y+sy
             }
-            if(object.z < object.size/2){
-                vz=object.size/2-object.z
+            if(z < 0){
+                vz=z
             }
-            if(object.z > world.depth-object.size/2){
-                vz=world.depth-(object.z+object.size/2)
+            if(z > world.depth-sz/2){
+                vz=world.depth-z+sz
             }
-            if(vx || vy || vz)object.observers("on_collision").notify([-vx,-vy, -vz], object, this)
+            if(vx || vy || vz)object.observers("on_collision").notify([vx/2, vy/2, vz/2], object, this)
 
         }
     }
