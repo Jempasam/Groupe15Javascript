@@ -1,5 +1,6 @@
 import Serpent from './Serpent.js';
 import Fruit from './Fruit.js';
+import { playToDeath } from './Menu.js';
 
 let inputStates = {};
 let vitesse = 5;
@@ -9,17 +10,33 @@ let debugGameOver = 0;
 let PremierCoup = false;
 let Pause = false;
 let choixSkin = 0;
+let son = true;
+const HIGHSCORE_KEY = 'highscore';
+
+let highscore = localStorage.getItem(HIGHSCORE_KEY);
+if (!isNaN(highscore) && highscore % 1 === 0) 
+{
+    
+}
+else
+{
+    highscore = 0;
+}
 
 // Mode de jeu alternatifs
 
 let mangerVitesse = false;
 let mangerInversion = false;
 let InversionTouche = false;
+let miamFast = false;
 
 
 const bouton1 = document.getElementById("modeVitesse");
 const bouton2 = document.getElementById("modeInversion");
 const bouton3 = document.getElementById("boutonSkin");
+const bouton4 = document.getElementById("modeMiamFast");
+
+var audio = document.getElementById('mangerAudio');
 
 function definirEcouteurs() {
 
@@ -36,6 +53,19 @@ function definirEcouteurs() {
         }
     });
 
+    document.getElementById("modeMiamFast").addEventListener("click", function()
+    {
+        miamFast = !miamFast;
+        if (miamFast)
+        {
+            bouton4.classList.add("bouton-active"); // Ajoute la classe pour la brillance
+        }
+        else
+        {
+            bouton4.classList.remove("bouton-active"); // Ajoute la classe pour la brillance
+        }
+    });
+
     document.getElementById("modeInversion").addEventListener("click", function()
     {        
         mangerInversion = !mangerInversion;
@@ -49,9 +79,27 @@ function definirEcouteurs() {
         }
     });
 
+    document.getElementById("boutonSon").addEventListener("click", function()
+    {
+        
+        const imgSon = document.getElementById("boutonSon").querySelector("img");
+        
+        
+        if (son)
+        {
+            imgSon.src = "../../snake/assets/Mute.png";
+            son = false;
+        }
+        else
+        {
+            imgSon.src = "../../snake/assets/Son.png"; // Ajoute la classe pour la brillance
+            son = true;
+        }
+    });
+
     document.getElementById("boutonSkin").addEventListener("click", function()
     {        
-        if (choixSkin < 1)
+        if (choixSkin < 2)
         {
             choixSkin ++;
         }
@@ -65,9 +113,20 @@ function definirEcouteurs() {
         if (choixSkin === 0) 
         {
             img.src = "../../snake/assets/serpentManchot.png";
-        } else 
+        } 
+        else 
         {
-            img.src = "../../snake/assets/serpentCanard.png";
+            if (choixSkin === 1)
+            {
+                img.src = "../../snake/assets/serpentCanard.png";
+            }
+            else
+            {
+                if (choixSkin === 2)
+                {
+                    img.src =  "../../snake/assets/serpentMariau.png";
+                }
+            }
         }
     });
 
@@ -97,6 +156,7 @@ function traiteKeyDown(event)
     {
         inputStates.right = true;
         PremierCoup = true;
+        vitesse = 5;
     }
 
 
@@ -173,6 +233,7 @@ function traiteKeyDown(event)
     {
         if (key === "ArrowUp") 
         {
+            console.log("La vitesse est de : " + vitesse);
             inputStates.right = false;
             if (!InversionTouche)
             {
@@ -280,18 +341,20 @@ function hitbox() {
     }
 
 
-    for (let i = 1; i < serpent.segments.length; i++) 
-    {
-        console.debug("La taille du serpent est de = ",serpent.segments.length);
+    for (let i = 2; i < serpent.segments.length; i++) {
         let segment = serpent.segments[i];
+        let segmentX = segment.x;
+        let segmentY = segment.y;
 
-        // On détecte une collision entre le serpent et sa queue
+        // On définit une hitbox pour chaque segment de la queue
+        var marginS = 4.9; // Ajustez cette valeur selon votre préférence
 
-        if ( serpentX == segment.x && serpentY == segment.y )
-        {
+        // On vérifie la collision avec le segment actuel
+        if (Math.abs(serpentX - segmentX) <= marginS && Math.abs(serpentY - segmentY) <= marginS) {
             gameOver();
         }
     }
+
 
     // On définit une hitbox pour le serpent
     var margin = 22;
@@ -311,6 +374,12 @@ function hitbox() {
 function mangerFruit() 
 {
     //audio.play();
+    if (son)
+    {
+        audio.play();
+    }
+
+
     serpent.AddNbFruits();
     serpent.positionQueue();
     afficherScore()
@@ -340,25 +409,15 @@ function mangerFruit()
 
 
     //Changement du mode de jeu alternatif
-    //if (mangerVitesse)
-    //{
-    //    vitesse = vitesse + 0.1;
-    //    vitesseP = vitesse;
-    //}
+    if (miamFast)
+    {
+        vitesse = vitesse + 0.1;
+        vitesseP = vitesse;
+    }
     
     if (mangerInversion)
     {
         InversionTouche = !InversionTouche;
-
-        if (InversionTouche)
-        {
-            console.log ("TRUCE");
-        }
-
-        if (!InversionTouche)
-        {
-            console.log ("WHILIS");
-        }
     }
 
 }
@@ -372,16 +431,75 @@ function TeleportationFruit()
 
 function gameOver() 
 {
-    // Code à exécuter en cas de collision avec la queue
-    console.log("Game Over - Le serpent a touché sa propre queue! Nombre de Game OVer = ", debugGameOver);
-    debugGameOver ++;
-    vitesse = 0;
-    // Afficher une boîte de dialogue avec un message et un bouton OK
-    alert("Vous avez perdu!");
+    let score;
+    const ModeVitesseImage = document.getElementById("ModeDeJeu2");
+    const ModeInversionImage = document.getElementById("ModeDeJeu1");
+    const ModeMiamFastImage = document.getElementById("ModeDeJeu3");
 
-    // Redémarrer la partie (recharger la page)
-    window.location.reload();
+    if (!mangerVitesse)
+    {
+        score = serpent.segments.length / 2;
+        console.log("Mon score est de : ", score);
+    }
+    else
+    {
+        score = serpent.segments.length / 4;
+    }
     
+        // Code à exécuter en cas de collision avec la queue
+        //console.log("Game Over - Le serpent a touché sa propre queue! Nombre de Game Over = ", debugGameOver);
+        debugGameOver ++;
+        vitesse = 0;
+        // Appeler playToDeath() de Menu.js
+        playToDeath();
+        console.log("Le HighScore est de : ", highscore);
+        if (score > highscore)
+        {
+            highscore = score;
+            localStorage.setItem(HIGHSCORE_KEY, highscore);
+        }
+        document.querySelector(".ScoreNow").textContent = score;
+        document.querySelector(".HighScoreChiffre").textContent = highscore;
+
+        if (mangerVitesse)
+        {
+            ModeVitesseImage.style.display = "block";
+        }
+        else
+        {
+            ModeVitesseImage.style.display = "none";
+        }
+
+        if (mangerInversion)
+        {
+            ModeInversionImage.style.display = "block";
+        }
+        else
+        {
+            ModeInversionImage.style.display = "none";
+        }
+
+        if (miamFast)
+        {
+            ModeMiamFastImage.style.display = "block";
+        }
+        else
+        {
+            ModeMiamFastImage.style.display = "none";
+        }
+
+        
+    
+}
+
+export function reset()
+{
+    serpent.setPositionX(50);
+    serpent.setPositionY(50);
+    serpent.setNbFruits(0);
+    PremierCoup = false;
+    InversionTouche = false;
+
 }
 
 
@@ -401,7 +519,7 @@ function pause()
 }
 
 
-function afficherScore()
+export function afficherScore()
 {
     if (!mangerVitesse)
     {

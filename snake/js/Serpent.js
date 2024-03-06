@@ -54,7 +54,12 @@ export default class Serpent {
     AddNbFruits()
     {
         this.nbFruits ++;
-    }    
+    }
+    
+    setNbFruits(TpFruit)
+    {
+        this.nbFruits = TpFruit;
+    }
 
     drawSerpent(ctx, zoom, angle, skin) {
         ctx.save();  
@@ -74,7 +79,17 @@ export default class Serpent {
         }
         else
         {
-            this.drawTeteSkinCanard(ctx);
+            if (skin == 1)
+            {
+                this.drawTeteSkinCanard(ctx);
+            }
+            else
+            {
+                if (skin == 2)
+                {
+                    this.drawTeteSkinMariau(ctx);
+                }
+            }
         }
     }
 
@@ -120,6 +135,54 @@ export default class Serpent {
         ctx.restore();
     }
 
+    drawTeteSkinMariau(ctx)
+    {
+        ctx.fillStyle = '#f7d9c9';
+        ctx.fillRect(0, -25, 50, 50);
+  
+        ctx.fillStyle = '#f7d9c9';
+        ctx.fillRect(45, -8, 10, 10);
+          
+        ctx.fillStyle = 'black';
+        ctx.fillRect(40, -2, 12,10)
+                
+        ctx.fillStyle = 'black';
+        ctx.fillRect(30, -15, 6,10)
+        
+        ctx.fillStyle = 'red';
+        ctx.fillRect(5, -30, 40,10)
+        
+        ctx.fillStyle = 'red';
+        ctx.fillRect(0, -25, 55,5)
+        
+        
+        
+        ctx.fillStyle = '#8e3e2f';
+        ctx.fillRect(-3, -15, 8,24)
+        
+        ctx.fillStyle = '#8e3e2f';
+        ctx.fillRect(-3, 0, 15,10)
+        
+        ctx.fillStyle = '#8e3e2f';
+        ctx.fillRect(10, -5, 10,8)
+        
+        ctx.fillStyle = '#8e3e2f';
+        ctx.fillRect(10, -20, 6,20)
+        
+        ctx.fillStyle = '#8e3e2f';
+        ctx.fillRect(0, -20, 15,10)
+        
+        //Moustache
+        
+        ctx.fillStyle = '#f7d9c9';
+        ctx.fillRect(40, -7, 4, 10);
+  
+        ctx.fillStyle = '#f7d9c9';
+        ctx.fillRect(47, -7, 5, 10);
+
+        ctx.restore();
+    }
+
 
     
     drawGrossir(ctx, zoom, angle, skin) {
@@ -138,7 +201,17 @@ export default class Serpent {
                  }
                  else
                  {
-                     this.drawCorpsSkinCanard(ctx);
+                    if (skin == 1)
+                    {
+                        this.drawCorpsSkinCanard(ctx);
+                    }
+                    else
+                    {
+                        if (skin == 2)
+                        {
+                            this.drawCorpsSkinMariau(ctx);
+                        }
+                    }
                  }
 
             }
@@ -155,6 +228,15 @@ export default class Serpent {
     drawCorpsSkinCanard(ctx)
     {
         ctx.fillStyle = '#7B7878';
+        ctx.fillRect(-25, -25, 50, 50);
+        ctx.restore();
+        
+    }
+
+    drawCorpsSkinMariau(ctx)
+    {
+        // On dessine la tête du serpent en 0, 0
+        ctx.fillStyle = 'blue';
         ctx.fillRect(-25, -25, 50, 50);
         ctx.restore();
         

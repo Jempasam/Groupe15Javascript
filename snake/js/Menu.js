@@ -1,27 +1,48 @@
+import { reset } from './GameManager.js';
+import { afficherScore } from './GameManager.js';
+
 // Menu.js
 
-// Récupération du bouton dans le DOM
+
 const toggleMenuButton = document.getElementById('toggleMenuButton');
-// Récupération du canvas menuPrincipal
+const buttonReset = document.getElementById('boutonReset');
+
 const divMenu = document.getElementById('menuJeu');
 const divJeu = document.getElementById('ecranjeu');
+const divMort = document.getElementById('ecranGameOver');
 
-// Booléen pour contrôler la visibilité du canvas
-let isMenuVisible = true;
 
-// Fonction pour changer la visibilité du canvas
-
-function toggleMenuVisibility() {
-
-  
-  // Change la visibilité du canvas en fonction du booléen
+function mainToPlay() 
+{
   divMenu.style.display = 'none';
 
   divJeu.style.display = 'block';
 }
 
+export function playToDeath()
+{
+  divMort.style.display = 'block';
+
+  divJeu.classList.add('blur');
+}
+
+function deathToMain()
+{
+  reset();
+  divMort.style.display = 'none';
+  divMenu.style.display = 'flex';
+  divJeu.style.display= 'none';
+  divJeu.classList.remove('blur');
+}
+
 // Ajout d'un écouteur d'événement pour détecter le clic sur le bouton
-toggleMenuButton.addEventListener('click', () => {
-  // Appel de la fonction pour changer la visibilité du canvas
-  toggleMenuVisibility();
+toggleMenuButton.addEventListener('click', () => 
+{
+  afficherScore();
+  mainToPlay();
+});
+
+buttonReset.addEventListener('click', () =>
+{
+  deathToMain();
 });

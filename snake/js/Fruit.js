@@ -4,6 +4,8 @@ export default class Fruit {
         this.x = 100;
         this.y = 100;
         this.nbFruitsSpawn = 0;
+        this.images = new Image();
+        this.images = '../assets/fruit1.png';
     }
 
     move(posX, posY)
@@ -49,8 +51,16 @@ export default class Fruit {
       
         // On dessine le fruit en 0, 0
         
-        ctx.fillStyle = 'yellow';
-        ctx.fillRect(0, 0, 30, 40);
+        ctx.beginPath();
+        ctx.arc(0, 0, 25, 0, Math.PI * 2);
+        ctx.fillStyle = 'red';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(0, -40); // Point de départ
+        ctx.lineTo(0, -23); // Point d'arrivée
+        ctx.strokeStyle = 'rgb(100, 200, 100)'; // Couleur du trait
+        ctx.lineWidth = 5; // Épaisseur du trait
+        ctx.stroke(); // Dessin du trait
       
         // Restauration du contexte
         ctx.restore();
