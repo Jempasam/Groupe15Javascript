@@ -158,7 +158,6 @@ setInterval((e)=>{
             first.apply(pt2)
             first.apply(pt1n)
             first.apply(pt2n)
-            console.log(pt1,pt2)
             draw_point(pt1, yellow)
             draw_point(pt2, red)
 

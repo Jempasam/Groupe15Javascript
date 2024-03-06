@@ -1,0 +1,179 @@
+
+.puissance4{
+    display: flex;
+    flex-direction: row;
+    background-color: gainsboro;
+    max-width: 50em;
+    margin: auto;
+}
+
+.puissance4_column{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.puissance4_cell{
+    display: flex;
+    aspect-ratio: 1;
+    flex-grow: 1;
+    border: 0.2em solid gray;
+
+    &:hover{
+        background-color: white;
+    }
+
+    &.undefined{
+        /* Fond composé de lignes blanches et noires */
+        background: linear-gradient(45deg, black, black, white 10%, white, black 40%, black, white 60%, white , black 90%);
+        background-size: 1em 1em;
+    }
+
+    /** TEAMS */
+    &.red{
+        --team-color: red;
+        --team-color-alt: #b55050;
+    }
+
+    &.blue{
+        --team-color: blue;
+        --team-color-alt: #565681;
+    }
+
+    &.green{
+        --team-color: green;
+        --team-color-alt: #516f51;
+    }
+
+    &.yellow{
+        --team-color: yellow;
+        --team-color-alt: #8b8b50;
+    }
+
+    /** ITEMS */
+    &.coin::after{
+        content:"";
+        height: 100%;
+        width: 100%;
+        background-color: var(--team-color, gray);
+        border-radius: 50%;
+    }
+    &.coin.falling::after{
+        opacity: 0.5;
+    }
+    &.coin.activated::after{
+        animation: activated 0.5s infinite alternate;
+    }
+    &.player::after{
+        content:"";
+        height: 100%;
+        width: 100%;
+        background-color: var(--team-color, gray);
+        border-top-left-radius: 50% 100%;
+        border-top-right-radius: 50% 100%;
+        border-bottom: 0.3em black solid;
+        animation: tang 0.5s infinite alternate ease-in-out;
+    }
+    &.player.loading::after{
+        background-color: var(--team-color-alt, black);
+    }
+
+    &.platform::after{
+        content:"";
+        background-image: url(assets/platform.png);
+        height: 100%;
+        background-size: cover;
+        width: 100%;
+    }
+
+    &.brokable_platform::after{
+        content:"";
+        background-image: url(assets/brokable.png);
+        height: 100%;
+        background-size: cover;
+        width: 100%;
+    }
+
+    &.falling_platform::after{
+        content:"";
+        background-image: url(assets/falling.png);
+        height: 100%;
+        background-size: cover;
+        width: 100%;
+    }
+
+    &.roller{
+        background-color: black;
+        &::after{
+            content:"";
+            background-color: greenyellow;
+            height: 80%;
+            width: 80%;
+            margin: 10%;
+            animation: shake 1s infinite linear;
+        }
+        &.right::after{
+            border-top-right-radius: 100% 50%;
+            border-bottom-right-radius: 100% 50%;
+        }
+        &.left::after{
+            border-top-left-radius: 100% 50%;
+            border-bottom-left-radius: 100% 50%;
+        }
+    }
+
+    &.wind::after{
+        content:"";
+        height: 20%;
+        width: 100%;
+        margin-top: 40%;
+        background-color: gray;
+        animation: rotate 1s infinite linear;
+    }
+}
+
+@keyframes activated{
+    0%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(1.2);
+        filter: blur(0.1em);
+    }
+}
+
+@keyframes tang{
+    0%{
+        transform: rotate(-20deg);
+    }
+    100%{
+        transform: rotate(20deg);
+    }
+}
+
+@keyframes shake{
+    0%{
+        transform: translate(0, 0);
+    }
+    25%{
+        transform: translate(0.2em, 0);
+    }
+    50%{
+        transform: translate(0, 0);
+    }
+    75%{
+        transform: translate(-0.2em, 0);
+    }
+    100%{
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes rotate{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
