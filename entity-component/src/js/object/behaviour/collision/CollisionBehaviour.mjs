@@ -35,16 +35,15 @@ export class CollisionBehaviour extends Behaviour{
                 if(collision){
                     let [aborder,bborder,anormal,bnormal]=collision
                     let v=[
-                        (-anormal[0]+bnormal[0]),
-                        (-anormal[1]+bnormal[1]),
-                        (-anormal[2]+bnormal[2])
+                        (bnormal[0]-anormal[0]),
+                        (bnormal[1]-anormal[1]),
+                        (bnormal[2]-anormal[2])
                     ]
                     relative_transform.copy(obj1.transform)
                     relative_transform.x=0
                     relative_transform.y=0
                     relative_transform.z=0
                     relative_transform.apply(v)
-                    console.log(v)
 
                     // Calculate collision depth vector
                     obj1.observers("on_collision").notify(v, obj1, obj2)

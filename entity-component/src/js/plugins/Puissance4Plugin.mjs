@@ -21,12 +21,11 @@ import { Transform, transform } from "../transform/Transform.mjs";
 import { SPHERE_BOUND } from "../collision/bound/SphereBound.mjs";
 import "babylonjs";
 import { ControlCircleBehaviour } from "../object/behaviour/controls/ControlCircleBehaviour.mjs";
+import { PHYSICAL } from "../object/tags.mjs";
+import { ControlRotationBehaviour } from "../object/behaviour/controls/ControlRotationBehaviour.mjs";
 
 // -- TAGS -- //
-let counter=23452
-
-/* Un object physique */
-const PHYSICAL = counter++
+let counter=6343
 
 /* Un type de mouvement d'objet physique */
 const MOVING = counter++
@@ -37,13 +36,6 @@ const BOUNCING = counter++
 /* L'objet aspire les objets physiques */
 const ASPIRATOR = counter++
 
-/* Une forme d'objet physique */
-const CIRCLE=counter++
-const SQUARE=counter++
-const WALL=counter++
-const GROUND=counter++
-
-/* Un objet controlable par le clavier*/
 const CONTROL=counter++
 
 const BLUE_COIN=counter++
@@ -91,6 +83,7 @@ export class Puissance4Plugin extends Plugin{
         world.addBehav([MOVING],new PushCollisionBehaviour(1))
         world.addBehav([MOVING],new DepthFrictionBehaviour(80))
         world.addBehav([MOVING],new DirectionnalFrictionBehaviour(0.5))
+        world.addBehav([MOVING],new GravityBehaviour(0,0,6))
 
         world.addBehav([SLIDING],new MovementBehaviour(0.98))
         world.addBehav([SLIDING],new PushCollisionBehaviour(1))
@@ -111,16 +104,15 @@ export class Puissance4Plugin extends Plugin{
         //world.addBehav([CONTROL],new ControlJumpBehaviour(200,2))
         //world.addBehav([CONTROL],new ControlDashBehaviour(200,100))
         //world.addBehav([CONTROL],new ControlSizeBehaviour())
-        world.addBehav([CONTROL],new ControlCircleBehaviour(["KeyA", "KeyD", "KeyW", "KeyS"],5,[5000,0,5000]))
+        world.addBehav([CONTROL],new ControlRotationBehaviour({"KeyA":[0,0,0.1]}))
         world.addBehav([ASPIRATOR,PHYSICAL],new AspirationBehaviour(1))
 
         world.addBehav([BLUE_COIN],new ConnectionBehaviour(80))
 
         // -- AJOUT DES OBJETS -- //
-        this.player=world.addObj([PHYSICAL,MOVING,CONTROL],{transform: transform(2000, 0, 8500, 500), bound:BOX_BOUND, dshape:red_box})
+        this.player=world.addObj([PHYSICAL,MOVING,CONTROL],{transform: transform(2000, 1000, 8000, 500), bound:BOX_BOUND, dshape:red_box})
 
         world.addObj([PHYSICAL,FIXED],{transform: transform(0, 0, 9000, 10_000, 10_000, 1000), bound:BOX_BOUND, dshape: green_box})
-        world.addObj([PHYSICAL,FIXED],{transform: transform(0, 9000, 0, 10_000, 1000, 10_000), bound:BOX_BOUND, dshape: green_box})
         //world.addObj([PHYSICAL,FIXED],{transform: transform(0, 8000, 0, 3_000, 1000, 3_000), bound:BOX_BOUND, dshape: green_box})
         //world.addObj([PHYSICAL,FIXED],{transform: transform(5000, 7000, 0, 3_000, 1000, 3_000), bound:BOX_BOUND, dshape: green_box})
 
