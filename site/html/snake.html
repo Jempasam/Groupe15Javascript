@@ -7,9 +7,7 @@
 </head>
 <body>
     <header>
-        <h1>Ultrafun <img src="../img/drakon.png" alt="logo"/> </h1>
-        
-        
+        <h1><a href="index.html">Ultrafun</a> <img src="../img/drakon.png" alt="logo"/> </h1>
         <!-- Ajout de l'icône de profil, class "profile-image", la source de l'image dépend de l'utilisateur-->
         <div id="profileIcon" style="display: none;">
             <a id="profileLink" href="profile.html">
@@ -18,27 +16,22 @@
         </div>
 
         <a id="connexionButton" class="button" href="connexion.html">Se Connecter</a>
-    
     </header>
     <nav>
         <ul>
-            <li><a href="snake.html">Snake</a></li>
+            <li><a class= "selected">Snake</a></li>
             <li><a href="puissance4.html">Puissance4</a></li>
             <li><a href="olympia.html">Olympia</a></li>
         </ul>
     </nav>
     <main>
-        <!-- paragraphe centré et loin des bords gauche et droit -->
-        <p style="text-align: center; margin: 0 20%;">
-            Bienvenue sur Ultrafun, le site de jeux en ligne le plus fun du web. 
-            Vous trouverez ici des jeux de qualité (100% FRANÇAIS!), des graphismes à couper le souffle (si vous êtes asthmatique), et une communauté de joueurs passionnés! 
-            Alors n'attendez plus, inscrivez-vous et rejoignez-nous pour des parties endiablées!
-        </p>
+        <canvas class="game">
+
+        </canvas>
     </main>
     <footer>
         Par Les meilleurs
     </footer>
-
     <script src="../js/account.js"></script>
 </body>
 </html>

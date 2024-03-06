@@ -18,6 +18,10 @@ img{
     height: 100%;
 }
 
+a{
+    color:inherit;
+    text-decoration: inherit;
+}
 
 /* GLOBAL */
 /*
@@ -83,6 +87,13 @@ header{
             height: 0.8em;
         }
     }
+
+    .profile-image {
+        width: 40px; /* Ajoutez la largeur souhaitée */
+        height: 40px; /* Ajoutez la hauteur souhaitée */
+        border-radius: 50%; /* Pour rendre l'image ronde, si nécessaire */
+    }
+
 }
 
 
@@ -200,16 +211,22 @@ main{
 .game{
     position: absolute;
     background-color: yellow;
-    outline: red 2em solid;
-    outline-offset: -2em;
     height: 60vh;
     width: 80vh;
     transition: height 0.2s, width 0.2s;
     &:hover{
         top: 5vh;
-        width: 100vw;
+        width: 126.7vh;
         height: 95vh;
     }
+}
+
+.connexion{
+    position: absolute;
+    top : 5%;
+    background-color: white;
+    height: 90vh;
+    width: 130vh;
 }
 
 /* FOOTER */

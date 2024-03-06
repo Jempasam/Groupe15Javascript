@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ultrafun</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Ultrafun</a> <img src="../img/drakon.png" alt="logo"/> </h1>
+        <a id="connexionButton" class="button" href="connexion.html">Se Connecter</a>
+    </header>
+    <main>
+        <!-- formulaire de connexion, ramène sur la page d'accueil -->
+        <form id="loginForm">
+            <label for="pseudo">Pseudo</label>
+            <input type="text" id="pseudo" name="pseudo" required>
+            <label for="mdp">Mot de passe</label>
+            <input type="password" id="mdp" name="mdp" required>
+            <input type="submit" value="Se connecter">
+        </form>
+        <!-- bouton pour la création de compte -->
+        <button id="createAccountBtn" class="button" onclick="window.location.href = 'inscription.html'" style="margin-top: 20px;">Créer un compte</button>
+    </main>
+    <footer>
+        Par Les meilleurs
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Vérifier si le LocalStorage est vide, si oui, le remplir avec les données du JSON
+            if (!localStorage.getItem("users")) {
+                // Remplacez ces données par celles de votre fichier JSON
+                const initialUsers = [
+                    { pseudo: "utilisateur1", mdp: "motdepasse1", profileImage: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"},
+                    { pseudo: "utilisateur2", mdp: "motdepasse2", profileImage: "https://selfmadewebdesigner.com/wp-content/uploads/2019/09/self-made-web-designer-upwork-profile.jpg" },
+                    // ... ajoutez d'autres utilisateurs si nécessaire
+                ];
+
+                localStorage.setItem("users", JSON.stringify(initialUsers));
+            }
+
+            const loginForm = document.getElementById("loginForm");
+
+            loginForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const pseudoInput = document.getElementById("pseudo").value;
+                const mdpInput = document.getElementById("mdp").value;
+
+                // Récupérer les utilisateurs depuis le LocalStorage
+                const users = JSON.parse(localStorage.getItem("users"));
+
+                // Vérifier les informations de connexion
+                const userFound = users.find(user => user.pseudo === pseudoInput && user.mdp === mdpInput);
+                console.log(userFound);
+                if (userFound) {
+
+                    // Après la vérification des identifiants
+                    var utilisateurConnecte = {
+                        username: userFound.pseudo,
+                        profileImage: userFound.profileImage
+                    };
+
+                    // Stocker les informations dans le LocalStorage
+                    sessionStorage.setItem('utilisateurConnecte', JSON.stringify(utilisateurConnecte));
+
+                    // Utilisateur connecté avec succès, rediriger vers la page d'accueil
+                    window.location.href = "../index.html";
+                } else {
+                    // Afficher un message d'erreur
+                    alert("Erreur de connexion. Veuillez vérifier vos informations.");
+                }
+            });
+            const createAccountBtn = document.getElementById("createAccountBtn");
+            createAccountBtn.addEventListener("click", function() {
+                window.location.href = "inscription.html";
+
+        });
+
+        function displayLocalStorage() {
+        const usersData = localStorage.getItem("users");
+        console.log("Contenu du LocalStorage (users) :", JSON.parse(usersData));
+        }
+        // Ajoutez cet appel de fonction pour afficher le LocalStorage au chargement de la page
+        displayLocalStorage();
+        });
+    </script>
+</body>
+</html>

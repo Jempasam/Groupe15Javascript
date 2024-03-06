@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ultrafun</title>
+    <script src="https://cdn.babylonjs.com/babylon.max.js"></script>
+    <script type="module" src="../../olympia/src/js/script.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Ultrafun</a> <img src="../img/drakon.png" alt="logo"/> </h1>
+        <!-- Ajout de l'icône de profil, class "profile-image", la source de l'image dépend de l'utilisateur-->
+        <div id="profileIcon" style="display: none;">
+            <a id="profileLink" href="profile.html">
+                <img class="profile-image" alt="profile">
+            </a>
+        </div>
+
+        <a id="connexionButton" class="button" href="connexion.html">Se Connecter</a>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="snake.html">Snake</a></li>
+            <li><a href="puissance4.html">Puissance4</a></li>
+            <li><a class= "selected">Olympia</a></li>
+        </ul>
+    </nav>
+    <main>
+        <canvas class="game" id="renderCanvas" width="800" height="500">
+        </canvas>
+        <!-- affichage des pv du joueur -->
+        <div id="pv" style="position: absolute; top: 25%; left: 32%; transform: translate(-50%, -50%); background-color: white; padding: 5px; border-radius: 5px; border-color: black;"></div>
+        <!-- affichage des pv alternatifs-->
+        <!-- <div id="pv" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>-->
+        <!--créer un div vide au milieu du canva "renderCanvas" pour afficher les informations du joueur-->
+        <div id="infoJoueur" style="position: absolute; top: 75%; left: 50%; transform: translate(-50%, -50%);"></div>
+    </main>
+    <footer>
+        Par Les meilleurs
+    </footer>
+    <script src="../js/account.js"></script>
+</body>
+</html>
