@@ -1,4 +1,5 @@
 import { Item } from "../field/Item.mjs";
+import { CancelledItem } from "./CancelledItem.mjs";
 import { StaticCoinItem } from "./StaticCoinItem.mjs";
 
 export class RollerItem extends Item{
@@ -13,11 +14,11 @@ export class RollerItem extends Item{
         return ["roller",this.direction>0?"right":"left"]
     }
 
-    onAdd(field,x,y){
+    onAdd(field,root,x,y){
         field.ticks.schedule(x,y,this)
     }
 
-    onTick(field,x,y){
+    onTick(field,root,x,y){
         this.time++
         if(this.time>2){
             this.time=0
@@ -25,6 +26,9 @@ export class RollerItem extends Item{
             let after_over=field.get(x+this.direction,y-1)
             if(over && after_over===null){
                 field.set(x,y-1,null)
+                if(!(over instanceof CancelledItem)){
+                    over=new CancelledItem(over,4)
+                }
                 field.set(x+this.direction,y-1,over)
             }
         }

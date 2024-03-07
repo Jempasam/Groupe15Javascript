@@ -8,7 +8,7 @@ export class Item{
      * @param {number} y
      * @returns {Array.<string>}
      */
-    getClasses(field,x,y){
+    getClasses(field,root,x,y){
         return ["undefined"]
     }
 
@@ -18,7 +18,7 @@ export class Item{
      * @param {number} x
      * @param {number} y
      */
-    onAdd(field,x,y){
+    onAdd(field,root,x,y){
     }
 
     /**
@@ -27,7 +27,7 @@ export class Item{
      * @param {number} x
      * @param {number} y
      */
-    onRemove(field,x,y){
+    onRemove(field,root,x,y){
     }
 
     /**
@@ -36,7 +36,7 @@ export class Item{
      * @param {number} x
      * @param {number} y
      */
-    onTick(field,x,y){
+    onTick(field,root,x,y){
     }
 
     /**
@@ -45,6 +45,6 @@ export class Item{
      * @param {number} x
      * @param {number} y
      */
-    onTrigger(field,x,y){
+    onTrigger(field,root,x,y){
     }
 }

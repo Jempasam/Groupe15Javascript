@@ -64,10 +64,10 @@ export class Field{
         this.updateElement(x,y)
         
         if(old){
-            old.onRemove(this,x,y)
+            old.onRemove(this,old,x,y)
         }
         if(item){
-            item.onAdd(this,x,y)
+            item.onAdd(this,item,x,y)
         }
     }
 
@@ -90,11 +90,16 @@ export class Field{
     updateElement(x,y){
         let item=this.get(x,y)
         let element=this.getElement(x,y)
-        element.className=""
-        element.classList.add("puissance4_cell")
         if(item){
-            item.getClasses(this,x,y).forEach(c=>element.classList.add(c))
+            let item_div=element.children[0]
+            if(!item_div){
+                item_div=document.createElement("div")
+                element.appendChild(item_div)
+            }
+            item_div.className="puissance4_item"
+            item.getClasses(this,item,x,y).forEach(c=>item_div.classList.add(c))
         }
+        else element.innerHTML=""
     }
     
 
