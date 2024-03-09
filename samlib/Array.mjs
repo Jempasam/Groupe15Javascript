@@ -6,6 +6,8 @@
 
 /**
  * Ajoute tout les éléments d'un iterable à celui-ci
+ * @memberof Array
+ * @instance
  * @param {Iterable} a 
  */
 Array.prototype.pushAll = function(a) 
@@ -16,6 +18,8 @@ Array.prototype.pushAll = function(a)
 
 /**
  * Supprime tout les éléments d'un iterable de celui-ci
+ * @memberof Array
+ * @instance
  * @param {Iterable} a
  */
 Array.prototype.removeAll = function(a){
@@ -27,6 +31,8 @@ Array.prototype.removeAll = function(a){
 
 /**
  * Supprime un élément rapidement (sans conserver l'ordre)
+ * @memberof Array
+ * @instance
  * @param {number} index 
  */
 Array.prototype.fastRemove = function fastDelete(index){

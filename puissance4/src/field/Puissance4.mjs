@@ -1,9 +1,11 @@
+// @ts-nocheck
+import { mapAttribute } from "../../../samlib/CustomElement.mjs"
 import { Item } from "./Item.mjs"
 import { Player } from "./Player.mjs"
 import { TickManager } from "./TickManager.mjs"
 
 
-export class Field{
+export class Puissance4 extends HTMLElement{
 
     /** @type {Array<Array<null|Item>>} */
     #content
@@ -11,31 +13,53 @@ export class Field{
     /** @type {TickManager} */
     ticks
 
+    static attributeMap={
+        "width": { def:0, parser:parseInt },
+        "height": { def:0, parser:parseInt }
+    }
+
+    /** @type {function(Element,number,number):void} */
+    oncellclick
+
     /**
      * Create a field in a html element 
-     * @param {HTMLElement} target 
      */
-    constructor(target, width, height){
-        this.width = width
-        this.height = height
+    constructor(){
+        super()
         this.#content = []
-        this.target=target
         this.ticks=new TickManager()
-        target.classList.add("puissance4")
-        for(let x=0; x<width; x++){
-            let content_column=[]
-            let column = document.createElement("div")
-            column.classList.add("puissance4_column")
-            target.appendChild(column)
-            for(let y=0; y<height; y++){
-                content_column.push(null)
-                let cell = document.createElement("div")
-                cell.classList.add("puissance4_cell")
-                column.appendChild(cell)
-            }
-            this.#content.push(content_column)
+        this.#rebuilt()
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if(["height","width"].includes(name)){
+            this.#rebuilt()
         }
-        console.log(this.#content)
+    }
+
+    #rebuilt(){
+        this.#content = []
+            this.innerHTML=""
+            let width=this.width
+            let height=this.height
+            for(let x=0; x<width; x++){
+                let content_column=[]
+                let column = document.createElement("div")
+                column.classList.add("puissance4_column")
+                this.appendChild(column)
+                for(let y=0; y<height; y++){
+                    content_column.push(null)
+                    let cell = document.createElement("div")
+                    cell.onclick=()=>{
+                        if(this.oncellclick){
+                            this.oncellclick(cell,x,y)
+                        }
+                    }
+                    cell.classList.add("puissance4_cell")
+                    column.appendChild(cell)
+                }
+                this.#content.push(content_column)
+            }
     }
 
     /* Item access */
@@ -79,7 +103,7 @@ export class Field{
      * @returns {Element}
      */
     getElement(x,y){
-        return this.target.children[x].children[y]
+        return this.children[x].children[y]
     }
 
     /**
@@ -104,4 +128,6 @@ export class Field{
     
 
 }
+mapAttribute(Puissance4)
 
+customElements.define("puissance-4",Puissance4)

@@ -1,4 +1,4 @@
-import { Field } from "./Field.mjs"
+import { Puissance4 } from "./Puissance4.mjs"
 import { Item } from "./Item.mjs"
 
 export class TickManager{
@@ -38,7 +38,7 @@ export class TickManager{
 
     /**
      * Tick all the scheduled ticks
-     * @param field {Field}
+     * @param field {Puissance4}
      */
     tick(field){
         let current_schedule=new Map(this.#scheduleds)

@@ -1,4 +1,6 @@
-import { Field } from "./field/Field.mjs"
+import { Editor, EditorSpawnable } from "./editor/Editor.mjs"
+import { Puissance4 } from "./field/Puissance4.mjs"
+import { SamSelector, SamOption } from "../../samlib/gui/Selector.mjs"
 import { Item } from "./field/Item.mjs"
 import { BrokablePlatformItem } from "./items/BrokablePlatformItem.mjs"
 import { MovingItem } from "./items/MovingItem.mjs"
@@ -7,11 +9,16 @@ import { PlayerItem } from "./items/PlayerItem.mjs"
 import { RollerItem } from "./items/RollerItem.mjs"
 import { StaticCoinItem } from "./items/StaticCoinItem.mjs"
 import { WindItem } from "./items/WindItem.mjs"
+import { BASE_COLLECTION } from "./field/collection/base_collection.mjs"
 
-let target=document.getElementById("target")
-if(!target)throw new Error("No target")
+let editor=document.querySelector("puissance-4-editor")
+if(!(editor instanceof Editor))throw new Error("No editor")
+editor.spawnables=BASE_COLLECTION
+//let target=document.getElementById("target")
+//if(!target)throw new Error("No target")
+//new Editor(target)
 
-let field=new Field(target, 14, 14)
+/*let field=new Field(target, 14, 14)
 
 let simple=(team)=>new MovingItem(new StaticCoinItem(team),0,1)
 
@@ -30,4 +37,8 @@ for(let i=0; i<3; i++){
 
 setInterval(()=>{
     field.ticks.tick(field)
-},50)
+},50)*/
+
+/** EDITOR */
+/** */
+

@@ -1,9 +1,9 @@
-import { Field } from "./Field.mjs";
+import { Puissance4 } from "./Puissance4.mjs";
 
 export class Item{
     /**
      * Get the classes to assign to the html element corresponding to this item
-     * @param {Field} field 
+     * @param {Puissance4} field 
      * @param {number} x 
      * @param {number} y
      * @returns {Array.<string>}
@@ -14,7 +14,7 @@ export class Item{
 
     /**
      * Called when the item is added to the field
-     * @param {Field} field
+     * @param {Puissance4} field
      * @param {number} x
      * @param {number} y
      */
@@ -23,7 +23,7 @@ export class Item{
 
     /**
      * Called when the item is removed from the field
-     * @param {Field} field
+     * @param {Puissance4} field
      * @param {number} x
      * @param {number} y
      */
@@ -32,7 +32,7 @@ export class Item{
 
     /**
      * Called when the item is ticked
-     * @param {Field} field
+     * @param {Puissance4} field
      * @param {number} x
      * @param {number} y
      */
@@ -41,7 +41,7 @@ export class Item{
 
     /**
      * Called when the item is triggered
-     * @param {Field} field
+     * @param {Puissance4} field
      * @param {number} x
      * @param {number} y
      */

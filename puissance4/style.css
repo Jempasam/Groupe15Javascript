@@ -1,11 +1,9 @@
 
-
-.puissance4{
+/* PUISSANCE 4 */
+puissance-4{
     display: flex;
     flex-direction: row;
     background-color: gainsboro;
-    max-width: 50em;
-    margin: auto;
 }
 
 .puissance4_column{
@@ -200,5 +198,64 @@
     }
     100%{
         transform: scaleX(0.8);
+    }
+}
+
+
+/* PUISSANCE 4 EDITOR */
+puissance-4-editor{
+    display: flex;
+    flex-direction: row;
+    background-color: gainsboro;
+    margin: auto;
+
+    >.menu{
+        display: flex;
+        flex-direction: column;
+        padding: 1em;
+        border: gray 0.1em solid;
+        >input[type=number], >input[type=text]{
+            text-align: center;
+            width: 6em;
+        }
+        >*:not(:last-child){
+            margin-bottom: 1em;
+        }
+
+        >sam-selector{
+            height: 0;
+            flex-grow: 1;
+            puissance-4{
+                width: 3em;
+                margin: 0.2em;
+            }
+        }
+    }
+
+    puissance-4-filemenu{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.2em;
+        &>*{
+            margin: 0.1em;
+        }
+        &>sam-selector{
+            min-width: 80%;
+        }
+        &>hr{
+            margin: 0;
+            width: 80%;
+        }
+        &>input{
+            min-width: 6em;
+            &[type=button]{
+                cursor: pointer;
+            }
+        }
+    }
+
+    >puissance-4{
+        flex-grow: 1;
     }
 }

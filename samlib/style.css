@@ -1,0 +1,29 @@
+
+sam-selector{
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    overflow-y: scroll;
+
+
+    background-color: gainsboro;
+    border-radius: 0.3em;
+    border: black 0.1rem solid;
+
+    text-align: center;
+}
+
+sam-option{
+    padding-left: 1em;
+    padding-right: 1em;
+    cursor: pointer;
+    
+    &:hover{
+        background-color: white;
+    }
+
+    &[selected=true]{
+        background-color:darkgray;
+        cursor: default;
+    }
+}
