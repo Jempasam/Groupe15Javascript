@@ -11,6 +11,7 @@ export class PlayerItem extends Item{
         this.rightKey=rightKey
         this.spawnKey=spawnKey
         this.time=0
+        this.movetime=0
         this.factory=factory
         this.next=factory(this.team)
     }
@@ -29,12 +30,18 @@ export class PlayerItem extends Item{
     }
 
     onTick(field,root,x,y){
-        if(eatKeyPress(this.leftKey)){
-            this.tryMove(field,root,x,y,x-1,y)
+        if(this.movetime<=0){
+            if(isKeyPressed(this.leftKey)){
+                this.tryMove(field,root,x,y,x-1,y)
+                this.movetime=2
+            }
+            if(isKeyPressed(this.rightKey)){
+                this.tryMove(field,root,x,y,x+1,y)
+                this.movetime=2
+            }
         }
-        if(eatKeyPress(this.rightKey)){
-            this.tryMove(field,root,x,y,x+1,y)
-        }
+        else this.movetime--
+            
         if(this.time>0){
             this.time--
             if(this.time===0){
@@ -42,7 +49,7 @@ export class PlayerItem extends Item{
             }
         }
         else{
-            if(eatKeyPress(this.spawnKey)){
+            if(isKeyPressed(this.spawnKey)){
                 this.time=40
                 field.set(x,y+1,this.next)
                 this.next=this.factory(this.team)
@@ -54,7 +61,7 @@ export class PlayerItem extends Item{
 
     tryMove(field,root,x,y,newx,newy){
         let target=field.get(newx,newy)
-        if(target!==undefined){
+        if(target===null || target instanceof PlayerItem){
             field.set(x,y,target)
             field.set(newx,newy,root)
         }
