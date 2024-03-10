@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "checkJs": true,
+        "noImplicitAny": false,
+        "target": "ES2020",
+        "strictNullChecks": true,
+        "exactOptionalPropertyTypes": false
+    }
+}

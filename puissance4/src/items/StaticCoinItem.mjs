@@ -13,19 +13,19 @@ export class StaticCoinItem extends Item{
         return ["static","coin",this.team]
     }
 
-    onAdd(field,x,y){
+    onAdd(field,root,x,y){
         let aligneds=this.#getAligneds(field,x,y)
         console.log(aligneds.length)
         if(aligneds.length>0){
             for(let [a,b] of aligneds){
-                console.log("there",a,b)
                 field.set(a,b,new ActivatedCoinItem(this.team))
             }
             field.set(x,y,new ActivatedCoinItem(this.team))
+            if(field.on_alignement)field.on_alignement([[x,y],...aligneds])
         }
     }
 
-    onTick(field,x,y){
+    onTick(field,root,x,y){
     }
 
     #collectInDirection(field,x,y,dx,dy){

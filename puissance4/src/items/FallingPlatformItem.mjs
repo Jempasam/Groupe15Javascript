@@ -12,11 +12,11 @@ export class FallingPlatformItem extends Item{
         return ["falling_platform"]
     }
 
-    onAdd(field,x,y){
+    onAdd(field,root,x,y){
         field.ticks.schedule(x,y,this)
     }
 
-    onTick(field,x,y){
+    onTick(field,root,x,y){
         this.time++
         if(this.time>4){
             this.time=0
@@ -29,10 +29,10 @@ export class FallingPlatformItem extends Item{
             else{
                 field.set(x,y,new BrokablePlatformItem())
                 if(under){
-                    under.onTrigger(field,x,y+1)
+                    under.onTrigger(field,under,x,y+1)
                 }
             }
         }
-        else field.ticks.schedule(x,y,this)
+        else field.ticks.schedule(x,y,root)
     }
 }

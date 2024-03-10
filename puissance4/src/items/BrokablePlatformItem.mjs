@@ -12,7 +12,7 @@ export class BrokablePlatformItem extends Item{
         return ["brokable_platform"]
     }
 
-    onTrigger(field,x,y){
+    onTrigger(field,root,x,y){
         field.set(x,y,new FallingPlatformItem())
     }
 }

@@ -11,12 +11,5 @@ export class ActivatedCoinItem extends Item{
     getClasses(){
         return ["activated","coin",this.team]
     }
-
-    onAdd(field,x,y){
-
-    }
-
-    onTick(field,x,y){
-    }
 }
 

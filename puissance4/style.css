@@ -1,10 +1,8 @@
-
-.puissance4{
+/* PUISSANCE 4 */
+puissance-4{
     display: flex;
     flex-direction: row;
     background-color: gainsboro;
-    max-width: 50em;
-    margin: auto;
 }
 
 .puissance4_column{
@@ -17,11 +15,16 @@
     display: flex;
     aspect-ratio: 1;
     flex-grow: 1;
-    border: 0.2em solid gray;
+    border: 0.1em solid rgb(185, 185, 185);
 
     &:hover{
         background-color: white;
     }
+}
+
+.puissance4_item{
+    width: 100%;
+    height: 100%;
 
     &.undefined{
         /* Fond composé de lignes blanches et noires */
@@ -50,86 +53,102 @@
         --team-color-alt: #8b8b50;
     }
 
-    /** ITEMS */
-    &.coin::after{
-        content:"";
+    /* ITEMS */
+    &.coin{
         height: 100%;
         width: 100%;
+        background-image: url(assets/coin.png);
+        background-size: cover;
         background-color: var(--team-color, gray);
+        background-blend-mode: multiply;
         border-radius: 50%;
     }
-    &.coin.falling::after{
-        opacity: 0.5;
-    }
-    &.coin.activated::after{
+    &.coin.activated{
         animation: activated 0.5s infinite alternate;
     }
-    &.player::after{
-        content:"";
+    
+    &.player{
         height: 100%;
         width: 100%;
+        background-image: url(assets/pipe.png);
+        background-size: cover;
         background-color: var(--team-color, gray);
-        border-top-left-radius: 50% 100%;
-        border-top-right-radius: 50% 100%;
-        border-bottom: 0.3em black solid;
-        animation: tang 0.5s infinite alternate ease-in-out;
+        background-blend-mode: multiply;
+        mask: url(assets/pipe.png);
+        mask-size: cover;
     }
-    &.player.loading::after{
+    &.player.loading{
         background-color: var(--team-color-alt, black);
+        animation: tired 0.5s infinite alternate ease-in-out;
     }
 
-    &.platform::after{
-        content:"";
+    &.platform{
         background-image: url(assets/platform.png);
+        image-rendering: pixelated;
         height: 100%;
         background-size: cover;
         width: 100%;
     }
 
-    &.brokable_platform::after{
-        content:"";
+    &.brokable_platform{
         background-image: url(assets/brokable.png);
+        image-rendering: pixelated;
         height: 100%;
         background-size: cover;
         width: 100%;
     }
 
-    &.falling_platform::after{
-        content:"";
+    &.falling_platform{
         background-image: url(assets/falling.png);
+        image-rendering: pixelated;
         height: 100%;
         background-size: cover;
         width: 100%;
+        animation: shake 0.2s;
     }
 
     &.roller{
+        animation: shake 1s infinite linear;
         background-color: black;
+        border-radius: 30%;
         &::after{
             content:"";
-            background-color: greenyellow;
-            height: 80%;
-            width: 80%;
-            margin: 10%;
-            animation: shake 1s infinite linear;
+            display: block;
+            background-color: gray;
+            height: 50%;
+            width: 50%;
+            margin: 25%;
         }
-        &.right::after{
-            border-top-right-radius: 100% 50%;
-            border-bottom-right-radius: 100% 50%;
+        &.right{
+            animation: rotate 1s infinite linear;
         }
-        &.left::after{
-            border-top-left-radius: 100% 50%;
-            border-bottom-left-radius: 100% 50%;
+        &.left{
+            animation: rotate 1s infinite linear reverse;
         }
+    }
+    &.wind{
+        height: 150%;
+        width: 20%;
+        margin-left: 40%;
+        margin-top: -25%;
+        background-color: gray;
+        animation: rotate 0.5s infinite linear;
     }
 
-    &.wind::after{
-        content:"";
-        height: 20%;
-        width: 100%;
-        margin-top: 40%;
-        background-color: gray;
-        animation: rotate 1s infinite linear;
+    /* STATE */
+    &.moving{
+        opacity: 0.7;
     }
+
+    &.cancelled{
+        filter: grayscale(50%);
+    }
+}
+
+#host>sam-gamemenu{
+    background-image: url(assets/coin_background.png);
+    background-size: cover;
+    background-color: white;
 }
 
 @keyframes activated{
@@ -175,5 +194,79 @@
     }
     100%{
         transform: rotate(360deg);
+    }
+}
+
+@keyframes tired{
+    0%{
+        transform: scaleX(1);
+    }
+    100%{
+        transform: scaleX(0.8);
+    }
+}
+
+
+/* PUISSANCE 4 EDITOR */
+puissance-4-loader, puissance-4-editor{
+    display: flex;
+    flex-direction: row;
+    background-color: gainsboro;
+    margin: auto;
+    box-sizing: border-box;
+
+    .menu{
+        display: flex;
+        flex-direction: column;
+        padding: 1em;
+        border: gray 0.1em solid;
+        >input[type=number], >input[type=text]{
+            text-align: center;
+            width: 6em;
+        }
+        >*:not(:last-child){
+            margin-bottom: 1em;
+        }
+
+        >sam-selector{
+            height: 0;
+            flex-grow: 1;
+            puissance-4{
+                width: 3em;
+                margin: 0.2em;
+            }
+        }
+        
+        >puissance-4-filemenu{
+
+            flex-grow: 1;
+        }
+    }
+
+    puissance-4-filemenu{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.2em;
+        &>*{
+            margin: 0.1em;
+        }
+        &>sam-selector{
+            min-width: 80%;
+        }
+        &>hr{
+            margin: 0;
+            width: 80%;
+        }
+        &>input{
+            min-width: 6em;
+            &[type=button]{
+                cursor: pointer;
+            }
+        }
+    }
+
+    >puissance-4{
+        flex-grow: 1;
     }
 }

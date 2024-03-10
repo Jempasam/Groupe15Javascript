@@ -11,11 +11,11 @@ export class WindItem extends Item{
         return ["wind"]
     }
 
-    onAdd(field,x,y){
+    onAdd(field,root,x,y){
         field.ticks.schedule(x,y,this)
     }
 
-    onTick(field,x,y){
+    onTick(field,root,x,y){
         this.time++
         if(this.time>2){
             this.time=0

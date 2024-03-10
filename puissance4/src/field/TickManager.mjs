@@ -1,12 +1,12 @@
-import { Field } from "./Field.mjs"
+import { Puissance4 } from "./Puissance4.mjs"
 import { Item } from "./Item.mjs"
 
 export class TickManager{
-    /** @type {Array.<[number,number,Item]>} */
+    /** @type {Map<[number,number],Item>} */
     #scheduleds
 
     constructor(){
-        this.#scheduleds=[]
+        this.#scheduleds=new Map()
     }
 
     /**
@@ -16,14 +16,14 @@ export class TickManager{
      * @param {Item} item
      */
     schedule(x,y,item){
-        this.#scheduleds.push([x,y,item])
+        this.#scheduleds.set([x,y],item)
     }
 
     /**
      * Clear the scheduled ticks
      */
     clear(){    
-        this.#scheduleds=[]
+        this.#scheduleds.clear()
     }
 
     /**
@@ -31,21 +31,21 @@ export class TickManager{
      * @param {function(number,number,Item):void} callback
      */
     forEach(callback){
-        for(let [x,y,item] of this.#scheduleds){
+        for(let [[x,y],item] of this.#scheduleds){
             callback(x,y,item)
         }
     }
 
     /**
      * Tick all the scheduled ticks
-     * @param field {Field}
+     * @param field {Puissance4}
      */
     tick(field){
-        let current_schedule=this.#scheduleds
+        let current_schedule=new Map(this.#scheduleds)
         this.clear()
-        for(let [x,y,item] of current_schedule){
+        for(let [[x,y],item] of current_schedule){
             let field_item=field.get(x,y)
-            if(field_item==item)item.onTick(field,x,y)
+            if(field_item==item)item.onTick(field,item,x,y)
         }
     }
 

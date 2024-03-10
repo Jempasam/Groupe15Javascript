@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ultrafun</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Ultrafun</a> <img src="../img/drakon.png" alt="logo"/> </h1>
+        <!-- Ajout de l'icône de profil, class "profile-image", la source de l'image dépend de l'utilisateur-->
+        <div id="profileIcon" style="display: none;">
+            <a id="profileLink" href="profile.html">
+                <img id="profileImage" class="profile-image" alt="profile">
+            </a>
+        </div>
+
+        <a id="connexionButton" class="button" href="connexion.html">Se Connecter</a>
+    </header>
+
+    <div id="profileContent" style="text-align: center; margin-top: 50px;">
+        <img id="userImage" src="" alt="User Image" style="max-width: 200px; max-height: 200px; border-radius: 50%;">
+        <p id="username"></p>
+        <button id="editUsernameBtn" onclick="editUsername()">Modifier le Pseudo</button>
+        <button id="changePasswordBtn" onclick="changePassword()">Modifier le Mot de Passe</button>
+
+    </div>
+
+    <script src="../js/account.js"></script>
+    <script>
+        // Récupérer les données de l'utilisateur depuis sessionStorage
+        const utilisateurConnecte = JSON.parse(sessionStorage.getItem('utilisateurConnecte'));
+
+        // Vérifier si l'utilisateur est connecté
+        if (utilisateurConnecte) {
+            // Mettre à jour l'image de profil et le pseudo
+            const profileImage = document.getElementById('profileImage');
+            const userImage = document.getElementById('userImage');
+            const username = document.getElementById('username');
+
+            profileImage.src = utilisateurConnecte.profileImage;
+            userImage.src = utilisateurConnecte.profileImage; // Afficher la photo de profil en grand
+            username.textContent = utilisateurConnecte.username;
+
+            userImage.onclick = function() {
+            changeProfileImage();
+            }
+
+            document.getElementById('changePasswordBtn').onclick = function() {
+            changePassword();
+            };
+
+            // Afficher l'icône de profil
+            const profileIcon = document.getElementById('profileIcon');
+            profileIcon.style.display = 'block';
+
+            // Cacher le bouton de connexion
+            const connexionButton = document.getElementById('connexionButton');
+            connexionButton.style.display = 'none';
+        }
+        function editUsername() {
+            const newUsername = prompt("Entrez votre nouveau pseudo :");
+            if (newUsername !== null) {
+                const usersData = localStorage.getItem("users");
+                //mettre à jour le pseudo dans le LocalStorage
+                const users = JSON.parse(usersData);
+                const userIndex = users.findIndex(user => user.pseudo === utilisateurConnecte.username);
+                users[userIndex].pseudo = newUsername;
+                localStorage.setItem("users", JSON.stringify(users));
+
+                // Mettre à jour le pseudo dans l'objet utilisateurConnecte et dans l'affichage
+                utilisateurConnecte.username = newUsername;
+                document.getElementById('username').textContent = newUsername;
+                sessionStorage.setItem('utilisateurConnecte', JSON.stringify(utilisateurConnecte));
+            }
+        }
+        function changeProfileImage() {
+            const newImageURL = prompt("Entrez l'URL de votre nouvelle photo de profil :");
+            if (newImageURL !== null) {
+                const usersData = localStorage.getItem("users");
+                console.log("Contenu du LocalStorage (users) :", JSON.parse(usersData));
+                //mettre à jour la photo de profil dans le LocalStorage
+                const users = JSON.parse(usersData);
+                const userIndex = users.findIndex(user => user.pseudo === utilisateurConnecte.username);
+                users[userIndex].profileImage = newImageURL;
+                localStorage.setItem("users", JSON.stringify(users));
+                console.log("Contenu du LocalStorage (users) après modification :", JSON.parse(localStorage.getItem("users")));
+                // Mettre à jour la photo de profil dans l'objet utilisateurConnecte et dans l'affichage
+                utilisateurConnecte.profileImage = newImageURL;
+                document.getElementById('profileImage').src = newImageURL;
+                document.getElementById('userImage').src = newImageURL;
+                sessionStorage.setItem('utilisateurConnecte', JSON.stringify(utilisateurConnecte));
+                
+                
+            }
+        }
+        function changePassword() {
+            const newPassword = prompt("Entrez votre nouveau mot de passe :");
+            if (newPassword !== null) {
+                const confirmPassword = prompt("Confirmez votre nouveau mot de passe :");
+                
+                if (newPassword === confirmPassword) {
+                    // Mettre à jour le mot de passe dans le LocalStorage
+                    const usersData = localStorage.getItem("users");
+                    const users = JSON.parse(usersData);
+                    const userIndex = users.findIndex(user => user.pseudo === utilisateurConnecte.username);
+                    users[userIndex].mdp = newPassword;
+                    localStorage.setItem("users", JSON.stringify(users));
+
+                    // Mettre à jour le mot de passe dans l'objet utilisateurConnecte
+                    utilisateurConnecte.mdp = newPassword;
+                    sessionStorage.setItem('utilisateurConnecte', JSON.stringify(utilisateurConnecte));
+                    
+                    console.log("Mot de passe mis à jour avec succès !");
+                } else {
+                    alert("Les mots de passe ne correspondent pas. Veuillez réessayer.");
+                }
+            }
+        }
+    </script>
+</body>
+</html>

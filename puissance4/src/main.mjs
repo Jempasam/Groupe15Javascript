@@ -1,36 +1,67 @@
-import { Field } from "./field/Field.mjs"
+import { Editor, EditorSpawnable, Puissance4Field } from "./editor/Editor.mjs"
+import { Puissance4 } from "./field/Puissance4.mjs"
+import { SamSelector, SamOption } from "../../samlib/gui/Selector.mjs"
 import { Item } from "./field/Item.mjs"
 import { BrokablePlatformItem } from "./items/BrokablePlatformItem.mjs"
-import { FallingCoinItem } from "./items/FallingCoinItem.mjs"
+import { MovingItem } from "./items/MovingItem.mjs"
 import { PlatformItem } from "./items/PlatformItem.mjs"
 import { PlayerItem } from "./items/PlayerItem.mjs"
 import { RollerItem } from "./items/RollerItem.mjs"
+import { StaticCoinItem } from "./items/StaticCoinItem.mjs"
 import { WindItem } from "./items/WindItem.mjs"
+import { BASE_COLLECTION } from "./field/collection/base_collection.mjs"
+import { GameMenu } from "../../samlib/gui/GameMenu.mjs"
+import { create, html } from "../../samlib/DOM.mjs"
+import { FileMenu } from "./editor/FileMenu.mjs"
+import { Loader } from "./editor/Loader.mjs"
 
-let target=document.getElementById("target")
-if(!target)throw new Error("No target")
+/* Get Host and create Menu */
+let host=document.getElementById("host")
+if(!host)throw new Error("No host")
 
-let field=new Field(target, 14, 14)
+function openMenu(){
+    host.innerHTML=html`<sam-gamemenu title="Puissance 4"/>`
 
-let simple=(team)=>new FallingCoinItem(team)
+    let menu=document.querySelector("sam-gamemenu")
+    if(!(menu instanceof GameMenu))throw new Error("No menu")
 
-field.set(0,0,new FallingCoinItem("red"))
-field.set(1,0,new FallingCoinItem("red"))
-field.set(2,0,new FallingCoinItem("red"))
-field.set(3,0,new FallingCoinItem("red"))
-field.set(4,0,new PlayerItem("red",simple,"KeyA","KeyD","KeyS"))
-field.set(7,0,new PlayerItem("blue",simple,"KeyU","KeyO","KeyI"))
-field.set(2,9,new WindItem())
+    menu.onplay= ()=> openLoader()
+    menu.actions={
+        "Editor": ()=> openEditor()
+    }
+}
 
-for(let i=0; i<5; i++){
-    field.set(i+6,8,new BrokablePlatformItem())
+function openEditor(){
+    host.innerHTML=html`<puissance-4-editor/>`
+    let editor=document.querySelector("puissance-4-editor")
+    if(!(editor instanceof Editor))throw new Error("No editor")
+    editor.spawnables=BASE_COLLECTION
+}
+
+function openLoader(){
+    host.innerHTML=""
+    let loader=new Loader()
+    loader.spawnables=BASE_COLLECTION
+    loader.onplay= field=>play(field)
+    host?.appendChild(loader)
+}
+
+/**
+ * 
+ * @param {Puissance4Field} field 
+ */
+function play(field){
+    host.innerHTML=""
+    let game=new Puissance4()
+    host.appendChild(game)
+    game.width=field.content.width
+    game.height=field.content.height
+    field.load(game)
+    setInterval(()=>{
+        console.log(game.ticks)
+        game.ticks.tick(game)
+    },50)
 }
 
 
-for(let i=0; i<3; i++){
-    field.set(i+9,5,new RollerItem(-1))
-}
-
-setInterval(()=>{
-    field.ticks.tick(field)
-},50)
+openMenu()
