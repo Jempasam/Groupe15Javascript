@@ -14,16 +14,24 @@ import { GameMenu } from "../../samlib/gui/GameMenu.mjs"
 import { create, html } from "../../samlib/DOM.mjs"
 import { FileMenu } from "./editor/FileMenu.mjs"
 import { Loader } from "./editor/Loader.mjs"
+import { GameHeader } from "../../samlib/gui/GameHeader.mjs"
 
 /* Get Host and create Menu */
 let host=document.getElementById("host")
 if(!host)throw new Error("No host")
+host.innerHTML=""
+
+/* Create Header */
+let header=new GameHeader()
+host.appendChild(header)
+host.appendChild(create("div"))
+header.onhome=()=>openMenu()
 
 function openMenu(){
-    host.innerHTML=html`<sam-gamemenu title="Puissance 4"/>`
-
-    let menu=document.querySelector("sam-gamemenu")
-    if(!(menu instanceof GameMenu))throw new Error("No menu")
+    let menu=new GameMenu()
+    host.removeChild(host.lastChild)
+    host.appendChild(menu)
+    header.onback=undefined
 
     menu.onplay= ()=> openLoader()
     menu.actions={
@@ -32,18 +40,22 @@ function openMenu(){
 }
 
 function openEditor(){
-    host.innerHTML=html`<puissance-4-editor/>`
-    let editor=document.querySelector("puissance-4-editor")
-    if(!(editor instanceof Editor))throw new Error("No editor")
+    let editor=new Editor()
+    host.removeChild(host.lastChild)
+    host.appendChild(editor)
+    header.onback= ()=>openMenu()
+
     editor.spawnables=BASE_COLLECTION
 }
 
 function openLoader(){
-    host.innerHTML=""
     let loader=new Loader()
+    host.removeChild(host.lastChild)
+    host.appendChild(loader)
+    header.onback= ()=>openMenu()
+
     loader.spawnables=BASE_COLLECTION
     loader.onplay= field=>play(field)
-    host?.appendChild(loader)
 }
 
 /**
@@ -51,9 +63,11 @@ function openLoader(){
  * @param {Puissance4Field} field 
  */
 function play(field){
-    host.innerHTML=""
     let game=new Puissance4()
+    host.removeChild(host.lastChild)
     host.appendChild(game)
+    header.onback= ()=>openLoader()
+    
     game.width=field.content.width
     game.height=field.content.height
     field.load(game)

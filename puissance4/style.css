@@ -145,7 +145,7 @@ puissance-4{
     }
 }
 
-#host>sam-gamemenu{
+#host{
     background-image: url(assets/coin_background.png);
     background-size: cover;
     background-color: white;
