@@ -1,5 +1,5 @@
 import { Item } from "../field/Item.mjs";
-import { StaticCoinItem } from "./StaticCoinItem.mjs";
+import { CoinItem } from "./CoinItem.mjs";
 
 export class MovingItem extends Item{
     
@@ -16,7 +16,8 @@ export class MovingItem extends Item{
     }
 
     onAdd(field,root,x,y){
-        field.ticks.schedule(x,y,root)
+        console.log("aa")
+        field.schedule(x,y,root)
     }
 
     onTick(field,root,x,y){
@@ -39,6 +40,6 @@ export class MovingItem extends Item{
                 field.set(x,y,this.base)
             }
         }
-        else field.ticks.schedule(x,y,root)
+        else field.schedule(x,y,root)
     }
 }

@@ -14,7 +14,7 @@ export class CancelledItem extends Item{
     }
 
     onAdd(field,root,x,y){
-        field.ticks.schedule(x,y,root)
+        field.schedule(x,y,root)
     }
 
     onTick(field,root,x,y){
@@ -22,6 +22,6 @@ export class CancelledItem extends Item{
         if(this.time<0){
             field.set(x,y,this.base)
         }
-        else field.ticks.schedule(x,y,root)
+        else field.schedule(x,y,root)
     }
 }

@@ -32,6 +32,6 @@ export class EffectItem extends Item{
             field.set(x,y,this.base)
         }
         this.temporary.onTick(field,root,x,y)
-        field.ticks.schedule(x,y,root)
+        field.schedule(x,y,root)
     }
 }

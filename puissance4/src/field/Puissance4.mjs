@@ -107,6 +107,10 @@ export class Puissance4 extends HTMLElement{
         return this.children[x].children[y]
     }
 
+    schedule(x,y,item){
+        if(this.get(x,y)==item)this.ticks.schedule(x,y,item)
+    }
+
     /**
      * Update the elemnt at the given coordinates for the corresponding item.
      * @param {number} x 

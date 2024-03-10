@@ -68,14 +68,22 @@ puissance-4{
     }
     
     &.player{
-        height: 100%;
-        width: 100%;
-        background-image: url(assets/pipe.png);
-        background-size: cover;
-        background-color: var(--team-color, gray);
-        background-blend-mode: multiply;
-        mask: url(assets/pipe.png);
-        mask-size: cover;
+        position: relative;
+        &::before{
+            position: absolute;
+            content: "";
+            display: block;
+            margin-left: -10%;
+            margin-top: -10%;
+            height: 165%;
+            width: 120%;
+            background-image: url(assets/canon.png);
+            background-size: cover;
+            background-color: var(--team-color, gray);
+            background-blend-mode: multiply;
+            mask: url(assets/canon.png);
+            mask-size: cover;
+        }
     }
     &.player.loading{
         background-color: var(--team-color-alt, black);
@@ -88,6 +96,50 @@ puissance-4{
         height: 100%;
         background-size: cover;
         width: 100%;
+    }
+
+    &.piston{
+        background-image: url(assets/piston.png);
+        image-rendering: pixelated;
+        height: 100%;
+        background-size: cover;
+        width: 100%;
+        &.top{
+            animation: piston-top 0.5s infinite alternate, ease-out;
+        }
+        &.right{
+            animation: piston-right 0.5s infinite alternate, ease-out;
+        }
+        &.bottom{
+            animation: piston-bottom 0.5s infinite alternate, ease-out;
+        }
+        &.left{
+            animation: piston-left 0.5s infinite alternate, ease-out;
+        }
+    }
+
+    &.pipe{
+        position: relative;
+        &::before{
+            content: "";
+            display: block;
+            background-image: url(assets/pipe.png);
+            image-rendering: pixelated;
+            height: 100%;
+            background-size: cover;
+            width: 100%;
+        }
+        &.top{
+            transform: rotate(180deg);
+        }
+        &.right{
+            transform: rotate(-90deg);
+        }
+        &.bottom{
+        }
+        &.left{
+            transform: rotate(90deg);
+        }
     }
 
     &.brokable_platform{
@@ -140,15 +192,55 @@ puissance-4{
         opacity: 0.7;
     }
 
+    &.slippy::after{
+        content: "";
+        display: block;
+        background-image: url(assets/slippy.png);
+        animation: back-move 1s infinite linear;
+        height: 100%;
+        width: 100%;
+        background-size: 100% 90%;
+    }
+
     &.cancelled{
         filter: grayscale(50%);
     }
 }
 
-#host>sam-gamemenu{
+#host{
     background-image: url(assets/coin_background.png);
     background-size: cover;
     background-color: white;
+}
+
+@keyframes back-move{
+    0%{
+        background-position-y: 0%;
+    }
+    100%{
+        background-position-y: 900%;
+    }
+
+}
+
+@keyframes piston-right {
+    0%{ transform: translateX(0) rotate(90deg); }
+    100%{transform: translateX(25%) rotate(90deg); } 
+}
+
+@keyframes piston-bottom {
+    0%{ transform: translateY(0) rotate(180deg); }
+    100%{transform: translateY(25%) rotate(180deg); } 
+}
+
+@keyframes piston-left {
+    0%{ transform: translateX(0) rotate(-90deg); }
+    100%{transform: translateX(-25%) rotate(-90deg); } 
+}
+
+@keyframes piston-top {
+    0%{ transform: translateY(0); }
+    100%{transform: translateY(-25%); } 
 }
 
 @keyframes activated{

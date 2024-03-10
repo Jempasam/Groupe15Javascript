@@ -1,5 +1,5 @@
 import { Item } from "../field/Item.mjs";
-import { StaticCoinItem } from "./StaticCoinItem.mjs";
+import { CoinItem } from "./CoinItem.mjs";
 import { eatKeyPress, isKeyPressed } from "../controls/Keyboard.mjs"
 
 export class PlayerItem extends Item{
@@ -11,28 +11,37 @@ export class PlayerItem extends Item{
         this.rightKey=rightKey
         this.spawnKey=spawnKey
         this.time=0
+        this.movetime=0
         this.factory=factory
+        this.next=factory(this.team)
     }
 
     getClasses(){
         return [
             "player",
             this.team,
-            ...(this.time>0 ? ["loading"] : [])
+            ...(this.time>0 ? ["loading"] : []),
+            ...this.next.getClasses()
         ]
     }
 
     onAdd(field,root,x,y){
-        field.ticks.schedule(x,y,this)
+        field.schedule(x,y,this)
     }
 
     onTick(field,root,x,y){
-        if(eatKeyPress(this.leftKey)){
-            this.tryMove(field,root,x,y,x-1,y)
+        if(this.movetime<=0){
+            if(isKeyPressed(this.leftKey)){
+                this.tryMove(field,root,x,y,x-1,y)
+                this.movetime=2
+            }
+            if(isKeyPressed(this.rightKey)){
+                this.tryMove(field,root,x,y,x+1,y)
+                this.movetime=2
+            }
         }
-        if(eatKeyPress(this.rightKey)){
-            this.tryMove(field,root,x,y,x+1,y)
-        }
+        else this.movetime--
+            
         if(this.time>0){
             this.time--
             if(this.time===0){
@@ -40,18 +49,19 @@ export class PlayerItem extends Item{
             }
         }
         else{
-            if(eatKeyPress(this.spawnKey)){
+            if(isKeyPressed(this.spawnKey)){
                 this.time=40
-                field.set(x,y+1,this.factory(this.team))
+                field.set(x,y+1,this.next)
+                this.next=this.factory(this.team)
                 field.updateElement(x,y)
             }
         }
-        field.ticks.schedule(x,y,this)
+        field.schedule(x,y,this)
     }
 
     tryMove(field,root,x,y,newx,newy){
         let target=field.get(newx,newy)
-        if(target!==undefined){
+        if(target===null || target instanceof PlayerItem){
             field.set(x,y,target)
             field.set(newx,newy,root)
         }
