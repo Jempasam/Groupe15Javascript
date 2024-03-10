@@ -7,7 +7,7 @@ import { MovingItem } from "./items/MovingItem.mjs"
 import { PlatformItem } from "./items/PlatformItem.mjs"
 import { PlayerItem } from "./items/PlayerItem.mjs"
 import { RollerItem } from "./items/RollerItem.mjs"
-import { StaticCoinItem } from "./items/StaticCoinItem.mjs"
+import { CoinItem } from "./items/CoinItem.mjs"
 import { WindItem } from "./items/WindItem.mjs"
 import { BASE_COLLECTION } from "./field/collection/base_collection.mjs"
 import { GameMenu } from "../../samlib/gui/GameMenu.mjs"
@@ -17,6 +17,7 @@ import { Loader } from "./editor/Loader.mjs"
 import { GameHeader } from "../../samlib/gui/GameHeader.mjs"
 import { PistonItem } from "./items/PistonItem.mjs"
 import { SlippyItem } from "./items/SlippyItem.mjs"
+import { PipeItem } from "./items/PipeItem.mjs"
 
 /* Get Host and create Menu */
 let host=document.getElementById("host")
@@ -107,9 +108,13 @@ function test(){
             game.width=10
             game.height=10
 
-            game.set(5,0,new PlayerItem("red",()=>new StaticCoinItem("blue")))
-            game.set(6,1,new SlippyItem(new StaticCoinItem("red"),0,1))
-            game.set(5,8,new PistonItem(1,0))
+            game.set(5,0,new PlayerItem("red",()=>new CoinItem("blue")))
+            game.set(6,1,new SlippyItem(new CoinItem("red"),0,1))
+            game.set(6,4,new PipeItem(0,1))
+            game.set(6,5,new PipeItem(0,1))
+            game.set(6,6,new PipeItem(0,1))
+            game.set(6,7,new PipeItem(1,0))
+            game.set(7,7,new PipeItem(1,0))
         }
     )
 }

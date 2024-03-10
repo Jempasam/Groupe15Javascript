@@ -1,6 +1,6 @@
 import { Item } from "../field/Item.mjs";
 import { CancelledItem } from "./CancelledItem.mjs";
-import { StaticCoinItem } from "./StaticCoinItem.mjs";
+import { CoinItem } from "./CoinItem.mjs";
 
 export class RollerItem extends Item{
     

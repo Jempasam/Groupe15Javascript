@@ -1,5 +1,5 @@
 import { Item } from "../field/Item.mjs";
-import { StaticCoinItem } from "./StaticCoinItem.mjs";
+import { CoinItem } from "./CoinItem.mjs";
 import { eatKeyPress, isKeyPressed } from "../controls/Keyboard.mjs"
 
 export class PlayerItem extends Item{

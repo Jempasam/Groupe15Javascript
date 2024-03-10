@@ -1,5 +1,5 @@
 import { Item } from "../field/Item.mjs";
-import { StaticCoinItem } from "./StaticCoinItem.mjs";
+import { CoinItem } from "./CoinItem.mjs";
 
 export class MovingItem extends Item{
     

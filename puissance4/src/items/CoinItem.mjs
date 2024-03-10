@@ -1,7 +1,7 @@
 import { Item } from "../field/Item.mjs";
 import { ActivatedCoinItem } from "./ActivatedCoinItem.mjs";
 
-export class StaticCoinItem extends Item{
+export class CoinItem extends Item{
     
     constructor(team){
         super()
@@ -33,7 +33,7 @@ export class StaticCoinItem extends Item{
         let collected=[]
         for(let i=1;i<6;i++){
             let item=field.get(x+dx*i,y+dy*i)
-            if(item && item.team===team)collected.push([x+dx*i,y+dy*i])
+            if(item && item instanceof CoinItem && item.team===team)collected.push([x+dx*i,y+dy*i])
             else break
         }
         return collected

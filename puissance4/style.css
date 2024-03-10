@@ -118,6 +118,30 @@ puissance-4{
         }
     }
 
+    &.pipe{
+        position: relative;
+        &::before{
+            content: "";
+            display: block;
+            background-image: url(assets/pipe.png);
+            image-rendering: pixelated;
+            height: 100%;
+            background-size: cover;
+            width: 100%;
+        }
+        &.top{
+            transform: rotate(180deg);
+        }
+        &.right{
+            transform: rotate(-90deg);
+        }
+        &.bottom{
+        }
+        &.left{
+            transform: rotate(90deg);
+        }
+    }
+
     &.brokable_platform{
         background-image: url(assets/brokable.png);
         image-rendering: pixelated;
