@@ -21,7 +21,6 @@ export class MovingItem extends Item{
     }
 
     onTick(field,root,x,y){
-        console.log(this.dx)
         this.time++
         if(this.time>5){
             let dx=this.dx

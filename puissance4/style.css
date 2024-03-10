@@ -68,14 +68,22 @@ puissance-4{
     }
     
     &.player{
-        height: 100%;
-        width: 100%;
-        background-image: url(assets/pipe.png);
-        background-size: cover;
-        background-color: var(--team-color, gray);
-        background-blend-mode: multiply;
-        mask: url(assets/pipe.png);
-        mask-size: cover;
+        position: relative;
+        &::before{
+            position: absolute;
+            content: "";
+            display: block;
+            margin-left: -10%;
+            margin-top: -10%;
+            height: 165%;
+            width: 120%;
+            background-image: url(assets/canon.png);
+            background-size: cover;
+            background-color: var(--team-color, gray);
+            background-blend-mode: multiply;
+            mask: url(assets/canon.png);
+            mask-size: cover;
+        }
     }
     &.player.loading{
         background-color: var(--team-color-alt, black);
@@ -160,6 +168,16 @@ puissance-4{
         opacity: 0.7;
     }
 
+    &.slippy::after{
+        content: "";
+        display: block;
+        background-image: url(assets/slippy.png);
+        animation: back-move 1s infinite linear;
+        height: 100%;
+        width: 100%;
+        background-size: 100% 90%;
+    }
+
     &.cancelled{
         filter: grayscale(50%);
     }
@@ -169,6 +187,16 @@ puissance-4{
     background-image: url(assets/coin_background.png);
     background-size: cover;
     background-color: white;
+}
+
+@keyframes back-move{
+    0%{
+        background-position-y: 0%;
+    }
+    100%{
+        background-position-y: 900%;
+    }
+
 }
 
 @keyframes piston-right {

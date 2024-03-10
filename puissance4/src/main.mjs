@@ -16,6 +16,7 @@ import { FileMenu } from "./editor/FileMenu.mjs"
 import { Loader } from "./editor/Loader.mjs"
 import { GameHeader } from "../../samlib/gui/GameHeader.mjs"
 import { PistonItem } from "./items/PistonItem.mjs"
+import { SlippyItem } from "./items/SlippyItem.mjs"
 
 /* Get Host and create Menu */
 let host=document.getElementById("host")
@@ -29,6 +30,7 @@ host.appendChild(create("div"))
 
 function openMenu(){
     let menu=new GameMenu()
+    menu.title="Puissance 4"
     host.removeChild(host.lastChild)
     host.appendChild(menu)
     header.onback=undefined
@@ -105,7 +107,8 @@ function test(){
             game.width=10
             game.height=10
 
-            game.set(6,1,new MovingItem(new StaticCoinItem("red"),0,1))
+            game.set(5,0,new PlayerItem("red",()=>new StaticCoinItem("blue")))
+            game.set(6,1,new SlippyItem(new StaticCoinItem("red"),0,1))
             game.set(5,8,new PistonItem(1,0))
         }
     )

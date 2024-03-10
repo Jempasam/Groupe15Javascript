@@ -5,6 +5,7 @@ import { PistonItem } from "../../items/PistonItem.mjs";
 import { PlatformItem } from "../../items/PlatformItem.mjs";
 import { PlayerItem } from "../../items/PlayerItem.mjs";
 import { RollerItem } from "../../items/RollerItem.mjs";
+import { SlippyItem } from "../../items/SlippyItem.mjs";
 import { StaticCoinItem } from "../../items/StaticCoinItem.mjs";
 import { WindItem } from "../../items/WindItem.mjs";
 
@@ -95,5 +96,15 @@ export const BASE_COLLECTION={
         "Joueur Bleu",
         "Un joueur bleu",
         ()=>new PlayerItem("blue", BASE_COLLECTION.blue_falling.factory, "KeyU","KeyO","KeyI")
+    ),
+    player_red_slippy: new EditorSpawnable(
+        "Joueur Rouge Glissant",
+        "Un joueur rouge qui glisse",
+        ()=>new PlayerItem("red", ()=>new SlippyItem(new StaticCoinItem("red"), 0, 1), "KeyA","KeyD","KeyS")
+    ),
+    player_blue_slippy: new EditorSpawnable(
+        "Joueur Bleu Glissant",
+        "Un joueur bleu qui glisse",
+        ()=>new PlayerItem("blue", ()=>new SlippyItem(new StaticCoinItem("blue"), 0, 1), "KeyU","KeyO","KeyI")
     ),
 }

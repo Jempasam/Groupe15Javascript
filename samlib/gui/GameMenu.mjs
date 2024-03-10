@@ -10,7 +10,7 @@ export class GameMenu extends HTMLElement{
 
     on_shop
 
-    attributeMap={
+    static attributeMap={
         "title":{def:""}
     }
 
@@ -32,6 +32,14 @@ export class GameMenu extends HTMLElement{
 
         this.dom_menu2=create("div.button_list")
         this.appendChild(this.dom_menu2)
+    }
+
+    attributeChangedCallback(name,oldValue,newValue){
+        switch(name){
+            case "title":
+                this.dom_title.innerText=newValue
+                break
+        }
     }
 
     generateMenu(){

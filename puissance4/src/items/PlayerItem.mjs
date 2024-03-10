@@ -12,13 +12,15 @@ export class PlayerItem extends Item{
         this.spawnKey=spawnKey
         this.time=0
         this.factory=factory
+        this.next=factory(this.team)
     }
 
     getClasses(){
         return [
             "player",
             this.team,
-            ...(this.time>0 ? ["loading"] : [])
+            ...(this.time>0 ? ["loading"] : []),
+            ...this.next.getClasses()
         ]
     }
 
@@ -42,7 +44,8 @@ export class PlayerItem extends Item{
         else{
             if(eatKeyPress(this.spawnKey)){
                 this.time=40
-                field.set(x,y+1,this.factory(this.team))
+                field.set(x,y+1,this.next)
+                this.next=this.factory(this.team)
                 field.updateElement(x,y)
             }
         }
