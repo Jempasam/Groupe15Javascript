@@ -35,9 +35,9 @@ export class MovementBehaviour extends Behaviour{
             object.dz*=this.sloppiness
             if(object.dz>-0.1 && object.dz<0.1)object.dz=0
 
-            object.x+=object.dx
-            object.y+=object.dy
-            object.z+=object.dz
+            object.transform.x+=object.dx
+            object.transform.y+=object.dy
+            object.transform.z+=object.dz
         }
     }
 

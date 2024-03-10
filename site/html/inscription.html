@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ultrafun - Inscription</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Ultrafun</a> <img src="../img/drakon.png" alt="logo"/> </h1>
+        <a id="connexionButton" class="button" href="connexion.html">Se Connecter</a>
+    </header>
+    <main>
+        <!-- formulaire d'inscription -->
+        <form id="registerForm">
+            <label for="newPseudo">Nouveau Pseudo</label>
+            <input type="text" id="newPseudo" name="newPseudo" required>
+
+            <label for="newMdp">Nouveau Mot de passe</label>
+            <input type="password" id="newMdp" name="newMdp" required>
+
+            <label for="confirmMdp">Confirmer le Mot de passe</label>
+            <input type="password" id="confirmMdp" name="confirmMdp" required>
+
+            <input type="submit" value="S'inscrire">
+        </form>
+
+        <!-- lien pour revenir à la page de connexion -->
+        <p>Déjà membre? <a href="connexion.html">Se connecter</a></p>
+    </main>
+    <footer>
+        Par Les meilleurs
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const registerForm = document.getElementById("registerForm");
+
+            registerForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const newPseudoInput = document.getElementById("newPseudo").value;
+                const newMdpInput = document.getElementById("newMdp").value;
+                const confirmMdpInput = document.getElementById("confirmMdp").value;
+
+                // Vérifier si les mots de passe correspondent
+                if (newMdpInput !== confirmMdpInput) {
+                    alert("Les mots de passe ne correspondent pas. Veuillez réessayer.");
+                    return;
+                }
+
+                // Récupérer les utilisateurs depuis le LocalStorage
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+
+                // Vérifier si le pseudo est déjà utilisé
+                const isPseudoTaken = users.some(user => user.pseudo === newPseudoInput);
+
+                if (isPseudoTaken) {
+                    alert("Ce pseudo est déjà utilisé. Veuillez choisir un autre.");
+                    return;
+                }
+
+                // Ajouter le nouvel utilisateur
+                const newUser = { pseudo: newPseudoInput, mdp: newMdpInput };
+                users.push(newUser);
+
+                // Mettre à jour le LocalStorage avec le nouvel utilisateur
+                localStorage.setItem("users", JSON.stringify(users));
+
+                // Informer l'utilisateur de l'inscription réussie
+                alert("Inscription réussie! Vous pouvez maintenant vous connecter.");
+
+                // Rediriger vers la page de connexion
+                window.location.href = "connexion.html";
+            });
+        });
+    </script>
+</body>
+</html>

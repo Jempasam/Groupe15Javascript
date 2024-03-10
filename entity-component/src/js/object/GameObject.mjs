@@ -1,6 +1,7 @@
-import { DTarget } from "../display/Display.mjs"
+import { DShape, DShapeDef, DTarget } from "../display/Display.mjs"
 import { Drawable } from "../drawable/Drawable.mjs"
 import { fastDelete } from "../lang/Array.mjs"
+import { Transform } from "../transform/Transform.mjs"
 import { Behaviour } from "./behaviour/Behaviour.mjs"
 import { ObserverGroup } from "./observers/ObserverGroup.mjs"
 
@@ -252,36 +253,32 @@ export class World{
             }
         }
     }
+
+    /** @type {DShape} */
+    static shape={
+        defaultColor: () => [255,0,0],
+        defaultShape: () => DShapeDef.BOX,
+        id: 1323
+    }
     
     /**
      * 
      * @param {DTarget} target 
      */
     drawOnTarget(target){
+        target.push()
+        target.transform.scale(1/this.width,1/this.height,1/this.depth)
         for(let object of /** @type {any[]} */(this.objects_list)){
-            if(object.dshape){
+            if(object.dshape && object.transform){
                 let shape=object.dshape
-
-                let size=object.size || 1
-                let width=object.width||object.size
-                let height=object.height||object.size
-                let depth=object.depth||object.size
-
-                width/=this.width
-                height/=this.height
-                depth/=this.depth
-
-                let ox=object.x/this.width-width/2
-                let oy=object.y/this.height-height/2
-                let oz=object.z/this.depth-depth/2
-                
+                let transform=object.transform
                 target.push()
-                target.move(ox,oy,oz)
-                target.scale(width,height,depth)
+                target.transform.compose(transform)
                 target.draw(shape)
                 target.pop()
             }
         }
+        target.pop()
     }
 
     tick(){

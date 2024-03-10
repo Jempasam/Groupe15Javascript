@@ -1,0 +1,112 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body{
+    height: 100%;
+}
+
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+body{
+    background-image: url("../img/menu.png");
+    background-size: 140vh 80vh;
+    background-position-x: right;
+    background-repeat: no-repeat;
+    background-color: black;
+    animation: fadeIn 5s infinite;
+}
+
+a{
+    color:inherit;
+    text-decoration: inherit;
+    transition: font-size 0.5s, letter-spacing 0.5s, color 0.2s;
+    &:hover{
+        font-size: 1.2em;
+        letter-spacing: 0.1em;
+        font-style: oblique;
+        color:rgb(213, 111, 111);
+    }
+}
+
+ul{
+    margin-left: 0;
+    width: 40em;
+    list-style: none;
+    counter-reset: enfer;
+}
+li{
+    cursor: pointer;
+    background: linear-gradient(90deg,rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+    padding: 0.3em;
+    padding-left: 6em;
+    margin-top: 1em;
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+    transition: padding-left 1s;
+    &:hover{
+        padding-left: 7em;
+    }
+    &:before{
+        counter-increment: enfer;
+        content: "Enfer " counter(enfer) ": ";
+    }
+}
+
+p{
+    color: white;
+    white-space: pre-wrap;
+    font-size: 1.3em;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3em;
+    text-align: left;
+    animation: floating 8s infinite ease-in-out;
+}
+h2{
+    position: absolute;
+    top: 80vh;
+    right: 0;
+
+    color: white;
+    font-size: 1.3em;
+
+    background: linear-gradient(-90deg,rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+    padding: 0.3em;
+}
+
+@keyframes fadeIn{
+    0%{
+        backdrop-filter: brightness(1);
+    }
+    25%{
+        backdrop-filter: brightness(0.5);
+    }
+    50%{
+        backdrop-filter: brightness(0.8);
+    }
+    75%{
+        backdrop-filter: brightness(0.4);
+    }
+    100%{
+        backdrop-filter: brightness(1);
+    }
+}
+
+@keyframes floating {
+    0%{
+        transform: translateY(-1em);
+    }
+    50%{
+        transform: translateY(1em);
+    }
+    100%{
+        transform: translateY(-1em);
+    }
+}

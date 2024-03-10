@@ -23,10 +23,13 @@ export class Player extends Entities {
         this.playerSpeed = playerSpeed;
         this.mesh.ellipsoid = new BABYLON.Vector3(0.5, 1, 0.5);
         this.mesh.ellipsoidOffset = new BABYLON.Vector3(0, 0.5, 0);
+        this.maxJump = 0;
         this.canJump = false;
         this.direction = new BABYLON.Vector3(0,0,0);
-        console.log(this.mesh.ellipsoidOffset);
+        //console.log(this.mesh.ellipsoidOffset);
         this.canTakeDamage = true;
+        this.unlockAttack = false;
+        this.canAttack = true;
         this.pvMax = 5;
         this.pv = this.pvMax;
 
@@ -39,7 +42,7 @@ export class Player extends Entities {
     }
     // Autres méthodes de la classe Player
     //detecter si un sol est juste en dessous de nous
-    detectGround(listeSol){
+    detectGround(listeSol, listeMoveGrounds){
         //this.canJump = false;
         //créer un point juste sous le joueur
         let point = new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y-0.51, this.mesh.position.z);
@@ -74,6 +77,49 @@ export class Player extends Entities {
         }
         //pointMesh.dispose();
         });
+
+        //pour chaque sol mobile
+        listeMoveGrounds.forEach(sol => {
+            //si le point est dans le sol (attention aux sols en pente)
+            if (sol.mesh.rotation.z != 0 || sol.mesh.rotation.x != 0){
+                if (this.mesh.intersectsMesh(sol.mesh, true) ){
+                    //on peut sauter
+                    this.canJump = true;
+                    //on arrête de tomber
+                    this.vectorSpeed.y = 0;
+
+                    this.mesh.position.x += sol.direction.x*sol.speed;
+                    this.mesh.position.z += sol.direction.z*sol.speed;
+                }
+            } else {
+                //si la plateforme monte
+                if (sol.direction.y > 0){
+                    if (sol.mesh.intersectsPoint(point)){
+                        //on peut sauter
+                        this.canJump = true;
+                        //on arrête de tomber
+                        this.vectorSpeed.y = 0;
+                        this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2);
+
+                        this.mesh.position.x += sol.direction.x*sol.speed;
+                        this.mesh.position.z += sol.direction.z*sol.speed;
+                    }
+                } else {
+                    //detecter le sol dans une zone rectangulaire sous le joueur
+                    if (this.mesh.position.x > sol.mesh.position.x - sol.xSize/2 && this.mesh.position.x < sol.mesh.position.x + sol.xSize/2 && this.mesh.position.z > sol.mesh.position.z - sol.zSize/2 && this.mesh.position.z < sol.mesh.position.z + sol.zSize/2 && this.mesh.position.y < sol.mesh.position.y + sol.ySize/2 + this.ySize && this.mesh.position.y > sol.mesh.position.y + sol.ySize/2){
+                        //on peut sauter
+                        this.canJump = true;
+                        //on arrête de tomber
+                        this.vectorSpeed.y = 0;
+                        this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2)+0.3;
+                        this.mesh.position.x += sol.direction.x*sol.speed;
+                        this.mesh.position.z += sol.direction.z*sol.speed;
+                    }
+                
+                }
+            }
+            //pointMesh.dispose();
+        });
     }
 
     
@@ -91,7 +137,7 @@ export class Player extends Entities {
                 this.y = warpZone.yOut+ this.mesh.ySize;
                 this.z = warpZone.zOut;
                 console.log("warp");
-                console.log(this.mesh.position.x, this.mesh.position.y, this.mesh.position.z)
+                //console.log(this.mesh.position.x, this.mesh.position.y, this.mesh.position.z)
             }
         });
     }
@@ -112,6 +158,18 @@ export class Player extends Entities {
         }
     }
 
+    detectUnlocker(listeUnlockers){
+        listeUnlockers.forEach(unlocker => {
+            if (this.mesh.intersectsMesh(unlocker.mesh, true)){
+                unlocker.unlock(this);
+                unlocker.mesh.dispose();
+                //le supprimer de la liste
+                listeUnlockers.splice(listeUnlockers.indexOf(unlocker), 1);
+                unlocker = null;
+            }
+        });
+    }
+
     takeDamage(){
         this.pv -= 1;
         this.canTakeDamage = false;
@@ -129,8 +187,25 @@ export class Player extends Entities {
     killPlayer(){
         this.pv = this.pvMax;
         this.resetPosition();
+        //message dans le div
+        document.getElementById("infoJoueur").innerHTML = "Vous êtes mort! Vous avez été renvoyé au début du niveau!";
+        //ajouter une bordure violette au div
+        document.getElementById("infoJoueur").style.border = "2px solid black";
+        //arrondir les coins du div
+        document.getElementById("infoJoueur").style.borderRadius = "10px";
+        //ajouter un fond blanc au div
+        document.getElementById("infoJoueur").style.backgroundColor = "white";
+        //afficher le div
+        document.getElementById("infoJoueur").style.display = "block";
+        //afficher le div pendant 3 secondes
+        setTimeout(function(){
+            document.getElementById("infoJoueur").style.display = "none";
+        }, 3000);
+        //cacher le div
+
     }
 
+    //fonction pour réinitialiser la position du joueur
     resetPosition(){
         this.x = 0;
         this.y = 0;
@@ -142,6 +217,55 @@ export class Player extends Entities {
 
     }
 
+    attaquer(){
+        //si le joueur a débloqué l'attaque
+        if (this.unlockAttack){
+            //si il n'y a pas déjà une attaque en cours
+            if(this.canAttack){
+            //créer un mesh en demi sphere devant le joueur
+            let attaque = BABYLON.MeshBuilder.CreateSphere("attaque", {diameter: 0.5, segments: 16}, this.scene);
+            //couper la sphere en deux
+            attaque.scaling.x = 6;
+            attaque.scaling.y = 0.5;
+            attaque.scaling.z = 4;
+            //normaliser le vecteur vitesse
+            let normeVitesse = Math.sqrt(this.vectorSpeed.x*this.vectorSpeed.x + this.vectorSpeed.z*this.vectorSpeed.z);
+            //diviser la vitesse par sa norme
+            let vecteurNormalise = new BABYLON.Vector3(this.vectorSpeed.x/normeVitesse, 0, this.vectorSpeed.z/normeVitesse);
+            attaque.position = vecteurNormalise.scale(1).add(this.mesh.position);
+            //tourner l'attaque dans la direction du joueur
+            attaque.lookAt(this.direction);
+            attaque.material = new BABYLON.StandardMaterial("attaqueMaterial", this.scene);
+            attaque.material.diffuseColor = BABYLON.Color3.Blue();
+            attaque.checkCollisions = false;
+            this.canAttack = false;
+            //attendre 1 seconde avant de faire disparaitre l'attaque
+            setTimeout(() => {
+                attaque.dispose();
+                setTimeout(() => {
+                this.canAttack = true;
+                }, 200);
+            }, 300);
+            /*listeMonstres.forEach(monstre => {
+                //si le monstre est touché
+                if (attaque.intersectsMesh(monstre.mesh, true)){
+                    monstre.takeDamage();
+                    console.log("touché");
+                }
+            });*/
+        }
+        //}
+        //si une attaque est en cours
+        /*if(this.mesh.getScene().getMeshByName("attaque")){
+            let attaque = this.mesh.getScene().getMeshByName("attaque");
+            //faire se déplacer l'attaque avec le joueur
+            //attaque.position = new BABYLON.Vector3(this.mesh.position.x+this.vectorSpeed.x*20, this.mesh.position.y, this.mesh.position.z+this.vectorSpeed.z*20);
+            //rendre le mesh de moins en moins visible
+            attaque.visibility -= 0.05;
+            }*/
+        }
+    }
+
 
     //bouge
     move(keyState, listes){
@@ -149,11 +273,14 @@ export class Player extends Entities {
         this.vectorSpeed.y-=0.005;
         this.vectorSpeed.z*=0.9;
         //tourne vers la direction du mouvement
-        this.mesh.lookAt(new BABYLON.Vector3(this.mesh.position.x+this.vectorSpeed.x,this.mesh.position.y,this.mesh.position.z+this.vectorSpeed.z));
+        this.direction = new BABYLON.Vector3(this.mesh.position.x+this.vectorSpeed.x,this.mesh.position.y,this.mesh.position.z+this.vectorSpeed.z);
+        this.mesh.lookAt(this.direction);
         //detecter si un sol est juste en dessous de nous
-        this.detectGround(listes[1]);
+        this.detectGround(listes[1], listes[7]);
         this.detectWarpZone(listes[4]);
         this.detectKillZone(listes[3], listes[0]);
+        this.detectUnlocker(listes[8]);
+        //this.attaquer(keyState, listes[0]);
         
         //avance dans la direction du mouvement
         if (keyState['KeyW']) {
@@ -173,8 +300,10 @@ export class Player extends Entities {
             this.vectorSpeed.x-= this.playerSpeed;
         }
         if (keyState['Space'] && this.canJump) {
+            if (this.maxJump > 0){
             console.log("space");
             this.vectorSpeed.y+= this.jumpPower;
+            }
         }
     
     
@@ -186,10 +315,27 @@ export class Player extends Entities {
 
         if(this.y < -1000){
             this.resetPosition();
+            this.pv -= 1;
             //repositionne tout les  monstres
             listes[0].forEach(monstre => {
                 monstre.resetPosition();
             });
+            //message dans le div
+            document.getElementById("infoJoueur").innerHTML = "Ne sautez pas dans le vide! Vous risqueriez de vous blesser très fort!";
+            //ajouter une bordure violette au div
+            document.getElementById("infoJoueur").style.border = "2px solid purple";
+            //arrondir les coins du div
+            document.getElementById("infoJoueur").style.borderRadius = "10px";
+            //ajouter un fond blanc au div
+            document.getElementById("infoJoueur").style.backgroundColor = "white";
+            //afficher le div
+            document.getElementById("infoJoueur").style.display = "block";
+            //afficher le div pendant 3 secondes
+            setTimeout(function(){
+                document.getElementById("infoJoueur").style.display = "none";
+            }, 3000);
+            //cacher le div
+
         }
     }
 }

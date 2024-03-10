@@ -1,27 +1,26 @@
-import BabylonJSDTarget from "./display/BabylonJSDTarget.mjs";
 import CanvasDTarget from "./display/CanvasDTarget.mjs";
-import { DShape, DShapeDef } from "./display/Display.mjs";
 import { Plugin, tickWorld } from "./object/plugin/Plugin.mjs";
-import { PlatformerPlugin } from "./plugins/PlatformerPlugin.mjs";
+import { Transform } from "./transform/Transform.mjs";
 import { Puissance4Plugin } from "./plugins/Puissance4Plugin.mjs";
-import { TestPlugin } from "./plugins/TestPlugin.mjs";
+import BabylonJSDTarget from "./display/BabylonJSDTarget.mjs";
+
+
 
 
 
 /** @type {Object.<string,{plugin:Plugin,isSelected:boolean}>} */
 let plugins={
-    test: {plugin: new TestPlugin(), isSelected: false},
-    platformer: {plugin: new PlatformerPlugin(), isSelected: false},
+    //test: {plugin: new TestPlugin(), isSelected: false},
+    //platformer: {plugin: new PlatformerPlugin(), isSelected: false},
     puissance4: {plugin: new Puissance4Plugin(), isSelected: true},
 }
 
 // Get Display
 const canvas = document.getElementById("target")
 if(!(canvas instanceof HTMLCanvasElement))throw new Error("Canvas not found")
+let transform=new Transform(0,0,0, 0,0,0, 100,100,100)
 //const target=new CanvasDTarget(canvas)
-const target=new BabylonJSDTarget(canvas, 0,0,0, 0,0,0, 100,100,100)
-target.scale(1,-1,1)
-target.move(0,-1,0)
+const target=new BabylonJSDTarget(canvas, transform)
 
 // Selector
 const selector = document.getElementById("selector")
@@ -57,3 +56,4 @@ start.onclick=()=>{
 }
 
 start.click()
+

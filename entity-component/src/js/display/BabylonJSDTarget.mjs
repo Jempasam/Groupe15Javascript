@@ -57,6 +57,7 @@ class ObjectPool{
     }
 }
 
+
 /**
  * Represents a canvas display target for rendering objects.
  * @extends BaseDTarget
@@ -88,7 +89,11 @@ export default class BabylonJSDTarget extends BaseDTarget {
             let sz=transform.sz
             const camera = new BABYLON.ArcRotateCamera("cam", 0, 0, sy*2, new BABYLON.Vector3(sx/2, sy/2, -sz), this.#scene);
             camera.setTarget(new BABYLON.Vector3(sx/2, sy/2, sz/2));
-            camera.attachControl(parent_canvas, true);
+            camera.attachControl(parent_canvas, false);
+            camera.keysRight = [];
+            camera.keysUp = [];
+            camera.keysDown = [];
+            camera.keysLeft = [];
             const ssao = new BABYLON.SSAO2RenderingPipeline("ssao",this.#scene, 0.75,[camera])
 
             
@@ -107,6 +112,9 @@ export default class BabylonJSDTarget extends BaseDTarget {
             back.position.y=sy/2
             back.position.x=sx/2
             back.rotation.x=-Math.PI/2
+
+            transform.scale(1,-1,1)
+            transform.move(0,-1,0)
         }
     }
 
@@ -128,7 +136,6 @@ export default class BabylonJSDTarget extends BaseDTarget {
                         let model=BABYLON.MeshBuilder.CreateBox("baseBox", {size: 1}, scene)
                         model.material=new BABYLON.StandardMaterial("baseBox", scene)
                         model.material.diffuseColor=new BABYLON.Color3(color[0]/255,color[1]/255,color[2]/255)
-                        model.isVisible=false
                         return model
                     }
                     break;
@@ -138,7 +145,6 @@ export default class BabylonJSDTarget extends BaseDTarget {
                         let model=BABYLON.MeshBuilder.CreateSphere("baseSphere", {diameter: 1, segments: 10}, scene)
                         model.material=new BABYLON.StandardMaterial("baseSphere", scene)
                         model.material.diffuseColor=new BABYLON.Color3(color[0]/255,color[1]/255,color[2]/255)
-                        model.isVisible=false
                         return model
                     }
                     break;
@@ -154,6 +160,7 @@ export default class BabylonJSDTarget extends BaseDTarget {
         if(!pool){
             let model=factory(this.#scene)
             model.setPivotPoint(new BABYLON.Vector3(-1/2,-1/2,-1/2))
+            model.isVisible=false
             pool=new ObjectPool(
                 ()=>{
                     return model.createInstance("child")

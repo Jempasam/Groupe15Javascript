@@ -1,16 +1,44 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Titre de la page</title>
-  <link rel="stylesheet" href="../css/styles.css">
-  <script src="../../snake/js/Serpent.js" type="module"></script>
-  <script src="../../snake/js/GameManager.js" type="module"></script>
+    <meta charset="UTF-8">
+    <title>Ultrafun</title>
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
-  <canvas id="myCanvas" width=500 height=500></canvas>
+    <header>
+        <h1>Ultrafun <img src="../img/drakon.png" alt="logo"/> </h1>
+        
+        
+        <!-- Ajout de l'icône de profil, class "profile-image", la source de l'image dépend de l'utilisateur-->
+        <div id="profileIcon" style="display: none;">
+            <a id="profileLink" href="profile.html">
+                <img class="profile-image" alt="profile">
+            </a>
+        </div>
 
-  <div id="score"></div>
+        <a id="connexionButton" class="button" href="connexion.html">Se Connecter</a>
+    
+    </header>
+    <nav>
+        <ul>
+            <li><a href="snake.html">Snake</a></li>
+            <li><a href="puissance4.html">Puissance4</a></li>
+            <li><a href="olympia.html">Olympia</a></li>
+        </ul>
+    </nav>
+    <main>
+        <!-- paragraphe centré et loin des bords gauche et droit -->
+        <p style="text-align: center; margin: 0 20%;">
+            Bienvenue sur Ultrafun, le site de jeux en ligne le plus fun du web. 
+            Vous trouverez ici des jeux de qualité (100% FRANÇAIS!), des graphismes à couper le souffle (si vous êtes asthmatique), et une communauté de joueurs passionnés! 
+            Alors n'attendez plus, inscrivez-vous et rejoignez-nous pour des parties endiablées!
+        </p>
+    </main>
+    <footer>
+        Par Les meilleurs
+    </footer>
 
+    <script src="../js/account.js"></script>
 </body>
 </html>

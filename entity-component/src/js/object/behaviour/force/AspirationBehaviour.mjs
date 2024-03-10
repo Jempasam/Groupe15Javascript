@@ -21,8 +21,8 @@ export class AspirationBehaviour extends Behaviour{
     tick(world, aspirators, aspireds){
         for(let aspirator of aspirators){
             for(let aspired of aspireds){
-                let dx=aspired.x-aspirator.x
-                let dy=aspired.y-aspirator.y
+                let dx=aspired.transform.x-aspirator.transform.x
+                let dy=aspired.transform.y-aspirator.transform.y
                 let d=Math.sqrt(dx*dx+dy*dy)
                 if(d>0){
                     dx/=d
