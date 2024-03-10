@@ -66,6 +66,13 @@ export class Puissance4Field{
                         cell.setAttribute("name",name)
                     }
                 }
+                else{
+                    target.set(x+ix,y+iy,null)
+                    if(doWriteNames){
+                        let cell=target.getElement(x+ix,y+iy)
+                        cell.removeAttribute("name")
+                    }
+                }
             }
         }
     }
@@ -95,7 +102,7 @@ export class Editor extends HTMLElement{
         this.field.oncellclick=(obj,x,y)=>{
             this.field.set(x,y,this.#factory())
             if(this.#factory_name!==undefined)obj.setAttribute("name",this.#factory_name)
-            else a.removeAttribute("name")
+            else obj.removeAttribute("name")
         }
         this.appendChild(this.field)
         
@@ -149,6 +156,7 @@ export class Editor extends HTMLElement{
         let option=dom`<sam-option><img src="assets/remove.png"/></sam-option>`
         option.addEventListener("select",event=>{
             this.#factory=()=>undefined
+            this.#factory_name=undefined
         })
         this.dom_selector.appendChild(option)
         for(let [name,spawnable] of Object.entries(this.#spawnables)){

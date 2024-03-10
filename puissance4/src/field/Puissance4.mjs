@@ -50,11 +50,12 @@ export class Puissance4 extends HTMLElement{
                 for(let y=0; y<height; y++){
                     content_column.push(null)
                     let cell = document.createElement("div")
-                    cell.onclick=()=>{
+                    cell.addEventListener("click",event=>{
                         if(this.oncellclick){
                             this.oncellclick(cell,x,y)
                         }
-                    }
+                        event.preventDefault()
+                    })
                     cell.classList.add("puissance4_cell")
                     column.appendChild(cell)
                 }

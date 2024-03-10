@@ -23,26 +23,25 @@ export class FileMenu extends HTMLElement{
         this.loader=loader
 
         // File Name
-        if(saver){
+        if(loader){
             this.file_name=create("input[type=text]")
             this.appendChild(this.file_name)
 
             this.bt_save_new=create("input[type=button][value=Save]")
             this.bt_save_new.onclick= ()=>this.save(this.file_name.value)
             this.appendChild(this.bt_save_new)
+
+            this.appendChild(create("hr"))
         }
 
-
-        this.appendChild(create("hr"))
-
-        if(loader){
+        if(saver){
             // Load Button
             this.bt_load=create("input[type=button][value=Load]")
             this.bt_load.onclick= ()=>this.load()
             this.appendChild(this.bt_load)
         }
 
-        if(saver){
+        if(loader){
             // Save Button
             this.bt_save=create("input[type=button][value=Save]")
             this.bt_save.onclick= ()=>this.save(this.#name)

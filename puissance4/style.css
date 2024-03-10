@@ -1,4 +1,3 @@
-
 /* PUISSANCE 4 */
 puissance-4{
     display: flex;
@@ -146,6 +145,12 @@ puissance-4{
     }
 }
 
+#host>sam-gamemenu{
+    background-image: url(assets/coin_background.png);
+    background-size: cover;
+    background-color: white;
+}
+
 @keyframes activated{
     0%{
         transform: scale(1);
@@ -203,13 +208,14 @@ puissance-4{
 
 
 /* PUISSANCE 4 EDITOR */
-puissance-4-editor{
+puissance-4-loader, puissance-4-editor{
     display: flex;
     flex-direction: row;
     background-color: gainsboro;
     margin: auto;
+    box-sizing: border-box;
 
-    >.menu{
+    .menu{
         display: flex;
         flex-direction: column;
         padding: 1em;
@@ -229,6 +235,11 @@ puissance-4-editor{
                 width: 3em;
                 margin: 0.2em;
             }
+        }
+        
+        >puissance-4-filemenu{
+
+            flex-grow: 1;
         }
     }
 
