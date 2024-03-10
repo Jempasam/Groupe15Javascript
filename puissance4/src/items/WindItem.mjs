@@ -12,7 +12,7 @@ export class WindItem extends Item{
     }
 
     onAdd(field,root,x,y){
-        field.ticks.schedule(x,y,this)
+        field.schedule(x,y,this)
     }
 
     onTick(field,root,x,y){
@@ -22,7 +22,7 @@ export class WindItem extends Item{
             this.#wind(field,x,y,1,0)
             this.#wind(field,x,y,-1,0)
         }
-        field.ticks.schedule(x,y,this)
+        field.schedule(x,y,this)
     }
 
     #wind(field,x,y,dx,dy){

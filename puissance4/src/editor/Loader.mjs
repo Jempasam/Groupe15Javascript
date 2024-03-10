@@ -39,14 +39,12 @@ export class Loader extends HTMLElement{
         this.appendChild(this.dom_menu)
         
         // File Menu
-        this.dom_file_menu=new FileMenu(
-            input =>{
-                this.#selected_field=new Puissance4Field(this.#spawnables,input)
-                this.load(this.#selected_field)
-            },
-        )
+        this.dom_file_menu=new FileMenu()
+        this.dom_file_menu.onselect= input=>{
+            this.#selected_field=new Puissance4Field(this.#spawnables,input)
+            this.load(this.#selected_field)
+        }
         this.dom_file_menu.classList.add("menu")
-        console.log(this.dom_file_menu)
         this.dom_menu.appendChild(this.dom_file_menu)
 
         // Play Button

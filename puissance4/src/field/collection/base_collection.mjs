@@ -1,6 +1,7 @@
 import { EditorSpawnable } from "../../editor/Editor.mjs";
 import { BrokablePlatformItem } from "../../items/BrokablePlatformItem.mjs";
 import { MovingItem } from "../../items/MovingItem.mjs";
+import { PistonItem } from "../../items/PistonItem.mjs";
 import { PlatformItem } from "../../items/PlatformItem.mjs";
 import { PlayerItem } from "../../items/PlayerItem.mjs";
 import { RollerItem } from "../../items/RollerItem.mjs";
@@ -37,6 +38,28 @@ export const BASE_COLLECTION={
         "Rouleau Droite",
         "Rouleau déplace les unité au dessus vers la droite",
         ()=>new RollerItem(1)
+    ),
+
+    /* Pistons */
+    piston_top: new EditorSpawnable(
+        "Piston Haut",
+        "Un piston qui projette les objets vers le haut",
+        ()=>new PistonItem(0,-1)
+    ),
+    piston_bottom: new EditorSpawnable(
+        "Piston Bas",
+        "Un piston qui projette les objets vers le bas",
+        ()=>new PistonItem(0,1)
+    ),
+    piston_left: new EditorSpawnable(
+        "Piston Gauche",
+        "Un piston qui projette les objets vers la gauche",
+        ()=>new PistonItem(-1,0)
+    ),
+    piston_right: new EditorSpawnable(
+        "Piston Droite",
+        "Un piston qui projette les objets vers la droite",
+        ()=>new PistonItem(1,0)
     ),
 
     /* Coins */

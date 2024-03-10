@@ -11,12 +11,14 @@ export class FileMenu extends HTMLElement{
     /** @type {string?} */
     #name=null
 
+    onselect
+
     /**
      * Create a filemenu allowing to select, load and save puissance 4 files
      * @param {function(Puissance4FieldContent):void=} saver 
      * @param {function():Puissance4FieldContent=} loader
      */
-    constructor(saver=undefined,loader=undefined){
+    constructor(saver=undefined,loader=undefined,){
         super()
 
         this.saver=saver
@@ -69,6 +71,9 @@ export class FileMenu extends HTMLElement{
             option.textContent=name
             option.addEventListener("select",event=>{
                 this.#name=name
+                LOCAL_STORAGE.edit("puissance-4-saves", OBJECT_DATA, saves=>{
+                    if(this.onselect)this.onselect(saves[name])
+                })
             })
             this.selector.appendChild(option)
         }

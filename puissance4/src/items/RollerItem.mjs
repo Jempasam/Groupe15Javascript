@@ -15,7 +15,7 @@ export class RollerItem extends Item{
     }
 
     onAdd(field,root,x,y){
-        field.ticks.schedule(x,y,this)
+        field.schedule(x,y,this)
     }
 
     onTick(field,root,x,y){
@@ -32,6 +32,6 @@ export class RollerItem extends Item{
                 field.set(x+this.direction,y-1,over)
             }
         }
-        field.ticks.schedule(x,y,this)
+        field.schedule(x,y,this)
     }
 }

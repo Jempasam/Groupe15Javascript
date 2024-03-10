@@ -13,7 +13,7 @@ export class FallingPlatformItem extends Item{
     }
 
     onAdd(field,root,x,y){
-        field.ticks.schedule(x,y,this)
+        field.schedule(x,y,this)
     }
 
     onTick(field,root,x,y){
@@ -33,6 +33,6 @@ export class FallingPlatformItem extends Item{
                 }
             }
         }
-        else field.ticks.schedule(x,y,root)
+        else field.schedule(x,y,root)
     }
 }

@@ -23,7 +23,7 @@ export class PlayerItem extends Item{
     }
 
     onAdd(field,root,x,y){
-        field.ticks.schedule(x,y,this)
+        field.schedule(x,y,this)
     }
 
     onTick(field,root,x,y){
@@ -46,7 +46,7 @@ export class PlayerItem extends Item{
                 field.updateElement(x,y)
             }
         }
-        field.ticks.schedule(x,y,this)
+        field.schedule(x,y,this)
     }
 
     tryMove(field,root,x,y,newx,newy){

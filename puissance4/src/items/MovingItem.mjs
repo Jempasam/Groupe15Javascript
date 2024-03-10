@@ -16,10 +16,12 @@ export class MovingItem extends Item{
     }
 
     onAdd(field,root,x,y){
-        field.ticks.schedule(x,y,root)
+        console.log("aa")
+        field.schedule(x,y,root)
     }
 
     onTick(field,root,x,y){
+        console.log(this.dx)
         this.time++
         if(this.time>5){
             let dx=this.dx
@@ -39,6 +41,6 @@ export class MovingItem extends Item{
                 field.set(x,y,this.base)
             }
         }
-        else field.ticks.schedule(x,y,root)
+        else field.schedule(x,y,root)
     }
 }
