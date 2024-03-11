@@ -144,7 +144,7 @@ export class ShopData{
     static set(shop_id,data){
         let storage=LOCAL_STORAGE.get("samlib_shop",OBJECT_DATA)
         if(!storage)storage={}
-        storage[shop_id]={"buyeds":Array.from(data.buyeds.values()), "money":Math.max(0,data.money)}
+        storage[shop_id]={buyeds:Array.from(data.buyeds.values()), money:Math.max(0,data.money)}
         LOCAL_STORAGE.set("samlib_shop",OBJECT_DATA,storage)
     }
 

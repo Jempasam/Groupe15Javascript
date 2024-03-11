@@ -46,7 +46,7 @@ function openMenu(){
         "Reset Shop": ()=>{
             let shopdata=ShopData.get("test")
             shopdata.money=100
-            shopdata.buyed.clear()
+            shopdata.buyeds.clear()
             ShopData.set("test",shopdata)
         }
     }
