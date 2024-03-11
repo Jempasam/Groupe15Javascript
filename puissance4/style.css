@@ -1,20 +1,23 @@
 /* PUISSANCE 4 */
 puissance-4{
     display: flex;
+    aspect-ratio: 1;
     flex-direction: row;
     background-color: gainsboro;
+    justify-content: center;
 }
 
 .puissance4_column{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     flex-grow: 1;
 }
 
 .puissance4_cell{
     display: flex;
     aspect-ratio: 1;
-    flex-grow: 1;
+    /*padding-bottom: 100%;*/
     border: 0.1em solid rgb(185, 185, 185);
 
     &:hover{
@@ -320,6 +323,7 @@ puissance-4-loader, puissance-4-editor{
     background-color: gainsboro;
     margin: auto;
     box-sizing: border-box;
+    height: 100%;
 
     .menu{
         display: flex;

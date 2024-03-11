@@ -28,6 +28,21 @@ const BLUE_KEYS=["KeyU","KeyO","KeyI"]
 const GREEN_KEYS=["KeyR","KeyY","KeyT"]
 const YELLOW_KEYS=["KeyV","KeyN","KeyB"]
 
+const DIRECTIONS={
+    "top": ["Haut",0,-1],
+    "bottom": ["Bas",0,1],
+    "left": ["Gauche",-1,0],
+    "right": ["Droite",1,0],
+}
+
+function transform(obj,callback){
+    let ret={}
+    for(let [key,value] of Object.entries(obj)){
+        const [nkey,nvalue]=callback(key,value)
+        ret[nkey]=nvalue
+    }
+    return ret
+}
 
 /**
  * @type {Object<string,EditorSpawnable>}
@@ -70,56 +85,24 @@ export const BASE_COLLECTION={
     ),
 
     /* Pistons */
-    piston_top: new EditorSpawnable(
-        "Piston Haut",
-        "Un piston qui projette les objets vers le haut",
-        10,
-        ()=>new PistonItem(0,-1)
-    ),
-    piston_bottom: new EditorSpawnable(
-        "Piston Bas",
-        "Un piston qui projette les objets vers le bas",
-        10,
-        ()=>new PistonItem(0,1)
-    ),
-    piston_left: new EditorSpawnable(
-        "Piston Gauche",
-        "Un piston qui projette les objets vers la gauche",
-        10,
-        ()=>new PistonItem(-1,0)
-    ),
-    piston_right: new EditorSpawnable(
-        "Piston Droite",
-        "Un piston qui projette les objets vers la droite",
-        10,
-        ()=>new PistonItem(1,0)
-    ),
+    ...transform(DIRECTIONS,(name,[txt,x,y])=>{
+        return [ `piston_${name}`, new EditorSpawnable(
+            `Piston ${txt}`,
+            `Un piston qui projette les objets vers le ${txt}`,
+            10,
+            ()=>new PistonItem(x,y)
+        )]
+    }),
 
     /* Pipes */
-    pipe_top: new EditorSpawnable(
-        "Tuyau Haut",
-        "Un tuyau qui projette les objets vers le haut",
-        10,
-        ()=>new PipeItem(0,-1)
-    ),
-    pipe_bottom: new EditorSpawnable(
-        "Tuyau Bas",
-        "Un tuyau qui projette les objets vers le bas",
-        10,
-        ()=>new PipeItem(0,1)
-    ),
-    pipe_left: new EditorSpawnable(
-        "Tuyau Gauche",
-        "Un tuyau qui projette les objets vers la gauche",
-        10,
-        ()=>new PipeItem(-1,0)
-    ),
-    pipe_right: new EditorSpawnable(
-        "Tuyau Droite",
-        "Un tuyau qui projette les objets vers la droite",
-        10,
-        ()=>new PipeItem(1,0)
-    ),
+    ...transform(DIRECTIONS,(name,[txt,x,y])=>{
+        return [ `pipe_${name}`, new EditorSpawnable(
+            `Tuyau ${txt}`,
+            `Un tuyau qui transporte les objets vers le ${txt}`,
+            10,
+            ()=>new PipeItem(x,y)
+        )]
+    }),
     ...per_team("red","Rouge",RED_KEYS),
     ...per_team("blue","Bleu",BLUE_KEYS),
     ...per_team("green","Vert",GREEN_KEYS),

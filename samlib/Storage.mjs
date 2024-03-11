@@ -50,11 +50,11 @@ export const ARRAY_DATA ={
 class Storage{
 
     /**
-     * A infix added before every stored data names.
+     * A prefix added before every stored data names.
      * Useful for making account-based storage.
      * @type {string}
      */
-    infix=""
+    prefix=""
     
     constructor(storage){
         this.storage=storage
@@ -68,7 +68,7 @@ class Storage{
      * @returns {T}
      */
     get(name,type){
-        let str=this.storage.getItem(this.infix+name)
+        let str=this.storage.getItem(this.prefix+name)
         if(str==null)return type.default
         else{
             let data=type.parse(str)
@@ -86,7 +86,7 @@ class Storage{
      */
     set(name,type,data){
         let str=type.serialize(data)
-        if(str!=null)localStorage.setItem(this.infix+name,str)
+        if(str!=null)localStorage.setItem(this.prefix+name,str)
     }
 
     /**
@@ -94,7 +94,7 @@ class Storage{
      * @param {string} name 
      */
     remove(name){
-        this.storage.removeItem(this.infix+name)
+        this.storage.removeItem(this.prefix+name)
     }
 
     /**
@@ -105,12 +105,35 @@ class Storage{
      * @param {function(T):void} editor 
      */
     edit(name,type,editor){
-        let data=this.get(this.infix+name,type)
+        let data=this.get(this.prefix+name,type)
         editor(data)
-        this.set(this.infix+name,type,data)
+        this.set(this.prefix+name,type,data)
     }
+
+    /**
+     * Create a new storage accessor to the same storage location with his own prefix
+     */
+    clone(){
+        let storage=new Storage(this.storage)
+        storage.prefix=this.prefix
+        return storage
+    }
+
 }
 
+/**
+ * A simple local storage, never cleared
+ */
 export const LOCAL_STORAGE=new Storage(localStorage)
 
+/**
+ * A copy of local storage, but with a different prefix.
+ * Use this one for account-based storage.
+ * Use prefix to set the account id.
+ */
+export const ACCOUNT_STORAGE=LOCAL_STORAGE.clone()
+
+/**
+ * a simple session storage, cleared when the session ends
+ */
 export const SESSION_STORAGE=new Storage(sessionStorage)
