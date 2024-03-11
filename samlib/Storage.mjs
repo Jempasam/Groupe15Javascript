@@ -48,6 +48,13 @@ export const ARRAY_DATA ={
 }
 
 class Storage{
+
+    /**
+     * A infix added before every stored data names.
+     * Useful for making account-based storage.
+     * @type {string}
+     */
+    infix=""
     
     constructor(storage){
         this.storage=storage
@@ -61,7 +68,7 @@ class Storage{
      * @returns {T}
      */
     get(name,type){
-        let str=this.storage.getItem(name)
+        let str=this.storage.getItem(this.infix+name)
         if(str==null)return type.default
         else{
             let data=type.parse(str)
@@ -79,7 +86,15 @@ class Storage{
      */
     set(name,type,data){
         let str=type.serialize(data)
-        if(str!=null)localStorage.setItem(name,str)
+        if(str!=null)localStorage.setItem(this.infix+name,str)
+    }
+
+    /**
+     * Remove a stored data
+     * @param {string} name 
+     */
+    remove(name){
+        this.storage.removeItem(this.infix+name)
     }
 
     /**
@@ -90,9 +105,9 @@ class Storage{
      * @param {function(T):void} editor 
      */
     edit(name,type,editor){
-        let data=this.get(name,type)
+        let data=this.get(this.infix+name,type)
         editor(data)
-        this.set(name,type,data)
+        this.set(this.infix+name,type,data)
     }
 }
 

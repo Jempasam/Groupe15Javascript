@@ -9,6 +9,25 @@ import { RollerItem } from "../../items/RollerItem.mjs";
 import { SlippyItem } from "../../items/SlippyItem.mjs";
 import { CoinItem } from "../../items/CoinItem.mjs";
 import { WindItem } from "../../items/WindItem.mjs";
+import { MeteorItem } from "../../items/MeteorItem.mjs";
+
+
+const SLIPPY_FACTORY= (team)=>new SlippyItem(new CoinItem(team), 0, 1)
+const FALLING_FACTORY= (team)=>new MovingItem(new CoinItem(team), 0, 1)
+function NEW_METEOR_FACTORY(){
+    let data={i:0}
+    return function(team){
+        let i = data.i = data.i + 1
+        if(i%3==1)return new MeteorItem(new CoinItem(team), 0, 1)
+        else return new MovingItem(new CoinItem(team), 0, 1)
+    }
+}
+
+const RED_KEYS=["KeyQ","KeyE","KeyW"]
+const BLUE_KEYS=["KeyU","KeyO","KeyI"]
+const GREEN_KEYS=["KeyR","KeyY","KeyT"]
+const YELLOW_KEYS=["KeyV","KeyN","KeyB"]
+
 
 /**
  * @type {Object<string,EditorSpawnable>}
@@ -101,92 +120,42 @@ export const BASE_COLLECTION={
         10,
         ()=>new PipeItem(1,0)
     ),
-
-    /* Coins */
-    red_static: new EditorSpawnable(
-        "Pièce Rouge Statique",
-        "Une pièce rouge qui ne bouge pas",
-        10,
-        ()=>new CoinItem("red")
-    ),
-    blue_static: new EditorSpawnable(
-        "Pièce Bleue Statique",
-        "Une pièce bleue qui ne bouge pas",
-        10,
-        ()=>new CoinItem("blue")
-    ),
-
-    red_falling: new EditorSpawnable(
-        "Pièce Tombante Rouge",
-        "Une pièce rouge qui tombe.",
-        10,
-        ()=>new MovingItem(new CoinItem("red"),0,1)
-    ),
-    blue_falling: new EditorSpawnable(
-        "Pièce Tombante Bleue",
-        "Une pièce bleue qui tombe.",
-        10,
-        ()=>new MovingItem(new CoinItem("blue"),0,1)
-    ),
-    
-    /* Players */
-    player_red: new EditorSpawnable(
-        "Joueur Rouge",
-        "Un joueur rouge",
-        10,
-        ()=>new PlayerItem("red", FALLING_FACTORY, ...RED_KEYS)
-    ),
-    player_blue: new EditorSpawnable(
-        "Joueur Bleu",
-        "Un joueur bleu",
-        10,
-        ()=>new PlayerItem("blue", FALLING_FACTORY, ...BLUE_KEYS)
-    ),
-    player_red_slippy: new EditorSpawnable(
-        "Joueur Rouge Glissant",
-        "Un joueur rouge qui glisse",
-        10,
-        ()=>new PlayerItem("red", SLIPPY_FACTORY, ...RED_KEYS)
-    ),
-    player_blue_slippy: new EditorSpawnable(
-        "Joueur Bleu Glissant",
-        "Un joueur bleu qui glisse",
-        10,
-        ()=>new PlayerItem("blue", SLIPPY_FACTORY, ...BLUE_KEYS)
-    ),
-    
-
-    /* Other Players */
-    player_green: new EditorSpawnable(
-        "Joueur Vert",
-        "Un joueur vert",
-        10,
-        ()=>new PlayerItem("green", FALLING_FACTORY, ...GREEN_KEYS)
-    ),
-    player_yellow: new EditorSpawnable(
-        "Joueur Jaune",
-        "Un joueur jaune",
-        10,
-        ()=>new PlayerItem("yellow", FALLING_FACTORY, ...YELLOW_KEYS)
-    ),
-    player_green_slippy: new EditorSpawnable(
-        "Joueur Vert Glissant",
-        "Un joueur vert qui glisse",
-        10,
-        ()=>new PlayerItem("green", SLIPPY_FACTORY, ...GREEN_KEYS)
-    ),
-    player_yellow_slippy: new EditorSpawnable(
-        "Joueur Jaune Glissant",
-        "Un joueur jaune qui glisse",
-        10,
-        ()=>new PlayerItem("yellow", SLIPPY_FACTORY, ...YELLOW_KEYS)
-    ),
+    ...per_team("red","Rouge",RED_KEYS),
+    ...per_team("blue","Bleu",BLUE_KEYS),
+    ...per_team("green","Vert",GREEN_KEYS),
+    ...per_team("yellow","Jaune",YELLOW_KEYS),
 }
-
-const SLIPPY_FACTORY= (team)=>new SlippyItem(new CoinItem(team), 0, 1)
-const FALLING_FACTORY= (team)=>new MovingItem(new CoinItem(team), 0, 1)
-
-const RED_KEYS=["KeyQ","KeyE","KeyW"]
-const BLUE_KEYS=["KeyU","KeyO","KeyI"]
-const GREEN_KEYS=["KeyR","KeyY","KeyT"]
-const YELLOW_KEYS=["KeyV","KeyN","KeyB"]
+function per_team(team,team_txt,keys){
+    return {
+        [`coin_${team}`]: new EditorSpawnable(
+            `Pièce ${team_txt}`,
+            `Une pièce ${team_txt}`,
+            10,
+            ()=>new CoinItem(team)
+        ),
+        [`coin_${team}_falling`]: new EditorSpawnable(
+            `Pièce Tombante ${team_txt}`,
+            `Une pièce ${team_txt} qui tombe`,
+            10,
+            ()=>new MovingItem(new CoinItem(team), 0, 1)
+        ),
+        [`player_${team}`]: new EditorSpawnable(
+            `Joueur ${team_txt}`,
+            `Un joueur ${team_txt}`,
+            10,
+            ()=>new PlayerItem(team, FALLING_FACTORY, ...keys)
+        ),
+        [`player_${team}_meteor`]: new EditorSpawnable(
+            `Joueur ${team_txt} Météore`,
+            `Un joueur ${team_txt} dont un jeton sur trois casse le truc en dessous`,
+            10,
+            ()=>new PlayerItem(team, NEW_METEOR_FACTORY(), ...keys)
+        ),
+        [`player_${team}_slippy`]: new EditorSpawnable(
+            `Joueur ${team_txt} Glissant`,
+            `Un joueur ${team_txt} qui glisse`,
+            10,
+            ()=>new PlayerItem(team, SLIPPY_FACTORY, ...keys)
+        ),
+    }
+}
