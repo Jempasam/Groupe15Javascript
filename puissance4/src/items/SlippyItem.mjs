@@ -13,8 +13,8 @@ export class SlippyItem extends Item{
         this.time=0
     }
 
-    getClasses(){
-        return ["slippy", ...this.base.getClasses()]
+    getClasses(...args){
+        return ["slippy", ...this.base.getClasses(...args)]
     }
 
     onAdd(field,root,x,y){

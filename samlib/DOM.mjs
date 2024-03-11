@@ -22,22 +22,25 @@ export function html(strings, ...values) {
  * and escape template parameters
  * @param {*} strings 
  * @param  {...any} values 
- * @returns 
+ * @returns
  */
 export function dom(strings, ...values) {
     const template = document.createElement("aa");
     template.innerHTML = html(strings, ...values);
-    return template.children[0];
+    if(template.children.length==1)return template.children[0];
+    return template.children;
 }
 
 /**
  * Create an element using a selector like description
- * @param {string} element 
+ * @param {string} element
+ * @param {string=} content
  * @returns {Element}
  */
-export function create(element){
+export function create(element,content){
     let splitted=element.split(/(?=\.)|(?=#)|(?=\[)/)
     let ret=document.createElement(splitted[0])
+    if(content)ret.textContent=content
     for(let s of splitted){
         if(s.length>1 && s[0]=="."){
             ret.classList.add(s.slice(1))

@@ -16,9 +16,10 @@ export class EditorSpawnable{
      * @param {string} desc 
      * @param {function():Item} factory 
      */
-    constructor(name,desc,factory){
+    constructor(name,desc,price,factory){
         this.name=name
-        this.desc=desc
+        this.description=desc
+        this.price=price
         this.factory=factory
     }
 }

@@ -10,11 +10,15 @@ import { SlippyItem } from "../../items/SlippyItem.mjs";
 import { CoinItem } from "../../items/CoinItem.mjs";
 import { WindItem } from "../../items/WindItem.mjs";
 
+/**
+ * @type {Object<string,EditorSpawnable>}
+ */
 export const BASE_COLLECTION={
     /* Ventilator */
     ventilator: new EditorSpawnable(
         "Ventilateur",
         "Repousse les objets à droite et à gauche",
+        10,
         ()=>new WindItem()
     ),
 
@@ -22,11 +26,13 @@ export const BASE_COLLECTION={
     platform: new EditorSpawnable(
         "Plateforme",
         "Plateforme immobile",
+        5,
         ()=>new PlatformItem()
     ),
     brokable: new EditorSpawnable(
         "Plateforme cassable",
         "Plateforme qui se casse après un certain nombre de passages",
+        10,
         ()=>new BrokablePlatformItem()
     ),
 
@@ -34,11 +40,13 @@ export const BASE_COLLECTION={
     roller_left: new EditorSpawnable(
         "Rouleau Gauche",
         "Rouleau déplace les unité au dessus vers la gauche",
+        10,
         ()=>new RollerItem(-1)
     ),
     roller_right: new EditorSpawnable(
         "Rouleau Droite",
         "Rouleau déplace les unité au dessus vers la droite",
+        10,
         ()=>new RollerItem(1)
     ),
 
@@ -46,21 +54,25 @@ export const BASE_COLLECTION={
     piston_top: new EditorSpawnable(
         "Piston Haut",
         "Un piston qui projette les objets vers le haut",
+        10,
         ()=>new PistonItem(0,-1)
     ),
     piston_bottom: new EditorSpawnable(
         "Piston Bas",
         "Un piston qui projette les objets vers le bas",
+        10,
         ()=>new PistonItem(0,1)
     ),
     piston_left: new EditorSpawnable(
         "Piston Gauche",
         "Un piston qui projette les objets vers la gauche",
+        10,
         ()=>new PistonItem(-1,0)
     ),
     piston_right: new EditorSpawnable(
         "Piston Droite",
         "Un piston qui projette les objets vers la droite",
+        10,
         ()=>new PistonItem(1,0)
     ),
 
@@ -68,21 +80,25 @@ export const BASE_COLLECTION={
     pipe_top: new EditorSpawnable(
         "Tuyau Haut",
         "Un tuyau qui projette les objets vers le haut",
+        10,
         ()=>new PipeItem(0,-1)
     ),
     pipe_bottom: new EditorSpawnable(
         "Tuyau Bas",
         "Un tuyau qui projette les objets vers le bas",
+        10,
         ()=>new PipeItem(0,1)
     ),
     pipe_left: new EditorSpawnable(
         "Tuyau Gauche",
         "Un tuyau qui projette les objets vers la gauche",
+        10,
         ()=>new PipeItem(-1,0)
     ),
     pipe_right: new EditorSpawnable(
         "Tuyau Droite",
         "Un tuyau qui projette les objets vers la droite",
+        10,
         ()=>new PipeItem(1,0)
     ),
 
@@ -90,22 +106,26 @@ export const BASE_COLLECTION={
     red_static: new EditorSpawnable(
         "Pièce Rouge Statique",
         "Une pièce rouge qui ne bouge pas",
+        10,
         ()=>new CoinItem("red")
     ),
     blue_static: new EditorSpawnable(
         "Pièce Bleue Statique",
         "Une pièce bleue qui ne bouge pas",
+        10,
         ()=>new CoinItem("blue")
     ),
 
     red_falling: new EditorSpawnable(
         "Pièce Tombante Rouge",
         "Une pièce rouge qui tombe.",
+        10,
         ()=>new MovingItem(new CoinItem("red"),0,1)
     ),
     blue_falling: new EditorSpawnable(
         "Pièce Tombante Bleue",
         "Une pièce bleue qui tombe.",
+        10,
         ()=>new MovingItem(new CoinItem("blue"),0,1)
     ),
     
@@ -113,21 +133,25 @@ export const BASE_COLLECTION={
     player_red: new EditorSpawnable(
         "Joueur Rouge",
         "Un joueur rouge",
+        10,
         ()=>new PlayerItem("red", FALLING_FACTORY, ...RED_KEYS)
     ),
     player_blue: new EditorSpawnable(
         "Joueur Bleu",
         "Un joueur bleu",
+        10,
         ()=>new PlayerItem("blue", FALLING_FACTORY, ...BLUE_KEYS)
     ),
     player_red_slippy: new EditorSpawnable(
         "Joueur Rouge Glissant",
         "Un joueur rouge qui glisse",
+        10,
         ()=>new PlayerItem("red", SLIPPY_FACTORY, ...RED_KEYS)
     ),
     player_blue_slippy: new EditorSpawnable(
         "Joueur Bleu Glissant",
         "Un joueur bleu qui glisse",
+        10,
         ()=>new PlayerItem("blue", SLIPPY_FACTORY, ...BLUE_KEYS)
     ),
     
@@ -136,21 +160,25 @@ export const BASE_COLLECTION={
     player_green: new EditorSpawnable(
         "Joueur Vert",
         "Un joueur vert",
+        10,
         ()=>new PlayerItem("green", FALLING_FACTORY, ...GREEN_KEYS)
     ),
     player_yellow: new EditorSpawnable(
         "Joueur Jaune",
         "Un joueur jaune",
+        10,
         ()=>new PlayerItem("yellow", FALLING_FACTORY, ...YELLOW_KEYS)
     ),
     player_green_slippy: new EditorSpawnable(
         "Joueur Vert Glissant",
         "Un joueur vert qui glisse",
+        10,
         ()=>new PlayerItem("green", SLIPPY_FACTORY, ...GREEN_KEYS)
     ),
     player_yellow_slippy: new EditorSpawnable(
         "Joueur Jaune Glissant",
         "Un joueur jaune qui glisse",
+        10,
         ()=>new PlayerItem("yellow", SLIPPY_FACTORY, ...YELLOW_KEYS)
     ),
 }

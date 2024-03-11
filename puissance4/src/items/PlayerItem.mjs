@@ -16,12 +16,12 @@ export class PlayerItem extends Item{
         this.next=factory(this.team)
     }
 
-    getClasses(){
+    getClasses(...args){
         return [
             "player",
             this.team,
             ...(this.time>0 ? ["loading"] : []),
-            ...this.next.getClasses()
+            ...this.next.getClasses(...args)
         ]
     }
 

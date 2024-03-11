@@ -8,10 +8,10 @@ export class MixItem extends Item{
         this.components=components
     }
 
-    getClasses(){
+    getClasses(...args){
         let ret=[]
         for(let c of this.components){
-            ret=[...ret, ...c.getClasses()]
+            ret=[...ret, ...c.getClasses(...args)]
         }
         return ret
     }

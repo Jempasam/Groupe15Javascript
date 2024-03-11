@@ -362,3 +362,28 @@ puissance-4-loader, puissance-4-editor{
         flex-grow: 1;
     }
 }
+
+div.presentation{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    >*{
+        width: 60%;
+        height: 60%;
+        animation: presentation 3s infinite alternate;
+        background-color: transparent;
+    }
+}
+
+@keyframes presentation {
+    0%{
+        transform: rotate(-20deg);
+    }
+    100%{
+        transform: rotate(20deg);
+    }
+    
+}

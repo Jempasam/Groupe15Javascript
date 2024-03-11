@@ -11,13 +11,14 @@ import { CoinItem } from "./items/CoinItem.mjs"
 import { WindItem } from "./items/WindItem.mjs"
 import { BASE_COLLECTION } from "./field/collection/base_collection.mjs"
 import { GameMenu } from "../../samlib/gui/GameMenu.mjs"
-import { create, html } from "../../samlib/DOM.mjs"
+import { create, dom, html } from "../../samlib/DOM.mjs"
 import { FileMenu } from "./editor/FileMenu.mjs"
 import { Loader } from "./editor/Loader.mjs"
 import { GameHeader } from "../../samlib/gui/GameHeader.mjs"
 import { PistonItem } from "./items/PistonItem.mjs"
 import { SlippyItem } from "./items/SlippyItem.mjs"
 import { PipeItem } from "./items/PipeItem.mjs"
+import { Shop, ShopData } from "../../samlib/gui/Shop.mjs"
 
 /* Get Host and create Menu */
 let host=document.getElementById("host")
@@ -38,9 +39,16 @@ function openMenu(){
     header.onhome=undefined
 
     menu.onplay= ()=> openLoader()
+    menu.onshop= ()=>openShop()
     menu.actions={
         "Editor": ()=> openEditor(),
-        "Test": ()=> test()
+        "Test": ()=> test(),
+        "Reset Shop": ()=>{
+            let shopdata=ShopData.get("test")
+            shopdata.money=100
+            shopdata.buyed.clear()
+            ShopData.set("test",shopdata)
+        }
     }
 }
 
@@ -63,6 +71,26 @@ function openLoader(){
 
     loader.spawnables=BASE_COLLECTION
     loader.onplay= field=>play(field)
+}
+
+function openShop(){
+    let shop=new Shop(id=>{
+        let ret=create("div.presentation")
+        let field=new Puissance4()
+        field.width=1
+        field.height=1
+        field.set(0,0,BASE_COLLECTION[id].factory())
+        ret.appendChild(field)
+        return ret
+    })
+    shop.title="Shop"
+    shop.shop_content=BASE_COLLECTION
+    shop.shop_id="test"
+    host.removeChild(host.lastChild)
+    host.appendChild(shop)
+    header.onback= ()=>openMenu()
+    header.onhome= ()=>openMenu()
+
 }
 
 function playGame(onback, callback){
@@ -118,6 +146,5 @@ function test(){
         }
     )
 }
-
 
 openMenu()

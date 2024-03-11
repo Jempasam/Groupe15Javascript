@@ -11,8 +11,8 @@ export class MovingItem extends Item{
         this.time=0
     }
 
-    getClasses(){
-        return ["moving", ...this.base.getClasses()]
+    getClasses(...args){
+        return ["moving", ...this.base.getClasses(...args)]
     }
 
     onAdd(field,root,x,y){
