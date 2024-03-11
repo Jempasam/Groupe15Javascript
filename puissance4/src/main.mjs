@@ -43,10 +43,16 @@ function openMenu(){
     menu.actions={
         "Editor": ()=> openEditor(),
         "Test": ()=> test(),
-        "Reset Shop": ()=>{
+        "Reset": ()=>{
             let shopdata=ShopData.get("test")
             shopdata.money=100
             shopdata.buyeds.clear()
+            ShopData.set("test",shopdata)
+        },
+        "God": ()=>{
+            let shopdata=ShopData.get("test")
+            shopdata.money=100000
+            for(let a in BASE_COLLECTION)shopdata.buyeds.add(a)
             ShopData.set("test",shopdata)
         }
     }
@@ -59,7 +65,12 @@ function openEditor(){
     header.onback= ()=>openMenu()
     header.onhome= ()=>openMenu()
 
-    editor.spawnables=BASE_COLLECTION
+    let disponible={}
+    for(let [key,spawnable] of Object.entries(BASE_COLLECTION)){
+        if(ShopData.get("test").isBuyed(key))disponible[key]=spawnable
+    }
+    editor.collection=BASE_COLLECTION
+    editor.spawnables=disponible
 }
 
 function openLoader(){

@@ -85,6 +85,9 @@ export class Editor extends HTMLElement{
     /** @type {EditorSpawnableDict} */
     #spawnables
 
+    /** @type {EditorSpawnableDict} */
+    #collection
+
     /** @type {function():Item|undefined} */
     #factory= ()=>undefined
 
@@ -110,7 +113,7 @@ export class Editor extends HTMLElement{
 
         // File Menu
         this.dom_file_menu=new FileMenu(
-            input => this.load(new Puissance4Field(this.#spawnables,input)),
+            input => this.load(new Puissance4Field(this.#collection,input)),
             () => this.field_definition.content,
         )
         this.dom_file_menu.classList.add("menu")
@@ -173,6 +176,10 @@ export class Editor extends HTMLElement{
         }
     }
 
+    set collection(collection){
+        this.#collection=collection
+    }
+
     /**
      * Load a field into the editor
      * @param {Puissance4Field} field_definition 
@@ -180,7 +187,7 @@ export class Editor extends HTMLElement{
     load(field_definition){
         this.field.width=field_definition.content.width
         this.field.height=field_definition.content.height
-        this.#spawnables=field_definition.dictionnary
+        this.#collection=field_definition.dictionnary
         field_definition.load(this.field,0,0,true)
     }
 
@@ -200,7 +207,7 @@ export class Editor extends HTMLElement{
             }
             grid.push(column)
         }
-        return new Puissance4Field(this.#spawnables,{height,width,grid})
+        return new Puissance4Field(this.#collection,{height,width,grid})
     }
         
 
