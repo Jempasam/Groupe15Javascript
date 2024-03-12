@@ -1,4 +1,3 @@
-import { FlowGraphSendCustomEventBlock } from "babylonjs/FlowGraph/Blocks/Execution/flowGraphSendCustomEventBlock"
 
 
 /**
