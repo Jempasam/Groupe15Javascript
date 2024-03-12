@@ -31,7 +31,7 @@ export class Loader extends HTMLElement{
         super()
 
         // Field
-        this.field=create("puissance-4")
+        this.field=create("puissance-4._scrollable")
         this.appendChild(this.field)
 
         // Menu

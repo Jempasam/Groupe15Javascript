@@ -102,7 +102,7 @@ export class Editor extends HTMLElement{
         this.appendChild(this.dom_menu)
 
         // Field
-        this.field=create("puissance-4")
+        this.field=create("puissance-4._scrollable")
         this.field.oncellclick=(obj,x,y)=>{
             this.field.set(x,y,this.#factory())
             if(this.#factory_name!==undefined)obj.setAttribute("name",this.#factory_name)
@@ -157,7 +157,7 @@ export class Editor extends HTMLElement{
     set spawnables(spawnables){
         this.#spawnables=spawnables
         this.dom_selector.innerHTML=""
-        let option=dom`<sam-option><img src="assets/remove.png"/></sam-option>`
+        let option=dom`<sam-option><div class="remover"/></div></sam-option>`
         option.addEventListener("select",event=>{
             this.#factory=()=>undefined
             this.#factory_name=undefined

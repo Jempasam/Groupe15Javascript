@@ -71,7 +71,7 @@ function openEditor(){
 
     let disponible={}
     for(let [key,spawnable] of Object.entries(BASE_COLLECTION)){
-        if(ShopData.get("test").isBuyed(key))disponible[key]=spawnable
+        if(ShopData.get(USED_STORAGE,"test").isBuyed(key))disponible[key]=spawnable
     }
     editor.collection=BASE_COLLECTION
     editor.spawnables=disponible
@@ -111,6 +111,7 @@ function openShop(){
 
 function playGame(onback, callback){
     let game=new Puissance4()
+    game.className="_scrollable"
     host.removeChild(host.lastChild)
     host.appendChild(game)
     let stopper= {val:true}

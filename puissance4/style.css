@@ -17,6 +17,7 @@ puissance-4{
 .puissance4_cell{
     display: flex;
     aspect-ratio: 1;
+    width: 100%;
     /*padding-bottom: 100%;*/
     border: 0.1em solid rgb(185, 185, 185);
 
@@ -343,6 +344,13 @@ puissance-4-loader, puissance-4-editor{
             flex-grow: 1;
             puissance-4{
                 width: 3em;
+                margin: 0.2em;
+            }
+            div.remover{
+                background-image: url(assets/remove.png);
+                background-size: 3em 3em;
+                width: 3em;
+                height: 3em;
                 margin: 0.2em;
             }
         }
