@@ -81,8 +81,6 @@ body {
   line-height: 1.5;
   color: #333;
   text-transform: uppercase;
-
-
 }
 
 #toggleMenuButton img {
@@ -96,7 +94,7 @@ body {
   border: 2px solid black;
   border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 80px;
+  margin-bottom: 100px;
 }
 
 #modeInversion {
@@ -105,6 +103,7 @@ body {
   border: 2px solid black;
   border-radius: 5px;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 #modeMiamFast {
@@ -113,7 +112,16 @@ body {
   border: 2px solid black;
   border-radius: 5px;
   cursor: pointer;
-  margin-bottom : -80px;
+  margin-bottom : -60px;
+}
+
+#modeSerpentLent {
+  position: absolute;
+  transform: translateX(-545%);
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom : 180px;
 }
 
 #boutonSkin {
@@ -230,31 +238,44 @@ body {
 {
   position:absolute;
   top : 65%;
-  left : 15%;
+  left : 10%;
 }
 
 #ModeDeJeu2
 {
   position:absolute;
   top : 65%;
-  left : 40%;
+  left : 30%;
 }
 
 #ModeDeJeu3
 {
   position:absolute;
   top : 65%;
-  left : 65%;
+  left : 55%;
+}
+
+#ModeDeJeu4
+{
+  position:absolute;
+  top : 65%;
+  left : 75%;
+}
+
+
+.easterEgg
+{
+  position: absolute;
+  margin-bottom: -20%;
+  animation: shake 1.5s infinite;
+  cursor: pointer;
 }
 
 
 
-
-
-
 @keyframes shake {
-  from { transform: translateX(-5px); }
-  to { transform: translateX(5px); }
+  from { transform: translateX(-200px); }
+  to { transform: translateX(200px); }
 }
 
 .bouton-active {

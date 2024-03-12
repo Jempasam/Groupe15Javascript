@@ -13,6 +13,9 @@ let Pause = false;
 let choixSkin = 0;
 let son = true;
 const HIGHSCORE_KEY = 'highscore';
+let dureeBloquer = 50;
+
+let toucheBloque = false;
 
 let highscore = localStorage.getItem(HIGHSCORE_KEY);
 if (!isNaN(highscore) && highscore % 1 === 0) 
@@ -36,6 +39,7 @@ const bouton1 = document.getElementById("modeVitesse");
 const bouton2 = document.getElementById("modeInversion");
 const bouton3 = document.getElementById("boutonSkin");
 const bouton4 = document.getElementById("modeMiamFast");
+const bouton5 = document.getElementById("modeSerpentLent");
 
 var audio = document.getElementById('mangerAudio');
 
@@ -80,6 +84,21 @@ function definirEcouteurs() {
         }
     });
 
+    document.getElementById("modeSerpentLent").addEventListener("click", function()
+    {        
+        if (dureeBloquer == 50)
+        {
+            bouton5.classList.add("bouton-active"); // Ajoute la classe pour la brillance
+            dureeBloquer = 500;
+
+        }
+        else
+        {
+            bouton5.classList.remove("bouton-active"); // Ajoute la classe pour la brillance
+            dureeBloquer = 50;
+        }
+    });
+
     document.getElementById("boutonSon").addEventListener("click", function()
     {
         
@@ -100,7 +119,7 @@ function definirEcouteurs() {
 
     document.getElementById("boutonSkin").addEventListener("click", function()
     {        
-        if (choixSkin < 2)
+        if (choixSkin < 3)
         {
             choixSkin ++;
         }
@@ -111,21 +130,39 @@ function definirEcouteurs() {
 
         // Mettre à jour l'image en fonction du choixSkin
         const img = document.getElementById("boutonSkin").querySelector("img");
+        const animationSkin = document.getElementById("easterEggLien").querySelector("img");
+        const easterEggLien = document.getElementById("easterEggLien");
+
         if (choixSkin === 0) 
         {
             img.src = "../assets/serpentManchot.png";
+            animationSkin.src = "../assets/serpentManchot.png";
+            easterEggLien.href = "https://fr.wikipedia.org/wiki/Manchot_empereur";
         } 
         else 
         {
             if (choixSkin === 1)
             {
                 img.src = "../assets/serpentCanard.png";
+                animationSkin.src = "../assets/serpentCanard.png";
+                easterEggLien.href = "https://fr.wikipedia.org/wiki/Canard";
             }
             else
             {
                 if (choixSkin === 2)
                 {
                     img.src =  "../assets/serpentMariau.png";
+                    animationSkin.src =  "../assets/serpentMariau.png";
+                    easterEggLien.href = "https://fr.wikipedia.org/wiki/Mario_(personnage)"
+                }
+                else
+                {
+                    if (choixSkin === 3)
+                    {
+                        img.src = "../assets/serpentSerpent.png";
+                        animationSkin.src = "../assets/serpentSerpent.png";
+                        easterEggLien.href = "https://fr.wikipedia.org/wiki/Serpentes"
+                    }
                 }
             }
         }
@@ -161,10 +198,9 @@ function traiteKeyDown(event)
     }
 
 
-
     if (inputStates.left == false && !InversionTouche || inputStates.left == true && InversionTouche || inputStates.up == true || inputStates.down == true)
     {
-        if (key === "ArrowRight") 
+        if (key === "ArrowRight" && toucheBloque == false) 
         {
             if (!InversionTouche)
             {
@@ -186,7 +222,7 @@ function traiteKeyDown(event)
 
     if (inputStates.right == false && !InversionTouche || inputStates.right == true && InversionTouche || inputStates.up == true || inputStates.down == true)
     {
-        if (key === "ArrowLeft") 
+        if (key === "ArrowLeft" && toucheBloque == false)  
         {
             inputStates.down = false;
             if (!InversionTouche)
@@ -207,7 +243,7 @@ function traiteKeyDown(event)
 
     if (inputStates.right == true  || inputStates.up == false && !InversionTouche || inputStates.up == true && InversionTouche || inputStates.left == true)
     {
-        if (key === "ArrowDown") 
+        if (key === "ArrowDown" && toucheBloque == false)  
         {
             if (!InversionTouche)
             {
@@ -232,7 +268,7 @@ function traiteKeyDown(event)
 
     if (inputStates.right == true || inputStates.down == false && !InversionTouche || inputStates.down == true && InversionTouche || inputStates.left == true)
     {
-        if (key === "ArrowUp") 
+        if (key === "ArrowUp" && toucheBloque == false) 
         {
             console.log("La vitesse est de : " + vitesse);
             inputStates.right = false;
@@ -251,6 +287,15 @@ function traiteKeyDown(event)
             
             inputStates.left = false;
         }
+    }
+
+    if (key === "ArrowRight" || "ArrowLeft" || "ArrowDown" || "ArrowUp")
+    {
+        toucheBloque = true;
+        setTimeout(() => {
+            toucheBloque = false;
+            console.log("touceBloque");
+          }, dureeBloquer);        
     }
 }
 
@@ -346,13 +391,13 @@ function hitbox() {
     }
 
 
-    for (let i = 2; i < serpent.segments.length; i++) {
+    for (let i = 5; i < serpent.segments.length; i++) {
         let segment = serpent.segments[i];
         let segmentX = segment.x;
         let segmentY = segment.y;
 
         // On définit une hitbox pour chaque segment de la queue
-        var marginS = 4.9; // Ajustez cette valeur selon votre préférence
+        var marginS = 5.5; // Ajustez cette valeur selon votre préférence
 
         // On vérifie la collision avec le segment actuel
         if (Math.abs(serpentX - segmentX) <= marginS && Math.abs(serpentY - segmentY) <= marginS) {
@@ -436,10 +481,17 @@ function TeleportationFruit()
 
 function gameOver() 
 {
+    angle = 0;
+    if (inputStates.left)
+    {
+        inputStates.left = false;
+        inputStates.right = true;
+    }
     let score;
     const ModeVitesseImage = document.getElementById("ModeDeJeu2");
     const ModeInversionImage = document.getElementById("ModeDeJeu1");
     const ModeMiamFastImage = document.getElementById("ModeDeJeu3");
+    const ModeSerpentLentImage = document.getElementById("ModeDeJeu4");
 
     if (!mangerVitesse)
     {
@@ -491,6 +543,15 @@ function gameOver()
         else
         {
             ModeMiamFastImage.style.display = "none";
+        }
+
+        if (dureeBloquer == 500)
+        {
+            ModeSerpentLentImage.style.display = "block";
+        }
+        else
+        {
+            ModeSerpentLentImage.style.display = "none";
         }
 
         
