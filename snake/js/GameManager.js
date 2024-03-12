@@ -87,12 +87,12 @@ function definirEcouteurs() {
         
         if (son)
         {
-            imgSon.src = "../../snake/assets/Mute.png";
+            imgSon.src = "../assets/Mute.png";
             son = false;
         }
         else
         {
-            imgSon.src = "../../snake/assets/Son.png"; // Ajoute la classe pour la brillance
+            imgSon.src = "../assets/Son.png"; // Ajoute la classe pour la brillance
             son = true;
         }
     });
@@ -112,19 +112,19 @@ function definirEcouteurs() {
         const img = document.getElementById("boutonSkin").querySelector("img");
         if (choixSkin === 0) 
         {
-            img.src = "../../snake/assets/serpentManchot.png";
+            img.src = "../assets/serpentManchot.png";
         } 
         else 
         {
             if (choixSkin === 1)
             {
-                img.src = "../../snake/assets/serpentCanard.png";
+                img.src = "../assets/serpentCanard.png";
             }
             else
             {
                 if (choixSkin === 2)
                 {
-                    img.src =  "../../snake/assets/serpentMariau.png";
+                    img.src =  "../assets/serpentMariau.png";
                 }
             }
         }
