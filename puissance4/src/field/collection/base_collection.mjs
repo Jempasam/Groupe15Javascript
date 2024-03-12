@@ -11,7 +11,7 @@ import { CoinItem } from "../../items/CoinItem.mjs";
 import { WindItem } from "../../items/WindItem.mjs";
 import { MeteorItem } from "../../items/MeteorItem.mjs";
 import { SnakeItem } from "../../items/SnakeItem.mjs";
-import { FruitItem } from "../../items/FruitITem.mjs";
+import { FruitItem } from "../../items/FruitItem.mjs";
 import { SpawnerItem } from "../../items/SpawnerItem.mjs";
 import { FallingPlatformItem } from "../../items/FallingPlatformItem.mjs";
 import { GoombaItem } from "../../items/GoombaItem.mjs";

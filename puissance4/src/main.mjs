@@ -24,7 +24,7 @@ import { NumberInput } from "../../samlib/gui/NumberInput.mjs"
 import { SnakeItem } from "./items/SnakeItem.mjs"
 import { SpawnerItem } from "./items/SpawnerItem.mjs"
 import { GoombaItem } from "./items/GoombaItem.mjs"
-import { FruitItem } from "./items/FruitITem.mjs"
+import { FruitItem } from "./items/FruitItem.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE

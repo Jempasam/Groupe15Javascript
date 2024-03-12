@@ -2,7 +2,7 @@ import { adom } from "../../../samlib/DOM.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
-import { FruitItem } from "./FruitITem.mjs";
+import { FruitItem } from "./FruitItem.mjs";
 import { Class } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 
