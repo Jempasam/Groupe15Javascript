@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { reset } from './GameManager.js';
 import { afficherScore } from './GameManager.js';
 
