@@ -44,7 +44,7 @@ export class GameMenu extends HTMLElement{
 
     generateMenu(){
         for(let [key,action] of Object.entries(this.#actions)){
-            let button=create("a.button")
+            let button=create("a.menu_button")
             button.innerText=key
             button.onclick=action
             this.dom_menu2.appendChild(button)

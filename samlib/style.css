@@ -69,7 +69,7 @@ sam-gamemenu{
     }
     
 
-    a.button{
+    a.menu_button{
         display: block;
         box-shadow: 0 0.1em 0.4em -0.1em black;
         border: black 0.1em solid;
@@ -283,8 +283,10 @@ sam-shop{
     a.button{
         display: block;
         box-shadow: 0 0.1em 0.4em -0.1em black;
+
         border: black 0.1em solid;
         background-color: rgb(255,255,255,0.2);
+
         padding: 0.5em;
         margin: 0.5em;
         font-size: 2em;

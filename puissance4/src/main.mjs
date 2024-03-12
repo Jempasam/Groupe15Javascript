@@ -19,6 +19,10 @@ import { PistonItem } from "./items/PistonItem.mjs"
 import { SlippyItem } from "./items/SlippyItem.mjs"
 import { PipeItem } from "./items/PipeItem.mjs"
 import { Shop, ShopData } from "../../samlib/gui/Shop.mjs"
+import { ACCOUNT_STORAGE, LOCAL_STORAGE } from "../../samlib/Storage.mjs"
+
+/* SETTINGS */
+let USED_STORAGE=ACCOUNT_STORAGE
 
 /* Get Host and create Menu */
 let host=document.getElementById("host")
@@ -44,16 +48,16 @@ function openMenu(){
         "Editor": ()=> openEditor(),
         "Test": ()=> test(),
         "Reset": ()=>{
-            let shopdata=ShopData.get("test")
+            let shopdata=ShopData.get(USED_STORAGE,"test")
             shopdata.money=100
             shopdata.buyeds.clear()
-            ShopData.set("test",shopdata)
+            ShopData.set(shopdata)
         },
         "God": ()=>{
-            let shopdata=ShopData.get("test")
+            let shopdata=ShopData.get(USED_STORAGE,"test")
             shopdata.money=100000
             for(let a in BASE_COLLECTION)shopdata.buyeds.add(a)
-            ShopData.set("test",shopdata)
+            ShopData.set(shopdata)
         }
     }
 }
@@ -94,6 +98,7 @@ function openShop(){
         ret.appendChild(field)
         return ret
     })
+    shop.storage=USED_STORAGE
     shop.title="Shop"
     shop.shop_content=BASE_COLLECTION
     shop.shop_id="test"

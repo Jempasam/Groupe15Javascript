@@ -6,7 +6,8 @@ import { LOCAL_STORAGE, OBJECT_DATA } from "../Storage.mjs"
 export class Shop extends HTMLElement{
 
     #shop_content
-    #shop_id
+    #shop_id="global"
+    #storage=LOCAL_STORAGE
 
     static attributeMap={
         "title":{def:""}
@@ -47,12 +48,17 @@ export class Shop extends HTMLElement{
         this.reloadShop()
     }
 
+    set storage(value){
+        this.#storage=value
+        this.reloadShop()
+    }
+
     reloadShop(){
         const dom_items=this.dom_items
         dom_items.innerHTML=""
         if(!this.#shop_content)return
 
-        let save=ShopData.get(this.#shop_id)
+        let save=ShopData.get(this.#storage, this.#shop_id)
 
         for(let [id,{name,description,price}] of Object.entries(this.#shop_content)){
             console.log(save,id)
@@ -69,7 +75,7 @@ export class Shop extends HTMLElement{
                 if(save.money<price)return
                 save.money-=price
                 save.buyeds.add(id)
-                ShopData.set(this.#shop_id,save)
+                ShopData.set(save)
                 this.reloadShop()
             }
             item.querySelector(".illustration").appendChild(this.display_getter(id))
@@ -89,9 +95,14 @@ export class ShopData{
 
     /**
      * Shop identifier
-     * @param {string} shop_id
+     * @type {string} shop_id
      */
     identifier
+
+    /**
+     * @type {Storage}
+     */
+    storage
 
     /**
      * Current money balance
@@ -99,10 +110,11 @@ export class ShopData{
      */
     money
 
-    constructor(buyeds,identifier,money){
+    constructor(buyeds,identifier,storage,money){
         console.log(buyeds)
         this.buyeds=buyeds
         this.identifier=identifier
+        this.storage=storage
         this.money=money
 
     }
@@ -121,16 +133,17 @@ export class ShopData{
      * @param {string} shop_id 
      * @returns {ShopData}
      */
-    static get(shop_id){
-        let storage=LOCAL_STORAGE.get("samlib_shop",OBJECT_DATA)
-        if(!storage)return new ShopData(new Set(),shop_id,0)
+    static get(storage,shop_id){
+        let shop_storages=storage.get("samlib_shop",OBJECT_DATA)
+        if(!shop_storages)return new ShopData(new Set(),shop_id,this.storage,0)
 
-        let data=storage[shop_id]
-        if(!data)return new ShopData(new Set(),shop_id,0)
+        let data=shop_storages[shop_id]
+        if(!data)return new ShopData(new Set(),shop_id,storage,0)
 
         return new ShopData(
             new Set(data.buyeds),
             shop_id,
+            storage,
             data.money ?? 0
         )
 
@@ -141,15 +154,15 @@ export class ShopData{
      * @param {string} shop_id
      * @param {ShopData} data
      */
-    static set(shop_id,data){
-        let storage=LOCAL_STORAGE.get("samlib_shop",OBJECT_DATA)
+    static set(data){
+        let storage=data.storage.get("samlib_shop",OBJECT_DATA)
         if(!storage)storage={}
-        storage[shop_id]={buyeds:Array.from(data.buyeds.values()), money:Math.max(0,data.money)}
-        LOCAL_STORAGE.set("samlib_shop",OBJECT_DATA,storage)
+        storage[data.identifier]={buyeds:Array.from(data.buyeds.values()), money:Math.max(0,data.money)}
+        data.storage.set("samlib_shop",OBJECT_DATA,storage)
     }
 
     static clear(shop_id){
-        LOCAL_STORAGE.set("samlib_shop",OBJECT_DATA,{})
+        this.storage.set("samlib_shop",OBJECT_DATA,{})
     }
 
 }

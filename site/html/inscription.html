@@ -35,6 +35,7 @@
     <script type="module">
         import { ACCOUNT_STORAGE } from "../../samlib/Storage.mjs";
         document.addEventListener("DOMContentLoaded", function() {
+            console.log(ACCOUNT_STORAGE.players)
             const registerForm = document.getElementById("registerForm");
 
             registerForm.addEventListener("submit", function(event) {
@@ -52,7 +53,6 @@
 
                 // Essayer de créer le nouveau compte
                 const accountCreated = ACCOUNT_STORAGE.add_player(newPseudoInput, newMdpInput);
-
                 if (!accountCreated) {
                     alert("Un compte existe déjà avec le même pseudo.");
                     return;
