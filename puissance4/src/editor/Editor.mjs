@@ -7,6 +7,7 @@ import { SamSelector } from "../../../samlib/gui/Selector.mjs"
 import { Item } from "../field/Item.mjs"
 import { LOCAL_STORAGE, OBJECT_DATA } from "../../../samlib/Storage.mjs"
 import { FileMenu } from "./FileMenu.mjs"
+import { NumberInput } from "../../../samlib/gui/NumberInput.mjs"
 
 
 export class EditorSpawnable{
@@ -63,8 +64,7 @@ export class Puissance4Field{
                     let item=spawnable.factory()
                     target.set(x+ix,y+iy,item)
                     if(doWriteNames){
-                        let cell=target.getElement(x+ix,y+iy)
-                        cell.setAttribute("name",name)
+                        item.factory=name
                     }
                 }
                 else{
@@ -104,9 +104,11 @@ export class Editor extends HTMLElement{
         // Field
         this.field=create("puissance-4._scrollable")
         this.field.oncellclick=(obj,x,y)=>{
-            this.field.set(x,y,this.#factory())
-            if(this.#factory_name!==undefined)obj.setAttribute("name",this.#factory_name)
-            else obj.removeAttribute("name")
+            let item=this.#factory()
+            if(item){
+                item.factory=this.#factory_name
+            }
+            this.field.set(x,y,item)
         }
         this.appendChild(this.field)
         
@@ -117,27 +119,26 @@ export class Editor extends HTMLElement{
             () => this.field_definition.content,
         )
         this.dom_file_menu.classList.add("menu")
-        console.log(this.dom_file_menu)
         this.appendChild(this.dom_file_menu)
 
         // Dimensions
-        this.dom_width=create("input[type=number]")
-        this.dom_width.setAttribute("min",4)
-        this.dom_width.setAttribute("max",40)
+        this.dom_width=new NumberInput()
+        this.dom_width.min=4
+        this.dom_width.max=40
         this.dom_width.value=10
         this.dom_menu.appendChild(this.dom_width)
-        this.dom_menu.onchange=()=>{
+        this.dom_menu.addEventListener("change",()=>{
             this.createField()
-        }
+        })
 
-        this.dom_height=create("input[type=number]")
-        this.dom_height.setAttribute("min",4)
-        this.dom_height.setAttribute("max",40)
+        this.dom_height=new NumberInput()
+        this.dom_height.min=4
+        this.dom_height.max=40
         this.dom_height.value=10
         this.dom_menu.appendChild(this.dom_height)
-        this.dom_menu.onchange=()=>{
+        this.dom_menu.addEventListener("change",()=>{
             this.createField()
-        }
+        })
 
         // Selector
         this.dom_selector=create("sam-selector")
@@ -156,6 +157,18 @@ export class Editor extends HTMLElement{
      */
     set spawnables(spawnables){
         this.#spawnables=spawnables
+        this.#createSelector()
+    }
+
+    set collection(collection){
+        this.#collection=collection
+    }
+
+    set storage(value){
+        this.dom_file_menu.storage=value
+    }
+
+    #createSelector(){
         this.dom_selector.innerHTML=""
         let option=dom`<sam-option><div class="remover"/></div></sam-option>`
         option.addEventListener("select",event=>{
@@ -176,15 +189,13 @@ export class Editor extends HTMLElement{
         }
     }
 
-    set collection(collection){
-        this.#collection=collection
-    }
-
     /**
      * Load a field into the editor
      * @param {Puissance4Field} field_definition 
      */
     load(field_definition){
+        this.dom_height.value=field_definition.content.width
+        this.dom_width.value=field_definition.content.height
         this.field.width=field_definition.content.width
         this.field.height=field_definition.content.height
         this.#collection=field_definition.dictionnary
@@ -198,10 +209,10 @@ export class Editor extends HTMLElement{
         for(let x=0; x<this.field.width; x++){
             let column=[]
             for(let y=0; y<this.field.height; y++){
-                let item=this.field.getElement(x,y)
+                let item=this.field.get(x,y)
                 if(!item)column.push(undefined)
                 else{
-                    let name=item.getAttribute("name")
+                    let name=item.factory
                     column.push(name)
                 }
             }

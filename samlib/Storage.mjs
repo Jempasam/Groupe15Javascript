@@ -54,7 +54,7 @@ export const ARRAY_DATA ={
     get default(){return []}
 }
 
-class Storage{
+export class Storage{
 
     /**
      * A prefix added before every stored data names.
@@ -318,7 +318,10 @@ class AccountStorage extends Storage{
                 }
             }
             else{
-                players.guest={data:{[name]:value}}
+                if(players.guest==undefined){
+                    players.guest={data:{}}
+                }
+                players.guest.data[name]=value
             }
         })
     }

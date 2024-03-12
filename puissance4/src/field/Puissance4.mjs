@@ -1,5 +1,7 @@
 // @ts-nocheck
 import { mapAttribute } from "../../../samlib/CustomElement.mjs"
+import { create, dom } from "../../../samlib/DOM.mjs"
+import { Class } from "../items/ItemUtils.mjs"
 import { Item } from "./Item.mjs"
 import { Player } from "./Player.mjs"
 import { TickManager } from "./TickManager.mjs"
@@ -49,14 +51,18 @@ export class Puissance4 extends HTMLElement{
                 this.appendChild(column)
                 for(let y=0; y<height; y++){
                     content_column.push(null)
-                    let cell = document.createElement("div")
+                    let cell = dom/*html*/`
+                        <div class="puissance4_cell">
+                            <div class="puissance4_item">
+                            </div>
+                        </div>
+                    `
                     cell.addEventListener("click",event=>{
                         if(this.oncellclick){
                             this.oncellclick(cell,x,y)
                         }
                         event.preventDefault()
                     })
-                    cell.classList.add("puissance4_cell")
                     column.appendChild(cell)
                 }
                 this.#content.push(content_column)
@@ -96,6 +102,34 @@ export class Puissance4 extends HTMLElement{
         }
     }
 
+    /**
+     * Swap two item with an animation.
+     * @param {number} x1 
+     * @param {number} y1 
+     * @param {number} x2 
+     * @param {number} y2 
+     */
+    swap(x1,y1,x2,y2){
+        // Swap
+        let item1=this.get(x1,y1)
+        let item2=this.get(x2,y2)
+
+        let anim1="moving_"+Class.direction(x1-x2,y1-y2)
+        let anim2="moving_"+Class.direction(x2-x1,y2-y1)
+        this.set(x1,y1,item2)
+        if(item2){
+            const element=this.getElement(x1,y1)
+            element.clientHeight
+            element.classList.add(anim1)
+        }
+        this.set(x2,y2,item1)
+        if(item1){
+            const element=this.getElement(x2,y2)
+            element.clientHeight
+            element.classList.add(anim2)
+        }
+    }
+
     /* Element access */
     /**
      * Get an element from the field.
@@ -104,7 +138,7 @@ export class Puissance4 extends HTMLElement{
      * @returns {Element}
      */
     getElement(x,y){
-        return this.children[x].children[y]
+        return this.children[x].children[y].children[0]
     }
 
     schedule(x,y,item){
@@ -119,16 +153,11 @@ export class Puissance4 extends HTMLElement{
     updateElement(x,y){
         let item=this.get(x,y)
         let element=this.getElement(x,y)
+        element.className="puissance4_item"
+        element.innerHTML=""
         if(item){
-            let item_div=element.children[0]
-            if(!item_div){
-                item_div=document.createElement("div")
-                element.appendChild(item_div)
-            }
-            item_div.className="puissance4_item"
-            item.getClasses(this,item,x,y).forEach(c=>item_div.classList.add(c))
+            element.appendChild(item.getDisplay(this,item,x,y))
         }
-        else element.innerHTML=""
     }
     
 

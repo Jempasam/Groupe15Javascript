@@ -17,7 +17,6 @@ export class MeteorItem extends Item{
     }
 
     onAdd(field,root,x,y){
-        console.log("aa")
         field.schedule(x,y,root)
     }
 
@@ -33,12 +32,11 @@ export class MeteorItem extends Item{
                 if(underder){
                     field.set(x+dx*2, y+dy*2, null)
                     field.set(x+dx, y+dy, new MovingItem(this.base, dx, dy))
+                    field.set(x, y, null)
                 }
                 else{
-                    field.set(x+dx, y+dy, root)
-
+                    field.swap(x,y, x+dx,y+dy)
                 }
-                field.set(x, y, null)
                 return
             }
             else{

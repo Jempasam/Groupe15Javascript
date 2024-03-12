@@ -75,6 +75,10 @@ export class Loader extends HTMLElement{
         field_definition.load(this.field,0,0,true)
     }
 
+    set storage(value){
+        this.dom_file_menu.storage=value
+    }
+
 }
 
 mapAttribute(Loader)

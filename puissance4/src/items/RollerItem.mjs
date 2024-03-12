@@ -25,11 +25,10 @@ export class RollerItem extends Item{
             let over=field.get(x,y-1)
             let after_over=field.get(x+this.direction,y-1)
             if(over && after_over===null){
-                field.set(x,y-1,null)
                 if(!(over instanceof CancelledItem)){
                     over=new CancelledItem(over,4)
                 }
-                field.set(x+this.direction,y-1,over)
+                field.swap(x,y-1, x+this.direction,y-1)
             }
         }
         field.schedule(x,y,this)

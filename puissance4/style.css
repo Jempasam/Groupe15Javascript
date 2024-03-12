@@ -29,36 +29,53 @@ puissance-4{
 .puissance4_item{
     width: 100%;
     height: 100%;
+    *{
+        width: 100%;
+        height: 100%;
+    }
 
-    &.undefined{
+    &.moving_left{
+        animation: moving_left 0.2s;
+    }
+    &.moving_right{
+        animation: moving_right 0.2s;
+    }
+    &.moving_bottom{
+        animation: moving_bottom 0.2s;
+    }
+    &.moving_top{
+        animation: moving_top 0.2s;
+    }
+
+    .undefined{
         /* Fond composé de lignes blanches et noires */
         background: linear-gradient(45deg, black, black, white 10%, white, black 40%, black, white 60%, white , black 90%);
         background-size: 1em 1em;
     }
 
     /** TEAMS */
-    &.red{
+    .red{
         --team-color: red;
         --team-color-alt: #b55050;
     }
 
-    &.blue{
+    .blue{
         --team-color: blue;
         --team-color-alt: #565681;
     }
 
-    &.green{
+    .green{
         --team-color: green;
         --team-color-alt: #516f51;
     }
 
-    &.yellow{
+    .yellow{
         --team-color: yellow;
         --team-color-alt: #8b8b50;
     }
 
     /* ITEMS */
-    &.coin{
+    .coin{
         height: 100%;
         width: 100%;
         background-image: url(assets/coin.png);
@@ -67,11 +84,54 @@ puissance-4{
         background-blend-mode: multiply;
         border-radius: 50%;
     }
-    &.coin.activated{
+    .coin.activated{
         animation: activated 0.5s infinite alternate;
     }
+
+    .snake{
+        position: relative;
+        &::before{
+            position: absolute;
+            content: "";
+            display: block;
+            margin-left: -10%;
+            margin-top: -10%;
+            height: 165%;
+            width: 120%;
+            background-image: url(assets/meca_snake_head.png);
+            background-size: cover;
+        }
+    }
+
+    .spawner{
+        position: relative;
+        &::before{
+            position: absolute;
+            z-index: 1;
+            content: "";
+            display: block;
+            margin-left: -10%;
+            margin-top: -10%;
+            height: 120%;
+            width: 120%;
+            background-image: url(assets/spawner.png);
+            image-rendering: pixelated;
+            background-size: cover;
+            
+        }
+        >*{
+            animation: rotate 1s infinite linear;
+        }
+    }
+
+    .snake_body{
+        background-image: url(assets/meca_snake_body.png);
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+    }
     
-    &.player{
+    .player{
         position: relative;
         &::before{
             position: absolute;
@@ -89,12 +149,12 @@ puissance-4{
             mask-size: cover;
         }
     }
-    &.player.loading{
+    .player.loading{
         background-color: var(--team-color-alt, black);
         animation: tired 0.5s infinite alternate ease-in-out;
     }
 
-    &.platform{
+    .platform{
         background-image: url(assets/platform.png);
         image-rendering: pixelated;
         height: 100%;
@@ -102,7 +162,15 @@ puissance-4{
         width: 100%;
     }
 
-    &.piston{
+    .fruit{
+        background-image: url(assets/apple.png);
+        image-rendering: pixelated;
+        height: 100%;
+        background-size: cover;
+        width: 100%;
+    }
+
+    .piston{
         background-image: url(assets/piston.png);
         image-rendering: pixelated;
         height: 100%;
@@ -122,7 +190,7 @@ puissance-4{
         }
     }
 
-    &.pipe{
+    .pipe{
         position: relative;
         &::before{
             content: "";
@@ -133,6 +201,91 @@ puissance-4{
             background-size: cover;
             width: 100%;
         }
+    }
+
+    .brokable_platform{
+        background-image: url(assets/brokable.png);
+        image-rendering: pixelated;
+        height: 100%;
+        background-size: cover;
+        width: 100%;
+    }
+
+    .falling_platform{
+        background-image: url(assets/falling.png);
+        image-rendering: pixelated;
+        height: 100%;
+        background-size: cover;
+        width: 100%;
+        animation: shake 0.2s;
+    }
+
+    .roller{
+        background-color: black;
+        border-radius: 30%;
+        &::after{
+            content:"";
+            position: relative;
+            top:25%;
+            left: 25%;
+            display: block;
+            background-color: gray;
+            height: 50%;
+            width: 50%;
+        }
+        &.right{
+            animation: rotate 1s infinite linear;
+        }
+        &.left{
+            animation: rotate 1s infinite linear reverse;
+        }
+    }
+    .wind{
+        height: 150%;
+        width: 20%;
+        margin-left: 40%;
+        margin-top: -25%;
+        background-color: gray;
+        animation: rotate 0.5s infinite linear;
+    }
+
+    .meteor{
+        &::after{
+            content: "";
+            display: block;
+            position: relative;
+            left: -50%;
+            top: -50%;
+            background-image: url(assets/fire.png);
+            background-size: cover;
+            height: 200%;
+            width: 200%;
+            animation: rotate 1s infinite linear;
+            mix-blend-mode: hard-light;
+        }
+    }
+
+    /* STATE */
+    .moving{
+        opacity: 0.7;
+    }
+
+    .slippy::after{
+        content: "";
+        display: block;
+        background-image: url(assets/slippy.png);
+        animation: back-move 1s infinite linear;
+        height: 100%;
+        width: 100%;
+        background-size: 100% 90%;
+    }
+
+    .cancelled{
+        filter: grayscale(50%);
+    }
+
+    /* COMMON */
+    .pipe, .snake{
         &.top{
             transform: rotate(180deg);
         }
@@ -145,90 +298,49 @@ puissance-4{
             transform: rotate(90deg);
         }
     }
-
-    &.brokable_platform{
-        background-image: url(assets/brokable.png);
-        image-rendering: pixelated;
-        height: 100%;
-        background-size: cover;
-        width: 100%;
-    }
-
-    &.falling_platform{
-        background-image: url(assets/falling.png);
-        image-rendering: pixelated;
-        height: 100%;
-        background-size: cover;
-        width: 100%;
-        animation: shake 0.2s;
-    }
-
-    &.roller{
-        animation: shake 1s infinite linear;
-        background-color: black;
-        border-radius: 30%;
-        &::after{
-            content:"";
-            display: block;
-            background-color: gray;
-            height: 50%;
-            width: 50%;
-            margin: 25%;
-        }
-        &.right{
-            animation: rotate 1s infinite linear;
-        }
-        &.left{
-            animation: rotate 1s infinite linear reverse;
-        }
-    }
-    &.wind{
-        height: 150%;
-        width: 20%;
-        margin-left: 40%;
-        margin-top: -25%;
-        background-color: gray;
-        animation: rotate 0.5s infinite linear;
-    }
-
-    &.meteor{
-        &::after{
-            content: "";
-            display: block;
-            background-image: url(assets/fire.png);
-            background-size: cover;
-            height: 200%;
-            width: 200%;
-            margin: -50%;
-            animation: rotate 1s infinite linear;
-            mix-blend-mode: hard-light;
-        }
-    }
-
-    /* STATE */
-    &.moving{
-        opacity: 0.7;
-    }
-
-    &.slippy::after{
-        content: "";
-        display: block;
-        background-image: url(assets/slippy.png);
-        animation: back-move 1s infinite linear;
-        height: 100%;
-        width: 100%;
-        background-size: 100% 90%;
-    }
-
-    &.cancelled{
-        filter: grayscale(50%);
-    }
 }
 
 #host{
     background-image: url(assets/coin_background.png);
     background-size: cover;
     background-color: white;
+}
+
+/* ANIMATIONS */
+@keyframes moving_left{
+    0%{
+        transform: translateX(100%);
+    }
+    100%{
+        transform: translateX(0);
+    }
+}
+
+@keyframes moving_right{
+    0%{
+        transform: translateX(-100%);
+    }
+    100%{
+        transform: translateX(0);
+    }
+}
+
+@keyframes moving_bottom{
+    0%{
+        transform: translateY(-100%);
+    }
+    100%{
+        transform: translateY(0);
+    }
+}
+
+@keyframes moving_top{
+    0%{
+        transform: translateY(100%);
+    }
+    100%{
+        transform: translateY(0);
+    }
 }
 
 @keyframes back-move{
@@ -334,6 +446,15 @@ puissance-4-loader, puissance-4-editor{
         >input[type=number], >input[type=text]{
             text-align: center;
             width: 6em;
+            font-size: 1.1em;
+        }
+        >input[type=button]{
+            padding: 0.1em;
+            font-variant-caps: all-petite-caps;
+            font-size: 1.2em;
+            &:hover{
+                background-color: lightskyblue;
+            }
         }
         >*:not(:last-child){
             margin-bottom: 1em;
@@ -342,6 +463,10 @@ puissance-4-loader, puissance-4-editor{
         >sam-selector{
             height: 0;
             flex-grow: 1;
+            >*{
+                padding-top: 0.5em;
+                padding-bottom: 0.5em;
+            }
             puissance-4{
                 width: 3em;
                 margin: 0.2em;
@@ -386,6 +511,48 @@ puissance-4-loader, puissance-4-editor{
 
     >puissance-4{
         flex-grow: 1;
+    }
+}
+
+sam-numberinput{
+    --var-outline: black 0.2em solid;
+    &:focus-within{
+        --var-outline: rgb(96, 96, 244) 0.2em solid;
+    }
+    
+    display: flex;
+    flex-direction: row;
+    >input[type=text]{
+        font-size: 1em;
+        text-align: center;
+        width: 2em;
+        border-top: var(--var-outline);
+        border-bottom: var(--var-outline);
+        &:focus{
+            outline: none;
+        }
+    }
+    >input[type=button]{
+        display: flex;
+        font-size: 1.2em;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        width: 1.4em;
+        padding-bottom: 0.em;
+        font-weight: bold;
+        outline: none;
+        border: var(--var-outline);
+        &:first-child{
+            border-top-left-radius: 40%;
+            border-bottom-left-radius: 40%;
+            border-right: none;
+        }
+        &:last-child{
+            border-top-right-radius: 40%;
+            border-bottom-right-radius: 40%;
+            border-left: none;
+        }
     }
 }
 

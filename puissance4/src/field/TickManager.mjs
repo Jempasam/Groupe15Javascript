@@ -2,7 +2,7 @@ import { Puissance4 } from "./Puissance4.mjs"
 import { Item } from "./Item.mjs"
 
 export class TickManager{
-    /** @type {Map<[number,number],Item>} */
+    /** @type {Map<string,[number,number,Item]>} */
     #scheduleds
 
     constructor(){
@@ -16,7 +16,7 @@ export class TickManager{
      * @param {Item} item
      */
     schedule(x,y,item){
-        this.#scheduleds.set([x,y],item)
+        this.#scheduleds.set(JSON.stringify([x,y]),[x,y,item])
     }
 
     /**
@@ -31,7 +31,7 @@ export class TickManager{
      * @param {function(number,number,Item):void} callback
      */
     forEach(callback){
-        for(let [[x,y],item] of this.#scheduleds){
+        for(let [key,[x,y,item]] of this.#scheduleds){
             callback(x,y,item)
         }
     }
@@ -43,7 +43,7 @@ export class TickManager{
     tick(field){
         let current_schedule=new Map(this.#scheduleds)
         this.clear()
-        for(let [[x,y],item] of current_schedule){
+        for(let [key,[x,y,item]] of current_schedule){
             let field_item=field.get(x,y)
             if(field_item==item)item.onTick(field,item,x,y)
         }

@@ -32,6 +32,18 @@ export function dom(strings, ...values) {
 }
 
 /**
+ * A tag template that return a dom from a outer html
+ * and escape template parameters. Return the first element only.
+ * @param {*} strings 
+ * @param  {...any} values 
+ */
+export function adom(strings, ...values) {
+    const template = document.createElement("aa");
+    template.innerHTML = html(strings, ...values);
+    return template.children[0];
+}
+
+/**
  * Create an element using a selector like description
  * @param {string} element
  * @param {string=} content

@@ -61,7 +61,6 @@ export class Shop extends HTMLElement{
         let save=ShopData.get(this.#storage, this.#shop_id)
 
         for(let [id,{name,description,price}] of Object.entries(this.#shop_content)){
-            console.log(save,id)
             let item=dom_items.appendChild(dom/*html*/`
                 <a class="${save.isBuyed(id)?"buyed":""}">
                     <h3>${name}</h3>
@@ -111,7 +110,6 @@ export class ShopData{
     money
 
     constructor(buyeds,identifier,storage,money){
-        console.log(buyeds)
         this.buyeds=buyeds
         this.identifier=identifier
         this.storage=storage

@@ -18,7 +18,6 @@ export class SlippyItem extends Item{
     }
 
     onAdd(field,root,x,y){
-        console.log("aa")
         field.schedule(x,y,root)
     }
 
@@ -44,8 +43,7 @@ export class SlippyItem extends Item{
             if(underder){
                 underder.onTrigger(field, underder, newx+this.dx, newy+this.dy)
             }
-            field.set(x, y, null)
-            field.set(newx, newy, root)
+            field.swap(x, y, newx, newy)
             return true
         }
         else return false

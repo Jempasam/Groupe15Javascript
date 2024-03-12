@@ -20,6 +20,9 @@ import { SlippyItem } from "./items/SlippyItem.mjs"
 import { PipeItem } from "./items/PipeItem.mjs"
 import { Shop, ShopData } from "../../samlib/gui/Shop.mjs"
 import { ACCOUNT_STORAGE, LOCAL_STORAGE } from "../../samlib/Storage.mjs"
+import { NumberInput } from "../../samlib/gui/NumberInput.mjs"
+import { SnakeItem } from "./items/SnakeItem.mjs"
+import { SpawnerItem } from "./items/SpawnerItem.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE
@@ -64,6 +67,7 @@ function openMenu(){
 
 function openEditor(){
     let editor=new Editor()
+    editor.storage=USED_STORAGE
     host.removeChild(host.lastChild)
     host.appendChild(editor)
     header.onback= ()=>openMenu()
@@ -79,6 +83,7 @@ function openEditor(){
 
 function openLoader(){
     let loader=new Loader()
+    loader.storage=USED_STORAGE
     host.removeChild(host.lastChild)
     host.appendChild(loader)
     header.onback= ()=>openMenu()
@@ -127,7 +132,6 @@ function playGame(onback, callback){
     setTimeout(function ticker(){
         game.ticks.tick(game)
         if(stopper.val)setTimeout(ticker,50)
-        console.log(">>")
     },50)
 }
 
@@ -152,14 +156,8 @@ function test(){
         game=>{
             game.width=10
             game.height=10
-
-            game.set(5,0,new PlayerItem("red",()=>new CoinItem("blue")))
-            game.set(6,1,new SlippyItem(new CoinItem("red"),0,1))
-            game.set(6,4,new PipeItem(0,1))
-            game.set(6,5,new PipeItem(0,1))
-            game.set(6,6,new PipeItem(0,1))
-            game.set(6,7,new PipeItem(1,0))
-            game.set(7,7,new PipeItem(1,0))
+            game.set(3,7,new SnakeItem(new CoinItem("red"),0,-1))
+            game.set(6,6,new SpawnerItem(20,()=>new CoinItem("red")))
         }
     )
 }
