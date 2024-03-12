@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Snake</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <script src="../js/Serpent.js" type="module"></script>
+  <script src="../js/GameManager.js" type="module"></script>
+  <script src="../js/Menu.js" type="module"></script>
+</head>
+<body>
+
+  <div id="menuJeu">
+    <canvas id="menuPrincipal" width=500 height="500"></canvas>
+    <button id="toggleMenuButton"><img src="../../snake/assets/depart.png" alt="Icône"></button>
+    <button id="modeVitesse"><img src="../../snake/assets/modeVitesse.png" alt="Icône"></button>
+    <button id="modeInversion"><img src="../../snake/assets/modeInversion.png" alt="Icône"></button>
+    <button id="modeMiamFast"><img src="../../snake/assets/modeMiamFast.png" alt="Icône"></button>
+    <p class = "TitreJeu">Snake</p>
+    <button id="boutonSkin"><img src="../../snake/assets/serpentManchot.png" alt="Icône"></button>
+
+    <button id="boutonSon"><img src="../../snake/assets/Son.png" alt="Icône"></button>
+
+    <audio id="mangerAudio" src="../../snake/assets/manger.mp3"></audio>
+
+  </div>
+
+    <div id="ecranjeu">
+    <canvas id="myCanvas" width=500 height=500></canvas>
+    <div id="score">
+
+      <p class = "ScoreAffichage">
+        <img src="../../snake/assets/fruit1.png" alt="Icône">
+      </p>
+
+      <p class = "NombrePoints">
+        0
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div id ="ecranGameOver">
+    <canvas id="gameOver" width=250 height=250> </canvas>
+    <p class = "ScoreNow">
+      0
+    </p>
+    <p class = "HighScoreChiffre">
+      0
+    </p>
+
+    <img id="ResultatFruit" src="../../snake/assets/fruit1.png">
+    <img id="RecordFruit" src="../../snake/assets/HighScore.png">
+    <img id="ModeDeJeu1" src="../../snake/assets/modeInversion.png">
+    <img id="ModeDeJeu2" src="../../snake/assets/modeVitesse.png">
+    <img id="ModeDeJeu3" src="../../snake/assets/modeMiamFast.png">
+
+    <button id="boutonReset"> <p> Recommencer </p></button>
+
+</body>
+</html>
