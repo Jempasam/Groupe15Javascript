@@ -102,7 +102,7 @@ export class SnakeItem extends Item{
             }
             else{
                 field.set(x,y,this.base)
-                under.onTrigger(field, under, x+dx, y+dy)
+                if(under)under.onTrigger(field, under, x+dx, y+dy)
             }
         }
         else field.schedule(x,y,root)

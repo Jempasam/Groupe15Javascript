@@ -14,6 +14,7 @@ import { SnakeItem } from "../../items/SnakeItem.mjs";
 import { FruitItem } from "../../items/FruitITem.mjs";
 import { SpawnerItem } from "../../items/SpawnerItem.mjs";
 import { FallingPlatformItem } from "../../items/FallingPlatformItem.mjs";
+import { GoombaItem } from "../../items/GoombaItem.mjs";
 
 
 const SLIPPY_FACTORY= (team)=>new SlippyItem(new CoinItem(team), 0, 1)
@@ -115,6 +116,28 @@ export const BASE_COLLECTION={
         "Un générateur qui fait apparaitres des fruits au hasard sur le terrain.",
         10,
         ()=> new SpawnerItem(60,()=>new FruitItem())
+    ),
+
+    /* BONHOMMES */
+    goomba_platform: new EditorSpawnable(
+        "Goomba Plateforme",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte une plateforme qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new PlatformItem())
+    ),
+
+    goomba_fruit: new EditorSpawnable(
+        "Goomba Goomba",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte un goomba qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new GoombaItem())
+    ),
+
+    aero_goomba: new EditorSpawnable(
+        "Aero Goomba",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte un ventilateur qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new WindItem())
     ),
 
     /* SPAWNERS */

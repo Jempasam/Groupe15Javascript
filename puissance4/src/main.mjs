@@ -23,6 +23,8 @@ import { ACCOUNT_STORAGE, LOCAL_STORAGE } from "../../samlib/Storage.mjs"
 import { NumberInput } from "../../samlib/gui/NumberInput.mjs"
 import { SnakeItem } from "./items/SnakeItem.mjs"
 import { SpawnerItem } from "./items/SpawnerItem.mjs"
+import { GoombaItem } from "./items/GoombaItem.mjs"
+import { FruitItem } from "./items/FruitITem.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE
@@ -157,7 +159,7 @@ function test(){
             game.width=10
             game.height=10
             game.set(3,7,new SnakeItem(new CoinItem("red"),0,-1))
-            game.set(6,6,new SpawnerItem(20,()=>new CoinItem("red")))
+            game.set(2,5,new GoombaItem(new FruitItem()))
         }
     )
 }

@@ -3,6 +3,7 @@
 export function html(strings, ...values) {
     const escaped = values.map((value) => {
         if(value instanceof Element)return value.outerHTML
+        if(value===undefined || value===null)return ""
         return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
