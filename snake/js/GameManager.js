@@ -277,7 +277,10 @@ function init()
     drawCanvas();
 
     definirEcouteurs();
-    requestAnimationFrame(mainloop);
+    setInterval(() => {
+        mainloop();
+      }, 15);
+    //requestAnimationFrame(mainloop);
 }
 
 // Permet de dessiner le serpent et les fruits
@@ -324,7 +327,8 @@ function mainloop()
         
     }
     drawCanvas();
-    requestAnimationFrame(mainloop);
+    
+    //requestAnimationFrame(mainloop);
 }
 
 function hitbox() {
