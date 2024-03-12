@@ -11,13 +11,23 @@ import { CoinItem } from "./items/CoinItem.mjs"
 import { WindItem } from "./items/WindItem.mjs"
 import { BASE_COLLECTION } from "./field/collection/base_collection.mjs"
 import { GameMenu } from "../../samlib/gui/GameMenu.mjs"
-import { create, html } from "../../samlib/DOM.mjs"
+import { create, dom, html } from "../../samlib/DOM.mjs"
 import { FileMenu } from "./editor/FileMenu.mjs"
 import { Loader } from "./editor/Loader.mjs"
 import { GameHeader } from "../../samlib/gui/GameHeader.mjs"
 import { PistonItem } from "./items/PistonItem.mjs"
 import { SlippyItem } from "./items/SlippyItem.mjs"
 import { PipeItem } from "./items/PipeItem.mjs"
+import { Shop, ShopData } from "../../samlib/gui/Shop.mjs"
+import { ACCOUNT_STORAGE, LOCAL_STORAGE } from "../../samlib/Storage.mjs"
+import { NumberInput } from "../../samlib/gui/NumberInput.mjs"
+import { SnakeItem } from "./items/SnakeItem.mjs"
+import { SpawnerItem } from "./items/SpawnerItem.mjs"
+import { GoombaItem } from "./items/GoombaItem.mjs"
+import { FruitItem } from "./items/FruitITem.mjs"
+
+/* SETTINGS */
+let USED_STORAGE=ACCOUNT_STORAGE
 
 /* Get Host and create Menu */
 let host=document.getElementById("host")
@@ -38,24 +48,44 @@ function openMenu(){
     header.onhome=undefined
 
     menu.onplay= ()=> openLoader()
+    menu.onshop= ()=>openShop()
     menu.actions={
         "Editor": ()=> openEditor(),
-        "Test": ()=> test()
+        "Test": ()=> test(),
+        "Reset": ()=>{
+            let shopdata=ShopData.get(USED_STORAGE,"test")
+            shopdata.money=100
+            shopdata.buyeds.clear()
+            ShopData.set(shopdata)
+        },
+        "God": ()=>{
+            let shopdata=ShopData.get(USED_STORAGE,"test")
+            shopdata.money=100000
+            for(let a in BASE_COLLECTION)shopdata.buyeds.add(a)
+            ShopData.set(shopdata)
+        }
     }
 }
 
 function openEditor(){
     let editor=new Editor()
+    editor.storage=USED_STORAGE
     host.removeChild(host.lastChild)
     host.appendChild(editor)
     header.onback= ()=>openMenu()
     header.onhome= ()=>openMenu()
 
-    editor.spawnables=BASE_COLLECTION
+    let disponible={}
+    for(let [key,spawnable] of Object.entries(BASE_COLLECTION)){
+        if(ShopData.get(USED_STORAGE,"test").isBuyed(key))disponible[key]=spawnable
+    }
+    editor.collection=BASE_COLLECTION
+    editor.spawnables=disponible
 }
 
 function openLoader(){
     let loader=new Loader()
+    loader.storage=USED_STORAGE
     host.removeChild(host.lastChild)
     host.appendChild(loader)
     header.onback= ()=>openMenu()
@@ -65,8 +95,30 @@ function openLoader(){
     loader.onplay= field=>play(field)
 }
 
+function openShop(){
+    let shop=new Shop(id=>{
+        let ret=create("div.presentation")
+        let field=new Puissance4()
+        field.width=1
+        field.height=1
+        field.set(0,0,BASE_COLLECTION[id].factory())
+        ret.appendChild(field)
+        return ret
+    })
+    shop.storage=USED_STORAGE
+    shop.title="Shop"
+    shop.shop_content=BASE_COLLECTION
+    shop.shop_id="test"
+    host.removeChild(host.lastChild)
+    host.appendChild(shop)
+    header.onback= ()=>openMenu()
+    header.onhome= ()=>openMenu()
+
+}
+
 function playGame(onback, callback){
     let game=new Puissance4()
+    game.className="_scrollable"
     host.removeChild(host.lastChild)
     host.appendChild(game)
     let stopper= {val:true}
@@ -82,7 +134,6 @@ function playGame(onback, callback){
     setTimeout(function ticker(){
         game.ticks.tick(game)
         if(stopper.val)setTimeout(ticker,50)
-        console.log(">>")
     },50)
 }
 
@@ -107,17 +158,10 @@ function test(){
         game=>{
             game.width=10
             game.height=10
-
-            game.set(5,0,new PlayerItem("red",()=>new CoinItem("blue")))
-            game.set(6,1,new SlippyItem(new CoinItem("red"),0,1))
-            game.set(6,4,new PipeItem(0,1))
-            game.set(6,5,new PipeItem(0,1))
-            game.set(6,6,new PipeItem(0,1))
-            game.set(6,7,new PipeItem(1,0))
-            game.set(7,7,new PipeItem(1,0))
+            game.set(3,7,new SnakeItem(new CoinItem("red"),0,-1))
+            game.set(2,5,new GoombaItem(new FruitItem()))
         }
     )
 }
-
 
 openMenu()

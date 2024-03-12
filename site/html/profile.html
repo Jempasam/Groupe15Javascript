@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Ultrafun</title>
     <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/account.js"></script>
 </head>
 <body>
     <header>
@@ -25,30 +26,30 @@
         <button id="changePasswordBtn" onclick="changePassword()">Modifier le Mot de Passe</button>
 
     </div>
+    
+    <script type="module">
+        import { ACCOUNT_STORAGE } from "../../samlib/Storage.mjs";
 
-    <script src="../js/account.js"></script>
-    <script>
         // Récupérer les données de l'utilisateur depuis sessionStorage
-        const utilisateurConnecte = JSON.parse(sessionStorage.getItem('utilisateurConnecte'));
+        let current_user=ACCOUNT_STORAGE.current_user_data
 
         // Vérifier si l'utilisateur est connecté
-        if (utilisateurConnecte) {
+        if (current_user) {
             // Mettre à jour l'image de profil et le pseudo
             const profileImage = document.getElementById('profileImage');
             const userImage = document.getElementById('userImage');
             const username = document.getElementById('username');
 
-            profileImage.src = utilisateurConnecte.profileImage;
-            userImage.src = utilisateurConnecte.profileImage; // Afficher la photo de profil en grand
-            username.textContent = utilisateurConnecte.username;
+            // Image
+            profileImage.src = current_user.image;
+            userImage.src = current_user.image;
+            userImage.onclick = changeProfileImage
 
-            userImage.onclick = function() {
-            changeProfileImage();
-            }
+            // Username
+            username.textContent = current_user.username + " ("+current_user.name+")"
+            document.getElementById('editUsernameBtn').onclick = editUsername
 
-            document.getElementById('changePasswordBtn').onclick = function() {
-            changePassword();
-            };
+            document.getElementById('changePasswordBtn').onclick = changePassword
 
             // Afficher l'icône de profil
             const profileIcon = document.getElementById('profileIcon');
@@ -61,36 +62,20 @@
         function editUsername() {
             const newUsername = prompt("Entrez votre nouveau pseudo :");
             if (newUsername !== null) {
-                const usersData = localStorage.getItem("users");
-                //mettre à jour le pseudo dans le LocalStorage
-                const users = JSON.parse(usersData);
-                const userIndex = users.findIndex(user => user.pseudo === utilisateurConnecte.username);
-                users[userIndex].pseudo = newUsername;
-                localStorage.setItem("users", JSON.stringify(users));
-
-                // Mettre à jour le pseudo dans l'objet utilisateurConnecte et dans l'affichage
-                utilisateurConnecte.username = newUsername;
-                document.getElementById('username').textContent = newUsername;
-                sessionStorage.setItem('utilisateurConnecte', JSON.stringify(utilisateurConnecte));
+                const current_user=ACCOUNT_STORAGE.current_user_data
+                current_user.username=newUsername
+                ACCOUNT_STORAGE.set_player(current_user)
+                location.reload()
             }
+
         }
         function changeProfileImage() {
             const newImageURL = prompt("Entrez l'URL de votre nouvelle photo de profil :");
             if (newImageURL !== null) {
-                const usersData = localStorage.getItem("users");
-                console.log("Contenu du LocalStorage (users) :", JSON.parse(usersData));
-                //mettre à jour la photo de profil dans le LocalStorage
-                const users = JSON.parse(usersData);
-                const userIndex = users.findIndex(user => user.pseudo === utilisateurConnecte.username);
-                users[userIndex].profileImage = newImageURL;
-                localStorage.setItem("users", JSON.stringify(users));
-                console.log("Contenu du LocalStorage (users) après modification :", JSON.parse(localStorage.getItem("users")));
-                // Mettre à jour la photo de profil dans l'objet utilisateurConnecte et dans l'affichage
-                utilisateurConnecte.profileImage = newImageURL;
-                document.getElementById('profileImage').src = newImageURL;
-                document.getElementById('userImage').src = newImageURL;
-                sessionStorage.setItem('utilisateurConnecte', JSON.stringify(utilisateurConnecte));
-                
+                const current_user=ACCOUNT_STORAGE.current_user_data
+                current_user.image=newImageURL
+                ACCOUNT_STORAGE.set_player(current_user)
+                location.reload()
                 
             }
         }
@@ -100,21 +85,14 @@
                 const confirmPassword = prompt("Confirmez votre nouveau mot de passe :");
                 
                 if (newPassword === confirmPassword) {
-                    // Mettre à jour le mot de passe dans le LocalStorage
-                    const usersData = localStorage.getItem("users");
-                    const users = JSON.parse(usersData);
-                    const userIndex = users.findIndex(user => user.pseudo === utilisateurConnecte.username);
-                    users[userIndex].mdp = newPassword;
-                    localStorage.setItem("users", JSON.stringify(users));
-
-                    // Mettre à jour le mot de passe dans l'objet utilisateurConnecte
-                    utilisateurConnecte.mdp = newPassword;
-                    sessionStorage.setItem('utilisateurConnecte', JSON.stringify(utilisateurConnecte));
-                    
+                    const current_user=ACCOUNT_STORAGE.current_user_data
+                    current_user.password=confirmPassword
+                    ACCOUNT_STORAGE.set_player(current_user)
                     console.log("Mot de passe mis à jour avec succès !");
                 } else {
                     alert("Les mots de passe ne correspondent pas. Veuillez réessayer.");
                 }
+                location.reload()
             }
         }
     </script>

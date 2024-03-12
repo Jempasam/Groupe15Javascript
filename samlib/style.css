@@ -69,7 +69,7 @@ sam-gamemenu{
     }
     
 
-    a.button{
+    a.menu_button{
         display: block;
         box-shadow: 0 0.1em 0.4em -0.1em black;
         border: black 0.1em solid;
@@ -113,7 +113,7 @@ sam-gameheader{
     flex-direction: row;
     justify-content: space-between;
 
-
+    height: fit-content;
     border-bottom: 0.3em black solid;
     box-shadow: 0 1em 1em -1em black;
 
@@ -150,5 +150,171 @@ sam-gameheader{
 
     .home{
         background-image: url(assets/home.svg);
+    }
+}
+
+sam-shop{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.1em;
+
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    >h2{
+        font-size: 2em;
+        padding: 0;
+        margin: 0em;
+        padding-bottom: 0.4em;
+        width: 100%;
+        text-align: center;
+        border-bottom: solid 0.15em black;
+    }
+
+    >.price{
+        position: absolute;
+        top: 0;
+        align-self: flex-end;
+        margin: 0.2em;
+        padding: 0.3em;
+        font-size: 1.5em;
+        background-color: rgb(255,255,255,0.2);
+        &::after{
+            content: "€";
+        }
+    }
+
+    >.item_list{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        overflow-y: scroll;
+
+        >a{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 0.2em;
+            padding: 0.5em;
+            width: 13em;
+
+            border: 0.3em black solid;
+            background-color: rgb(255,255,255,0.2);
+            >h3{
+                text-align: center;
+                margin: 0;
+            }
+            >.illustration{
+                display: block;
+                margin: auto;
+                width: 80%;
+                aspect-ratio: 1;
+                box-shadow: inset 0 0 1em 0 black;
+            }
+            >.price{
+                position: relative;
+                display: block;
+                text-align: end;
+                font-size: 1.5em;
+                font-weight: bold;
+                &::after{
+                    content: "€";
+                }
+            }
+            &.buyed{
+                position: relative;
+                color: rgb(0,0,0,0.4);
+                border-color: rgb(0,0,0,0.4);
+                background-color: rgb(255,255,255,0.1);
+                &::after{
+                    position: absolute;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    height: 100%;
+
+                    content: "Buyed";
+                    color: red;
+                    font-size: 6em;
+                    font-weight: bold;
+                    font-variant-caps: all-petite-caps;
+                    transform: rotate(45deg);
+                }
+            }
+            &:not(.buyed){
+                transition: transform 0.2s;
+                cursor: pointer;
+                &:hover{
+                    transform: scale(1.05);
+                }
+            }
+        }
+    }
+
+    >.button_list{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        justify-content: space-around;
+        >*{
+            cursor: pointer;
+            transition: transform 0.2s;
+            &:hover{
+                transform: scale(1.2);
+            }
+        }
+
+        &:not(:last-child){
+            padding-bottom: 2em;
+        }
+    }
+    
+
+    a.button{
+        display: block;
+        box-shadow: 0 0.1em 0.4em -0.1em black;
+
+        border: black 0.1em solid;
+        background-color: rgb(255,255,255,0.2);
+
+        padding: 0.5em;
+        margin: 0.5em;
+        font-size: 2em;
+        font-variant-caps: all-petite-caps;
+        font-weight: bold;
+    }
+
+    a.play{
+        display: block;
+
+        width: 20%;
+        aspect-ratio: 1;
+
+        border: 0.5em black solid;
+        border-radius: 50%;;
+
+        background-image: url(assets/play.svg);
+        background-color: rgb(255,255,255,0.2);
+        cursor: pointer;
+    }
+
+    a.shop{
+        display: block;
+
+        width: 20%;
+        aspect-ratio: 1;
+
+        background-image: url(assets/shop.svg);
+        cursor: pointer;
     }
 }

@@ -31,7 +31,7 @@ export class Loader extends HTMLElement{
         super()
 
         // Field
-        this.field=create("puissance-4")
+        this.field=create("puissance-4._scrollable")
         this.appendChild(this.field)
 
         // Menu
@@ -73,6 +73,10 @@ export class Loader extends HTMLElement{
         this.field.height=field_definition.content.height
         this.#spawnables=field_definition.dictionnary
         field_definition.load(this.field,0,0,true)
+    }
+
+    set storage(value){
+        this.dom_file_menu.storage=value
     }
 
 }

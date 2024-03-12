@@ -9,12 +9,64 @@ import { RollerItem } from "../../items/RollerItem.mjs";
 import { SlippyItem } from "../../items/SlippyItem.mjs";
 import { CoinItem } from "../../items/CoinItem.mjs";
 import { WindItem } from "../../items/WindItem.mjs";
+import { MeteorItem } from "../../items/MeteorItem.mjs";
+import { SnakeItem } from "../../items/SnakeItem.mjs";
+import { FruitItem } from "../../items/FruitITem.mjs";
+import { SpawnerItem } from "../../items/SpawnerItem.mjs";
+import { FallingPlatformItem } from "../../items/FallingPlatformItem.mjs";
+import { GoombaItem } from "../../items/GoombaItem.mjs";
 
+
+const SLIPPY_FACTORY= (team)=>new SlippyItem(new CoinItem(team), 0, 1)
+const FALLING_FACTORY= (team)=>new MovingItem(new CoinItem(team), 0, 1)
+function NEW_METEOR_FACTORY(){
+    let data={i:0}
+    return function(team){
+        let i = data.i = data.i + 1
+        if(i%3==1)return new MeteorItem(new CoinItem(team), 0, 1)
+        else return new MovingItem(new CoinItem(team), 0, 1)
+    }
+}
+
+function NEW_SNAKE_FACTORY(){
+    let data={i:0}
+    return function(team){
+        let i = data.i = data.i + 1
+        if(i%3==1)return new SnakeItem(new CoinItem(team), 0, 1)
+        else return new MovingItem(new CoinItem(team), 0, 1)
+    }
+}
+
+const RED_KEYS=["KeyQ","KeyE","KeyW"]
+const BLUE_KEYS=["KeyU","KeyO","KeyI"]
+const GREEN_KEYS=["KeyR","KeyY","KeyT"]
+const YELLOW_KEYS=["KeyV","KeyN","KeyB"]
+
+const DIRECTIONS={
+    "top": ["Haut",0,-1],
+    "bottom": ["Bas",0,1],
+    "left": ["Gauche",-1,0],
+    "right": ["Droite",1,0],
+}
+
+function transform(obj,callback){
+    let ret={}
+    for(let [key,value] of Object.entries(obj)){
+        const [nkey,nvalue]=callback(key,value)
+        ret[nkey]=nvalue
+    }
+    return ret
+}
+
+/**
+ * @type {Object<string,EditorSpawnable>}
+ */
 export const BASE_COLLECTION={
     /* Ventilator */
     ventilator: new EditorSpawnable(
         "Ventilateur",
         "Repousse les objets à droite et à gauche",
+        10,
         ()=>new WindItem()
     ),
 
@@ -22,11 +74,13 @@ export const BASE_COLLECTION={
     platform: new EditorSpawnable(
         "Plateforme",
         "Plateforme immobile",
+        5,
         ()=>new PlatformItem()
     ),
     brokable: new EditorSpawnable(
         "Plateforme cassable",
         "Plateforme qui se casse après un certain nombre de passages",
+        10,
         ()=>new BrokablePlatformItem()
     ),
 
@@ -34,131 +88,136 @@ export const BASE_COLLECTION={
     roller_left: new EditorSpawnable(
         "Rouleau Gauche",
         "Rouleau déplace les unité au dessus vers la gauche",
+        10,
         ()=>new RollerItem(-1)
     ),
     roller_right: new EditorSpawnable(
         "Rouleau Droite",
         "Rouleau déplace les unité au dessus vers la droite",
+        10,
         ()=>new RollerItem(1)
     ),
 
+    /* SNAKE */
+    snake: new EditorSpawnable(
+        "Serpent Controllable",
+        "Un serpent controllable avec les flèches de direction. Il peut manger les pièces fixes pour grandir.",
+        10,
+        ()=>new SnakeItem(new PlatformItem(), 0, 1, ["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
+    ),
+    fruit: new EditorSpawnable(
+        "Fruit",
+        "Un fruit que les serpents peuvent manger. Ils sont fragiles et se cassent facilement.",
+        10,
+        ()=> new FruitItem()
+    ),
+    fruit_spawner: new EditorSpawnable(
+        "Générateur de Fruit",
+        "Un générateur qui fait apparaitres des fruits au hasard sur le terrain.",
+        10,
+        ()=> new SpawnerItem(60,()=>new FruitItem())
+    ),
+
+    /* BONHOMMES */
+    goomba_platform: new EditorSpawnable(
+        "Goomba Plateforme",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte une plateforme qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new PlatformItem())
+    ),
+
+    goomba_fruit: new EditorSpawnable(
+        "Goomba Goomba",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte un goomba qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new GoombaItem())
+    ),
+
+    aero_goomba: new EditorSpawnable(
+        "Aero Goomba",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte un ventilateur qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new WindItem())
+    ),
+
+    /* SPAWNERS */
+    gravel_spawner: new EditorSpawnable(
+        "Générateur de Gravier",
+        "Un générateur qui fait apparaitres du terrain qui chute au hasard sur le terrain.",
+        10,
+        ()=> new SpawnerItem(100,()=>new FallingPlatformItem())
+    ),
+
+    snake_spawner: new EditorSpawnable(
+        "Générateur de Serpent",
+        "Un générateur qui fait apparaitres des serpents au hasard sur le terrain.",
+        10,
+        ()=> new SpawnerItem(200,()=>new SnakeItem(new PlatformItem(), 0, 1))
+    ),
+
     /* Pistons */
-    piston_top: new EditorSpawnable(
-        "Piston Haut",
-        "Un piston qui projette les objets vers le haut",
-        ()=>new PistonItem(0,-1)
-    ),
-    piston_bottom: new EditorSpawnable(
-        "Piston Bas",
-        "Un piston qui projette les objets vers le bas",
-        ()=>new PistonItem(0,1)
-    ),
-    piston_left: new EditorSpawnable(
-        "Piston Gauche",
-        "Un piston qui projette les objets vers la gauche",
-        ()=>new PistonItem(-1,0)
-    ),
-    piston_right: new EditorSpawnable(
-        "Piston Droite",
-        "Un piston qui projette les objets vers la droite",
-        ()=>new PistonItem(1,0)
-    ),
+    ...transform(DIRECTIONS,(name,[txt,x,y])=>{
+        return [ `piston_${name}`, new EditorSpawnable(
+            `Piston ${txt}`,
+            `Un piston qui projette les objets vers le ${txt}`,
+            10,
+            ()=>new PistonItem(x,y)
+        )]
+    }),
 
     /* Pipes */
-    pipe_top: new EditorSpawnable(
-        "Tuyau Haut",
-        "Un tuyau qui projette les objets vers le haut",
-        ()=>new PipeItem(0,-1)
-    ),
-    pipe_bottom: new EditorSpawnable(
-        "Tuyau Bas",
-        "Un tuyau qui projette les objets vers le bas",
-        ()=>new PipeItem(0,1)
-    ),
-    pipe_left: new EditorSpawnable(
-        "Tuyau Gauche",
-        "Un tuyau qui projette les objets vers la gauche",
-        ()=>new PipeItem(-1,0)
-    ),
-    pipe_right: new EditorSpawnable(
-        "Tuyau Droite",
-        "Un tuyau qui projette les objets vers la droite",
-        ()=>new PipeItem(1,0)
-    ),
-
-    /* Coins */
-    red_static: new EditorSpawnable(
-        "Pièce Rouge Statique",
-        "Une pièce rouge qui ne bouge pas",
-        ()=>new CoinItem("red")
-    ),
-    blue_static: new EditorSpawnable(
-        "Pièce Bleue Statique",
-        "Une pièce bleue qui ne bouge pas",
-        ()=>new CoinItem("blue")
-    ),
-
-    red_falling: new EditorSpawnable(
-        "Pièce Tombante Rouge",
-        "Une pièce rouge qui tombe.",
-        ()=>new MovingItem(new CoinItem("red"),0,1)
-    ),
-    blue_falling: new EditorSpawnable(
-        "Pièce Tombante Bleue",
-        "Une pièce bleue qui tombe.",
-        ()=>new MovingItem(new CoinItem("blue"),0,1)
-    ),
-    
-    /* Players */
-    player_red: new EditorSpawnable(
-        "Joueur Rouge",
-        "Un joueur rouge",
-        ()=>new PlayerItem("red", FALLING_FACTORY, ...RED_KEYS)
-    ),
-    player_blue: new EditorSpawnable(
-        "Joueur Bleu",
-        "Un joueur bleu",
-        ()=>new PlayerItem("blue", FALLING_FACTORY, ...BLUE_KEYS)
-    ),
-    player_red_slippy: new EditorSpawnable(
-        "Joueur Rouge Glissant",
-        "Un joueur rouge qui glisse",
-        ()=>new PlayerItem("red", SLIPPY_FACTORY, ...RED_KEYS)
-    ),
-    player_blue_slippy: new EditorSpawnable(
-        "Joueur Bleu Glissant",
-        "Un joueur bleu qui glisse",
-        ()=>new PlayerItem("blue", SLIPPY_FACTORY, ...BLUE_KEYS)
-    ),
-    
-
-    /* Other Players */
-    player_green: new EditorSpawnable(
-        "Joueur Vert",
-        "Un joueur vert",
-        ()=>new PlayerItem("green", FALLING_FACTORY, ...GREEN_KEYS)
-    ),
-    player_yellow: new EditorSpawnable(
-        "Joueur Jaune",
-        "Un joueur jaune",
-        ()=>new PlayerItem("yellow", FALLING_FACTORY, ...YELLOW_KEYS)
-    ),
-    player_green_slippy: new EditorSpawnable(
-        "Joueur Vert Glissant",
-        "Un joueur vert qui glisse",
-        ()=>new PlayerItem("green", SLIPPY_FACTORY, ...GREEN_KEYS)
-    ),
-    player_yellow_slippy: new EditorSpawnable(
-        "Joueur Jaune Glissant",
-        "Un joueur jaune qui glisse",
-        ()=>new PlayerItem("yellow", SLIPPY_FACTORY, ...YELLOW_KEYS)
-    ),
+    ...transform(DIRECTIONS,(name,[txt,x,y])=>{
+        return [ `pipe_${name}`, new EditorSpawnable(
+            `Tuyau ${txt}`,
+            `Un tuyau qui transporte les objets vers le ${txt}`,
+            10,
+            ()=>new PipeItem(x,y)
+        )]
+    }),
+    ...per_team("red","Rouge",RED_KEYS),
+    ...per_team("blue","Bleu",BLUE_KEYS),
+    ...per_team("green","Vert",GREEN_KEYS),
+    ...per_team("yellow","Jaune",YELLOW_KEYS),
 }
-
-const SLIPPY_FACTORY= (team)=>new SlippyItem(new CoinItem(team), 0, 1)
-const FALLING_FACTORY= (team)=>new MovingItem(new CoinItem(team), 0, 1)
-
-const RED_KEYS=["KeyQ","KeyE","KeyW"]
-const BLUE_KEYS=["KeyU","KeyO","KeyI"]
-const GREEN_KEYS=["KeyR","KeyY","KeyT"]
-const YELLOW_KEYS=["KeyV","KeyN","KeyB"]
+String.fromCharCode()
+function per_team(team,team_txt,keys){
+    const control_txt=`Contrôlé avec ${keys[0]}, ${keys[1]} et ${keys[2]}.`
+    return {
+        [`coin_${team}`]: new EditorSpawnable(
+            `Pièce ${team_txt}`,
+            `Une pièce ${team_txt}`,
+            10,
+            ()=>new CoinItem(team)
+        ),
+        [`coin_${team}_falling`]: new EditorSpawnable(
+            `Pièce Tombante ${team_txt}`,
+            `Une pièce ${team_txt} qui tombe.`,
+            10,
+            ()=>new MovingItem(new CoinItem(team), 0, 1)
+        ),
+        [`player_${team}`]: new EditorSpawnable(
+            `Joueur ${team_txt}`,
+            `Un joueur ${team_txt}.${control_txt}`,
+            10,
+            ()=>new PlayerItem(team, FALLING_FACTORY, ...keys)
+        ),
+        [`player_${team}_meteor`]: new EditorSpawnable(
+            `Joueur ${team_txt} Météore`,
+            `Un joueur ${team_txt} dont un jeton sur trois casse le truc en dessous.${control_txt}`,
+            10,
+            ()=>new PlayerItem(team, NEW_METEOR_FACTORY(), ...keys)
+        ),
+        [`player_${team}_slippy`]: new EditorSpawnable(
+            `Joueur ${team_txt} Glissant`,
+            `Un joueur ${team_txt} qui glisse.${control_txt}`,
+            10,
+            ()=>new PlayerItem(team, SLIPPY_FACTORY, ...keys)
+        ),
+        [`player_${team}_snake`]: new EditorSpawnable(
+            `Joueur ${team_txt} Serpent`,
+            `Un joueur ${team_txt} qui lance des serpents une fois sur trois.${control_txt}`,
+            10,
+            ()=>new PlayerItem(team, NEW_SNAKE_FACTORY(), ...keys)
+        ),
+    }
+}

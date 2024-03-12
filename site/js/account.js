@@ -1,31 +1,29 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Vérifier si l'utilisateur est connecté
-    var utilisateurConnecteJSON = sessionStorage.getItem('utilisateurConnecte');
-    console.log(utilisateurConnecteJSON);
-    var utilisateurConnecte = utilisateurConnecteJSON ? JSON.parse(utilisateurConnecteJSON) : null;
+import { dom } from "../../samlib/DOM.mjs";
+import { ACCOUNT_STORAGE } from "../../samlib/Storage.mjs";
 
-    // Sélectionner le bouton de connexion
+document.addEventListener('DOMContentLoaded', function() {
+    // Récupère l'utilisateur
+    let current_user_data=ACCOUNT_STORAGE.current_user_data
+
     var connexionButton = document.getElementById('connexionButton');
     var profileIcon = document.getElementById('profileIcon');
 
     // Si l'utilisateur est connecté, afficher le bouton de déconnexion
-    if (utilisateurConnecte) {
+    if (current_user_data) {
+        console.log("Connected as "+current_user_data.name);
+        profileIcon.style="display: block;"
+
         var profileLink = document.getElementById('profileLink');
-        profileLink.setAttribute('href', 'profile.html'); // Lien vers le profil de l'utilisateur
-
-        // Afficher l'icône de profil avec le chemin spécifié dans le LocalStorage
-        profileIcon.style.display = 'block';
+        profileLink.setAttribute('href', 'profile.html');
         var profileImage = document.querySelector('.profile-image');
-        profileImage.setAttribute('src', utilisateurConnecte.profileImage);
+        profileImage.setAttribute('src', current_user_data.image);
+        
+        var deconnexionButton = 
+            dom/*html*/`<a class="button" href="connexion.html">Se Déconnecter</a>`
 
-        var deconnexionButton = document.createElement('a');
-        deconnexionButton.setAttribute('class', 'button');
-        deconnexionButton.setAttribute('href', 'connexion.html'); // Lien vers la déconnexion
-        deconnexionButton.textContent = 'Se Déconnecter';
+        // @ts-ignore
         deconnexionButton.addEventListener('click', function() {
-            // Mettre à jour le sessionStorage lors de la déconnexion
-            sessionStorage.clear();
-            // Recharger la page pour refléter les changements
+            ACCOUNT_STORAGE.current_user = null;
             location.reload();
         });
 

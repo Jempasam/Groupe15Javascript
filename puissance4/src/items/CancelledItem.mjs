@@ -9,8 +9,8 @@ export class CancelledItem extends Item{
         this.time=duration
     }
 
-    getClasses(){
-        return [...this.base.getClasses(),"cancelled"]
+    getClasses(...args){
+        return [...this.base.getClasses(...args),"cancelled"]
     }
 
     onAdd(field,root,x,y){

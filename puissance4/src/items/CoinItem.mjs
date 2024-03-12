@@ -15,7 +15,6 @@ export class CoinItem extends Item{
 
     onAdd(field,root,x,y){
         let aligneds=this.#getAligneds(field,x,y)
-        console.log(aligneds.length)
         if(aligneds.length>0){
             for(let [a,b] of aligneds){
                 field.set(a,b,new ActivatedCoinItem(this.team))

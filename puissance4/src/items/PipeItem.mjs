@@ -17,7 +17,7 @@ export class PipeItem extends Item{
         this.content=null
     }
 
-    getClasses(){
+    getClasses(...args){
         let direction
         if(Math.abs(this.dx)>Math.abs(this.dy)){
             if(this.dx>0)direction="right"
@@ -29,7 +29,7 @@ export class PipeItem extends Item{
         }
         let content
         if(this.content===null)content=[]
-        else content=this.content.getClasses()
+        else content=this.content.getClasses(...args)
         return ["pipe", direction, ...content]
     }
 
