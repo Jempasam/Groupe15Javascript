@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Serpent from './Serpent.js';
 import Fruit from './Fruit.js';
 import { playToDeath } from './Menu.js';
