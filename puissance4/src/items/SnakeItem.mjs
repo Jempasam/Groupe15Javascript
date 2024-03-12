@@ -58,6 +58,7 @@ export class SnakeItem extends Item{
                 if(ndx!==-this.px || ndy!==-this.py){
                     this.dx=ndx
                     this.dy=ndy
+                    field.updateElement(x,y)
                 }
             }
         }
@@ -69,11 +70,6 @@ export class SnakeItem extends Item{
             if(under===null || (this.keySet && under instanceof CoinItem) || under instanceof FruitItem){
                 if(under!=null){
                     this.length++
-                }
-
-                let underder=field.get(x+dx*2, y+dy*2)
-                if(underder){
-                    underder.onTrigger(field, underder, x+dx*2, y+dy*2)
                 }
 
                 // Rotation
@@ -106,6 +102,7 @@ export class SnakeItem extends Item{
             }
             else{
                 field.set(x,y,this.base)
+                under.onTrigger(field, under, x+dx, y+dy)
             }
         }
         else field.schedule(x,y,root)

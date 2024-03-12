@@ -11,14 +11,16 @@ puissance-4{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    height: 100%;
     flex-grow: 1;
 }
 
 .puissance4_cell{
     display: flex;
+    justify-content: center;
+    align-items: center;
     aspect-ratio: 1;
-    width: 100%;
-    /*padding-bottom: 100%;*/
+
     border: 0.1em solid rgb(185, 185, 185);
 
     &:hover{
@@ -27,8 +29,8 @@ puissance-4{
 }
 
 .puissance4_item{
-    width: 100%;
     height: 100%;
+    aspect-ratio: 1;
     *{
         width: 100%;
         height: 100%;
