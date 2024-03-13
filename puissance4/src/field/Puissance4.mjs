@@ -35,7 +35,15 @@ export class Puissance4 extends HTMLElement{
 
     attributeChangedCallback(name, oldValue, newValue) {
         if(["height","width"].includes(name)){
+            const old_content=this.#content
             this.#rebuilt()
+            const copy_width=Math.min(old_content.length,this.#content.length)
+            for(let x=0; x<copy_width; x++){
+                const copy_height=Math.min(old_content[x].length,this.#content[x].length)
+                for(let y=0; y<copy_height; y++){
+                    this.set(x,y,old_content[x][y])
+                }
+            }
         }
     }
 
@@ -87,8 +95,9 @@ export class Puissance4 extends HTMLElement{
      * @param {number} x 
      * @param {number} y 
      * @param {Item} item 
+     * @param {boolean=} animate
      */
-    set(x,y,item){
+    set(x,y,item,animate=true){
         if(x<0 || x>=this.width || y<0 || y>=this.height)return
         let old=this.get(x,y)
         this.#content[x][y]=item
@@ -99,6 +108,16 @@ export class Puissance4 extends HTMLElement{
         }
         if(item){
             item.onAdd(this,item,x,y)
+        }
+
+        if(animate){
+            if(old){
+                if(item)this.getElement(x,y).classList.add("transforming")
+                else this.getElement(x,y).classList.add("destroying")
+            }
+            else{
+                if(item)this.getElement(x,y).classList.add("appearing")
+            }
         }
     }
 
@@ -116,13 +135,13 @@ export class Puissance4 extends HTMLElement{
 
         let anim1="moving_"+Class.direction(x1-x2,y1-y2)
         let anim2="moving_"+Class.direction(x2-x1,y2-y1)
-        this.set(x1,y1,item2)
+        this.set(x1,y1,item2,false)
         if(item2){
             const element=this.getElement(x1,y1)
             element.clientHeight
             element.classList.add(anim1)
         }
-        this.set(x2,y2,item1)
+        this.set(x2,y2,item1,false)
         if(item1){
             const element=this.getElement(x2,y2)
             element.clientHeight

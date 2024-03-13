@@ -2,8 +2,9 @@ import { Item } from "../field/Item.mjs";
 import { FallingPlatformItem } from "./FallingPlatformItem.mjs";
 import { Class } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
+import { PipeItem } from "./PipeItem.mjs";
 
-export class PipeItem extends Item{
+export class ShootingPipeItem extends PipeItem{
     
     /**
      * 
@@ -11,19 +12,11 @@ export class PipeItem extends Item{
      * @param {number} dy 
      */
     constructor(dx,dy){
-        super()
-        this.dx=dx
-        this.dy=dy
-        this.time=0
-        this.content=null
+        super(dx,dy)
     }
 
     getClasses(...args){
-        return ["pipe", Class.direction(this.dx,this.dy), ...(this.content?.getClasses(...args)??[])]
-    }
-
-    onAdd(field,root,x,y){
-        field.schedule(x,y,root)
+        return ["shooting_pipe", Class.direction(this.dx,this.dy), ...(this.content?.getClasses(...args)??[])]
     }
 
     onTick(field,root,x,y){
@@ -43,7 +36,7 @@ export class PipeItem extends Item{
             else{
                 let after=field.get(x+dx,y+dy)
                 if(!after){
-                    field.set(x+dx, y+dy, this.content)
+                    field.set(x+dx, y+dy, new MovingItem(this.content,dx,dy))
                     this.content=null
                     field.updateElement(x,y)
                 }
