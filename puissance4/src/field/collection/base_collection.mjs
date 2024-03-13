@@ -163,6 +163,12 @@ export const BASE_COLLECTION={
         10,
         ()=>new BocalItem(new GoombaItem())
     ),
+    bocal_serpent: new EditorSpawnable(
+        "Bocal à Serpent Explosif",
+        "Un bocal fragile qui contient un serpent explosif.",
+        10,
+        ()=>new BocalItem(new SnakeItem(new TNTItem(), Math.random()>.5?1:-1, 0))
+    ),
     
 
     /* SPAWNERS */

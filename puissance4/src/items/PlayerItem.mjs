@@ -64,7 +64,7 @@ export class PlayerItem extends Item{
         if(target===null || target instanceof PlayerItem){
             field.swap(x,y,newx,newy)
         }
-        else{
+        else if(target!==undefined){
             target.onTrigger(field,root,newx,newy)
         }
     }

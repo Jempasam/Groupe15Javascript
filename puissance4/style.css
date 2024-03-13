@@ -136,6 +136,13 @@ puissance-4{
             image-rendering: pixelated;
             background-size: cover;
         }
+        >*{
+            top: 10%;
+            left: 10%;
+            position: absolute;
+            width: 80% !important;
+            height: 80% !important;
+        }
     }
 
     .goomba{
