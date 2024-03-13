@@ -25,6 +25,8 @@ import { SnakeItem } from "./items/SnakeItem.mjs"
 import { SpawnerItem } from "./items/SpawnerItem.mjs"
 import { GoombaItem } from "./items/GoombaItem.mjs"
 import { FruitItem } from "./items/FruitItem.mjs"
+import { BocalItem } from "./items/BocalItem.mjs"
+import { TNTItem } from "./items/TNTItem.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE
@@ -158,8 +160,9 @@ function test(){
         game=>{
             game.width=10
             game.height=10
-            game.set(3,7,new SnakeItem(new CoinItem("red"),0,-1))
-            game.set(2,5,new GoombaItem(new FruitItem()))
+            game.set(0,0,new TNTItem())
+            game.set(3,1,new PlayerItem("red",()=>new FruitItem(),"KeyQ","KeyE","KeyW"))
+            game.set(0,1,new BocalItem(new FruitItem()))
         }
     )
 }

@@ -36,18 +36,13 @@ puissance-4{
         height: 100%;
     }
 
-    &.moving_left{
-        animation: moving_left 0.2s;
-    }
-    &.moving_right{
-        animation: moving_right 0.2s;
-    }
-    &.moving_bottom{
-        animation: moving_bottom 0.2s;
-    }
-    &.moving_top{
-        animation: moving_top 0.2s;
-    }
+    &.moving_left{ animation: moving_left 0.2s; }
+    &.moving_right{ animation: moving_right 0.2s; }
+    &.moving_bottom{ animation: moving_bottom 0.2s; }
+    &.moving_top{ animation: moving_top 0.2s; }
+    &.appearing{ animation: appearing 0.2s; }
+    &.transforming{ animation: transforming 0.2s; }
+    &.destroying{ animation: destroying 0.6s; }
 
     .undefined{
         /* Fond composé de lignes blanches et noires */
@@ -126,6 +121,30 @@ puissance-4{
         }
     }
 
+    .bocal{
+        position: relative;
+        &::before{
+            position: absolute;
+            z-index: 1;
+            content: "";
+            display: block;
+            margin-left: -10%;
+            margin-top: -40%;
+            height: 145%;
+            width: 120%;
+            background-image: url(assets/bocal.png);
+            image-rendering: pixelated;
+            background-size: cover;
+        }
+        >*{
+            top: 10%;
+            left: 10%;
+            position: absolute;
+            width: 80% !important;
+            height: 80% !important;
+        }
+    }
+
     .goomba{
         display: block;
         margin-left: -10%;
@@ -181,6 +200,15 @@ puissance-4{
         width: 100%;
     }
 
+    .tnt{
+        background-image: url(assets/tnt.png);
+        animation: charging 0.3s infinite alternate ease-in-out;
+        image-rendering: pixelated;
+        height: 100%;
+        background-size: cover;
+        width: 100%;
+    }
+
     .fruit{
         background-image: url(assets/apple.png);
         image-rendering: pixelated;
@@ -209,7 +237,7 @@ puissance-4{
         }
     }
 
-    .pipe{
+    .pipe, .shooting_pipe{
         position: relative;
         &::before{
             content: "";
@@ -219,6 +247,12 @@ puissance-4{
             height: 100%;
             background-size: cover;
             width: 100%;
+        }
+    }
+
+    .shooting_pipe{
+        &::before{
+            animation: tang 0.4s infinite alternate ease-in-out;
         }
     }
 
@@ -304,7 +338,7 @@ puissance-4{
     }
 
     /* COMMON */
-    .pipe, .snake{
+    .pipe, .snake, .shooting_pipe{
         &.top{
             transform: rotate(180deg);
         }
@@ -372,6 +406,37 @@ puissance-4{
 
 }
 
+@keyframes appearing{
+    0%{
+        transform: scale(0);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
+@keyframes transforming{
+    0%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(1.2);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
+@keyframes destroying{
+    0% {
+        background-color: rgb(0,0,0,0.5);
+    }
+    100% {
+        background-color: rgb(0,0,0,0);
+        transform: scale(0.5);
+    }
+}
+
 @keyframes piston-right {
     0%{ transform: translateX(0) rotate(90deg); }
     100%{transform: translateX(25%) rotate(90deg); } 
@@ -426,6 +491,15 @@ puissance-4{
     }
     100%{
         transform: translate(0, 0);
+    }
+}
+
+@keyframes charging{
+    0%{
+        transform: scale(0.95);
+    }
+    100%{
+        transform: scale(1.05);
     }
 }
 

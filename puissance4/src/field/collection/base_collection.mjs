@@ -15,6 +15,9 @@ import { FruitItem } from "../../items/FruitItem.mjs";
 import { SpawnerItem } from "../../items/SpawnerItem.mjs";
 import { FallingPlatformItem } from "../../items/FallingPlatformItem.mjs";
 import { GoombaItem } from "../../items/GoombaItem.mjs";
+import { ShootingPipeItem } from "../../items/ShootingPipe.mjs";
+import { TNTItem } from "../../items/TNTItem.mjs";
+import { BocalItem } from "../../items/BocalItem.mjs";
 
 
 const SLIPPY_FACTORY= (team)=>new SlippyItem(new CoinItem(team), 0, 1)
@@ -140,6 +143,34 @@ export const BASE_COLLECTION={
         ()=>new GoombaItem(new WindItem())
     ),
 
+    goomba_explosif: new EditorSpawnable(
+        "Goomba Explosif",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte une bombe qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new TNTItem())
+    ),
+
+    /* BOCAL */
+    bocal_tnt: new EditorSpawnable(
+        "Bocal à bombe",
+        "Un bocal fragile qui contient une bombe.",
+        10,
+        ()=>new BocalItem(new TNTItem())
+    ),
+    bocal_goomba: new EditorSpawnable(
+        "Bocal à Goomba",
+        "Un bocal fragile qui contient un goomba.",
+        10,
+        ()=>new BocalItem(new GoombaItem())
+    ),
+    bocal_serpent: new EditorSpawnable(
+        "Bocal à Serpent Explosif",
+        "Un bocal fragile qui contient un serpent explosif.",
+        10,
+        ()=>new BocalItem(new SnakeItem(new TNTItem(), Math.random()>.5?1:-1, 0))
+    ),
+    
+
     /* SPAWNERS */
     gravel_spawner: new EditorSpawnable(
         "Générateur de Gravier",
@@ -174,6 +205,16 @@ export const BASE_COLLECTION={
             ()=>new PipeItem(x,y)
         )]
     }),
+    
+    ...transform(DIRECTIONS,(name,[txt,x,y])=>{
+        return [ `shooting_pipe_${name}`, new EditorSpawnable(
+            `Tuyau Canon ${txt}`,
+            `Un tuyau qui transporte les objets vers le ${txt} et les projette à la sortie.`,
+            10,
+            ()=>new ShootingPipeItem(x,y)
+        )]
+    }),
+
     ...per_team("red","Rouge",RED_KEYS),
     ...per_team("blue","Bleu",BLUE_KEYS),
     ...per_team("green","Vert",GREEN_KEYS),
