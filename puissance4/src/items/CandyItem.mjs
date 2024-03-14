@@ -15,10 +15,26 @@ export class CandyItem extends Item{
     }
 
     onAdd(field,root,x,y){
+        field.schedule(x,y,root)
+    }
+
+    onTick(field,root,x,y){
         let found=this.find(field,root,x,y)
-        for(let [p,px,py] of found){
-            p.finded=false
-            if(found.length>4)field.set(px,py,null)
+        if(found.length>3){
+            found.sort((a,b)=>a[2]-b[2])
+            for(let [p,px,py] of found){
+                field.set(px,py,null)
+                for(let i=1; true; i++){
+                    const over=field.get(px,py-i)
+                    if(over && !over.finded){
+                        field.swap(px,py-i,px,py-i+1)
+                    }
+                    else break
+                }
+            }
+        }
+        else{
+            for(let [p,px,py] of found)p.finded=false
         }
     }
 

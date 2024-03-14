@@ -22,36 +22,8 @@ import { LinkItem } from "../../items/LinkItem.mjs";
 import { MoblinItem } from "../../items/MoblinItem.mjs";
 import { PacmanItem } from "../../items/PacmanItem.mjs";
 import { CandyItem } from "../../items/CandyItem.mjs";
+import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SNAKE_FACTORY, SLIPPY_FACTORY } from "./base_factories.mjs";
 
-
-const SLIPPY_FACTORY= (team)=>new SlippyItem(new CoinItem(team), 0, 1)
-const FALLING_FACTORY= (team)=>new MovingItem(new CoinItem(team), 0, 1)
-function NEW_METEOR_FACTORY(){
-    let data={i:0}
-    return function(team){
-        let i = data.i = data.i + 1
-        if(i%3==1)return new MeteorItem(new CoinItem(team), 0, 1)
-        else return new MovingItem(new CoinItem(team), 0, 1)
-    }
-}
-
-function NEW_SNAKE_FACTORY(){
-    let data={i:0}
-    return function(team){
-        let i = data.i = data.i + 1
-        if(i%3==1)return new SnakeItem(new CoinItem(team), 0, 1)
-        else return new MovingItem(new CoinItem(team), 0, 1)
-    }
-}
-
-function NEW_CANDY_FACTORY(){
-    let data={i:0}
-    return function(team){
-        let i = data.i = data.i + 1
-        if(i%2==1)return new MovingItem(CandyItem.random(), 0, 1)
-        else return new MovingItem(new CoinItem(team), 0, 1)
-    }
-}
 
 const RED_KEYS=["KeyQ","KeyE","KeyW"]
 const BLUE_KEYS=["KeyU","KeyO","KeyI"]
@@ -303,9 +275,15 @@ function per_team(team,team_txt,keys){
         ),
         [`player_${team}_candy`]: new EditorSpawnable(
             `Joueur ${team_txt} Bonbon`,
-            `Un joueur ${team_txt} qui lance des bonbons une fois sur deux. Les bonbon disparaissent quand associés par 5.${control_txt}`,
+            `Un joueur ${team_txt} qui lance un double bonbon une fois sur deux. Les bonbon disparaissent quand associés par 4.${control_txt}`,
             10,
             ()=>new PlayerItem(team, NEW_CANDY_FACTORY(), ...keys)
+        ),
+        [`player_${team}_bicolor`]: new EditorSpawnable(
+            `Joueur ${team_txt} Bicolore`,
+            `Un joueur ${team_txt} qui lance une double pièce bicolore une fois sur deux.${control_txt}`,
+            10,
+            ()=>new PlayerItem(team, NEW_BICOLOR_FACTORY(), ...keys)
         ),
         [`player_${team}_meteor`]: new EditorSpawnable(
             `Joueur ${team_txt} Météore`,

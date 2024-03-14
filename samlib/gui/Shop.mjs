@@ -20,11 +20,13 @@ export class Shop extends HTMLElement{
         super()
         this.display_getter=display_getter
 
-        let [title,price,items]=dom/*htm*/`
+        let [count,title,price,items]=dom/*htm*/`
+            <span class="count">0/80</span>
             <h2>${this.title}</h2>
             <span class="price">0</span>
             <div class="item_list"></div>
         `
+        this.dom_count=this.appendChild(count)
         this.dom_title=this.appendChild(title)
         this.dom_price=this.appendChild(price)
         this.dom_items=this.appendChild(items)
@@ -59,7 +61,9 @@ export class Shop extends HTMLElement{
         if(!this.#shop_content)return
 
         let save=ShopData.get(this.#storage, this.#shop_id)
-
+        
+        let total=0
+        let buyed=0
         for(let [id,{name,description,price}] of Object.entries(this.#shop_content)){
             let item=dom_items.appendChild(dom/*html*/`
                 <a class="${save.isBuyed(id)?"buyed":""}">
@@ -69,6 +73,8 @@ export class Shop extends HTMLElement{
                     <span class="price">${price}</span>
                 </a>
             `)
+            total++
+            if(save.isBuyed(id))buyed++
             item.onclick=()=>{
                 if(save.isBuyed(id))return
                 if(save.money<price)return
@@ -79,7 +85,7 @@ export class Shop extends HTMLElement{
             }
             item.querySelector(".illustration").appendChild(this.display_getter(id))
         }
-
+        this.dom_count.innerText=`${buyed}/${total}`
         this.dom_price.innerText=save.money
     }
 }

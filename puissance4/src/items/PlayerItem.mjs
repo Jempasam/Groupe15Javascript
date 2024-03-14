@@ -49,7 +49,7 @@ export class PlayerItem extends Item{
             }
         }
         else{
-            if(isKeyPressed(this.spawnKey)){
+            if(isKeyPressed(this.spawnKey) && field.get(x,y+1)===null){
                 this.time=40
                 field.set(x,y+1,this.next)
                 this.next=this.factory(this.team)

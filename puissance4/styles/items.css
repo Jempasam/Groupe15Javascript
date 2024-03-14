@@ -295,6 +295,20 @@
         image-rendering: pixelated;
     }
 
+    .pair{
+        position: relative;
+        *:first-child{
+            position: absolute;
+            scale: 0.5;
+            translate: 0 -25%;
+        }
+        *:last-child{
+            position: absolute;
+            scale: 0.5;
+            translate: 0 25%;
+        }
+    }
+
     /* cookies */
     .candy{
         background-size: cover;
@@ -327,7 +341,7 @@
     }
 
     /* COMMON */
-    .pipe, .snake, .shooting_pipe, .link, .pacman{
+    .pipe, .snake, .shooting_pipe, .link, .pacman, .pair{
         &.top{
             rotate: 180deg;
         }

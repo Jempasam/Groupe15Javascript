@@ -31,6 +31,7 @@ import { LinkItem } from "./items/LinkItem.mjs"
 import { MoblinItem } from "./items/MoblinItem.mjs"
 import { PacmanItem } from "./items/PacmanItem.mjs"
 import { CandyItem } from "./items/CandyItem.mjs"
+import { PairItem } from "./items/PairItem.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE
@@ -176,6 +177,7 @@ function test(){
             game.height=10
             game.set(4,4,new WallItem())
             game.set(4,5,new WallItem())
+            game.set(8,2,new MovingItem(new PairItem(new CoinItem("red"),new CoinItem("blue"),0,1),0,1))
             game.set(8,8,new PacmanItem(0,-1,['ArrowUp','ArrowRight','ArrowDown','ArrowLeft']))
             game.set(7,7,new CandyItem(1))
             game.set(5,5,new WallItem())
