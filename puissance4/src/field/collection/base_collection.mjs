@@ -3,7 +3,7 @@ import { BrokablePlatformItem } from "../../items/BrokablePlatformItem.mjs";
 import { MovingItem } from "../../items/MovingItem.mjs";
 import { PipeItem } from "../../items/PipeItem.mjs";
 import { PistonItem } from "../../items/PistonItem.mjs";
-import { PlatformItem } from "../../items/PlatformItem.mjs";
+import { PlatformItem, WallItem } from "../../items/PlatformItem.mjs";
 import { PlayerItem } from "../../items/PlayerItem.mjs";
 import { RollerItem } from "../../items/RollerItem.mjs";
 import { SlippyItem } from "../../items/SlippyItem.mjs";
@@ -18,6 +18,10 @@ import { GoombaItem } from "../../items/GoombaItem.mjs";
 import { ShootingPipeItem } from "../../items/ShootingPipe.mjs";
 import { TNTItem } from "../../items/TNTItem.mjs";
 import { BocalItem } from "../../items/BocalItem.mjs";
+import { LinkItem } from "../../items/LinkItem.mjs";
+import { MoblinItem } from "../../items/MoblinItem.mjs";
+import { PacmanItem } from "../../items/PacmanItem.mjs";
+import { CandyItem } from "../../items/CandyItem.mjs";
 
 
 const SLIPPY_FACTORY= (team)=>new SlippyItem(new CoinItem(team), 0, 1)
@@ -36,6 +40,15 @@ function NEW_SNAKE_FACTORY(){
     return function(team){
         let i = data.i = data.i + 1
         if(i%3==1)return new SnakeItem(new CoinItem(team), 0, 1)
+        else return new MovingItem(new CoinItem(team), 0, 1)
+    }
+}
+
+function NEW_CANDY_FACTORY(){
+    let data={i:0}
+    return function(team){
+        let i = data.i = data.i + 1
+        if(i%2==1)return new MovingItem(CandyItem.random(), 0, 1)
         else return new MovingItem(new CoinItem(team), 0, 1)
     }
 }
@@ -121,6 +134,32 @@ export const BASE_COLLECTION={
         ()=> new SpawnerItem(60,()=>new FruitItem())
     ),
 
+    /* ZELDA */
+    link: new EditorSpawnable(
+        "Link",
+        "Un personnage contrôlable avec les flèches de direction. Il peut attaquer les objets en face de lui en avançant vers eux.",
+        10,
+        ()=>new LinkItem(null, ["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
+    ),
+    moblin: new EditorSpawnable(
+        "Moblin",
+        "Un ennemi qui se déplace aléatoirement et change de direction lorsqu'il rencontre un obstacle en le frappant.",
+        10,
+        ()=>new MoblinItem(null)
+    ),
+    explosive_moblin: new EditorSpawnable(
+        "Moblin Explosif",
+        "Un moblin qui fait tomber une bombe une fois mort.",
+        10,
+        ()=>new MoblinItem(new TNTItem())
+    ),
+    wall: new EditorSpawnable(
+        "Mur",
+        "Un mur indestructible.",
+        10,
+        ()=>new WallItem()
+    ),
+
     /* BONHOMMES */
     goomba_platform: new EditorSpawnable(
         "Goomba Plateforme",
@@ -150,6 +189,14 @@ export const BASE_COLLECTION={
         ()=>new GoombaItem(new TNTItem())
     ),
 
+    /* PACMAN */
+    pacman: new EditorSpawnable(
+        "Pacman",
+        "Un pacman contrôlable avec les touches directionelles.",
+        10,
+        ()=>new PacmanItem(0,-1,["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
+    ),
+
     /* BOCAL */
     bocal_tnt: new EditorSpawnable(
         "Bocal à bombe",
@@ -162,6 +209,12 @@ export const BASE_COLLECTION={
         "Un bocal fragile qui contient un goomba.",
         10,
         ()=>new BocalItem(new GoombaItem())
+    ),
+    bocal_moblin: new EditorSpawnable(
+        "Bocal à Moblin",
+        "Un bocal fragile qui contient un moblin.",
+        10,
+        ()=>new BocalItem(new MoblinItem())
     ),
     bocal_serpent: new EditorSpawnable(
         "Bocal à Serpent Explosif",
@@ -184,6 +237,12 @@ export const BASE_COLLECTION={
         "Un générateur qui fait apparaitres des serpents au hasard sur le terrain.",
         10,
         ()=> new SpawnerItem(200,()=>new SnakeItem(new PlatformItem(), 0, 1))
+    ),
+    moblin_spawner: new EditorSpawnable(
+        "Générateur de Moblin",
+        "Un générateur qui fait apparaitres des moblins au hasard sur le terrain.",
+        10,
+        ()=> new SpawnerItem(100,()=>new MoblinItem())
     ),
 
     /* Pistons */
@@ -241,6 +300,12 @@ function per_team(team,team_txt,keys){
             `Un joueur ${team_txt}.${control_txt}`,
             10,
             ()=>new PlayerItem(team, FALLING_FACTORY, ...keys)
+        ),
+        [`player_${team}_candy`]: new EditorSpawnable(
+            `Joueur ${team_txt} Bonbon`,
+            `Un joueur ${team_txt} qui lance des bonbons une fois sur deux. Les bonbon disparaissent quand associés par 5.${control_txt}`,
+            10,
+            ()=>new PlayerItem(team, NEW_CANDY_FACTORY(), ...keys)
         ),
         [`player_${team}_meteor`]: new EditorSpawnable(
             `Joueur ${team_txt} Météore`,

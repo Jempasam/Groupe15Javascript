@@ -13,8 +13,10 @@ export class SlippyItem extends Item{
         this.time=0
     }
 
-    getClasses(...args){
-        return ["slippy", ...this.base.getClasses(...args)]
+    getDisplay(...args){
+        let ret= this.base.getDisplay(...args)
+        ret.classList.add("slippy")
+        return ret
     }
 
     onAdd(field,root,x,y){

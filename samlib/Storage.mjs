@@ -128,9 +128,9 @@ export class Storage{
      * @param {function(T):void} editor 
      */
     edit(name,type,editor){
-        let data=this.get(this.prefix+name,type)
+        let data=this.get(name,type)
         editor(data)
-        this.set(this.prefix+name,type,data)
+        this.set(name,type,data)
     }
 
     _copyInto(other){

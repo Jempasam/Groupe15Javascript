@@ -41,6 +41,7 @@ export function dom(strings, ...values) {
 export function adom(strings, ...values) {
     const template = document.createElement("aa");
     template.innerHTML = html(strings, ...values);
+    console.log(template.outerHTML)
     return template.children[0];
 }
 

@@ -58,7 +58,7 @@ export class SnakeItem extends Item{
                 if(ndx!==-this.px || ndy!==-this.py){
                     this.dx=ndx
                     this.dy=ndy
-                    field.updateElement(x,y)
+                    //field.updateElement(x,y)
                 }
             }
         }
@@ -67,7 +67,7 @@ export class SnakeItem extends Item{
             let dy=this.dy
             this.time=0
             let under=field.get(x+dx,y+dy)
-            if(under===null || (this.keySet && under instanceof CoinItem) || under instanceof FruitItem){
+            if(under===null || (this.keySet && under instanceof CoinItem) || under.isComestible){
                 if(under!=null){
                     this.length++
                 }

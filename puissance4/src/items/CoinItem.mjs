@@ -58,5 +58,7 @@ export class CoinItem extends Item{
         if(line.length>=3)total=[...total,...line]
         return total
     }
+
+    isComestible=true
 }
 

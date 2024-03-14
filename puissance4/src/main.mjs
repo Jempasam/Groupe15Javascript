@@ -4,7 +4,7 @@ import { SamSelector, SamOption } from "../../samlib/gui/Selector.mjs"
 import { Item } from "./field/Item.mjs"
 import { BrokablePlatformItem } from "./items/BrokablePlatformItem.mjs"
 import { MovingItem } from "./items/MovingItem.mjs"
-import { PlatformItem } from "./items/PlatformItem.mjs"
+import { PlatformItem, WallItem } from "./items/PlatformItem.mjs"
 import { PlayerItem } from "./items/PlayerItem.mjs"
 import { RollerItem } from "./items/RollerItem.mjs"
 import { CoinItem } from "./items/CoinItem.mjs"
@@ -19,7 +19,7 @@ import { PistonItem } from "./items/PistonItem.mjs"
 import { SlippyItem } from "./items/SlippyItem.mjs"
 import { PipeItem } from "./items/PipeItem.mjs"
 import { Shop, ShopData } from "../../samlib/gui/Shop.mjs"
-import { ACCOUNT_STORAGE, LOCAL_STORAGE } from "../../samlib/Storage.mjs"
+import { ACCOUNT_STORAGE, LOCAL_STORAGE, OBJECT_DATA } from "../../samlib/Storage.mjs"
 import { NumberInput } from "../../samlib/gui/NumberInput.mjs"
 import { SnakeItem } from "./items/SnakeItem.mjs"
 import { SpawnerItem } from "./items/SpawnerItem.mjs"
@@ -27,6 +27,10 @@ import { GoombaItem } from "./items/GoombaItem.mjs"
 import { FruitItem } from "./items/FruitItem.mjs"
 import { BocalItem } from "./items/BocalItem.mjs"
 import { TNTItem } from "./items/TNTItem.mjs"
+import { LinkItem } from "./items/LinkItem.mjs"
+import { MoblinItem } from "./items/MoblinItem.mjs"
+import { PacmanItem } from "./items/PacmanItem.mjs"
+import { CandyItem } from "./items/CandyItem.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE
@@ -154,13 +158,30 @@ function play(field){
     )
 }
 
+let succes=ACCOUNT_STORAGE.get("succes",OBJECT_DATA)
+if(!succes.list)succes.list=[]
+succes.list.push("first_game")
+ACCOUNT_STORAGE.set("succes",OBJECT_DATA,succes)
+
+ACCOUNT_STORAGE.edit("succes",OBJECT_DATA,succes=>{
+    if(!succes.list)succes.list=[]
+    succes.list.push("first_game")
+})
+
 function test(){
     playGame(
         ()=>openMenu(),
         game=>{
             game.width=10
             game.height=10
+            game.set(4,4,new WallItem())
+            game.set(4,5,new WallItem())
+            game.set(8,8,new PacmanItem(0,-1,['ArrowUp','ArrowRight','ArrowDown','ArrowLeft']))
+            game.set(7,7,new CandyItem(1))
+            game.set(5,5,new WallItem())
             game.set(0,0,new TNTItem())
+            game.set(7,0,new LinkItem(null,['ArrowUp','ArrowRight','ArrowDown','ArrowLeft']))
+            game.set(8,0,new MoblinItem())
             game.set(3,1,new PlayerItem("red",()=>new FruitItem(),"KeyQ","KeyE","KeyW"))
             game.set(0,1,new BocalItem(new FruitItem()))
         }

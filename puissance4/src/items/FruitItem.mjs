@@ -13,4 +13,6 @@ export class FruitItem extends Item{
     getClasses(){
         return ["fruit"]
     }
+
+    isComestible=true
 }

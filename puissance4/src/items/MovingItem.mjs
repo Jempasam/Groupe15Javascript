@@ -11,8 +11,10 @@ export class MovingItem extends Item{
         this.time=0
     }
 
-    getClasses(...args){
-        return ["moving", ...this.base.getClasses(...args)]
+    getDisplay(...args){
+        let ret= this.base.getDisplay(...args)
+        ret.classList.add("moving")
+        return ret
     }
 
     onAdd(field,root,x,y){

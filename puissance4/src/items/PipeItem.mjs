@@ -1,3 +1,4 @@
+import { adom } from "../../../samlib/DOM.mjs";
 import { Item } from "../field/Item.mjs";
 import { FallingPlatformItem } from "./FallingPlatformItem.mjs";
 import { Class } from "./ItemUtils.mjs";
@@ -17,9 +18,17 @@ export class PipeItem extends Item{
         this.time=0
         this.content=null
     }
+    
+    getDisplay(...args){
+        let ret
+        if(this.content){
+            ret= this.content.getDisplay(...args)
+        }
+        else ret=adom`<div></div>`
+        ret.classList.add("pipe")
+        ret.classList.add(Class.direction(this.dx,this.dy))
+        return ret
 
-    getClasses(...args){
-        return ["pipe", Class.direction(this.dx,this.dy), ...(this.content?.getClasses(...args)??[])]
     }
 
     onAdd(field,root,x,y){

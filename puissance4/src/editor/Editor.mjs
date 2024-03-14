@@ -103,12 +103,17 @@ export class Editor extends HTMLElement{
 
         // Field
         this.field=create("puissance-4._scrollable")
-        this.field.oncellclick=(obj,x,y)=>{
-            let item=this.#factory()
-            if(item){
-                item.factory=this.#factory_name
+        this.field.oncelldraw=(obj,x,y,button)=>{
+            if(button==1){
+                let item=this.#factory()
+                if(item){
+                    item.factory=this.#factory_name
+                }
+                this.field.set(x,y,item)
             }
-            this.field.set(x,y,item)
+            else if(button==2){
+                this.field.set(x,y,null)
+            }
         }
         this.appendChild(this.field)
         

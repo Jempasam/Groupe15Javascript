@@ -10,3 +10,14 @@ export class PlatformItem extends Item{
         return ["platform"]
     }
 }
+
+export class WallItem extends PlatformItem{
+    
+    constructor(){
+        super()
+    }
+
+    getClasses(){
+        return ["wall"]
+    }
+}
