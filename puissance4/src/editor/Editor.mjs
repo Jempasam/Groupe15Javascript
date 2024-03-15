@@ -199,8 +199,8 @@ export class Editor extends HTMLElement{
      * @param {Puissance4Field} field_definition 
      */
     load(field_definition){
-        this.dom_height.value=field_definition.content.width
-        this.dom_width.value=field_definition.content.height
+        this.dom_height.value=field_definition.content.height
+        this.dom_width.value=field_definition.content.width
         this.field.width=field_definition.content.width
         this.field.height=field_definition.content.height
         this.#collection=field_definition.dictionnary

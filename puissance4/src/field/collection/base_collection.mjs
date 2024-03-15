@@ -22,7 +22,8 @@ import { LinkItem } from "../../items/LinkItem.mjs";
 import { MoblinItem } from "../../items/MoblinItem.mjs";
 import { PacmanItem } from "../../items/PacmanItem.mjs";
 import { CandyItem } from "../../items/CandyItem.mjs";
-import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SNAKE_FACTORY, SLIPPY_FACTORY } from "./base_factories.mjs";
+import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_BUBBLE_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SNAKE_FACTORY, SLIPPY_FACTORY, WILD_CANDY_FACTORY } from "./base_factories.mjs";
+import { BubbleItem } from "../../items/BubbleItem.mjs";
 
 
 const RED_KEYS=["KeyQ","KeyE","KeyW"]
@@ -199,20 +200,32 @@ export const BASE_COLLECTION={
     /* SPAWNERS */
     gravel_spawner: new EditorSpawnable(
         "Générateur de Gravier",
-        "Un générateur qui fait apparaitres du terrain qui chute au hasard sur le terrain.",
+        "Un générateur qui fait apparaitre du terrain qui chute au hasard sur le terrain.",
         10,
         ()=> new SpawnerItem(100,()=>new FallingPlatformItem())
+    ),
+    bubble_spawner: new EditorSpawnable(
+        "Générateur de Bulles",
+        "Un generateur qui fait apparaitre des bulles qui explose après un petit moement.",
+        10,
+        ()=>new SpawnerItem(100,()=>new BubbleItem())
+    ),
+    candy_spawner: new EditorSpawnable(
+        "Générateur de Bonbons",
+        "Un générateur qui fait apparaître des bonbons et des paires de bonbons au hasard. Les bonbons disparaissent quand associés par 4.",
+        10,
+        ()=>new SpawnerItem(100,WILD_CANDY_FACTORY)
     ),
 
     snake_spawner: new EditorSpawnable(
         "Générateur de Serpent",
-        "Un générateur qui fait apparaitres des serpents au hasard sur le terrain.",
+        "Un générateur qui fait apparaitre des serpents au hasard sur le terrain.",
         10,
         ()=> new SpawnerItem(200,()=>new SnakeItem(new PlatformItem(), 0, 1))
     ),
     moblin_spawner: new EditorSpawnable(
         "Générateur de Moblin",
-        "Un générateur qui fait apparaitres des moblins au hasard sur le terrain.",
+        "Un générateur qui fait apparaitre des moblins au hasard sur le terrain.",
         10,
         ()=> new SpawnerItem(100,()=>new MoblinItem())
     ),
@@ -272,6 +285,12 @@ function per_team(team,team_txt,keys){
             `Un joueur ${team_txt}.${control_txt}`,
             10,
             ()=>new PlayerItem(team, FALLING_FACTORY, ...keys)
+        ),
+        [`player_${team}_bubble`]: new EditorSpawnable(
+            `Joueur ${team_txt} Bulle`,
+            `Un joueur ${team_txt} qui une fois sur tois envoie une bulle qui disparait après un petit moment.${control_txt}`,
+            10,
+            ()=>new PlayerItem(team, NEW_BUBBLE_FACTORY(), ...keys)
         ),
         [`player_${team}_candy`]: new EditorSpawnable(
             `Joueur ${team_txt} Bonbon`,

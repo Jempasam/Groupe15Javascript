@@ -112,7 +112,7 @@
         >*{
             position: absolute;
             top:-60%;
-            scale: 0.6;
+            transform: scale(0.6);
         }
     }
 
@@ -167,8 +167,9 @@
         animation: tired 0.5s infinite alternate ease-in-out;
     }
 
-    /* simple walls */
-    .fruit, .wall, .platform, .brokable_platform, .falling_platform{
+    /* simple textureds */
+    .fruit, .wall, .platform, .brokable_platform, .falling_platform, 
+    .bubble{
         image-rendering: pixelated;
         background-size: cover;
     }
@@ -196,6 +197,11 @@
 
     .fruit{
         background-image: url(../assets/apple.png);
+    }
+
+    .bubble{
+        background-image: url(../assets/bubble.png);
+        animation: charging 1s infinite alternate ease-in-out;
     }
 
     .tnt{

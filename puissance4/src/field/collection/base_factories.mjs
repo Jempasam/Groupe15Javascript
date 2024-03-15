@@ -1,3 +1,4 @@
+import { BubbleItem } from "../../items/BubbleItem.mjs"
 import { CandyItem } from "../../items/CandyItem.mjs"
 import { CoinItem } from "../../items/CoinItem.mjs"
 import { MeteorItem } from "../../items/MeteorItem.mjs"
@@ -24,6 +25,18 @@ export function NEW_METEOR_FACTORY(){
     return function(team){
         let i = data.i = data.i + 1
         if(i%3==1)return new MeteorItem(new CoinItem(team), 0, 1)
+        else return new MovingItem(new CoinItem(team), 0, 1)
+    }
+}
+
+/**
+ * Un constructeur d'usines à pièce qui tombent, mais 1 fois sur trois elle crée une bulle tombante
+ */
+export function NEW_BUBBLE_FACTORY(){
+    let data={i:0}
+    return function(team){
+        let i = data.i = data.i + 1
+        if(i%3==1)return new MovingItem(new BubbleItem(), 0, 1)
         else return new MovingItem(new CoinItem(team), 0, 1)
     }
 }
@@ -78,6 +91,10 @@ export function NEW_BICOLOR_FACTORY(){
     }
 }
 
+export const WILD_CANDY_FACTORY=createRandomFactory(CandyItem.random)
+
+
+// Helpers
 function randomDirection(){
     if(Math.random()>0.5){
         if(Math.random()>0.5) return [0,1]
@@ -86,5 +103,15 @@ function randomDirection(){
     else{
         if(Math.random()>0.5) return [1,0]
         else return [-1,0]
+    }
+}
+
+function createRandomFactory(seeded_factory){
+    return function(team){
+        if(Math.random()>0.5){
+            let [dx,dy]=randomDirection()
+            return new MovingItem(new PairItem(seeded_factory(Math.random()*10000),seeded_factory(Math.random()*10000),dx,dy), 0, 1)
+        }
+        else return new MovingItem(seeded_factory(Math.random()*10000), 0, 1)
     }
 }
