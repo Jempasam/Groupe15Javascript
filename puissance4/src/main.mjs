@@ -105,7 +105,7 @@ function openLoader(){
 
 function openShop(){
     let shop=new Shop(id=>{
-        let ret=create("div.presentation")
+        let ret=create(`div.presentation[title=${BASE_COLLECTION[id].name}]`)
         let field=new Puissance4()
         field.width=1
         field.height=1

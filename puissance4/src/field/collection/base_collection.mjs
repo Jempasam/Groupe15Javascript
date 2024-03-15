@@ -25,6 +25,7 @@ import { CandyItem } from "../../items/CandyItem.mjs";
 import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_BUBBLE_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SNAKE_FACTORY, SLIPPY_FACTORY, WILD_CANDY_FACTORY } from "./base_factories.mjs";
 import { BubbleItem } from "../../items/BubbleItem.mjs";
 import { LynelItem } from "../../items/LynelItem.mjs";
+import { OctorokItem } from "../../items/OctorokItem.mjs";
 
 
 const DIRECTIONS={
@@ -118,6 +119,18 @@ export const BASE_COLLECTION={
         "Un ennemi qui se déplace aléatoirement et change de direction lorsqu'il rencontre un obstacle en le frappant.",
         10,
         ()=>new MoblinItem(null)
+    ),
+    octorok: new EditorSpawnable(
+        "Octorok",
+        "Un ennemi qui se déplace aléatoirement et lance des projectiles dans les 4 directions. Il n'attaque pas en se déplaçant.",
+        10,
+        ()=>new OctorokItem(()=>new BubbleItem())
+    ),
+    octorok_explosif: new EditorSpawnable(
+        "Octorok Explosif",
+        "Un ennemi qui se déplace aléatoirement et lance des projectiles bombes dans les 4 directions. Il n'attaque pas en se déplaçant.",
+        10,
+        ()=>new OctorokItem(()=>new TNTItem())
     ),
     lynel: new EditorSpawnable(
         "Lynel",

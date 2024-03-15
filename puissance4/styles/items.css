@@ -105,7 +105,7 @@
     }
 
     /* holding characters */
-    .moblin, .link, .goomba, .lynel{
+    .moblin, .link, .goomba, .lynel, .octorok{
         image-rendering: pixelated;
         background-size: cover;
         position: relative;
@@ -179,6 +179,31 @@
         height: 120%;
         width: 110%;
         background-image: url(../assets/moblin.gif);
+    }
+
+    .octorok{
+        width: 100%;
+        height: 100%;
+        &::after{
+            content: "";
+            display: block;
+            margin-left: -5%;
+            margin-top: -5%;
+            height: 110%;
+            width: 110%;
+            image-rendering: pixelated;
+            background-size: cover;
+            position: relative;
+            background-image: url(../assets/octorok.png);
+        }
+        &._shooting::after{
+            background-image: url(../assets/octorok_shooting.png);
+        }
+        >*{
+            position: absolute;
+            top:40%;
+            transform: scale(0.7);
+        }
     }
     
     .player{
@@ -385,7 +410,7 @@
     }
 
     /* COMMON */
-    .pipe, .snake, .shooting_pipe, .link, .pacman, .pair{
+    .pipe, .snake, .shooting_pipe, .link, .pacman, .pair, .octorok{
         &.top{
             rotate: 180deg;
         }
