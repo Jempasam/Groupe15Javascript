@@ -1,4 +1,5 @@
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 
 export class MovingItem extends Item{
@@ -11,12 +12,13 @@ export class MovingItem extends Item{
         this.time=0
     }
 
-    getClasses(){
-        return ["moving", ...this.base.getClasses()]
+    getDisplay(...args){
+        let ret= this.base.getDisplay(...args)
+        ret.classList.add("moving")
+        return ret
     }
 
     onAdd(field,root,x,y){
-        console.log("aa")
         field.schedule(x,y,root)
     }
 
@@ -32,11 +34,11 @@ export class MovingItem extends Item{
                 if(underder){
                     underder.onTrigger(field, underder, x+dx*2, y+dy*2)
                 }
-                field.set(x, y, null)
-                field.set(x+dx, y+dy, root)
+                field.swap(x,y, x+dx,y+dy)
                 return
             }
             else{
+                Sounds.TOP.play()
                 field.set(x,y,this.base)
             }
         }

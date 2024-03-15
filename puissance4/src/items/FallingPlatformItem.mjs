@@ -22,8 +22,7 @@ export class FallingPlatformItem extends Item{
             this.time=0
             let under=field.get(x,y+1)
             if(under===null){
-                field.set(x,y,null)
-                field.set(x,y+1,this)
+                field.swap(x,y,x,y+1)
                 return
             }
             else{

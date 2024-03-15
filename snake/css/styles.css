@@ -1,0 +1,263 @@
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#playButton {
+  margin-left : 500px;
+}
+
+#ecranjeu {
+  display: none; /* Le menu est initialement caché */
+  position: relative;
+  background-color: green;
+}
+
+#ecranGameOver {
+  display: none; /* Le menu est initialement caché */
+  position: absolute;
+  background-color: palevioletred;
+}
+
+.blur {
+  filter: blur(5px); /* Ajustez la quantité de flou selon vos préférences */
+}
+
+#myCanvas {
+  border: 1px solid black;
+  text-align: center;
+  width: 500px;
+  height: 500px;
+}
+
+#score {
+  border: 1px solid black;
+  padding: 1vw;
+  text-align: left;
+  position: absolute;
+  top: 50%;
+  right: -27.5%;
+  width: 20%;
+  max-width: 200px;
+}
+
+#menuJeu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 800px;
+}
+
+#menuPrincipal {
+  background: linear-gradient(to bottom, cyan 60%, green 40%);
+  border-radius : 10%;
+}
+
+#toggleMenuButton {
+  position: absolute;
+  border-radius : 50%;
+  margin-bottom: 80px;
+  padding : 20px;
+}
+
+#boutonReset {
+  position: absolute;
+  border-radius : 30%;
+  top : 80%;
+  left : 33%;
+  width : 100px;
+  height: 40px;
+}
+
+#boutonReset p {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #333;
+  text-transform: uppercase;
+
+
+}
+
+#toggleMenuButton img {
+  width : 40px;
+  height : 40px;
+}
+
+#modeVitesse {
+  position: absolute;
+  transform: translateX(-575%);
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 80px;
+}
+
+#modeInversion {
+  position: absolute;
+  transform: translateX(-575%);
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#modeMiamFast {
+  position: absolute;
+  transform: translateX(-540%);
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom : -80px;
+}
+
+#boutonSkin {
+  position: absolute;
+  transform : translateY(350%);
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  width : 125px;
+  height : 50px;
+}
+
+#boutonSon {
+  position: absolute;
+  transform : translateY(-500%);
+  margin-right : -350px;
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  width : 40px;
+  height : 40px;
+}
+
+#boutonSon img
+{
+  width: 30px;
+}
+
+#boutonSkin img{
+  width: 50px;
+
+}
+
+.TitreJeu {
+  text-transform: uppercase;
+  font-size: calc(12px + 2vw);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: #ff5c00;
+  font-family: 'Arial Black', sans-serif;
+  /*animation: shake 0.5s infinite alternate; /* Animation (exemple : secousse) */
+
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  /*bottom: 70%;*/
+
+}
+
+.ScoreAffichage img
+{
+  margin-left: 25%;
+  margin-top : -20px;
+  width : 50px;
+  height: 50px;
+}
+
+.NombrePoints
+{
+  text-transform: uppercase;
+  font-size: calc(12px + 2vw);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Arial Black', sans-serif;
+
+  text-align: center;
+  margin-top : -10px;
+}
+
+#ResultatFruit {
+  position : absolute;
+  top : 5%;
+  left : 0;
+  width: 20%;
+  height: 20%;
+}
+
+#RecordFruit {
+  position : absolute;
+  top : 35%;
+  left : 0;
+  width: 20%;
+  height: 20%;
+}
+
+.ScoreNow
+{
+  position: absolute;
+  top: -1%;
+  left: 50%;
+
+  text-transform: uppercase;
+  font-size: 28px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Arial Black', sans-serif;
+
+  text-align: center;
+}
+
+.HighScoreChiffre
+{
+  position: absolute;
+  top: 30%;
+  left: 50%;
+
+  text-transform: uppercase;
+  font-size: 28px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Arial Black', sans-serif;
+
+  text-align: center;
+}
+
+#ModeDeJeu1
+{
+  position:absolute;
+  top : 65%;
+  left : 15%;
+}
+
+#ModeDeJeu2
+{
+  position:absolute;
+  top : 65%;
+  left : 40%;
+}
+
+#ModeDeJeu3
+{
+  position:absolute;
+  top : 65%;
+  left : 65%;
+}
+
+
+
+
+
+
+@keyframes shake {
+  from { transform: translateX(-5px); }
+  to { transform: translateX(5px); }
+}
+
+.bouton-active {
+  box-shadow: 0 0 10px yellow; /* Ombre jaune */
+}
+

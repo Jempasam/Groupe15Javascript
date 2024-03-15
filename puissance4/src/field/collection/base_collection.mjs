@@ -3,18 +3,65 @@ import { BrokablePlatformItem } from "../../items/BrokablePlatformItem.mjs";
 import { MovingItem } from "../../items/MovingItem.mjs";
 import { PipeItem } from "../../items/PipeItem.mjs";
 import { PistonItem } from "../../items/PistonItem.mjs";
-import { PlatformItem } from "../../items/PlatformItem.mjs";
+import { PlatformItem, WallItem } from "../../items/PlatformItem.mjs";
 import { PlayerItem } from "../../items/PlayerItem.mjs";
 import { RollerItem } from "../../items/RollerItem.mjs";
 import { SlippyItem } from "../../items/SlippyItem.mjs";
 import { CoinItem } from "../../items/CoinItem.mjs";
 import { WindItem } from "../../items/WindItem.mjs";
+import { MeteorItem } from "../../items/MeteorItem.mjs";
+import { SnakeItem } from "../../items/SnakeItem.mjs";
+import { FruitItem } from "../../items/FruitItem.mjs";
+import { SpawnerItem } from "../../items/SpawnerItem.mjs";
+import { FallingPlatformItem } from "../../items/FallingPlatformItem.mjs";
+import { GoombaItem } from "../../items/GoombaItem.mjs";
+import { ShootingPipeItem } from "../../items/ShootingPipe.mjs";
+import { TNTItem } from "../../items/TNTItem.mjs";
+import { BocalItem } from "../../items/BocalItem.mjs";
+import { LinkItem } from "../../items/LinkItem.mjs";
+import { MoblinItem } from "../../items/MoblinItem.mjs";
+import { PacmanItem } from "../../items/PacmanItem.mjs";
+import { CandyItem } from "../../items/CandyItem.mjs";
+import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_BUBBLE_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SNAKE_FACTORY, SLIPPY_FACTORY, WILD_CANDY_FACTORY } from "./base_factories.mjs";
+import { BubbleItem } from "../../items/BubbleItem.mjs";
+import { LynelItem } from "../../items/LynelItem.mjs";
+import { OctorokItem } from "../../items/OctorokItem.mjs";
 
+
+const DIRECTIONS={
+    "top": ["Haut",0,-1],
+    "bottom": ["Bas",0,1],
+    "left": ["Gauche",-1,0],
+    "right": ["Droite",1,0],
+}
+
+/** @type {Array<[number,number]>} */
+const vDIRECTIONS=[[0,-1],[1,0],[0,1],[-1,0]]
+
+/** @type {Array<string>} */
+const vTEAMS=["red","blue","yellow","green"]
+
+/** @type {Array<[string,string,string]>} */
+const vKEYS=[["KeyQ","KeyE","KeyW"], ["KeyU","KeyO","KeyI"], ["KeyR","KeyY","KeyT"], ["KeyV","KeyN","KeyB"]]
+
+function transform(obj,callback){
+    let ret={}
+    for(let [key,value] of Object.entries(obj)){
+        const [nkey,nvalue]=callback(key,value)
+        ret[nkey]=nvalue
+    }
+    return ret
+}
+
+/**
+ * @type {Object<string,EditorSpawnable>}
+ */
 export const BASE_COLLECTION={
     /* Ventilator */
     ventilator: new EditorSpawnable(
         "Ventilateur",
         "Repousse les objets à droite et à gauche",
+        10,
         ()=>new WindItem()
     ),
 
@@ -22,143 +69,258 @@ export const BASE_COLLECTION={
     platform: new EditorSpawnable(
         "Plateforme",
         "Plateforme immobile",
+        5,
         ()=>new PlatformItem()
     ),
     brokable: new EditorSpawnable(
         "Plateforme cassable",
         "Plateforme qui se casse après un certain nombre de passages",
+        10,
         ()=>new BrokablePlatformItem()
     ),
 
     /* Rollers */
-    roller_left: new EditorSpawnable(
-        "Rouleau Gauche",
-        "Rouleau déplace les unité au dessus vers la gauche",
-        ()=>new RollerItem(-1)
-    ),
-    roller_right: new EditorSpawnable(
-        "Rouleau Droite",
-        "Rouleau déplace les unité au dessus vers la droite",
-        ()=>new RollerItem(1)
+    roller: new EditorSpawnable(
+        "Rouleau",
+        "Rouleau déplace les unité au dessus vers la droite ou la gauche",
+        10,
+        v=>new RollerItem(v%2*2-1)
     ),
 
-    /* Pistons */
-    piston_top: new EditorSpawnable(
-        "Piston Haut",
-        "Un piston qui projette les objets vers le haut",
-        ()=>new PistonItem(0,-1)
+    /* SNAKE */
+    snake: new EditorSpawnable(
+        "Serpent Controllable",
+        "Un serpent controllable avec les flèches de direction. Il peut manger les pièces fixes pour grandir.",
+        10,
+        v=>new SnakeItem(new PlatformItem(), ...vDIRECTIONS[v%4], ["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
     ),
-    piston_bottom: new EditorSpawnable(
-        "Piston Bas",
-        "Un piston qui projette les objets vers le bas",
-        ()=>new PistonItem(0,1)
+    fruit: new EditorSpawnable(
+        "Fruit",
+        "Un fruit que les serpents peuvent manger. Ils sont fragiles et se cassent facilement.",
+        10,
+        ()=> new FruitItem()
     ),
-    piston_left: new EditorSpawnable(
-        "Piston Gauche",
-        "Un piston qui projette les objets vers la gauche",
-        ()=>new PistonItem(-1,0)
-    ),
-    piston_right: new EditorSpawnable(
-        "Piston Droite",
-        "Un piston qui projette les objets vers la droite",
-        ()=>new PistonItem(1,0)
+    fruit_spawner: new EditorSpawnable(
+        "Générateur de Fruit",
+        "Un générateur qui fait apparaitres des fruits au hasard sur le terrain.",
+        10,
+        ()=> new SpawnerItem(60,()=>new FruitItem())
     ),
 
-    /* Pipes */
-    pipe_top: new EditorSpawnable(
-        "Tuyau Haut",
-        "Un tuyau qui projette les objets vers le haut",
-        ()=>new PipeItem(0,-1)
+    /* ZELDA */
+    link: new EditorSpawnable(
+        "Link",
+        "Un personnage contrôlable avec les flèches de direction. Il peut attaquer les objets en face de lui en avançant vers eux.",
+        10,
+        ()=>new LinkItem(null, ["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
     ),
-    pipe_bottom: new EditorSpawnable(
-        "Tuyau Bas",
-        "Un tuyau qui projette les objets vers le bas",
-        ()=>new PipeItem(0,1)
+    moblin: new EditorSpawnable(
+        "Moblin",
+        "Un ennemi qui se déplace aléatoirement et change de direction lorsqu'il rencontre un obstacle en le frappant.",
+        10,
+        ()=>new MoblinItem(null)
     ),
-    pipe_left: new EditorSpawnable(
-        "Tuyau Gauche",
-        "Un tuyau qui projette les objets vers la gauche",
-        ()=>new PipeItem(-1,0)
+    octorok: new EditorSpawnable(
+        "Octorok",
+        "Un ennemi qui se déplace aléatoirement et lance des projectiles dans les 4 directions. Il n'attaque pas en se déplaçant.",
+        10,
+        ()=>new OctorokItem(()=>new BubbleItem())
     ),
-    pipe_right: new EditorSpawnable(
-        "Tuyau Droite",
-        "Un tuyau qui projette les objets vers la droite",
-        ()=>new PipeItem(1,0)
+    octorok_explosif: new EditorSpawnable(
+        "Octorok Explosif",
+        "Un ennemi qui se déplace aléatoirement et lance des projectiles bombes dans les 4 directions. Il n'attaque pas en se déplaçant.",
+        10,
+        ()=>new OctorokItem(()=>new TNTItem())
+    ),
+    lynel: new EditorSpawnable(
+        "Lynel",
+        "Un ennemi puissant qui se déplace, attaque, change de direction, attrape des items, saute, et en lance au hasard.",
+        10,
+        v=>new LynelItem(null,v%6+1)
+    ),
+    explosive_moblin: new EditorSpawnable(
+        "Moblin Explosif",
+        "Un moblin qui fait tomber une bombe une fois mort.",
+        10,
+        ()=>new MoblinItem(new TNTItem())
+    ),
+    wall: new EditorSpawnable(
+        "Mur",
+        "Un mur indestructible.",
+        10,
+        ()=>new WallItem()
     ),
 
-    /* Coins */
-    red_static: new EditorSpawnable(
-        "Pièce Rouge Statique",
-        "Une pièce rouge qui ne bouge pas",
-        ()=>new CoinItem("red")
-    ),
-    blue_static: new EditorSpawnable(
-        "Pièce Bleue Statique",
-        "Une pièce bleue qui ne bouge pas",
-        ()=>new CoinItem("blue")
+    /* BONHOMMES */
+    goomba_platform: new EditorSpawnable(
+        "Goomba Plateforme",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte une plateforme qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new PlatformItem())
     ),
 
-    red_falling: new EditorSpawnable(
-        "Pièce Tombante Rouge",
-        "Une pièce rouge qui tombe.",
-        ()=>new MovingItem(new CoinItem("red"),0,1)
+    goomba_fruit: new EditorSpawnable(
+        "Goomba Goomba",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte un goomba qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new GoombaItem())
     ),
-    blue_falling: new EditorSpawnable(
-        "Pièce Tombante Bleue",
-        "Une pièce bleue qui tombe.",
-        ()=>new MovingItem(new CoinItem("blue"),0,1)
+
+    aero_goomba: new EditorSpawnable(
+        "Aero Goomba",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte un ventilateur qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new WindItem())
+    ),
+
+    goomba_explosif: new EditorSpawnable(
+        "Goomba Explosif",
+        "Un goomba qui se balade et tombe si il n'y a pas de sol. Il porte une bombe qu'il fait tomber si on l'écrase.",
+        10,
+        ()=>new GoombaItem(new TNTItem())
+    ),
+
+    /* PACMAN */
+    pacman: new EditorSpawnable(
+        "Pacman",
+        "Un pacman contrôlable avec les touches directionelles.",
+        10,
+        ()=>new PacmanItem(0,-1,["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
+    ),
+
+    /* BOCAL */
+    bocal_tnt: new EditorSpawnable(
+        "Bocal à bombe",
+        "Un bocal fragile qui contient une bombe.",
+        10,
+        ()=>new BocalItem(new TNTItem())
+    ),
+    bocal_goomba: new EditorSpawnable(
+        "Bocal à Goomba",
+        "Un bocal fragile qui contient un goomba.",
+        10,
+        ()=>new BocalItem(new GoombaItem())
+    ),
+    bocal_moblin: new EditorSpawnable(
+        "Bocal à Moblin",
+        "Un bocal fragile qui contient un moblin.",
+        10,
+        ()=>new BocalItem(new MoblinItem())
+    ),
+    bocal_serpent: new EditorSpawnable(
+        "Bocal à Serpent Explosif",
+        "Un bocal fragile qui contient un serpent explosif.",
+        10,
+        ()=>new BocalItem(new SnakeItem(new TNTItem(), Math.random()>.5?1:-1, 0))
     ),
     
-    /* Players */
-    player_red: new EditorSpawnable(
-        "Joueur Rouge",
-        "Un joueur rouge",
-        ()=>new PlayerItem("red", FALLING_FACTORY, ...RED_KEYS)
-    ),
-    player_blue: new EditorSpawnable(
-        "Joueur Bleu",
-        "Un joueur bleu",
-        ()=>new PlayerItem("blue", FALLING_FACTORY, ...BLUE_KEYS)
-    ),
-    player_red_slippy: new EditorSpawnable(
-        "Joueur Rouge Glissant",
-        "Un joueur rouge qui glisse",
-        ()=>new PlayerItem("red", SLIPPY_FACTORY, ...RED_KEYS)
-    ),
-    player_blue_slippy: new EditorSpawnable(
-        "Joueur Bleu Glissant",
-        "Un joueur bleu qui glisse",
-        ()=>new PlayerItem("blue", SLIPPY_FACTORY, ...BLUE_KEYS)
-    ),
-    
 
-    /* Other Players */
-    player_green: new EditorSpawnable(
-        "Joueur Vert",
-        "Un joueur vert",
-        ()=>new PlayerItem("green", FALLING_FACTORY, ...GREEN_KEYS)
+    /* SPAWNERS */
+    gravel_spawner: new EditorSpawnable(
+        "Générateur de Gravier",
+        "Un générateur qui fait apparaitre du terrain qui chute au hasard sur le terrain.",
+        10,
+        ()=> new SpawnerItem(100,()=>new FallingPlatformItem())
     ),
-    player_yellow: new EditorSpawnable(
-        "Joueur Jaune",
-        "Un joueur jaune",
-        ()=>new PlayerItem("yellow", FALLING_FACTORY, ...YELLOW_KEYS)
+    bubble_spawner: new EditorSpawnable(
+        "Générateur de Bulles",
+        "Un generateur qui fait apparaitre des bulles qui explose après un petit moement.",
+        10,
+        ()=>new SpawnerItem(100,()=>new BubbleItem())
     ),
-    player_green_slippy: new EditorSpawnable(
-        "Joueur Vert Glissant",
-        "Un joueur vert qui glisse",
-        ()=>new PlayerItem("green", SLIPPY_FACTORY, ...GREEN_KEYS)
+    candy_spawner: new EditorSpawnable(
+        "Générateur de Bonbons",
+        "Un générateur qui fait apparaître des bonbons et des paires de bonbons au hasard. Les bonbons disparaissent quand associés par 4.",
+        10,
+        ()=>new SpawnerItem(100,WILD_CANDY_FACTORY)
     ),
-    player_yellow_slippy: new EditorSpawnable(
-        "Joueur Jaune Glissant",
-        "Un joueur jaune qui glisse",
-        ()=>new PlayerItem("yellow", SLIPPY_FACTORY, ...YELLOW_KEYS)
+
+    snake_spawner: new EditorSpawnable(
+        "Générateur de Serpent",
+        "Un générateur qui fait apparaitre des serpents au hasard sur le terrain.",
+        10,
+        v=> new SpawnerItem(200,()=>new SnakeItem(new PlatformItem(), ...vDIRECTIONS[v%4]))
+    ),
+    moblin_spawner: new EditorSpawnable(
+        "Générateur de Moblin",
+        "Un générateur qui fait apparaitre des moblins au hasard sur le terrain.",
+        10,
+        ()=> new SpawnerItem(100,()=>new MoblinItem())
+    ),
+
+    piston: new EditorSpawnable(
+            `Piston`,
+            `Un piston qui projette les objets dans une direction`,
+            10,
+            v=>new PistonItem(...vDIRECTIONS[v%4])
+    ),
+
+    pipe: new EditorSpawnable(
+        `Tuyau`,
+        `Un tuyau qui transporte les objets et les aspire à son entrée`,
+        10,
+        v=>new PipeItem(...vDIRECTIONS[v%4])
+    ),
+
+    shooting_pipe: new EditorSpawnable(
+        `Tuyau Canon`,
+        `Un tuyau qui transporte les objets, les aspire à son entrée et les projette à la sortie.`,
+        10,
+        v=>new ShootingPipeItem(...vDIRECTIONS[v%4])
+    ),
+
+    coin: new EditorSpawnable(
+        `Pièce`,
+        `Une pièce`,
+        10,
+        v=>new CoinItem(vTEAMS[v%4])
+    ),
+    coin_falling: new EditorSpawnable(
+        `Pièce Tombante`,
+        `Une pièce qui tombe.`,
+        10,
+        v=>new MovingItem(new CoinItem(vTEAMS[v%4]), 0, 1)
+    ),
+    player: new EditorSpawnable(
+        `Joueur`,
+        `Un joueur.`,
+        10,
+        v=>new PlayerItem(vTEAMS[v%4], FALLING_FACTORY, ...vKEYS[v%4])
+    ),
+    player_bubble: new EditorSpawnable(
+        `Joueur Bulle`,
+        `Un joueur qui une fois sur tois envoie une bulle qui disparait après un petit moment.`,
+        10,
+        v=>new PlayerItem(vTEAMS[v%4], NEW_BUBBLE_FACTORY(), ...vKEYS[v%4])
+    ),
+    player_candy: new EditorSpawnable(
+        `Joueur Bonbon`,
+        `Un joueur qui lance un double bonbon une fois sur deux. Les bonbon disparaissent quand associés par 4.`,
+        10,
+        v=>new PlayerItem(vTEAMS[v%4], NEW_CANDY_FACTORY(), ...vKEYS[v%4])
+    ),
+    player_bicolor: new EditorSpawnable(
+        `Joueur Bicolore`,
+        `Un joueur qui lance une double pièce bicolore une fois sur deux.`,
+        10,
+        v=>new PlayerItem(vTEAMS[v%4], NEW_BICOLOR_FACTORY(), ...vKEYS[v%4])
+    ),
+    player_meteor: new EditorSpawnable(
+        `Joueur Météore`,
+        `Un joueur dont un jeton sur trois casse le truc en dessous.`,
+        10,
+        v=>new PlayerItem(vTEAMS[v%4], NEW_METEOR_FACTORY(), ...vKEYS[v%4])
+    ),
+    player_slippy: new EditorSpawnable(
+        `Joueur Glissant`,
+        `Un joueur qui glisse.`,
+        10,
+        v=>new PlayerItem(vTEAMS[v%4], SLIPPY_FACTORY, ...vKEYS[v%4])
+    ),
+    player_snake: new EditorSpawnable(
+        `Joueur Serpent`,
+        `Un joueur qui lance des serpents une fois sur trois.`,
+        10,
+        v=>new PlayerItem(vTEAMS[v%4], NEW_SNAKE_FACTORY(), ...vKEYS[v%4])
     ),
 }
-
-const SLIPPY_FACTORY= (team)=>new SlippyItem(new CoinItem(team), 0, 1)
-const FALLING_FACTORY= (team)=>new MovingItem(new CoinItem(team), 0, 1)
-
-const RED_KEYS=["KeyQ","KeyE","KeyW"]
-const BLUE_KEYS=["KeyU","KeyO","KeyI"]
-const GREEN_KEYS=["KeyR","KeyY","KeyT"]
-const YELLOW_KEYS=["KeyV","KeyN","KeyB"]

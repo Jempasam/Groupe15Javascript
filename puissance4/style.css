@@ -1,302 +1,5 @@
-/* PUISSANCE 4 */
-puissance-4{
-    display: flex;
-    flex-direction: row;
-    background-color: gainsboro;
-}
-
-.puissance4_column{
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.puissance4_cell{
-    display: flex;
-    aspect-ratio: 1;
-    flex-grow: 1;
-    border: 0.1em solid rgb(185, 185, 185);
-
-    &:hover{
-        background-color: white;
-    }
-}
-
-.puissance4_item{
-    width: 100%;
-    height: 100%;
-
-    &.undefined{
-        /* Fond composé de lignes blanches et noires */
-        background: linear-gradient(45deg, black, black, white 10%, white, black 40%, black, white 60%, white , black 90%);
-        background-size: 1em 1em;
-    }
-
-    /** TEAMS */
-    &.red{
-        --team-color: red;
-        --team-color-alt: #b55050;
-    }
-
-    &.blue{
-        --team-color: blue;
-        --team-color-alt: #565681;
-    }
-
-    &.green{
-        --team-color: green;
-        --team-color-alt: #516f51;
-    }
-
-    &.yellow{
-        --team-color: yellow;
-        --team-color-alt: #8b8b50;
-    }
-
-    /* ITEMS */
-    &.coin{
-        height: 100%;
-        width: 100%;
-        background-image: url(assets/coin.png);
-        background-size: cover;
-        background-color: var(--team-color, gray);
-        background-blend-mode: multiply;
-        border-radius: 50%;
-    }
-    &.coin.activated{
-        animation: activated 0.5s infinite alternate;
-    }
-    
-    &.player{
-        position: relative;
-        &::before{
-            position: absolute;
-            content: "";
-            display: block;
-            margin-left: -10%;
-            margin-top: -10%;
-            height: 165%;
-            width: 120%;
-            background-image: url(assets/canon.png);
-            background-size: cover;
-            background-color: var(--team-color, gray);
-            background-blend-mode: multiply;
-            mask: url(assets/canon.png);
-            mask-size: cover;
-        }
-    }
-    &.player.loading{
-        background-color: var(--team-color-alt, black);
-        animation: tired 0.5s infinite alternate ease-in-out;
-    }
-
-    &.platform{
-        background-image: url(assets/platform.png);
-        image-rendering: pixelated;
-        height: 100%;
-        background-size: cover;
-        width: 100%;
-    }
-
-    &.piston{
-        background-image: url(assets/piston.png);
-        image-rendering: pixelated;
-        height: 100%;
-        background-size: cover;
-        width: 100%;
-        &.top{
-            animation: piston-top 0.5s infinite alternate, ease-out;
-        }
-        &.right{
-            animation: piston-right 0.5s infinite alternate, ease-out;
-        }
-        &.bottom{
-            animation: piston-bottom 0.5s infinite alternate, ease-out;
-        }
-        &.left{
-            animation: piston-left 0.5s infinite alternate, ease-out;
-        }
-    }
-
-    &.pipe{
-        position: relative;
-        &::before{
-            content: "";
-            display: block;
-            background-image: url(assets/pipe.png);
-            image-rendering: pixelated;
-            height: 100%;
-            background-size: cover;
-            width: 100%;
-        }
-        &.top{
-            transform: rotate(180deg);
-        }
-        &.right{
-            transform: rotate(-90deg);
-        }
-        &.bottom{
-        }
-        &.left{
-            transform: rotate(90deg);
-        }
-    }
-
-    &.brokable_platform{
-        background-image: url(assets/brokable.png);
-        image-rendering: pixelated;
-        height: 100%;
-        background-size: cover;
-        width: 100%;
-    }
-
-    &.falling_platform{
-        background-image: url(assets/falling.png);
-        image-rendering: pixelated;
-        height: 100%;
-        background-size: cover;
-        width: 100%;
-        animation: shake 0.2s;
-    }
-
-    &.roller{
-        animation: shake 1s infinite linear;
-        background-color: black;
-        border-radius: 30%;
-        &::after{
-            content:"";
-            display: block;
-            background-color: gray;
-            height: 50%;
-            width: 50%;
-            margin: 25%;
-        }
-        &.right{
-            animation: rotate 1s infinite linear;
-        }
-        &.left{
-            animation: rotate 1s infinite linear reverse;
-        }
-    }
-    &.wind{
-        height: 150%;
-        width: 20%;
-        margin-left: 40%;
-        margin-top: -25%;
-        background-color: gray;
-        animation: rotate 0.5s infinite linear;
-    }
-
-    /* STATE */
-    &.moving{
-        opacity: 0.7;
-    }
-
-    &.slippy::after{
-        content: "";
-        display: block;
-        background-image: url(assets/slippy.png);
-        animation: back-move 1s infinite linear;
-        height: 100%;
-        width: 100%;
-        background-size: 100% 90%;
-    }
-
-    &.cancelled{
-        filter: grayscale(50%);
-    }
-}
-
-#host{
-    background-image: url(assets/coin_background.png);
-    background-size: cover;
-    background-color: white;
-}
-
-@keyframes back-move{
-    0%{
-        background-position-y: 0%;
-    }
-    100%{
-        background-position-y: 900%;
-    }
-
-}
-
-@keyframes piston-right {
-    0%{ transform: translateX(0) rotate(90deg); }
-    100%{transform: translateX(25%) rotate(90deg); } 
-}
-
-@keyframes piston-bottom {
-    0%{ transform: translateY(0) rotate(180deg); }
-    100%{transform: translateY(25%) rotate(180deg); } 
-}
-
-@keyframes piston-left {
-    0%{ transform: translateX(0) rotate(-90deg); }
-    100%{transform: translateX(-25%) rotate(-90deg); } 
-}
-
-@keyframes piston-top {
-    0%{ transform: translateY(0); }
-    100%{transform: translateY(-25%); } 
-}
-
-@keyframes activated{
-    0%{
-        transform: scale(1);
-    }
-    100%{
-        transform: scale(1.2);
-        filter: blur(0.1em);
-    }
-}
-
-@keyframes tang{
-    0%{
-        transform: rotate(-20deg);
-    }
-    100%{
-        transform: rotate(20deg);
-    }
-}
-
-@keyframes shake{
-    0%{
-        transform: translate(0, 0);
-    }
-    25%{
-        transform: translate(0.2em, 0);
-    }
-    50%{
-        transform: translate(0, 0);
-    }
-    75%{
-        transform: translate(-0.2em, 0);
-    }
-    100%{
-        transform: translate(0, 0);
-    }
-}
-
-@keyframes rotate{
-    0%{
-        transform: rotate(0deg);
-    }
-    100%{
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes tired{
-    0%{
-        transform: scaleX(1);
-    }
-    100%{
-        transform: scaleX(0.8);
-    }
-}
+@import url(styles/field.css);
+@import url(styles/items.css);
 
 
 /* PUISSANCE 4 EDITOR */
@@ -306,6 +9,7 @@ puissance-4-loader, puissance-4-editor{
     background-color: gainsboro;
     margin: auto;
     box-sizing: border-box;
+    height: 100%;
 
     .menu{
         display: flex;
@@ -315,18 +19,48 @@ puissance-4-loader, puissance-4-editor{
         >input[type=number], >input[type=text]{
             text-align: center;
             width: 6em;
+            font-size: 1.1em;
         }
-        >*:not(:last-child){
-            margin-bottom: 1em;
+        >input[type=button]{
+            padding: 0.1em;
+            font-variant-caps: all-petite-caps;
+            font-size: 1.2em;
+            &:hover{
+                background-color: lightskyblue;
+            }
+        }
+
+        >sam-numberinput{
+            margin-bottom: 0.5em;
+            margin-top: 0.5em;
         }
 
         >sam-selector{
             height: 0;
             flex-grow: 1;
+            >*{
+                padding-top: 0.5em;
+                padding-bottom: 0.5em;
+            }
             puissance-4{
                 width: 3em;
                 margin: 0.2em;
             }
+            div.remover{
+                background-image: url(assets/remove.png);
+                background-size: 3em 3em;
+                width: 3em;
+                height: 3em;
+                margin: 0.2em;
+            }
+        }
+
+        >puissance-4{
+            padding: 20%;
+            overflow: hidden;
+            margin-top: 10%;
+            margin-bottom: 10%;
+            border: black 0.1em solid;
         }
         
         >puissance-4-filemenu{
@@ -361,4 +95,55 @@ puissance-4-loader, puissance-4-editor{
     >puissance-4{
         flex-grow: 1;
     }
+}
+
+div.presentation{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    >*{
+        width: 60%;
+        height: 60%;
+        background-color: transparent;
+        &:first-child{
+            position: absolute;
+            animation: presentation 3s infinite ease-in-out alternate;
+            opacity: 0.4;
+        }
+        &:last-child{
+            position: absolute;
+            animation: presentation 3s infinite ease-in-out alternate-reverse;
+        }
+    }
+}
+
+@keyframes presentation {
+    from{
+        transform: translateX(-30%) rotate(-30deg);
+    }
+    to{
+        transform: translateX(30%) rotate(30deg);
+    }
+}
+
+#host {
+    display: flex;
+    flex-direction: column;
+    width: min(90vw, 120vh);
+    margin: auto;
+    aspect-ratio:1.35;
+    >*{
+        margin: auto;
+        min-height: 0;
+        flex-grow: 1;
+        width: 100%;
+    }
+    border: black solid 0.5em;
+    background-image: url(assets/coin_background.png);
+    background-size: cover;
+    background-color: white;
 }

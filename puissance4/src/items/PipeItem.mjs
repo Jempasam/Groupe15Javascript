@@ -1,5 +1,8 @@
+import { adom } from "../../../samlib/DOM.mjs";
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { FallingPlatformItem } from "./FallingPlatformItem.mjs";
+import { Class } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 
 export class PipeItem extends Item{
@@ -16,21 +19,17 @@ export class PipeItem extends Item{
         this.time=0
         this.content=null
     }
+    
+    getDisplay(...args){
+        let ret
+        if(this.content){
+            ret= this.content.getDisplay(...args)
+        }
+        else ret=adom`<div></div>`
+        ret.classList.add("pipe")
+        ret.classList.add(Class.direction(this.dx,this.dy))
+        return ret
 
-    getClasses(){
-        let direction
-        if(Math.abs(this.dx)>Math.abs(this.dy)){
-            if(this.dx>0)direction="right"
-            else direction="left"
-        }
-        else{
-            if(this.dy>0)direction="bottom"
-            else direction="top"
-        }
-        let content
-        if(this.content===null)content=[]
-        else content=this.content.getClasses()
-        return ["pipe", direction, ...content]
     }
 
     onAdd(field,root,x,y){
@@ -53,12 +52,13 @@ export class PipeItem extends Item{
             }
             else{
                 let after=field.get(x+dx,y+dy)
-                if(!after){
+                if(after===null){
                     field.set(x+dx, y+dy, this.content)
+                    Sounds.POP.play()
                     this.content=null
                     field.updateElement(x,y)
                 }
-                else if(after instanceof PipeItem && after.content===null){
+                else if(after && after instanceof PipeItem && after.content===null){
                     after.content=this.content
                     field.updateElement(x+dx,y+dy)
                     after.time=0

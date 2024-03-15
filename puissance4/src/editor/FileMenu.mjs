@@ -1,6 +1,6 @@
 import { mapAttribute } from "../../../samlib/CustomElement.mjs";
 import { create } from "../../../samlib/DOM.mjs";
-import { LOCAL_STORAGE, OBJECT_DATA } from "../../../samlib/Storage.mjs";
+import { LOCAL_STORAGE, OBJECT_DATA, Storage } from "../../../samlib/Storage.mjs";
 import { SamSelector } from "../../../samlib/gui/Selector.mjs";
 
 
@@ -13,12 +13,14 @@ export class FileMenu extends HTMLElement{
 
     onselect
 
+    #storage=LOCAL_STORAGE
+
     /**
      * Create a filemenu allowing to select, load and save puissance 4 files
      * @param {function(Puissance4FieldContent):void=} saver 
      * @param {function():Puissance4FieldContent=} loader
      */
-    constructor(saver=undefined,loader=undefined,){
+    constructor(saver=undefined,loader=undefined){
         super()
 
         this.saver=saver
@@ -65,13 +67,13 @@ export class FileMenu extends HTMLElement{
     // Régénère la liste des fichiers
     loadFileList(){
         this.selector.innerHTML=""
-        let saves=LOCAL_STORAGE.get("puissance-4-saves",OBJECT_DATA)
+        let saves=this.#storage.get("puissance-4-saves",OBJECT_DATA)
         for(let [name,obj] of Object.entries(saves)){
             let option=create("sam-option")
             option.textContent=name
             option.addEventListener("select",event=>{
                 this.#name=name
-                LOCAL_STORAGE.edit("puissance-4-saves", OBJECT_DATA, saves=>{
+                this.#storage.edit("puissance-4-saves", OBJECT_DATA, saves=>{
                     if(this.onselect)this.onselect(saves[name])
                 })
             })
@@ -81,7 +83,7 @@ export class FileMenu extends HTMLElement{
 
     save(name){
         if(name){
-            LOCAL_STORAGE.edit("puissance-4-saves", OBJECT_DATA, saves=>{
+            this.#storage.edit("puissance-4-saves", OBJECT_DATA, saves=>{
                 saves[name]=this.loader()
             })
             this.loadFileList()
@@ -91,7 +93,7 @@ export class FileMenu extends HTMLElement{
     load(){
         let name=this.#name
         if(name){
-            LOCAL_STORAGE.edit("puissance-4-saves", OBJECT_DATA, saves=>{
+            this.#storage.edit("puissance-4-saves", OBJECT_DATA, saves=>{
                 this.saver(saves[name])
             })
         }
@@ -100,11 +102,16 @@ export class FileMenu extends HTMLElement{
     remove(){
         let name=this.#name
         if(name){
-            LOCAL_STORAGE.edit("puissance-4-saves", OBJECT_DATA, saves=>{
+            this.#storage.edit("puissance-4-saves", OBJECT_DATA, saves=>{
                 delete saves[name]
             })
             this.loadFileList()
         }
+    }
+
+    set storage(value){
+        this.#storage=value
+        this.loadFileList()
     }
 }
 

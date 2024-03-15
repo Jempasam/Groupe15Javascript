@@ -1,6 +1,8 @@
 import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { eatKeyPress, isKeyPressed } from "../controls/Keyboard.mjs"
+import { adom, dom } from "../../../samlib/DOM.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 
 export class PlayerItem extends Item{
     
@@ -15,14 +17,13 @@ export class PlayerItem extends Item{
         this.factory=factory
         this.next=factory(this.team)
     }
-
-    getClasses(){
-        return [
-            "player",
-            this.team,
-            ...(this.time>0 ? ["loading"] : []),
-            ...this.next.getClasses()
-        ]
+    
+    getDisplay(...args){
+        return adom/*html*/`
+            <div class="player ${this.team} ${this.time>0?"loading":""}">
+                ${this.next.getDisplay(...args)}
+            </div>
+        `
     }
 
     onAdd(field,root,x,y){
@@ -35,7 +36,7 @@ export class PlayerItem extends Item{
                 this.tryMove(field,root,x,y,x-1,y)
                 this.movetime=2
             }
-            if(isKeyPressed(this.rightKey)){
+            else if(isKeyPressed(this.rightKey)){
                 this.tryMove(field,root,x,y,x+1,y)
                 this.movetime=2
             }
@@ -49,21 +50,24 @@ export class PlayerItem extends Item{
             }
         }
         else{
-            if(isKeyPressed(this.spawnKey)){
+            if(isKeyPressed(this.spawnKey) && field.get(x,y+1)===null){
                 this.time=40
                 field.set(x,y+1,this.next)
                 this.next=this.factory(this.team)
+                Sounds.POP.play()
                 field.updateElement(x,y)
             }
         }
-        field.schedule(x,y,this)
+        field.schedule(x,y,root)
     }
 
     tryMove(field,root,x,y,newx,newy){
         let target=field.get(newx,newy)
         if(target===null || target instanceof PlayerItem){
-            field.set(x,y,target)
-            field.set(newx,newy,root)
+            field.swap(x,y,newx,newy)
+        }
+        else if(target!==undefined){
+            target.onTrigger(field,root,newx,newy)
         }
     }
 }

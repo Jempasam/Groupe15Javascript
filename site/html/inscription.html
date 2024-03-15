@@ -32,8 +32,10 @@
         Par Les meilleurs
     </footer>
 
-    <script>
+    <script type="module">
+        import { ACCOUNT_STORAGE } from "../../samlib/Storage.mjs";
         document.addEventListener("DOMContentLoaded", function() {
+            console.log(ACCOUNT_STORAGE.players)
             const registerForm = document.getElementById("registerForm");
 
             registerForm.addEventListener("submit", function(event) {
@@ -49,27 +51,15 @@
                     return;
                 }
 
-                // Récupérer les utilisateurs depuis le LocalStorage
-                const users = JSON.parse(localStorage.getItem("users")) || [];
-
-                // Vérifier si le pseudo est déjà utilisé
-                const isPseudoTaken = users.some(user => user.pseudo === newPseudoInput);
-
-                if (isPseudoTaken) {
-                    alert("Ce pseudo est déjà utilisé. Veuillez choisir un autre.");
+                // Essayer de créer le nouveau compte
+                const accountCreated = ACCOUNT_STORAGE.add_player(newPseudoInput, newMdpInput);
+                if (!accountCreated) {
+                    alert("Un compte existe déjà avec le même pseudo.");
                     return;
                 }
-
-                // Ajouter le nouvel utilisateur
-                const newUser = { pseudo: newPseudoInput, mdp: newMdpInput };
-                users.push(newUser);
-
-                // Mettre à jour le LocalStorage avec le nouvel utilisateur
-                localStorage.setItem("users", JSON.stringify(users));
-
-                // Informer l'utilisateur de l'inscription réussie
-                alert("Inscription réussie! Vous pouvez maintenant vous connecter.");
-
+                else{
+                    alert("Inscription réussie! Vous pouvez maintenant vous connecter.");
+                }
                 // Rediriger vers la page de connexion
                 window.location.href = "connexion.html";
             });

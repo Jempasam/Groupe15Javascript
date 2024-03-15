@@ -3,6 +3,7 @@
 export function html(strings, ...values) {
     const escaped = values.map((value) => {
         if(value instanceof Element)return value.outerHTML
+        if(value===undefined || value===null)return ""
         return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -22,9 +23,22 @@ export function html(strings, ...values) {
  * and escape template parameters
  * @param {*} strings 
  * @param  {...any} values 
- * @returns 
+ * @returns
  */
 export function dom(strings, ...values) {
+    const template = document.createElement("aa");
+    template.innerHTML = html(strings, ...values);
+    if(template.children.length==1)return template.children[0];
+    return template.children;
+}
+
+/**
+ * A tag template that return a dom from a outer html
+ * and escape template parameters. Return the first element only.
+ * @param {*} strings 
+ * @param  {...any} values 
+ */
+export function adom(strings, ...values) {
     const template = document.createElement("aa");
     template.innerHTML = html(strings, ...values);
     return template.children[0];
@@ -32,12 +46,14 @@ export function dom(strings, ...values) {
 
 /**
  * Create an element using a selector like description
- * @param {string} element 
+ * @param {string} element
+ * @param {string=} content
  * @returns {Element}
  */
-export function create(element){
+export function create(element,content){
     let splitted=element.split(/(?=\.)|(?=#)|(?=\[)/)
     let ret=document.createElement(splitted[0])
+    if(content)ret.textContent=content
     for(let s of splitted){
         if(s.length>1 && s[0]=="."){
             ret.classList.add(s.slice(1))

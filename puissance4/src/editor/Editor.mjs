@@ -7,6 +7,7 @@ import { SamSelector } from "../../../samlib/gui/Selector.mjs"
 import { Item } from "../field/Item.mjs"
 import { LOCAL_STORAGE, OBJECT_DATA } from "../../../samlib/Storage.mjs"
 import { FileMenu } from "./FileMenu.mjs"
+import { NumberInput } from "../../../samlib/gui/NumberInput.mjs"
 
 
 export class EditorSpawnable{
@@ -14,11 +15,12 @@ export class EditorSpawnable{
      * 
      * @param {string} name 
      * @param {string} desc 
-     * @param {function():Item} factory 
+     * @param {function(number):Item} factory 
      */
-    constructor(name,desc,factory){
+    constructor(name,desc,price,factory){
         this.name=name
-        this.desc=desc
+        this.description=desc
+        this.price=price
         this.factory=factory
     }
 }
@@ -26,7 +28,7 @@ export class EditorSpawnable{
 /** @typedef {Object<string,EditorSpawnable>} EditorSpawnableDict */
 
 
-/** @typedef {{height:number, width:number, grid:Array<Array<string|undefined>>}} Puissance4FieldContent */
+/** @typedef {{height:number, width:number, grid:Array<Array<[string,number]|undefined>>}} Puissance4FieldContent */
 
 export class Puissance4Field{
     /**
@@ -55,15 +57,16 @@ export class Puissance4Field{
         if(y+height>target.height)throw new Error("Height overflow")
         for(let ix=0; ix<width; ix++){
             for(let iy=0; iy<height; iy++){
-                let name=grid[ix][iy]
-                if(name!==null){
+                let entry=grid[ix][iy]
+                if(entry!==null){
+                    let [name,variant]=entry
                     let spawnable=this.dictionnary[name]
                     if(spawnable===undefined)throw new Error(`Unknown spawnable: "${name}" `)
-                    let item=spawnable.factory()
+                    let item=spawnable.factory(variant)
                     target.set(x+ix,y+iy,item)
                     if(doWriteNames){
-                        let cell=target.getElement(x+ix,y+iy)
-                        cell.setAttribute("name",name)
+                        item.factory=name
+                        item.variant=variant
                     }
                 }
                 else{
@@ -84,11 +87,17 @@ export class Editor extends HTMLElement{
     /** @type {EditorSpawnableDict} */
     #spawnables
 
+    /** @type {EditorSpawnableDict} */
+    #collection
+
     /** @type {function():Item|undefined} */
     #factory= ()=>undefined
 
     /** @type {string|undefined} */
     #factory_name=undefined
+
+    /** @type {number} */
+    #variant=0
 
     constructor(){
         super()
@@ -98,46 +107,76 @@ export class Editor extends HTMLElement{
         this.appendChild(this.dom_menu)
 
         // Field
-        this.field=create("puissance-4")
-        this.field.oncellclick=(obj,x,y)=>{
-            this.field.set(x,y,this.#factory())
-            if(this.#factory_name!==undefined)obj.setAttribute("name",this.#factory_name)
-            else obj.removeAttribute("name")
+        this.field=create("puissance-4._scrollable")
+        this.field.oncelldraw=(obj,x,y,button)=>{
+            if(button%2==1){
+                let item=this.#factory(this.#variant)
+                if(item){
+                    item.factory=this.#factory_name
+                    item.variant=this.#variant
+                }
+                this.field.set(x,y,item)
+            }
+            else if(button%4/2==1){
+                this.field.set(x,y,null)
+            }
+            else if(button%8/4==1){
+                let cell=this.field.get(x,y)
+                if(cell){
+                    let spawnable=this.#spawnables[cell.factory]
+                    let variant=cell.variant
+                    this.dom_variant.value=variant
+                    this.select(cell.factory,spawnable.factory)
+                }
+            }
         }
         this.appendChild(this.field)
         
 
         // File Menu
         this.dom_file_menu=new FileMenu(
-            input => this.load(new Puissance4Field(this.#spawnables,input)),
+            input => this.load(new Puissance4Field(this.#collection,input)),
             () => this.field_definition.content,
         )
         this.dom_file_menu.classList.add("menu")
-        console.log(this.dom_file_menu)
         this.appendChild(this.dom_file_menu)
 
         // Dimensions
-        this.dom_width=create("input[type=number]")
-        this.dom_width.setAttribute("min",4)
-        this.dom_width.setAttribute("max",40)
+        this.dom_width=new NumberInput()
+        this.dom_width.min=4
+        this.dom_width.max=40
         this.dom_width.value=10
         this.dom_menu.appendChild(this.dom_width)
-        this.dom_menu.onchange=()=>{
+        this.dom_width.addEventListener("change",()=>{
             this.createField()
-        }
+        })
 
-        this.dom_height=create("input[type=number]")
-        this.dom_height.setAttribute("min",4)
-        this.dom_height.setAttribute("max",40)
+        this.dom_height=new NumberInput()
+        this.dom_height.min=4
+        this.dom_height.max=40
         this.dom_height.value=10
         this.dom_menu.appendChild(this.dom_height)
-        this.dom_menu.onchange=()=>{
+        this.dom_height.addEventListener("change",()=>{
             this.createField()
-        }
+        })
 
         // Selector
         this.dom_selector=create("sam-selector")
         this.dom_menu.appendChild(this.dom_selector)
+
+        // Variant Number
+        this.dom_variant=new NumberInput()
+        this.dom_variant.min=0
+        this.dom_variant.max=100
+        this.dom_variant.value=0
+        this.dom_variant.addEventListener("change",e=>{this.updateExemple()})
+        this.dom_menu.appendChild(this.dom_variant)
+
+        // Example
+        this.dom_exampel=new Puissance4()
+        this.dom_exampel.width=1
+        this.dom_exampel.height=1
+        this.dom_menu.appendChild(this.dom_exampel)
 
         this.createField()
     }
@@ -152,21 +191,46 @@ export class Editor extends HTMLElement{
      */
     set spawnables(spawnables){
         this.#spawnables=spawnables
+        this.#createSelector()
+    }
+
+    set collection(collection){
+        this.#collection=collection
+    }
+
+    set storage(value){
+        this.dom_file_menu.storage=value
+    }
+
+    select(name,factory){
+        this.#factory_name=name
+        this.#factory=factory
+        this.updateExemple()
+    }
+
+    selectVariant(index){
+        this.#variant=index
+        this.updateExemple()
+    }
+
+    updateExemple(index){
+        this.#variant=this.dom_variant.value
+        if(this.#factory)this.dom_exampel.set(0,0,this.#factory(this.#variant))
+        else this.dom_exampel.set(0,0,null)
+    }
+
+    #createSelector(){
         this.dom_selector.innerHTML=""
-        let option=dom`<sam-option><img src="assets/remove.png"/></sam-option>`
-        option.addEventListener("select",event=>{
-            this.#factory=()=>undefined
-            this.#factory_name=undefined
-        })
+
+        // Remover
+        let option=dom`<sam-option><div class="remover"/></div></sam-option>`
+        option.addEventListener("select",event=>this.select(name,undefined))
         this.dom_selector.appendChild(option)
         for(let [name,spawnable] of Object.entries(this.#spawnables)){
             let option=create("sam-option")
-            option.addEventListener("select",event=>{
-                this.#factory=spawnable.factory
-                this.#factory_name=name
-            })
+            option.addEventListener("select",event=>this.select(name,spawnable.factory))
             let cell=dom`<puissance-4 width=1 height=1 />`
-            cell.set(0,0,spawnable.factory())
+            cell.set(0,0,spawnable.factory(0))
             option.appendChild(cell)
             this.dom_selector.appendChild(option)
         }
@@ -177,9 +241,11 @@ export class Editor extends HTMLElement{
      * @param {Puissance4Field} field_definition 
      */
     load(field_definition){
+        this.dom_height.value=field_definition.content.height
+        this.dom_width.value=field_definition.content.width
         this.field.width=field_definition.content.width
         this.field.height=field_definition.content.height
-        this.#spawnables=field_definition.dictionnary
+        this.#collection=field_definition.dictionnary
         field_definition.load(this.field,0,0,true)
     }
 
@@ -190,16 +256,17 @@ export class Editor extends HTMLElement{
         for(let x=0; x<this.field.width; x++){
             let column=[]
             for(let y=0; y<this.field.height; y++){
-                let item=this.field.getElement(x,y)
+                let item=this.field.get(x,y)
                 if(!item)column.push(undefined)
                 else{
-                    let name=item.getAttribute("name")
-                    column.push(name)
+                    let name=item.factory
+                    let variant=item.variant
+                    column.push([name,variant])
                 }
             }
             grid.push(column)
         }
-        return new Puissance4Field(this.#spawnables,{height,width,grid})
+        return new Puissance4Field(this.#collection,{height,width,grid})
     }
         
 

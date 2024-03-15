@@ -8,9 +8,11 @@ export class CancelledItem extends Item{
         this.base=base
         this.time=duration
     }
-
-    getClasses(){
-        return [...this.base.getClasses(),"cancelled"]
+    
+    getDisplay(...args){
+        let ret= this.base.getDisplay(...args)
+        ret.classList.add("cancelled")
+        return ret
     }
 
     onAdd(field,root,x,y){

@@ -10,10 +10,10 @@ export class EffectItem extends Item{
         this.time=duration
     }
 
-    getClasses(){
-        return [...this.base, ...this.temporary]
+    getClasses(...args){
+        return [...this.base.getClasses(...args), ...this.temporary.getClasses(...args)]
     }
-
+    
     onAdd(field,root,x,y){
         this.temporary.onAdd(field,root,x,y)
     }
