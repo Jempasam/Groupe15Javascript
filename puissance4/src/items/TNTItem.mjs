@@ -1,4 +1,5 @@
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 
 export class TNTItem extends Item{
     
@@ -14,14 +15,15 @@ export class TNTItem extends Item{
     onTick(field, root, x, y){
         this.time++
         if(this.time>=40){
-            for(let px=-2; px<2; px++){
-                for(let py=-2; py<2; py++){
+            for(let px=-2; px<=2; px++){
+                for(let py=-2; py<=2; py++){
                     let target=field.get(x+px,y+py)
                     if(target){
                         field.set(x+px,y+py,null)
                     }
                 }
             }
+            Sounds.BOMB.play()
         }
         else field.schedule(x,y,root)
     }

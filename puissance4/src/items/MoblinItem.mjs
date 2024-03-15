@@ -1,5 +1,6 @@
 import { adom } from "../../../samlib/DOM.mjs";
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Class } from "./ItemUtils.mjs";
 
@@ -46,6 +47,7 @@ export class MoblinItem extends Item{
                 let facing=field.get(x+this.dx,y+this.dy)
                 if(facing!==null){
                     if(facing!==undefined){
+                        Sounds.ITCHIK.play()
                         facing.onTrigger(field,root,x+this.dx,y+this.dy)
                     }
                     this.dx=-this.dx

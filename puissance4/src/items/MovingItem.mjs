@@ -1,4 +1,5 @@
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 
 export class MovingItem extends Item{
@@ -37,6 +38,7 @@ export class MovingItem extends Item{
                 return
             }
             else{
+                Sounds.TOP.play()
                 field.set(x,y,this.base)
             }
         }

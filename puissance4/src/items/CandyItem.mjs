@@ -1,5 +1,6 @@
 import { adom } from "../../../samlib/DOM.mjs"
 import { Item } from "../field/Item.mjs"
+import { Sounds } from "../sounds/SoundBank.mjs"
 
 export class CandyItem extends Item{
     
@@ -32,6 +33,7 @@ export class CandyItem extends Item{
                     else break
                 }
             }
+            Sounds.CROCK.play()
         }
         else{
             for(let [p,px,py] of found)p.finded=false

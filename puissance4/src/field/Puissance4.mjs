@@ -119,6 +119,7 @@ export class Puissance4 extends HTMLElement{
      */
     set(x,y,item,animate=true){
         if(x<0 || x>=this.width || y<0 || y>=this.height)return
+        if(item===undefined)throw new Error("Tried to set a case as undefined")
         let old=this.get(x,y)
         this.#content[x][y]=item
         this.updateElement(x,y)

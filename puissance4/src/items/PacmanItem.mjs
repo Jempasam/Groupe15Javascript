@@ -1,6 +1,7 @@
 import { adom } from "../../../samlib/DOM.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { FruitItem } from "./FruitItem.mjs";
 import { Class } from "./ItemUtils.mjs";
@@ -51,21 +52,26 @@ export class PacmanItem extends Item{
             ndy=0
         }
         if(ndx!==undefined){
-            this.dx=ndx
-            this.dy=ndy
-            this.time=3
-            field.updateElement(x,y)
+            let target=field.get(x+ndx,y+ndy)
+            if(target===null || target?.isComestible){
+                this.dx=ndx
+                this.dy=ndy
+            }
         }
         if(this.time>5){
             let dx=this.dx
             let dy=this.dy
             this.time=0
             let under=field.get(x+dx,y+dy)
-            if(under===null){
+            if(under===null || under?.isComestible){
                 if(this.keySet){
                     this.canPress=true
                     this.px=dx
                     this.py=dy
+                }
+                if(under?.isComestible){
+                    field.set(x+dx,y+dy,null)
+                    Sounds.CROCK.play()
                 }
                 field.swap(x,y, x+dx,y+dy)
             }

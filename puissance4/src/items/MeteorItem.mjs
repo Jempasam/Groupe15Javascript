@@ -1,5 +1,6 @@
 import { adom } from "../../../samlib/DOM.mjs";
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 
@@ -38,6 +39,7 @@ export class MeteorItem extends Item{
                     field.set(x+dx*2, y+dy*2, null)
                     field.set(x+dx, y+dy, new MovingItem(this.base, dx, dy))
                     field.set(x, y, null)
+                    Sounds.TOP.play()
                 }
                 else{
                     field.swap(x,y, x+dx,y+dy)

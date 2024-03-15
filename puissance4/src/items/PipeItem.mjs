@@ -1,5 +1,6 @@
 import { adom } from "../../../samlib/DOM.mjs";
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { FallingPlatformItem } from "./FallingPlatformItem.mjs";
 import { Class } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
@@ -51,12 +52,13 @@ export class PipeItem extends Item{
             }
             else{
                 let after=field.get(x+dx,y+dy)
-                if(!after){
+                if(after===null){
                     field.set(x+dx, y+dy, this.content)
+                    Sounds.POP.play()
                     this.content=null
                     field.updateElement(x,y)
                 }
-                else if(after instanceof PipeItem && after.content===null){
+                else if(after && after instanceof PipeItem && after.content===null){
                     after.content=this.content
                     field.updateElement(x+dx,y+dy)
                     after.time=0

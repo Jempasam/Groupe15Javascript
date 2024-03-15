@@ -1,4 +1,5 @@
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { CancelledItem } from "./CancelledItem.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 
@@ -29,6 +30,7 @@ export class RollerItem extends Item{
                     over=new CancelledItem(over,4)
                 }
                 field.swap(x,y-1, x+this.direction,y-1)
+                Sounds.TCHI.play()
             }
         }
         field.schedule(x,y,this)

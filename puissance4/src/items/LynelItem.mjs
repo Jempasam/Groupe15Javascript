@@ -1,5 +1,6 @@
 import { adom } from "../../../samlib/DOM.mjs";
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { BubbleItem } from "./BubbleItem.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Class } from "./ItemUtils.mjs";
@@ -87,7 +88,7 @@ export class LynelItem extends Item{
                         if(this.base){
                             const already=field.get(x+this.dx,y+this.dy)
                             if(already!==undefined){
-                                const object=Math.floor(Math.random()*5)
+                                const object=Math.floor(Math.random()*4)
                                 let item
                                 switch(object){
                                     case 0:
@@ -125,10 +126,12 @@ export class LynelItem extends Item{
                         field.updateElement(x,y)
                         break
                     case 4: // Attack
+                        Sounds.SWORD.play()
                         this.attack_time=2
                         field.updateElement(x,y)
                         break
                     case 5: // Meteor Charge
+                        Sounds.DRAGON.play()
                         field.set(x,y,new MeteorItem(root,this.dx,this.dy))
                 }
                 

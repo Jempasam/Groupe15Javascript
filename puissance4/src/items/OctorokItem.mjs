@@ -1,5 +1,6 @@
 import { adom } from "../../../samlib/DOM.mjs";
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Class } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
@@ -53,6 +54,7 @@ export class OctorokItem extends Item{
                     let already=field.get(x-this.dx,y-this.dy)
                     if(already!==undefined){
                         field.set(x-this.dx,y-+this.dy,new MovingItem(this.base,-this.dx,-this.dy))
+                        Sounds.POP.play()
                         if(already===null)this.base=this.factory()
                         else this.base=already
                         this.shooting_time=1
