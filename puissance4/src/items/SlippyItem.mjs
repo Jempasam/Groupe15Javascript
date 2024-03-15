@@ -1,4 +1,5 @@
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 
 export class SlippyItem extends Item{
@@ -13,8 +14,10 @@ export class SlippyItem extends Item{
         this.time=0
     }
 
-    getClasses(...args){
-        return ["slippy", ...this.base.getClasses(...args)]
+    getDisplay(...args){
+        let ret= this.base.getDisplay(...args)
+        ret.classList.add("slippy")
+        return ret
     }
 
     onAdd(field,root,x,y){
@@ -29,8 +32,14 @@ export class SlippyItem extends Item{
             this.time=0
             let under=field.get(x+dx,y+dy)
             if(this.tryFall(field,root,x,y,x+dx,y+dy))return
-            if(this.tryFall(field,root,x,y,x+this.dx+this.leftdx ,y+this.dy+this.leftdy))return
-            if(this.tryFall(field,root,x,y,x+this.dx-this.leftdx, y+this.dy-this.leftdy))return
+            if(this.tryFall(field,root,x,y,x+this.dx+this.leftdx ,y+this.dy+this.leftdy)){
+                Sounds.TCHI.play()
+                return
+            }
+            if(this.tryFall(field,root,x,y,x+this.dx-this.leftdx, y+this.dy-this.leftdy)){
+                Sounds.TCHI.play()
+                return
+            }
             field.set(x,y,this.base)
         }
         else field.schedule(x,y,root)

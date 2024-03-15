@@ -1,6 +1,7 @@
 import { adom } from "../../../samlib/DOM.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { FruitItem } from "./FruitItem.mjs";
 import { Class } from "./ItemUtils.mjs";
@@ -58,7 +59,7 @@ export class SnakeItem extends Item{
                 if(ndx!==-this.px || ndy!==-this.py){
                     this.dx=ndx
                     this.dy=ndy
-                    field.updateElement(x,y)
+                    //field.updateElement(x,y)
                 }
             }
         }
@@ -67,9 +68,10 @@ export class SnakeItem extends Item{
             let dy=this.dy
             this.time=0
             let under=field.get(x+dx,y+dy)
-            if(under===null || (this.keySet && under instanceof CoinItem) || under instanceof FruitItem){
+            if(under===null || under?.isComestible){
                 if(under!=null){
                     this.length++
+                    Sounds.CROCK.play()
                 }
 
                 // Rotation

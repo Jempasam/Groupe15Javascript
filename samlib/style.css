@@ -318,3 +318,45 @@ sam-shop{
         cursor: pointer;
     }
 }
+
+sam-numberinput{
+    --var-outline: black 0.2em solid;
+    &:focus-within{
+        --var-outline: rgb(96, 96, 244) 0.2em solid;
+    }
+    
+    display: flex;
+    flex-direction: row;
+    >input[type=text]{
+        font-size: 1em;
+        text-align: center;
+        width: 2em;
+        border-top: var(--var-outline);
+        border-bottom: var(--var-outline);
+        &:focus{
+            outline: none;
+        }
+    }
+    >input[type=button]{
+        display: flex;
+        font-size: 1.2em;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        width: 1.4em;
+        padding-bottom: 0.em;
+        font-weight: bold;
+        outline: none;
+        border: var(--var-outline);
+        &:first-child{
+            border-top-left-radius: 40%;
+            border-bottom-left-radius: 40%;
+            border-right: none;
+        }
+        &:last-child{
+            border-top-right-radius: 40%;
+            border-bottom-right-radius: 40%;
+            border-left: none;
+        }
+    }
+}

@@ -2,6 +2,7 @@ import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { eatKeyPress, isKeyPressed } from "../controls/Keyboard.mjs"
 import { adom, dom } from "../../../samlib/DOM.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 
 export class PlayerItem extends Item{
     
@@ -49,10 +50,11 @@ export class PlayerItem extends Item{
             }
         }
         else{
-            if(isKeyPressed(this.spawnKey)){
+            if(isKeyPressed(this.spawnKey) && field.get(x,y+1)===null){
                 this.time=40
                 field.set(x,y+1,this.next)
                 this.next=this.factory(this.team)
+                Sounds.POP.play()
                 field.updateElement(x,y)
             }
         }

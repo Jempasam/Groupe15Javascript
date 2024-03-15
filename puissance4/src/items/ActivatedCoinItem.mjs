@@ -11,5 +11,9 @@ export class ActivatedCoinItem extends Item{
     getClasses(){
         return ["activated","coin",this.team]
     }
+
+    getTeam(){
+        return this.team
+    }
 }
 

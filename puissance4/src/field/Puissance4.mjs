@@ -23,6 +23,9 @@ export class Puissance4 extends HTMLElement{
     /** @type {function(Element,number,number):void} */
     oncellclick
 
+    /** @type {function(Element,number,number,number):void} */
+    oncelldraw
+
     /**
      * Create a field in a html element 
      */
@@ -68,8 +71,25 @@ export class Puissance4 extends HTMLElement{
                     cell.addEventListener("click",event=>{
                         if(this.oncellclick){
                             this.oncellclick(cell,x,y)
+                            event.preventDefault()
                         }
-                        event.preventDefault()
+                    })
+                    cell.addEventListener("mouseenter",event=>{
+                        if(event.buttons%2==1 || event.buttons%4/2==1 || event.buttons%8/4==1){
+                            if(this.oncelldraw){
+                                this.oncelldraw(cell,x,y,event.buttons)
+                                event.preventDefault()
+                            }
+                        }
+                    })
+                    cell.addEventListener("mousedown",event=>{
+                        if(this.oncelldraw){
+                            this.oncelldraw(cell,x,y,event.buttons)
+                            event.preventDefault()
+                        }
+                    })
+                    cell.addEventListener("contextmenu",event=>{
+                        if(this.oncelldraw)event.preventDefault()
                     })
                     column.appendChild(cell)
                 }
@@ -99,6 +119,7 @@ export class Puissance4 extends HTMLElement{
      */
     set(x,y,item,animate=true){
         if(x<0 || x>=this.width || y<0 || y>=this.height)return
+        if(item===undefined)throw new Error("Tried to set a case as undefined")
         let old=this.get(x,y)
         this.#content[x][y]=item
         this.updateElement(x,y)
@@ -111,6 +132,7 @@ export class Puissance4 extends HTMLElement{
         }
 
         if(animate){
+            this.getElement(x,y).clientHeight
             if(old){
                 if(item)this.getElement(x,y).classList.add("transforming")
                 else this.getElement(x,y).classList.add("destroying")

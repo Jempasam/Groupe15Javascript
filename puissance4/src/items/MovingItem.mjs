@@ -1,4 +1,5 @@
 import { Item } from "../field/Item.mjs";
+import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 
 export class MovingItem extends Item{
@@ -11,8 +12,10 @@ export class MovingItem extends Item{
         this.time=0
     }
 
-    getClasses(...args){
-        return ["moving", ...this.base.getClasses(...args)]
+    getDisplay(...args){
+        let ret= this.base.getDisplay(...args)
+        ret.classList.add("moving")
+        return ret
     }
 
     onAdd(field,root,x,y){
@@ -35,6 +38,7 @@ export class MovingItem extends Item{
                 return
             }
             else{
+                Sounds.TOP.play()
                 field.set(x,y,this.base)
             }
         }

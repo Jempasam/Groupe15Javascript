@@ -27,12 +27,16 @@ export class CoinItem extends Item{
     onTick(field,root,x,y){
     }
 
+    getTeam(){
+        return this.team
+    }
+
     #collectInDirection(field,x,y,dx,dy){
         const team=this.team
         let collected=[]
         for(let i=1;i<6;i++){
             let item=field.get(x+dx*i,y+dy*i)
-            if(item && item instanceof CoinItem && item.team===team)collected.push([x+dx*i,y+dy*i])
+            if(item && item.getTeam && item.getTeam()===team)collected.push([x+dx*i,y+dy*i])
             else break
         }
         return collected
@@ -58,5 +62,7 @@ export class CoinItem extends Item{
         if(line.length>=3)total=[...total,...line]
         return total
     }
+
+    isComestible=true
 }
 
