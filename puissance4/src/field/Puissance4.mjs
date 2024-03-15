@@ -131,6 +131,7 @@ export class Puissance4 extends HTMLElement{
         }
 
         if(animate){
+            this.getElement(x,y).clientHeight
             if(old){
                 if(item)this.getElement(x,y).classList.add("transforming")
                 else this.getElement(x,y).classList.add("destroying")
