@@ -75,7 +75,7 @@ export class Puissance4 extends HTMLElement{
                         }
                     })
                     cell.addEventListener("mouseenter",event=>{
-                        if(event.buttons%2==1 || event.buttons%4/2==1){
+                        if(event.buttons%2==1 || event.buttons%4/2==1 || event.buttons%8/4==1){
                             if(this.oncelldraw){
                                 this.oncelldraw(cell,x,y,event.buttons)
                                 event.preventDefault()

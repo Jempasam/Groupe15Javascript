@@ -32,6 +32,7 @@ import { MoblinItem } from "./items/MoblinItem.mjs"
 import { PacmanItem } from "./items/PacmanItem.mjs"
 import { CandyItem } from "./items/CandyItem.mjs"
 import { PairItem } from "./items/PairItem.mjs"
+import { LynelItem } from "./items/LynelItem.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE
@@ -108,7 +109,13 @@ function openShop(){
         let field=new Puissance4()
         field.width=1
         field.height=1
-        field.set(0,0,BASE_COLLECTION[id].factory())
+        field.set(0,0,BASE_COLLECTION[id].factory(1))
+        ret.appendChild(field)
+
+        field=new Puissance4()
+        field.width=1
+        field.height=1
+        field.set(0,0,BASE_COLLECTION[id].factory(0))
         ret.appendChild(field)
         return ret
     })
@@ -181,6 +188,7 @@ function test(){
             game.set(8,8,new PacmanItem(0,-1,['ArrowUp','ArrowRight','ArrowDown','ArrowLeft']))
             game.set(7,7,new CandyItem(1))
             game.set(5,5,new WallItem())
+            game.set(6,3,new LynelItem())
             game.set(0,0,new TNTItem())
             game.set(7,0,new LinkItem(null,['ArrowUp','ArrowRight','ArrowDown','ArrowLeft']))
             game.set(8,0,new MoblinItem())

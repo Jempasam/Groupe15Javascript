@@ -1,6 +1,7 @@
 import { adom } from "../../../samlib/DOM.mjs";
 import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
+import { Class } from "./ItemUtils.mjs";
 
 export class MoblinItem extends Item{
     /**
@@ -18,7 +19,7 @@ export class MoblinItem extends Item{
 
     getDisplay(...args){
         return adom/*html*/`
-            <div class="moblin">
+            <div class="moblin ${Class.direction(this.dx,this.dy)}">
                 ${this.base?.getDisplay(...args)}
             </div>
         `

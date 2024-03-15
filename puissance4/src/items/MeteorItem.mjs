@@ -1,3 +1,4 @@
+import { adom } from "../../../samlib/DOM.mjs";
 import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { MovingItem } from "./MovingItem.mjs";
@@ -12,8 +13,12 @@ export class MeteorItem extends Item{
         this.time=0
     }
 
-    getClasses(...args){
-        return ["meteor", ...this.base.getClasses(...args)]
+    getDisplay(...args){
+        return adom/*html*/`
+            <div class="meteor">
+                ${this.base?.getDisplay(...args)}
+            </div>
+        `
     }
 
     onAdd(field,root,x,y){

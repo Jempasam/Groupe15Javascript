@@ -29,8 +29,10 @@ puissance-4-loader, puissance-4-editor{
                 background-color: lightskyblue;
             }
         }
-        >*:not(:last-child){
-            margin-bottom: 1em;
+
+        >sam-numberinput{
+            margin-bottom: 0.5em;
+            margin-top: 0.5em;
         }
 
         >sam-selector{
@@ -51,6 +53,14 @@ puissance-4-loader, puissance-4-editor{
                 height: 3em;
                 margin: 0.2em;
             }
+        }
+
+        >puissance-4{
+            padding: 20%;
+            overflow: hidden;
+            margin-top: 10%;
+            margin-bottom: 10%;
+            border: black 0.1em solid;
         }
         
         >puissance-4-filemenu{
@@ -88,6 +98,7 @@ puissance-4-loader, puissance-4-editor{
 }
 
 div.presentation{
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -97,19 +108,26 @@ div.presentation{
     >*{
         width: 60%;
         height: 60%;
-        animation: presentation 3s infinite alternate;
         background-color: transparent;
+        &:first-child{
+            position: absolute;
+            animation: presentation 3s infinite ease-in-out alternate;
+            opacity: 0.4;
+        }
+        &:last-child{
+            position: absolute;
+            animation: presentation 3s infinite ease-in-out alternate-reverse;
+        }
     }
 }
 
 @keyframes presentation {
-    0%{
-        transform: rotate(-20deg);
+    from{
+        transform: translateX(-30%) rotate(-30deg);
     }
-    100%{
-        transform: rotate(20deg);
+    to{
+        transform: translateX(30%) rotate(30deg);
     }
-    
 }
 
 #host {

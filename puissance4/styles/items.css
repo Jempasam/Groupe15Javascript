@@ -105,7 +105,7 @@
     }
 
     /* holding characters */
-    .moblin, .link, .goomba{
+    .moblin, .link, .goomba, .lynel{
         image-rendering: pixelated;
         background-size: cover;
         position: relative;
@@ -124,15 +124,52 @@
         background-image: url(../assets/goomba.webp);
     }
 
+    .lynel{
+        position: relative;
+        margin-left: -20%;
+        margin-top: -20%;
+        height: 140%;
+        width: 140%;
+        background-image: url(../assets/linel.png);
+        &._attack::after{
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            content: "";
+            display: block;
+            width:300%;
+            height: 300%;
+            background-image: url(../assets/attack.png);
+            background-size: cover;
+            animation: rotate 0.5s infinite linear;
+        }
+        &._life2{
+            filter: hue-rotate(40deg);
+        }
+        &._life3{
+            filter: hue-rotate(160deg);
+        }
+        &._life4{
+            filter: hue-rotate(260deg);
+        }
+        &._life5{
+            filter: grayscale(1) contrast(1.5);
+        }
+        &._life6{
+            filter: contrast(1.5) hue-rotate(-20deg) !important;
+            scale: 1.5;
+        }
+    }
+
     .link{
         margin-left: -10%;
         margin-top: -10%;
         height: 130%;
         width: 110%;
-        background-image: url(../assets/link_bas.webp);
+        background-image: url(../assets/link.png);
         &._attack{
             height: 180%;
-            background-image: url(../assets/attaque_bas.webp);
+            background-image: url(../assets/link_attack.png);
         }
     }
 
@@ -141,7 +178,7 @@
         margin-top: -10%;
         height: 120%;
         width: 110%;
-        background-image: url(../assets/ennemis_bas.webp);
+        background-image: url(../assets/moblin.gif);
     }
     
     .player{
@@ -181,7 +218,7 @@
     .wall{
         position: relative;
         background-image: url(../assets/stone.png);
-        height: 150%;
+        height: 180%;
         width: 150%;
         margin: -25%;
     }
@@ -280,10 +317,11 @@
     }
 
     .meteor{
+        position: relative;
         &::after{
             content: "";
             display: block;
-            position: relative;
+            position: absolute;
             left: -50%;
             top: -50%;
             background-image: url(../assets/fire.png);
@@ -358,6 +396,15 @@
         }
         &.left{
             rotate: 90deg;
+        }
+    }
+
+    .lynel, .moblin{
+        &.right{
+            rotate: 15deg;
+        }
+        &.left{
+            rotate: -15deg;
         }
     }
 }
