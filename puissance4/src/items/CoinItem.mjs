@@ -14,6 +14,10 @@ export class CoinItem extends Item{
     }
 
     onAdd(field,root,x,y){
+        field.schedule(x,y,root)
+    }
+
+    onTick(field,root,x,y){
         let aligneds=this.#getAligneds(field,x,y)
         if(aligneds.length>0){
             for(let [a,b] of aligneds){
@@ -22,9 +26,6 @@ export class CoinItem extends Item{
             field.set(x,y,new ActivatedCoinItem(this.team))
             if(field.on_alignement)field.on_alignement([[x,y],...aligneds])
         }
-    }
-
-    onTick(field,root,x,y){
     }
 
     getTeam(){

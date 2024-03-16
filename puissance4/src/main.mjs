@@ -33,6 +33,7 @@ import { PacmanItem } from "./items/PacmanItem.mjs"
 import { CandyItem } from "./items/CandyItem.mjs"
 import { PairItem } from "./items/PairItem.mjs"
 import { LynelItem } from "./items/LynelItem.mjs"
+import { TripleItem } from "./items/TripleItem.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE
@@ -182,6 +183,7 @@ function test(){
         game=>{
             game.width=10
             game.height=10
+            game.set(0,4,new MovingItem(new TripleItem(CandyItem.random(),CandyItem.random(),CandyItem.random(),1,0),0,1))
             game.set(4,4,new WallItem())
             game.set(4,5,new WallItem())
             game.set(8,2,new MovingItem(new PairItem(new CoinItem("red"),new CoinItem("blue"),0,1),0,1))

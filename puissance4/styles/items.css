@@ -378,6 +378,24 @@
         }
     }
 
+    .triple{
+        position: relative;
+        *:nth-child(1){
+            position: absolute;
+            scale: 0.4;
+            translate: 0 -35%;
+        }
+        *:nth-child(2){
+            position: absolute;
+            scale: 0.4;
+        }
+        *:nth-child(3){
+            position: absolute;
+            scale: 0.4;
+            translate: 0 35%;
+        }
+    }
+
     /* cookies */
     .candy{
         background-size: cover;
@@ -388,6 +406,16 @@
         &._color2{ background-image: url(../assets/candy/2.png); }
         &._color3{ background-image: url(../assets/candy/3.png); }
         &._color4{ background-image: url(../assets/candy/4.png); }
+    }
+
+    .tetris{
+        background-image: url(../assets/tetris.png);
+        background-size: cover;
+        background-color: var(--team-color, gray);
+        background-blend-mode: multiply;
+        mask: url(../assets/tetris.png);
+        mask-size: cover;
+        image-rendering: pixelated;
     }
 
     /* states */
@@ -410,7 +438,7 @@
     }
 
     /* COMMON */
-    .pipe, .snake, .shooting_pipe, .link, .pacman, .pair, .octorok{
+    .pipe, .snake, .shooting_pipe, .link, .pacman, .pair, .triple, .octorok{
         &.top{
             rotate: 180deg;
         }

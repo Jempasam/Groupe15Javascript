@@ -22,10 +22,11 @@ import { LinkItem } from "../../items/LinkItem.mjs";
 import { MoblinItem } from "../../items/MoblinItem.mjs";
 import { PacmanItem } from "../../items/PacmanItem.mjs";
 import { CandyItem } from "../../items/CandyItem.mjs";
-import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_BUBBLE_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SNAKE_FACTORY, SLIPPY_FACTORY, WILD_CANDY_FACTORY } from "./base_factories.mjs";
+import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_BUBBLE_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SNAKE_FACTORY, NEW_TETRIS_FACTORY, SLIPPY_FACTORY, WILD_CANDY_FACTORY, WILD_TETRIS_FACTORY } from "./base_factories.mjs";
 import { BubbleItem } from "../../items/BubbleItem.mjs";
 import { LynelItem } from "../../items/LynelItem.mjs";
 import { OctorokItem } from "../../items/OctorokItem.mjs";
+import { TetrisItem } from "../../items/TetrisItem.mjs";
 
 
 const DIRECTIONS={
@@ -234,6 +235,12 @@ export const BASE_COLLECTION={
         10,
         ()=>new SpawnerItem(100,WILD_CANDY_FACTORY)
     ),
+    tetris_spawner: new EditorSpawnable(
+        "Générateur de Tetris",
+        "Un générateur qui fait apparaître des blocs de tetris. Les blocs disparaissent lorsqu'ils occupent une ligne entière.",
+        10,
+        ()=>new SpawnerItem(100,WILD_TETRIS_FACTORY)
+    ),
 
     snake_spawner: new EditorSpawnable(
         "Générateur de Serpent",
@@ -281,6 +288,12 @@ export const BASE_COLLECTION={
         10,
         v=>new MovingItem(new CoinItem(vTEAMS[v%4]), 0, 1)
     ),
+    tetris: new EditorSpawnable(
+        "Bloc de Tetris",
+        "Un bloc de tetris qui disparaissent lorsqu'ils occupent une ligne entière.",
+        10,
+        v=>new TetrisItem(vTEAMS[v%4])
+    ),
     player: new EditorSpawnable(
         `Joueur`,
         `Un joueur.`,
@@ -295,9 +308,15 @@ export const BASE_COLLECTION={
     ),
     player_candy: new EditorSpawnable(
         `Joueur Bonbon`,
-        `Un joueur qui lance un double bonbon une fois sur deux. Les bonbon disparaissent quand associés par 4.`,
+        `Un joueur qui lance un double et triple bonbons une fois sur deux. Les bonbon disparaissent quand associés par 4.`,
         10,
         v=>new PlayerItem(vTEAMS[v%4], NEW_CANDY_FACTORY(), ...vKEYS[v%4])
+    ),
+    player_tetris: new EditorSpawnable(
+        `Joueur Tetris`,
+        `Un joueur qui lance des blocs de tetris  une fois sur deux. Les blocs disparaissent lorsqu'il sont alignés sur une ligne.`,
+        10,
+        v=>new PlayerItem(vTEAMS[v%4], NEW_TETRIS_FACTORY(), ...vKEYS[v%4])
     ),
     player_bicolor: new EditorSpawnable(
         `Joueur Bicolore`,

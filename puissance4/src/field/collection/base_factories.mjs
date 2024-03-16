@@ -6,6 +6,8 @@ import { MovingItem } from "../../items/MovingItem.mjs"
 import { PairItem } from "../../items/PairItem.mjs"
 import { SlippyItem } from "../../items/SlippyItem.mjs"
 import { SnakeItem } from "../../items/SnakeItem.mjs"
+import { TetrisItem } from "../../items/TetrisItem.mjs"
+import { TripleItem } from "../../items/TripleItem.mjs"
 
 /**
  * Une usine à pièces glissantes
@@ -62,7 +64,22 @@ export function NEW_CANDY_FACTORY(){
         let i = data.i = data.i + 1
         if(i%2==1){
             let [dx,dy]=randomDirection()
-            return new MovingItem(new PairItem(CandyItem.random(),CandyItem.random(),dx,dy), 0, 1)
+            return new MovingItem(WILD_CANDY_FACTORY(team), 0, 1)
+        }
+        else return new MovingItem(new CoinItem(team), 0, 1)
+    }
+}
+
+/**
+ * Un constructeur d'usines à pièce qui tombent, dont 1 pièce sur 2 est un double bonbon candy crush.
+ */
+export function NEW_TETRIS_FACTORY(){
+    let data={i:0}
+    return function(team){
+        let i = data.i = data.i + 1
+        if(i%2==1){
+            let [dx,dy]=randomDirection()
+            return new MovingItem(WILD_TETRIS_FACTORY(team), 0, 1)
         }
         else return new MovingItem(new CoinItem(team), 0, 1)
     }
@@ -92,6 +109,7 @@ export function NEW_BICOLOR_FACTORY(){
 }
 
 export const WILD_CANDY_FACTORY=createRandomFactory(CandyItem.random)
+export const WILD_TETRIS_FACTORY=createRandomFactory(t=>new TetrisItem(t))
 
 
 // Helpers
@@ -108,10 +126,15 @@ function randomDirection(){
 
 function createRandomFactory(seeded_factory){
     return function(team){
-        if(Math.random()>0.5){
+        const fact= ()=> seeded_factory(team,Math.random()*10000)
+        if(Math.random()>0.8){
             let [dx,dy]=randomDirection()
-            return new MovingItem(new PairItem(seeded_factory(Math.random()*10000),seeded_factory(Math.random()*10000),dx,dy), 0, 1)
+            return new MovingItem(new TripleItem(fact(),fact(),fact(),dx,dy), 0, 1)
         }
-        else return new MovingItem(seeded_factory(Math.random()*10000), 0, 1)
+        if(Math.random()>0.){
+            let [dx,dy]=randomDirection()
+            return new MovingItem(new PairItem(fact(),fact(),dx,dy), 0, 1)
+        }
+        else return new MovingItem(fact(), 0, 1)
     }
 }
