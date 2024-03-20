@@ -47,6 +47,17 @@ export const STRING_DATA ={
     get default(){return ""}
 }
 
+/** @type {StorageType<number>} */
+export const NUMBER_DATA ={
+    parse: e=>{
+        let ret=parseFloat(e)
+        if(ret===NaN)return 0
+        else return ret
+    },
+    serialize: e=>""+e,
+    get default(){return 0}
+}
+
 /** @type {StorageType<Array>} */
 export const ARRAY_DATA ={
     parse: JSON.parse,

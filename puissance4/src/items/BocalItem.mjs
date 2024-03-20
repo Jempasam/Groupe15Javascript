@@ -24,4 +24,8 @@ export class BocalItem extends Item{
     onTrigger(field,root,x,y){
         field.set(x,y,this.base)
     }
+
+    rotate(field, root, x, y){
+        this.base.rotate(field, root, x, y)
+    }
 }

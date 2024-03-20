@@ -4,7 +4,7 @@ import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { FruitItem } from "./FruitItem.mjs";
-import { Class } from "./ItemUtils.mjs";
+import { Class, Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 
 export class PacmanItem extends Item{
@@ -78,4 +78,6 @@ export class PacmanItem extends Item{
         }
         field.schedule(x,y,root)
     }
+
+    rotate=Methods.rotate.dxdy
 }

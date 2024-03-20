@@ -4,7 +4,7 @@ import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { FruitItem } from "./FruitItem.mjs";
-import { Class } from "./ItemUtils.mjs";
+import { Class, Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 
 export class SnakeItem extends Item{
@@ -108,6 +108,11 @@ export class SnakeItem extends Item{
             }
         }
         else field.schedule(x,y,root)
+    }
+
+    rotate(field, root, x, y){
+        Methods.rotate.dxdy.call(this, field , root, x, y)
+        this.base.rotate(field, root, x, y)
     }
 }
 

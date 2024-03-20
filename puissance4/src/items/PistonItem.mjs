@@ -1,5 +1,6 @@
 import { Item } from "../field/Item.mjs";
 import { FallingPlatformItem } from "./FallingPlatformItem.mjs";
+import { Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 
 export class PistonItem extends Item{
@@ -48,4 +49,6 @@ export class PistonItem extends Item{
         }
         field.schedule(x,y,root)
     }
+
+    rotate=Methods.rotate.dxdy
 }

@@ -63,7 +63,7 @@ export class PlayerItem extends Item{
 
     tryMove(field,root,x,y,newx,newy){
         let target=field.get(newx,newy)
-        if(target===null || target instanceof PlayerItem){
+        if(target===null || (target instanceof PlayerItem && this.time==0)){
             field.swap(x,y,newx,newy)
         }
         else if(target!==undefined){

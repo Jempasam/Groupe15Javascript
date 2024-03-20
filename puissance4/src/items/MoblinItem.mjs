@@ -2,7 +2,7 @@ import { adom } from "../../../samlib/DOM.mjs";
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
-import { Class } from "./ItemUtils.mjs";
+import { Class, Methods } from "./ItemUtils.mjs";
 
 export class MoblinItem extends Item{
     /**
@@ -59,5 +59,10 @@ export class MoblinItem extends Item{
             this.time=0
         }
         field.schedule(x,y,root)
+    }
+
+    rotate(field, root, x, y){
+        Methods.rotate.dxdy.call(this, field , root, x, y)
+        this.base?.rotate(field, root, x, y)
     }
 }

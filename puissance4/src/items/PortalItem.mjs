@@ -3,7 +3,7 @@ import { Item } from "../field/Item.mjs"
 import { Sounds } from "../sounds/SoundBank.mjs"
 import { Methods } from "./ItemUtils.mjs"
 
-export class CandyItem extends Item{
+export class PortalItem extends Item{
     
     constructor(color){
         super()
