@@ -89,6 +89,13 @@ export default class Serpent {
                 {
                     this.drawTeteSkinMariau(ctx);
                 }
+                else
+                {
+                    if (skin == 3)
+                    {
+                        this.drawTeteSkinSerpent(ctx);
+                    }
+                }
             }
         }
     }
@@ -183,6 +190,51 @@ export default class Serpent {
         ctx.restore();
     }
 
+    drawTeteSkinSerpent(ctx)
+    {
+        ctx.fillStyle = '#8FBC8F';
+        ctx.fillRect(0, -25, 50, 50);
+                
+        ctx.fillStyle = 'red';
+        ctx.fillRect(50, 0, 10,7)
+        
+        ctx.beginPath();
+        ctx.moveTo(58, 4);
+        ctx.lineTo(65, -3);
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = 'red';
+        ctx.stroke();
+  
+        ctx.beginPath();
+        ctx.moveTo(62, -5);
+        ctx.lineTo(72, 5);
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = 'red';
+        ctx.stroke();
+  
+        ctx.beginPath();
+        ctx.moveTo(72, 4);
+        ctx.lineTo(71, 12);
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'red';
+        ctx.stroke();
+  
+        ctx.beginPath();
+        ctx.moveTo(72, 4);
+        ctx.lineTo(80, 9);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'red';
+        ctx.stroke();
+                 
+        ctx.fillStyle = 'white';
+        ctx.fillRect(25, -15, 10,10)
+  
+        ctx.fillStyle = 'black';
+        ctx.fillRect(30, -13, 5,5)
+        
+        ctx.restore();
+    }
+
 
     
     drawGrossir(ctx, zoom, angle, skin) {
@@ -211,6 +263,13 @@ export default class Serpent {
                         {
                             this.drawCorpsSkinMariau(ctx);
                         }
+                        else
+                        {
+                            if (skin == 3)
+                            {
+                                this.drawCorpsSkinSerpent(ctx);
+                            }
+                        }
                     }
                  }
 
@@ -230,7 +289,13 @@ export default class Serpent {
         ctx.fillStyle = '#7B7878';
         ctx.fillRect(-25, -25, 50, 50);
         ctx.restore();
-        
+    }
+
+    drawCorpsSkinSerpent(ctx)
+    {
+        ctx.fillStyle = 'greenyellow';
+        ctx.fillRect(-25, -25, 50, 50);
+        ctx.restore();
     }
 
     drawCorpsSkinMariau(ctx)
