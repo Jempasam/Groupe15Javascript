@@ -42,10 +42,11 @@ export class AchievementsStorage{
      * @param {(value:number,max:number)=>number} callback Le 1er paramètre est la valeur actuelle de l'achievement, le 2ème est la valeur max
      */
     edit(gameid,achid,callback){
-        let previous=this.get(gameid,achid)
+        const previous=this.get(gameid,achid)
         if(previous!==undefined){
-            let max=this.achievements[gameid].achievements[achid].max
-            this.set(gameid,achid,callback(previous,max))
+            const max=this.achievements[gameid].achievements[achid].max
+            const now=callback(previous,max)
+            if(now!=previous)this.set(gameid,achid,now)
         }
     }
     
