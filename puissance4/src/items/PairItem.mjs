@@ -1,7 +1,7 @@
 import { Item } from "../field/Item.mjs"
 import "../../../samlib/Array.mjs"
 import { adom } from "../../../samlib/DOM.mjs"
-import { Class } from "./ItemUtils.mjs"
+import { Class, Methods } from "./ItemUtils.mjs"
 
 export class PairItem extends Item{
     
@@ -57,5 +57,11 @@ export class PairItem extends Item{
                 }
             }
         }
+    }
+
+    rotate(field, root, x, y){
+        Methods.rotate.dxdy.call(this, field , root, x, y)
+        this.a.rotate(field, root, x, y)
+        this.b.rotate(field, root, x, y)
     }
 }

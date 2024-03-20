@@ -1,7 +1,7 @@
 import { Item } from "../field/Item.mjs"
 import "../../../samlib/Array.mjs"
 import { adom } from "../../../samlib/DOM.mjs"
-import { Class } from "./ItemUtils.mjs"
+import { Class, Methods } from "./ItemUtils.mjs"
 
 export class TripleItem extends Item{
     
@@ -56,5 +56,12 @@ export class TripleItem extends Item{
             field.set(px+dx, py+dy, this.b)
         }
         field.set(px, py, this.c)
+    }
+
+    rotate(field, root, x, y){
+        Methods.rotate.dxdy.call(this, field , root, x, y)
+        this.a.rotate(field, root, x, y)
+        this.b.rotate(field, root, x, y)
+        this.c.rotate(field, root, x, y)
     }
 }

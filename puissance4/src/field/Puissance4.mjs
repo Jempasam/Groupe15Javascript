@@ -171,6 +171,11 @@ export class Puissance4 extends HTMLElement{
         }
     }
 
+    rotate(x,y){
+        const obj=get(x,y)
+        if(obj)obj.rotate(this,obj,x,y)
+    }
+
     /* Element access */
     /**
      * Get an element from the field.

@@ -2,7 +2,7 @@ import { adom } from "../../../samlib/DOM.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
-import { Class } from "./ItemUtils.mjs";
+import { Class, Methods } from "./ItemUtils.mjs";
 
 export class LinkItem extends Item{
     /**
@@ -71,5 +71,9 @@ export class LinkItem extends Item{
             field.updateElement(x,y)
         }
         return true
+    }
+
+    rotate(field, root, x, y){
+        Methods.rotate.dxdy.call(this, field , root, x, y)
     }
 }

@@ -31,6 +31,7 @@ export class Item{
     /**
      * Called when the item is added to the field
      * @param {Puissance4} field
+     * @param {Item} root 
      * @param {number} x
      * @param {number} y
      */
@@ -40,6 +41,7 @@ export class Item{
     /**
      * Called when the item is removed from the field
      * @param {Puissance4} field
+     * @param {Item} root 
      * @param {number} x
      * @param {number} y
      */
@@ -49,6 +51,7 @@ export class Item{
     /**
      * Called when the item is ticked
      * @param {Puissance4} field
+     * @param {Item} root 
      * @param {number} x
      * @param {number} y
      */
@@ -58,9 +61,20 @@ export class Item{
     /**
      * Called when the item is triggered
      * @param {Puissance4} field
+     * @param {Item} root 
      * @param {number} x
      * @param {number} y
      */
     onTrigger(field,root,x,y){
+    }
+
+    /**
+     * Rotate the item by 90 degree clockwise
+     * @param {Puissance4} field
+     * @param {Item} root 
+     * @param {number} x
+     * @param {number} y
+     */
+    rotate(field,root,x,y){
     }
 }

@@ -1,5 +1,6 @@
 import { Item } from "../field/Item.mjs";
 import { ActivatedCoinItem } from "./ActivatedCoinItem.mjs";
+import { Methods } from "./ItemUtils.mjs";
 
 export class CoinItem extends Item{
     
@@ -12,10 +13,8 @@ export class CoinItem extends Item{
     getClasses(){
         return ["static","coin",this.team]
     }
-
-    onAdd(field,root,x,y){
-        field.schedule(x,y,root)
-    }
+    
+    onAdd=Methods.onAdd.schedule
 
     onTick(field,root,x,y){
         let aligneds=this.#getAligneds(field,x,y)

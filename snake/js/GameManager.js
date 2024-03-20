@@ -3,6 +3,8 @@ import Serpent from './Serpent.js';
 import Fruit from './Fruit.js';
 import { playToDeath } from './Menu.js';
 
+import { ACCOUNT_STORAGE, OBJECT_DATA } from '../../samlib/Storage.mjs';
+
 let inputStates = {};
 let vitesse = 5;
 let vitesseP = 0;
@@ -12,7 +14,7 @@ let PremierCoup = false;
 let Pause = false;
 let choixSkin = 0;
 let son = true;
-const HIGHSCORE_KEY = 'highscore';
+//const HIGHSCORE_KEY = 'highscore'; SUPPRIMER
 let dureeBloquer = 50;
 
 let toucheBloque = false;
@@ -22,14 +24,16 @@ function asset(url){
     return import.meta.resolve("./../assets/"+url);
 }
 
-let highscore = localStorage.getItem(HIGHSCORE_KEY);
-if (!isNaN(highscore) && highscore % 1 === 0) 
+//let highscore = localStorage.getItem(HIGHSCORE_KEY); SUPPRIMER
+let highscoreSnake = ACCOUNT_STORAGE.get("highscoreSnake", OBJECT_DATA);
+if (!isNaN(highscoreSnake) && highscoreSnake % 1 === 0) 
 {
     
 }
 else
 {
-    highscore = 0;
+    highscoreSnake = 0;
+    ACCOUNT_STORAGE.set("highscoreSnake", OBJECT_DATA, highscoreSnake);
 }
 
 // Mode de jeu alternatifs
@@ -514,14 +518,14 @@ function gameOver()
         vitesse = 0;
         // Appeler playToDeath() de Menu.js
         playToDeath();
-        console.log("Le HighScore est de : ", highscore);
-        if (score > highscore)
+        console.log("Le HighScore est de : ", highscoreSnake);
+        if (score > highscoreSnake)
         {
-            highscore = score;
-            localStorage.setItem(HIGHSCORE_KEY, highscore);
+            highscoreSnake = score;
+            ACCOUNT_STORAGE.set("highscoreSnake",OBJECT_DATA,highscoreSnake);
         }
         document.querySelector(".ScoreNow").textContent = score;
-        document.querySelector(".HighScoreChiffre").textContent = highscore;
+        document.querySelector(".HighScoreChiffre").textContent = highscoreSnake;
 
         if (mangerVitesse)
         {

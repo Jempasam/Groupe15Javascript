@@ -3,7 +3,7 @@ import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { BubbleItem } from "./BubbleItem.mjs";
 import { CoinItem } from "./CoinItem.mjs";
-import { Class } from "./ItemUtils.mjs";
+import { Class, Methods } from "./ItemUtils.mjs";
 import { MeteorItem } from "./MeteorItem.mjs";
 import { MoblinItem } from "./MoblinItem.mjs";
 import { MovingItem } from "./MovingItem.mjs";
@@ -151,5 +151,10 @@ export class LynelItem extends Item{
             this.time=0
         }
         field.schedule(x,y,root)
+    }
+
+    rotate(field, root, x, y){
+        Methods.rotate.dxdy.call(this, field , root, x, y)
+        this.base?.rotate(field, root, x, y)
     }
 }

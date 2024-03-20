@@ -39,4 +39,10 @@ export class MixItem extends Item{
             c.onTick(field,root,x,y)
         }
     }
+
+    rotate(field, root, x, y){
+        for(let c of this.components){
+            c.rotate(field, root, x, y)
+        }
+    }
 }

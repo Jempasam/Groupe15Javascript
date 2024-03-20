@@ -237,3 +237,84 @@ footer{
     height: 4em;
     background-color: red;
 }
+
+/* ACHIEVEMENTS */
+.achievements{
+    padding: 4em;
+
+    >section{
+        border: black solid 0.2em;
+        background-color: rgb(255,255,255,0.3);
+        padding: 1em;
+        margin: 0.2em;
+        width: min(60em, 90%);
+        >h2{
+            text-align: center;
+            font-variant-caps: all-petite-caps;
+            font-size: 2em;
+        }
+        >ul{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            list-style: none;
+            >li{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 0.3em;
+                margin-top: 0.5em;
+                box-shadow: 0 0.1em 0.2em black;
+                width: 15em;
+                >.progress{
+                    margin-top: 0.5em;
+                }
+                >h3{
+                    text-align: center;
+                }
+                >img{
+                    align-self: center;
+                    width: 60%;
+                    
+                }
+                >p{
+                    margin-top: -2em;
+                    text-shadow: 0.1em 0.1em 0 white, -0.1em -0.1em 0 white, -0.1em 0.1em 0 white, 0.1em -0.1em 0 white;
+                }
+            }
+        }
+    }
+}
+
+.progress{
+    position: relative;
+    display: block;
+    background: white;
+    outline: 0.1em gray solid;
+    border-radius: 0.3em;
+    padding: 0.2em;
+    text-align: center;
+    &::before{
+        content:"";
+        left: 0;
+        top: 0;
+        height: 100%;
+        border-radius: 0.3em;
+        position: absolute;
+        display: block;
+        background-color: aquamarine;
+        opacity: 0.6;
+    }
+    &[value="0"]::before{ width: 0%; }
+    &[value="1"]::before{ width: 10%; }
+    &[value="2"]::before{ width: 20%; }
+    &[value="3"]::before{ width: 30%; }
+    &[value="4"]::before{ width: 40%; }
+    &[value="5"]::before{ width: 50%; }
+    &[value="6"]::before{ width: 60%; }
+    &[value="7"]::before{ width: 70%; }
+    &[value="8"]::before{ width: 80%; }
+    &[value="9"]::before{ width: 90%; }
+    &[value="10"]::before{ width: 100%; }
+}

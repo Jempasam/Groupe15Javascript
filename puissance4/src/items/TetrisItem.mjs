@@ -1,6 +1,7 @@
 import { adom } from "../../../samlib/DOM.mjs"
 import { Item } from "../field/Item.mjs"
 import { Sounds } from "../sounds/SoundBank.mjs"
+import { Methods } from "./ItemUtils.mjs"
 
 export class TetrisItem extends Item{
     
@@ -15,9 +16,7 @@ export class TetrisItem extends Item{
         return adom/*html*/`<div class="tetris ${this.team}"><div>`
     }
 
-    onAdd(field,root,x,y){
-        field.schedule(x,y,root)
-    }
+    onAdd=Methods.onAdd.schedule
 
     onTick(field,root,x,y){
         for(let ox=0; ox<field.width; ox++){
