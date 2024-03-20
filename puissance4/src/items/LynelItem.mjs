@@ -1,4 +1,5 @@
 import { adom } from "../../../samlib/DOM.mjs";
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { BubbleItem } from "./BubbleItem.mjs";
@@ -39,7 +40,10 @@ export class LynelItem extends Item{
 
     onTrigger(field,root,x,y){
         this.life--
-        if(this.life==0)field.set(x,y,this.base)
+        if(this.life==0){
+            field.set(x,y,this.base)
+            observers(field,"on_die").notify(this,x,y)
+        }
         else field.updateElement(x,y)
     }
 

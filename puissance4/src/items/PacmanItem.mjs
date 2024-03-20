@@ -63,6 +63,7 @@ export class PacmanItem extends Item{
             let dy=this.dy
             this.time=0
             let under=field.get(x+dx,y+dy)
+            console.log(under+" "+(under?.isComestible)+" "+new FruitItem().isComestible)
             if(under===null || under?.isComestible){
                 if(this.keySet){
                     this.canPress=true
@@ -74,6 +75,9 @@ export class PacmanItem extends Item{
                     Sounds.CROCK.play()
                 }
                 field.swap(x,y, x+dx,y+dy)
+            }
+            else if(under){
+                under.onTrigger(field,under,x+dx,y+dy)
             }
         }
         field.schedule(x,y,root)

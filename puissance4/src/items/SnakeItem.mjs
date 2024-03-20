@@ -1,4 +1,5 @@
 import { adom } from "../../../samlib/DOM.mjs";
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
@@ -105,6 +106,7 @@ export class SnakeItem extends Item{
             else{
                 field.set(x,y,this.base)
                 if(under)under.onTrigger(field, under, x+dx, y+dy)
+                observers(field,"on_die").notify(this,x,y)
             }
         }
         else field.schedule(x,y,root)

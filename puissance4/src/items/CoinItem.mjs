@@ -1,3 +1,4 @@
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
 import { ActivatedCoinItem } from "./ActivatedCoinItem.mjs";
 import { Methods } from "./ItemUtils.mjs";
@@ -23,7 +24,7 @@ export class CoinItem extends Item{
                 field.set(a,b,new ActivatedCoinItem(this.team))
             }
             field.set(x,y,new ActivatedCoinItem(this.team))
-            if(field.on_alignement)field.on_alignement([[x,y],...aligneds])
+            observers(field,"on_alignement").notify([[x,y],...aligneds])
         }
     }
 
