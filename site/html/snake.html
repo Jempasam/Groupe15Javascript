@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <title>Ultrafun</title>
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../../snake/css/styles.css">
     <script type="module" src="../js/account.js"></script>
+    <script type="module" src="../../snake/js/Serpent.js"></script>
+    <script type="module" src="../../snake/js/GameManager.js"></script>
+    <script type="module" src="../../snake/js/Menu.js"></script>
 </head>
 <body>
     <header>
@@ -27,9 +31,64 @@
         </ul>
     </nav>
     <main>
-        <canvas class="game">
-
-        </canvas>
+        <div class="game snake">
+            <div id="menuJeu">
+                <div id="menuPrincipal" ></div>
+                <button id="toggleMenuButton"><img src="../../snake/assets/depart.png" alt="Icône"></button>
+                <button id="modeVitesse"><img src="../../snake/assets/modeVitesse.png" alt="Icône"></button>
+                <button id="modeInversion"><img src="../../snake/assets/modeInversion.png" alt="Icône"></button>
+                <button id="modeMiamFast"><img src="../../snake/assets/modeMiamFast.png" alt="Icône"></button>
+                <button id="modeSerpentLent"><img src="../../snake/assets/modeSerpentLent.png" alt="Icône"></button>
+                <p class = "TitreJeu">Snake</p>
+                <button id="boutonSkin"><img src="../../snake/assets/serpentManchot.png" alt="Icône"></button>
+                <a href="https://fr.wikipedia.org/wiki/Manchot_empereur.html" class="easterEgg" id="easterEggLien">
+                  <img src="../../snake/assets/serpentManchot.png" alt="Serpent">
+              </a>
+              
+            
+            
+                <button id="boutonSon"><img src="../../snake/assets/Son.png" alt="Icône"></button>
+            
+                <audio id="mangerAudio" src="../../snake/assets/manger.mp3"></audio>
+            
+              </div>
+            
+                <div id="ecranjeu">
+                <canvas id="myCanvas" width=500 height=500></canvas>
+                <div id="score">
+            
+                  <p class = "ScoreAffichage">
+                    <img src="../../snake/assets/fruit1.png" alt="Icône">
+                  </p>
+            
+                  <p class = "NombrePoints">
+                    0
+                  </p>
+            
+                </div>
+            
+              </div>
+            
+            
+              <div id ="ecranGameOver">
+                <canvas id="gameOver" width=250 height=250> </canvas>
+                <p class = "ScoreNow">
+                  0
+                </p>
+                <p class = "HighScoreChiffre">
+                  0
+                </p>
+            
+                <img id="ResultatFruit" src="../../snake/assets/fruit1.png">
+                <img id="RecordFruit" src="../../snake/assets/HighScore.png">
+                <img id="ModeDeJeu1" src="../../snake/assets/modeInversion.png">
+                <img id="ModeDeJeu2" src="../../snake/assets/modeVitesse.png">
+                <img id="ModeDeJeu3" src="../../snake/assets/modeMiamFast.png">
+                <img id="ModeDeJeu4" src="../../snake/assets/modeSerpentLent.png">
+            
+                <button id="boutonReset"> <p> Recommencer </p></button>
+            
+            </div>
     </main>
     <footer>
         Par Les meilleurs

@@ -19,6 +19,11 @@ let dureeBloquer = 50;
 
 let toucheBloque = false;
 
+//resoudre les problèmes de liens
+function asset(url){
+    return import.meta.resolve("./../assets/"+url);
+}
+
 //let highscore = localStorage.getItem(HIGHSCORE_KEY); SUPPRIMER
 let highscoreSnake = ACCOUNT_STORAGE.get("highscoreSnake", OBJECT_DATA);
 if (!isNaN(highscoreSnake) && highscoreSnake % 1 === 0) 
@@ -139,32 +144,32 @@ function definirEcouteurs() {
 
         if (choixSkin === 0) 
         {
-            img.src = "../assets/serpentManchot.png";
-            animationSkin.src = "../assets/serpentManchot.png";
+            img.src = asset("serpentManchot.png");
+            animationSkin.src = asset("serpentManchot.png");
             easterEggLien.href = "https://fr.wikipedia.org/wiki/Manchot_empereur";
         } 
         else 
         {
             if (choixSkin === 1)
             {
-                img.src = "../assets/serpentCanard.png";
-                animationSkin.src = "../assets/serpentCanard.png";
+                img.src = asset("serpentCanard.png");
+                animationSkin.src = asset("serpentCanard.png");
                 easterEggLien.href = "https://fr.wikipedia.org/wiki/Canard";
             }
             else
             {
                 if (choixSkin === 2)
                 {
-                    img.src =  "../assets/serpentMariau.png";
-                    animationSkin.src =  "../assets/serpentMariau.png";
+                    img.src =  asset("serpentMariau.png");
+                    animationSkin.src =  asset("serpentMariau.png");
                     easterEggLien.href = "https://fr.wikipedia.org/wiki/Mario_(personnage)"
                 }
                 else
                 {
                     if (choixSkin === 3)
                     {
-                        img.src = "../assets/serpentSerpent.png";
-                        animationSkin.src = "../assets/serpentSerpent.png";
+                        img.src = asset("serpentSerpent.png");
+                        animationSkin.src = asset("serpentSerpent.png");
                         easterEggLien.href = "https://fr.wikipedia.org/wiki/Serpentes"
                     }
                 }
