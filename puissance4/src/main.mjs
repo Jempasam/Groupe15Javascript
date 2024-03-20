@@ -34,6 +34,7 @@ import { CandyItem } from "./items/CandyItem.mjs"
 import { PairItem } from "./items/PairItem.mjs"
 import { LynelItem } from "./items/LynelItem.mjs"
 import { TripleItem } from "./items/TripleItem.mjs"
+import { EndScreen } from "../../samlib/gui/EndScreen.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE
@@ -102,6 +103,24 @@ function openLoader(){
 
     loader.spawnables=BASE_COLLECTION
     loader.onplay= field=>play(field)
+}
+
+
+function endGame(winner,score,money,field){
+    let endScreen=new EndScreen()
+    host.removeChild(host.lastChild)
+    host.appendChild(endScreen)
+    header.onback=undefined
+    header.onhome= ()=>openMenu()
+
+    endScreen.money=money
+    endScreen.score=score
+    endScreen.winner=winner
+    endScreen.actions={
+        "Restart":()=>{play(field)},
+        "Quit":()=>{openMenu()}
+    }
+
 }
 
 function openShop(){

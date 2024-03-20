@@ -51,7 +51,7 @@ export const STRING_DATA ={
 export const NUMBER_DATA ={
     parse: e=>{
         let ret=parseFloat(e)
-        if(ret===NaN)return 0
+        if(isNaN(ret))return 0
         else return ret
     },
     serialize: e=>""+e,

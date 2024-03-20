@@ -6,7 +6,7 @@ export const achievement_list = {
     "puissance4":{
         name:"Puissance 4",
         achievements:{
-            "win":{
+            "acheter":{
                 name: "Victoires",
                 desc: "Gagnez une partie",
                 img: "https://www.shutterstock.com/image-vector/golden-crown-gradient-mesh-vector-600nw-599734505.jpg",
