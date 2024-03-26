@@ -6,22 +6,30 @@ import { CoinItem } from "./CoinItem.mjs";
 import { FruitItem } from "./FruitItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
+import { Controler } from "./controler/Controlers.mjs";
 
 export class PacmanItem extends Item{
     
-    constructor(dx, dy, keySet){
+    /**
+     * 
+     * @param {number} dx 
+     * @param {number} dy 
+     * @param {Controler} controler 
+     */
+    constructor(dx, dy, controler){
         super()
         this.dx=dx
         this.dy=dy
         this.time=0
-        this.keySet=keySet
+        this.action_time=0
+        this.controler=controler
         this.px=0
         this.py=0
     }
 
     getDisplay(...args){
         return adom/*html*/`
-            <div class="pacman ${Class.direction(this.dx,this.dy)}">
+            <div class="pacman ${Class.direction(this.dx,this.dy)} ${this.controler.team}">
             <div>
         `
     }
@@ -32,44 +40,28 @@ export class PacmanItem extends Item{
 
     onTick(field,root,x,y){
         this.time++
+        
+        if(this.action_time<=0){
+            this.controler.onAction(field,this.dx,this.dy,x,y, action=>{
+                if(action.isDirection){
+                    const under=field.get(x+action.dx,y+action.dy)
+                    if(under===null || under?.isComestible){
+                        this.dx=action.dx
+                        this.dy=action.dy
+                        this.action_time=5
+                    }
 
-        let ndx
-        let ndy
-        if(isKeyPressed(this.keySet[0])){
-            ndx=0
-            ndy=-1
+                }
+            })
         }
-        else if(isKeyPressed(this.keySet[1])){
-            ndx=1
-            ndy=0
-        }
-        else if(isKeyPressed(this.keySet[2])){
-            ndx=0
-            ndy=1
-        }
-        else if(isKeyPressed(this.keySet[3])){
-            ndx=-1
-            ndy=0
-        }
-        if(ndx!==undefined){
-            let target=field.get(x+ndx,y+ndy)
-            if(target===null || target?.isComestible){
-                this.dx=ndx
-                this.dy=ndy
-            }
-        }
+        else this.action_time--
+
         if(this.time>5){
+            this.time=0
             let dx=this.dx
             let dy=this.dy
-            this.time=0
             let under=field.get(x+dx,y+dy)
-            console.log(under+" "+(under?.isComestible)+" "+new FruitItem().isComestible)
             if(under===null || under?.isComestible){
-                if(this.keySet){
-                    this.canPress=true
-                    this.px=dx
-                    this.py=dy
-                }
                 if(under?.isComestible){
                     field.set(x+dx,y+dy,null)
                     Sounds.CROCK.play()

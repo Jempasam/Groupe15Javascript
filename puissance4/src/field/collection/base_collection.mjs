@@ -27,6 +27,8 @@ import { BubbleItem } from "../../items/BubbleItem.mjs";
 import { LynelItem } from "../../items/LynelItem.mjs";
 import { OctorokItem } from "../../items/OctorokItem.mjs";
 import { TetrisItem } from "../../items/TetrisItem.mjs";
+import { ALL_CONTROLERS_FACTORIES, WanderingControler } from "../../items/controler/Controlers.mjs";
+import { MouseItem } from "../../items/MouseItem.mjs";
 
 
 const DIRECTIONS={
@@ -91,9 +93,9 @@ export const BASE_COLLECTION={
     /* SNAKE */
     snake: new EditorSpawnable(
         "Serpent Controllable",
-        "Un serpent controllable avec les flèches de direction. Il peut manger les pièces fixes pour grandir.",
+        "Un serpent controllable avec les flèches de direction. Il peut manger les objects comestibles.",
         10,
-        v=>new SnakeItem(new PlatformItem(), ...vDIRECTIONS[v%4], ["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
+        v=>new SnakeItem(new PlatformItem(), ...vDIRECTIONS[v%4], ALL_CONTROLERS_FACTORIES[Math.floor(v/4)%ALL_CONTROLERS_FACTORIES.length]())
     ),
     fruit: new EditorSpawnable(
         "Fruit",
@@ -113,7 +115,7 @@ export const BASE_COLLECTION={
         "Link",
         "Un personnage contrôlable avec les flèches de direction. Il peut attaquer les objets en face de lui en avançant vers eux.",
         10,
-        ()=>new LinkItem(null, ["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
+        (v)=>new LinkItem(null, ALL_CONTROLERS_FACTORIES[v%ALL_CONTROLERS_FACTORIES.length]())
     ),
     moblin: new EditorSpawnable(
         "Moblin",
@@ -186,7 +188,15 @@ export const BASE_COLLECTION={
         "Pacman",
         "Un pacman contrôlable avec les touches directionelles.",
         10,
-        ()=>new PacmanItem(0,-1,["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
+        (v)=>new PacmanItem(0,-1,ALL_CONTROLERS_FACTORIES[v%ALL_CONTROLERS_FACTORIES.length]())
+    ),
+
+    /* MOUSE */
+    mouse: new EditorSpawnable(
+        "Pointeur de souris",
+        "Une souris folle qui se déplace aléatoirement et intéragit avec l'environnement.",
+        10,
+        (v)=>new MouseItem()
     ),
 
     /* BOCAL */
@@ -212,7 +222,7 @@ export const BASE_COLLECTION={
         "Bocal à Serpent Explosif",
         "Un bocal fragile qui contient un serpent explosif.",
         10,
-        ()=>new BocalItem(new SnakeItem(new TNTItem(), Math.random()>.5?1:-1, 0))
+        ()=>new BocalItem(new SnakeItem(new TNTItem(), Math.random()>.5?1:-1, 0, new WanderingControler(),1))
     ),
     
 
@@ -246,7 +256,7 @@ export const BASE_COLLECTION={
         "Générateur de Serpent",
         "Un générateur qui fait apparaitre des serpents au hasard sur le terrain.",
         10,
-        v=> new SpawnerItem(200,()=>new SnakeItem(new PlatformItem(), ...vDIRECTIONS[v%4]))
+        v=> new SpawnerItem(200,()=>new SnakeItem(new PlatformItem(), ...vDIRECTIONS[v%4], new WanderingControler(),1))
     ),
     moblin_spawner: new EditorSpawnable(
         "Générateur de Moblin",

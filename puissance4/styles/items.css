@@ -1,5 +1,5 @@
 .puissance4_item{
-
+    contain: content style;
     .undefined{
         /* Fond composé de lignes blanches et noires */
         background: linear-gradient(45deg, black, black, white 10%, white, black 40%, black, white 60%, white , black 90%);
@@ -27,6 +27,11 @@
         --team-color-alt: #8b8b50;
     }
 
+    .purple{
+        --team-color: purple;
+        --team-color-alt: #6f516f;
+    }
+
     /* ITEMS */
     .coin{
         background-image: url(../assets/coin.png);
@@ -37,26 +42,6 @@
     }
     .coin.activated{
         animation: activated 0.5s infinite alternate;
-    }
-
-    .snake{
-        position: relative;
-        &::before{
-            position: absolute;
-            content: "";
-            display: block;
-            margin-left: -10%;
-            margin-top: -10%;
-            height: 165%;
-            width: 120%;
-            background-image: url(../assets/meca_snake_head.png);
-            background-size: cover;
-        }
-    }
-
-    .snake_body{
-        background-image: url(../assets/meca_snake_body.png);
-        background-size: cover;
     }
 
     .spawner{
@@ -105,15 +90,37 @@
     }
 
     /* holding characters */
-    .moblin, .link, .goomba, .lynel, .octorok{
-        image-rendering: pixelated;
-        background-size: cover;
+    .moblin, .link, .goomba, .lynel, .octorok, .pacman, .snake, .snake_body, .mouse{
         position: relative;
+        image-rendering: pixelated;
+        &::after{
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+
+            background-color: var(--team-color, var(--team-default,white));
+            background-blend-mode: multiply;
+            mask-image: var(--image);
+            mask-size: cover;
+            background-image: var(--image);
+            image-rendering: pixelated;
+            background-size: cover;
+        }
         >*{
             position: absolute;
+            z-index: 1;
             top:-60%;
             transform: scale(0.6);
         }
+    }
+
+    .pacman{
+        --image: url(../assets/pacman2.gif);
+        --team-default: gold;
     }
 
     .goomba{
@@ -121,17 +128,37 @@
         margin-top: -10%;
         height: 120%;
         width: 120%;
-        background-image: url(../assets/goomba.webp);
+        --image: url(../assets/goomba.webp);
+    }
+
+    .mouse{
+        margin-left: -10%;
+        margin-top: -10%;
+        height: 120%;
+        width: 120%;
+        --image: url(../assets/mouse/cursor.png);
+        &.pointer{ --image: url(../assets/mouse/pointer.png); }
+        &.grabbed{ --image: url(../assets/mouse/grabbed.png); }
+        &.grabber{ --image: url(../assets/mouse/grab.png); }
+        &.waiter{ --image: url(../assets/mouse/wait.png); }
+        &.mover{ --image: url(../assets/mouse/move.png); }
+        z-index: 1;
+        >*{
+            z-index: 0;
+            top: -20%;
+            left: 0;
+            transform: scale(0.9);
+        }
     }
 
     .lynel{
-        position: relative;
         margin-left: -20%;
         margin-top: -20%;
         height: 140%;
         width: 140%;
-        background-image: url(../assets/linel.png);
-        &._attack::after{
+        --image: url(../assets/linel.png);
+        &._attack::before{
+            z-index: 1;
             position: absolute;
             top: -100%;
             left: -100%;
@@ -141,6 +168,7 @@
             height: 300%;
             background-image: url(../assets/attack.png);
             background-size: cover;
+            image-rendering: pixelated;
             animation: rotate 0.5s infinite linear;
         }
         &._life2{
@@ -166,10 +194,10 @@
         margin-top: -10%;
         height: 130%;
         width: 110%;
-        background-image: url(../assets/link.png);
+        --image: url(../assets/link.png);
         &._attack{
             height: 180%;
-            background-image: url(../assets/link_attack.png);
+            --image: url(../assets/link_attack.png);
         }
     }
 
@@ -178,26 +206,20 @@
         margin-top: -10%;
         height: 120%;
         width: 110%;
-        background-image: url(../assets/moblin.gif);
+        --image: url(../assets/moblin.gif);
     }
 
     .octorok{
-        width: 100%;
-        height: 100%;
+        margin-left: -5%;
+        margin-top: -5%;
+        height: 110%;
+        width: 110%;
+        --image: url(../assets/octorok.png);
         &::after{
-            content: "";
-            display: block;
-            margin-left: -5%;
-            margin-top: -5%;
-            height: 110%;
-            width: 110%;
-            image-rendering: pixelated;
-            background-size: cover;
-            position: relative;
-            background-image: url(../assets/octorok.png);
+            z-index: 1;
         }
-        &._shooting::after{
-            background-image: url(../assets/octorok_shooting.png);
+        &._shooting{
+            --image: url(../assets/octorok_shooting.png);
         }
         >*{
             position: absolute;
@@ -224,9 +246,31 @@
             mask-size: cover;
         }
     }
+
     .player.loading{
         background-color: var(--team-color-alt, black);
         animation: tired 0.5s infinite alternate ease-in-out;
+    }
+
+    .snake{
+        --image: url(../assets/meca_snake_head.png);
+        --team-default: rgb(94, 137, 73);
+        &::after{
+            margin-left: -10%;
+            margin-top: -10%;
+            height: 165%;
+            width: 120%;
+        }
+        >*{
+            inset: 0;
+            z-index: 0;
+            transform: none;
+        }
+    }
+
+    .snake_body{
+        --image: url(../assets/meca_snake_body.png);
+        --team-default: rgb(94, 137, 73);
     }
 
     /* simple textureds */
@@ -356,12 +400,6 @@
             animation: rotate 1s infinite linear;
             mix-blend-mode: hard-light;
         }
-    }
-
-    .pacman{
-        background-image: url(../assets/pacman.gif);
-        background-size: cover;
-        image-rendering: pixelated;
     }
 
     .pair{

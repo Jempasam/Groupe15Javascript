@@ -19,4 +19,5 @@ export class Sounds{
     static GUITARE= createSound("guitare.ogg",0.05)
     static BOMB= createSound("bomb.wav",0.05)
     static CROUNCH= createSound("crounch.wav",0.05)
+    static CLICK= createSound("click.mp3",0.05)
 }

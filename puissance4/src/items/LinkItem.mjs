@@ -4,25 +4,28 @@ import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
+import { Controler } from "./controler/Controlers.mjs";
 
 export class LinkItem extends Item{
     /**
      * 
      * @param {Item?} base 
+     * @param {Controler} controler
      */
-    constructor(base=null, keyset){
+    constructor(base=null, controler){
         super()
         this.base=base
         this.time=0
-        this.keyset=keyset
+        this.controler=controler
         this.attack_time=0
+        this.can_do=true
         this.dx=0
         this.dy=1
     }
 
     getDisplay(...args){
         return adom/*html*/`
-            <div class="link ${this.attack_time>0?"_attack":""} ${Class.direction(this.dx,this.dy)}">
+            <div class="link ${this.attack_time>0?"_attack":""} ${Class.direction(this.dx,this.dy)} ${this.controler.team}">
                 ${this.base?.getDisplay(...args)}
             </div>
         `
@@ -45,11 +48,26 @@ export class LinkItem extends Item{
                 field.updateElement(x,y)
             }
         }
+        else if(this.can_do){
+            let commands=this.controler.getCurrentAction(field,this.dx,this.dy,x,y)
+            for(let command of commands){
+                if(command.isDirection){
+                    this.dx=command.dx
+                    this.dy=command.dy
+                    this.can_do=false
+                }
+                else if(command==Controler.MOVE){
+                    this.tryMove(field,root,x,y,this.dx,this.dy)
+                    this.can_do=false
+                }
+            }
+        }
         else if(this.time>5){
-            if(isKeyPressed(this.keyset[0]) && this.tryMove(field,root,x,y,0,-1)){}
+            this.can_do=true
+            /*if(isKeyPressed(this.keyset[0]) && this.tryMove(field,root,x,y,0,-1)){}
             else if(isKeyPressed(this.keyset[1]) && this.tryMove(field,root,x,y,1,0)){}
             else if(isKeyPressed(this.keyset[2]) && this.tryMove(field,root,x,y,0,1)){}
-            else if(isKeyPressed(this.keyset[3]) && this.tryMove(field,root,x,y,-1,0)){}
+            else if(isKeyPressed(this.keyset[3]) && this.tryMove(field,root,x,y,-1,0)){}*/
         }
         field.schedule(x,y,root)
     }

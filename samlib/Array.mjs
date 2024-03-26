@@ -27,7 +27,12 @@ Array.prototype.removeAll = function(a){
     return this;
 }
 
-
+/**
+ * @type {Array}
+ */
+export function random(array){
+    return array[Math.floor(Math.random()*array.length)]
+}
 
 /**
  * Supprime un élément rapidement (sans conserver l'ordre)
