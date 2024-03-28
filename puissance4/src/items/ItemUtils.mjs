@@ -11,3 +11,18 @@ export class Class{
         }
     } 
 }
+
+export const Methods={
+    rotate:{
+        dxdy(field,root,x,y){
+            this.dx=this.dy
+            this.dy=-this.dx
+        }
+    },
+    onAdd:{
+        schedule(field,root,x,y){
+            field.schedule(x,y,root)
+        }
+    }
+}
+

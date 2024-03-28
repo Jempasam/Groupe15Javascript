@@ -1,22 +1,14 @@
 import { view } from "./Template.mjs";
+import { EndScreen } from "./gui/EndScreen.mjs";
 
-class Test{
-    constructor(){
-        this.name="Salade";
-        this.desc="C'est une salade";
-        this.age=12;
-    }
+let body=document.querySelector("body")
+
+let endScreen=new EndScreen()
+endScreen.money=100
+endScreen.score=100
+endScreen.winner="Player 1"
+endScreen.actions={
+    "Restart":()=>{console.log("Restart")},
+    "Quit":()=>{console.log("Quit")}
 }
-
-let obj=new Test()
-let testView=view(String)/*html*/`
-<div>
-    <h1>${x=>x.name}</h1>
-    <p>${x=>x.desc}</p>
-    <p>${x=>x.age}</p>
-</div>
-`
-
-let result= testView(obj)
-
-console.log(result)
+body?.appendChild(endScreen)
