@@ -112,6 +112,7 @@ class Escaping extends State{
     duration=0
 
     onStart(field,root,mouse,x,y){
+        Sounds.GUITARE.play()
         mouse.randomDirection(field,x,y)
     }
 
@@ -121,6 +122,7 @@ class Escaping extends State{
         const under=field.get(x+dx,y+dy)
         if(under===undefined){
             field.set(x,y,null)
+            Sounds.GUITARE2.play()
         }
         else{
             field.swap(x,y,x+dx,y+dy)
@@ -271,7 +273,7 @@ class Drawing extends State{
             mouse.move(field,x,y,dx,dy)
             if(field.get(x,y)===null && this.length%this.a<=this.b){
                 field.set(x,y,this.next)
-                Sounds.POP.play()
+                Sounds.TOP.play()
                 this.next=this.decorator(this.factory(this.variant+Math.round(Math.random()*this.variant_d)))
             }
             if(this.length==this.rotate_moment){
