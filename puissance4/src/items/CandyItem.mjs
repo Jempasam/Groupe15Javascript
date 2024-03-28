@@ -1,6 +1,8 @@
 import { adom } from "../../../samlib/DOM.mjs"
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs"
 import { Item } from "../field/Item.mjs"
 import { Sounds } from "../sounds/SoundBank.mjs"
+import { Methods } from "./ItemUtils.mjs"
 
 export class CandyItem extends Item{
     
@@ -15,9 +17,7 @@ export class CandyItem extends Item{
         return adom/*html*/`<div class="candy _color${this.color}"><div>`
     }
 
-    onAdd(field,root,x,y){
-        field.schedule(x,y,root)
-    }
+    onAdd=Methods.onAdd.schedule
 
     onTick(field,root,x,y){
         let found=this.find(field,root,x,y)
@@ -33,6 +33,7 @@ export class CandyItem extends Item{
                     else break
                 }
             }
+            observers(field,"on_crushed").notify(found)
             Sounds.CROCK.play()
         }
         else{
@@ -56,4 +57,5 @@ export class CandyItem extends Item{
         return new CandyItem(Math.floor(Math.random()*4+1))
     }
 
+    isComestible=true
 }

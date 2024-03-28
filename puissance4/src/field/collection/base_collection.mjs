@@ -22,10 +22,15 @@ import { LinkItem } from "../../items/LinkItem.mjs";
 import { MoblinItem } from "../../items/MoblinItem.mjs";
 import { PacmanItem } from "../../items/PacmanItem.mjs";
 import { CandyItem } from "../../items/CandyItem.mjs";
-import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_BUBBLE_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SNAKE_FACTORY, SLIPPY_FACTORY, WILD_CANDY_FACTORY } from "./base_factories.mjs";
+import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_BUBBLE_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SNAKE_FACTORY, NEW_TETRIS_FACTORY, SLIPPY_FACTORY, WILD_CANDY_FACTORY, WILD_TETRIS_FACTORY } from "./base_factories.mjs";
 import { BubbleItem } from "../../items/BubbleItem.mjs";
 import { LynelItem } from "../../items/LynelItem.mjs";
 import { OctorokItem } from "../../items/OctorokItem.mjs";
+import { TetrisItem } from "../../items/TetrisItem.mjs";
+import { ALL_CONTROLERS, WanderingControler } from "../../items/controler/Controlers.mjs";
+import { MouseItem } from "../../items/MouseItem.mjs";
+import { roundGet } from "../../../../samlib/Array.mjs";
+import { MasterhandItem } from "../../items/MasterhandItem.mjs";
 
 
 const DIRECTIONS={
@@ -40,6 +45,7 @@ const vDIRECTIONS=[[0,-1],[1,0],[0,1],[-1,0]]
 
 /** @type {Array<string>} */
 const vTEAMS=["red","blue","yellow","green"]
+const vTEAMS_NAMES=["Rouge","Bleu","Jaune","Vert"]
 
 /** @type {Array<[string,string,string]>} */
 const vKEYS=[["KeyQ","KeyE","KeyW"], ["KeyU","KeyO","KeyI"], ["KeyR","KeyY","KeyT"], ["KeyV","KeyN","KeyB"]]
@@ -90,9 +96,10 @@ export const BASE_COLLECTION={
     /* SNAKE */
     snake: new EditorSpawnable(
         "Serpent Controllable",
-        "Un serpent controllable avec les flèches de direction. Il peut manger les pièces fixes pour grandir.",
+        "Un serpent controllable avec les flèches de direction. Il peut manger les objects comestibles.",
         10,
-        v=>new SnakeItem(new PlatformItem(), ...vDIRECTIONS[v%4], ["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
+        v=>new SnakeItem(new PlatformItem(), ...vDIRECTIONS[v%4], roundGet(ALL_CONTROLERS,Math.floor(v/4)).factory()),
+        v=>roundGet(ALL_CONTROLERS,Math.floor(v/4)).name
     ),
     fruit: new EditorSpawnable(
         "Fruit",
@@ -112,7 +119,8 @@ export const BASE_COLLECTION={
         "Link",
         "Un personnage contrôlable avec les flèches de direction. Il peut attaquer les objets en face de lui en avançant vers eux.",
         10,
-        ()=>new LinkItem(null, ["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
+        v=>new LinkItem(null, roundGet(ALL_CONTROLERS,v).factory()),
+        v=>roundGet(ALL_CONTROLERS,v).name
     ),
     moblin: new EditorSpawnable(
         "Moblin",
@@ -136,7 +144,8 @@ export const BASE_COLLECTION={
         "Lynel",
         "Un ennemi puissant qui se déplace, attaque, change de direction, attrape des items, saute, et en lance au hasard.",
         10,
-        v=>new LynelItem(null,v%6+1)
+        v=>new LynelItem(null,v%6+1),
+        v=> (v%6+1)+" Vies"
     ),
     explosive_moblin: new EditorSpawnable(
         "Moblin Explosif",
@@ -185,7 +194,38 @@ export const BASE_COLLECTION={
         "Pacman",
         "Un pacman contrôlable avec les touches directionelles.",
         10,
-        ()=>new PacmanItem(0,-1,["ArrowUp","ArrowRight","ArrowDown","ArrowLeft"])
+        (v)=>new PacmanItem(0,-1,roundGet(ALL_CONTROLERS,v).factory()),
+    ),
+
+    /* MOUSE */
+    mouse: new EditorSpawnable(
+        "Pointeur de souris",
+        "Une souris folle qui se déplace aléatoirement et intéragit avec l'environnement.",
+        10,
+        (v)=>new MouseItem()
+    ),
+
+    /* MASTER HAND */
+    master_hand: new EditorSpawnable(
+        "Master Hand",
+        "Un Concepteur de niveau plutôt approximatif, il reste le temps de finir son travail et vous laisse jouer tranquille.",
+        10,
+        v=>{
+            switch(v%4){
+                case 0: return new MasterhandItem(3,3)
+                case 1: return new MasterhandItem(3,0)
+                case 2: return new MasterhandItem(6,0)
+                default: return new MasterhandItem(20,10)
+            }
+        },
+        v=>{
+            switch(v%4){
+                case 0: return "Master Hand"
+                case 1: return "Faster Hand"
+                case 2: return "Super Faster Hand"
+                default: return "Elder Hand"
+            }
+        }
     ),
 
     /* BOCAL */
@@ -211,7 +251,7 @@ export const BASE_COLLECTION={
         "Bocal à Serpent Explosif",
         "Un bocal fragile qui contient un serpent explosif.",
         10,
-        ()=>new BocalItem(new SnakeItem(new TNTItem(), Math.random()>.5?1:-1, 0))
+        ()=>new BocalItem(new SnakeItem(new TNTItem(), Math.random()>.5?1:-1, 0, new WanderingControler(),1))
     ),
     
 
@@ -234,12 +274,18 @@ export const BASE_COLLECTION={
         10,
         ()=>new SpawnerItem(100,WILD_CANDY_FACTORY)
     ),
+    tetris_spawner: new EditorSpawnable(
+        "Générateur de Tetris",
+        "Un générateur qui fait apparaître des blocs de tetris. Les blocs disparaissent lorsqu'ils occupent une ligne entière.",
+        10,
+        ()=>new SpawnerItem(100,WILD_TETRIS_FACTORY)
+    ),
 
     snake_spawner: new EditorSpawnable(
         "Générateur de Serpent",
         "Un générateur qui fait apparaitre des serpents au hasard sur le terrain.",
         10,
-        v=> new SpawnerItem(200,()=>new SnakeItem(new PlatformItem(), ...vDIRECTIONS[v%4]))
+        v=> new SpawnerItem(200,()=>new SnakeItem(new PlatformItem(), ...vDIRECTIONS[v%4], new WanderingControler(),1))
     ),
     moblin_spawner: new EditorSpawnable(
         "Générateur de Moblin",
@@ -273,54 +319,77 @@ export const BASE_COLLECTION={
         `Pièce`,
         `Une pièce`,
         10,
-        v=>new CoinItem(vTEAMS[v%4])
+        v=>new CoinItem(vTEAMS[v%4]),
+        v=>vTEAMS_NAMES[v%4]
     ),
     coin_falling: new EditorSpawnable(
         `Pièce Tombante`,
         `Une pièce qui tombe.`,
         10,
-        v=>new MovingItem(new CoinItem(vTEAMS[v%4]), 0, 1)
+        v=>new MovingItem(new CoinItem(vTEAMS[v%4]), 0, 1),
+        v=>vTEAMS_NAMES[v%4]
+    ),
+    tetris: new EditorSpawnable(
+        "Bloc de Tetris",
+        "Un bloc de tetris qui disparaissent lorsqu'ils occupent une ligne entière.",
+        10,
+        v=>new TetrisItem(vTEAMS[v%4]),
+        v=>vTEAMS_NAMES[v%4]
     ),
     player: new EditorSpawnable(
         `Joueur`,
         `Un joueur.`,
         10,
-        v=>new PlayerItem(vTEAMS[v%4], FALLING_FACTORY, ...vKEYS[v%4])
+        v=>new PlayerItem(vTEAMS[v%4], FALLING_FACTORY, ...vKEYS[v%4]),
+        v=>vTEAMS_NAMES[v%4]
     ),
     player_bubble: new EditorSpawnable(
         `Joueur Bulle`,
         `Un joueur qui une fois sur tois envoie une bulle qui disparait après un petit moment.`,
         10,
-        v=>new PlayerItem(vTEAMS[v%4], NEW_BUBBLE_FACTORY(), ...vKEYS[v%4])
+        v=>new PlayerItem(vTEAMS[v%4], NEW_BUBBLE_FACTORY(), ...vKEYS[v%4]),
+        v=>vTEAMS_NAMES[v%4]
     ),
     player_candy: new EditorSpawnable(
         `Joueur Bonbon`,
-        `Un joueur qui lance un double bonbon une fois sur deux. Les bonbon disparaissent quand associés par 4.`,
+        `Un joueur qui lance un double et triple bonbons une fois sur deux. Les bonbon disparaissent quand associés par 4.`,
         10,
-        v=>new PlayerItem(vTEAMS[v%4], NEW_CANDY_FACTORY(), ...vKEYS[v%4])
+        v=>new PlayerItem(vTEAMS[v%4], NEW_CANDY_FACTORY(), ...vKEYS[v%4]),
+        v=>vTEAMS_NAMES[v%4]
+    ),
+    player_tetris: new EditorSpawnable(
+        `Joueur Tetris`,
+        `Un joueur qui lance des blocs de tetris  une fois sur deux. Les blocs disparaissent lorsqu'il sont alignés sur une ligne.`,
+        10,
+        v=>new PlayerItem(vTEAMS[v%4], NEW_TETRIS_FACTORY(), ...vKEYS[v%4]),
+        v=>vTEAMS_NAMES[v%4]
     ),
     player_bicolor: new EditorSpawnable(
         `Joueur Bicolore`,
         `Un joueur qui lance une double pièce bicolore une fois sur deux.`,
         10,
-        v=>new PlayerItem(vTEAMS[v%4], NEW_BICOLOR_FACTORY(), ...vKEYS[v%4])
+        v=>new PlayerItem(vTEAMS[v%4], NEW_BICOLOR_FACTORY(), ...vKEYS[v%4]),
+        v=>vTEAMS_NAMES[v%4]
     ),
     player_meteor: new EditorSpawnable(
         `Joueur Météore`,
         `Un joueur dont un jeton sur trois casse le truc en dessous.`,
         10,
-        v=>new PlayerItem(vTEAMS[v%4], NEW_METEOR_FACTORY(), ...vKEYS[v%4])
+        v=>new PlayerItem(vTEAMS[v%4], NEW_METEOR_FACTORY(), ...vKEYS[v%4]),
+        v=>vTEAMS_NAMES[v%4]
     ),
     player_slippy: new EditorSpawnable(
         `Joueur Glissant`,
         `Un joueur qui glisse.`,
         10,
-        v=>new PlayerItem(vTEAMS[v%4], SLIPPY_FACTORY, ...vKEYS[v%4])
+        v=>new PlayerItem(vTEAMS[v%4], SLIPPY_FACTORY, ...vKEYS[v%4]),
+        v=>vTEAMS_NAMES[v%4]
     ),
     player_snake: new EditorSpawnable(
         `Joueur Serpent`,
         `Un joueur qui lance des serpents une fois sur trois.`,
         10,
-        v=>new PlayerItem(vTEAMS[v%4], NEW_SNAKE_FACTORY(), ...vKEYS[v%4])
+        v=>new PlayerItem(vTEAMS[v%4], NEW_SNAKE_FACTORY(), ...vKEYS[v%4]),
+        v=>vTEAMS_NAMES[v%4]
     ),
 }

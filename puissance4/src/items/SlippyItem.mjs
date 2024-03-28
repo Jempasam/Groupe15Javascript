@@ -1,6 +1,7 @@
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
+import { Methods } from "./ItemUtils.mjs";
 
 export class SlippyItem extends Item{
     
@@ -57,4 +58,10 @@ export class SlippyItem extends Item{
         }
         else return false
     }
+
+    rotate(field, root, x, y){
+        Methods.rotate.dxdy.call(this, field , root, x, y)
+        this.base.rotate(field, root, x, y)
+    }
+
 }

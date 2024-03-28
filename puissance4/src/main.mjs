@@ -11,7 +11,7 @@ import { CoinItem } from "./items/CoinItem.mjs"
 import { WindItem } from "./items/WindItem.mjs"
 import { BASE_COLLECTION } from "./field/collection/base_collection.mjs"
 import { GameMenu } from "../../samlib/gui/GameMenu.mjs"
-import { create, dom, html } from "../../samlib/DOM.mjs"
+import { adom, create, dom, html } from "../../samlib/DOM.mjs"
 import { FileMenu } from "./editor/FileMenu.mjs"
 import { Loader } from "./editor/Loader.mjs"
 import { GameHeader } from "../../samlib/gui/GameHeader.mjs"
@@ -33,6 +33,11 @@ import { PacmanItem } from "./items/PacmanItem.mjs"
 import { CandyItem } from "./items/CandyItem.mjs"
 import { PairItem } from "./items/PairItem.mjs"
 import { LynelItem } from "./items/LynelItem.mjs"
+import { TripleItem } from "./items/TripleItem.mjs"
+import { EndScreen } from "../../samlib/gui/EndScreen.mjs"
+import { ARROW_CONTROLER, RED_CONTROLER, WanderingControler } from "./items/controler/Controlers.mjs"
+import { MouseItem } from "./items/MouseItem.mjs"
+import { MasterhandItem } from "./items/MasterhandItem.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE
@@ -71,7 +76,8 @@ function openMenu(){
             shopdata.money=100000
             for(let a in BASE_COLLECTION)shopdata.buyeds.add(a)
             ShopData.set(shopdata)
-        }
+        },
+        "Help": ()=> helpScreen(),
     }
 }
 
@@ -101,6 +107,38 @@ function openLoader(){
 
     loader.spawnables=BASE_COLLECTION
     loader.onplay= field=>play(field)
+}
+
+
+function endGame(winner,score,money,field){
+    let endScreen=new EndScreen()
+    host.removeChild(host.lastChild)
+    host.appendChild(endScreen)
+    header.onback=undefined
+    header.onhome= ()=>openMenu()
+
+    endScreen.money=money
+    endScreen.score=score
+    endScreen.winner=winner
+    endScreen.actions={
+        "Restart":()=>{play(field)},
+        "Quit":()=>{openMenu()}
+    }
+
+}
+
+function helpScreen(){
+    header.onback= ()=>openMenu()
+    header.onhome= ()=>openMenu()
+
+    host.removeChild(host.lastChild)
+    host?.appendChild(adom/*html*/`
+        <div class="help">
+            <h1>Help</h1>
+            <h2>Magasin</h2>
+            <p>Vous pouvez acheter des objets au magasin pour pouvoir les utiliser dans l'éditeur.</p>
+        </div>
+    `)
 }
 
 function openShop(){
@@ -182,18 +220,13 @@ function test(){
         game=>{
             game.width=10
             game.height=10
-            game.set(4,4,new WallItem())
-            game.set(4,5,new WallItem())
-            game.set(8,2,new MovingItem(new PairItem(new CoinItem("red"),new CoinItem("blue"),0,1),0,1))
-            game.set(8,8,new PacmanItem(0,-1,['ArrowUp','ArrowRight','ArrowDown','ArrowLeft']))
-            game.set(7,7,new CandyItem(1))
-            game.set(5,5,new WallItem())
-            game.set(6,3,new LynelItem())
-            game.set(0,0,new TNTItem())
-            game.set(7,0,new LinkItem(null,['ArrowUp','ArrowRight','ArrowDown','ArrowLeft']))
-            game.set(8,0,new MoblinItem())
-            game.set(3,1,new PlayerItem("red",()=>new FruitItem(),"KeyQ","KeyE","KeyW"))
-            game.set(0,1,new BocalItem(new FruitItem()))
+            game.set(5,0,new SnakeItem(new FruitItem(),0,1,RED_CONTROLER))
+            game.set(7,7,new FruitItem())
+            game.set(7,8,new FruitItem())
+            game.set(7,9,new FruitItem())
+            game.set(2,5,new FruitItem())
+            game.set(1,5,new FruitItem())
+            game.set(5,5,new MasterhandItem(3,1))
         }
     )
 }

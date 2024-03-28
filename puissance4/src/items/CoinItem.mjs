@@ -1,5 +1,7 @@
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
 import { ActivatedCoinItem } from "./ActivatedCoinItem.mjs";
+import { Methods } from "./ItemUtils.mjs";
 
 export class CoinItem extends Item{
     
@@ -12,19 +14,18 @@ export class CoinItem extends Item{
     getClasses(){
         return ["static","coin",this.team]
     }
+    
+    onAdd=Methods.onAdd.schedule
 
-    onAdd(field,root,x,y){
+    onTick(field,root,x,y){
         let aligneds=this.#getAligneds(field,x,y)
         if(aligneds.length>0){
             for(let [a,b] of aligneds){
                 field.set(a,b,new ActivatedCoinItem(this.team))
             }
             field.set(x,y,new ActivatedCoinItem(this.team))
-            if(field.on_alignement)field.on_alignement([[x,y],...aligneds])
+            observers(field,"on_alignement").notify([[x,y],...aligneds])
         }
-    }
-
-    onTick(field,root,x,y){
     }
 
     getTeam(){
@@ -62,7 +63,5 @@ export class CoinItem extends Item{
         if(line.length>=3)total=[...total,...line]
         return total
     }
-
-    isComestible=true
 }
 

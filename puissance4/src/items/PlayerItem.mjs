@@ -34,11 +34,9 @@ export class PlayerItem extends Item{
         if(this.movetime<=0){
             if(isKeyPressed(this.leftKey)){
                 this.tryMove(field,root,x,y,x-1,y)
-                this.movetime=2
             }
             else if(isKeyPressed(this.rightKey)){
                 this.tryMove(field,root,x,y,x+1,y)
-                this.movetime=2
             }
         }
         else this.movetime--
@@ -63,11 +61,13 @@ export class PlayerItem extends Item{
 
     tryMove(field,root,x,y,newx,newy){
         let target=field.get(newx,newy)
-        if(target===null || target instanceof PlayerItem){
+        if(target===null || (target instanceof PlayerItem && this.time==0)){
             field.swap(x,y,newx,newy)
+            this.movetime=2
         }
         else if(target!==undefined){
             target.onTrigger(field,root,newx,newy)
+            this.movetime=2
         }
     }
 }
