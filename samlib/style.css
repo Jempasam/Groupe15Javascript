@@ -55,6 +55,7 @@ sam-gamemenu{
         width: 100%;
         align-items: center;
         justify-content: space-around;
+        flex-wrap: wrap;
         >*{
             cursor: pointer;
             transition: transform 0.2s;

@@ -83,6 +83,8 @@ class ArrowControler extends Controler{
     }
 
     get team(){ return null }
+
+    get name(){return "Neutral"}
 }
 export const ARROW_CONTROLER=new ArrowControler()
 
@@ -112,7 +114,12 @@ export const RED_CONTROLER=new PlayerControler("red","KeyQ","KeyE","KeyW")
 export const BLUE_CONTROLER=new PlayerControler("blue","KeyU","KeyO","KeyI")
 export const YELLOW_CONTROLER=new PlayerControler("yellow","KeyR","KeyY","KeyT")
 export const GREEN_CONTROLER=new PlayerControler("green","KeyV","KeyN","KeyB")
-export const PLAYER_CONTROLERS=[RED_CONTROLER,BLUE_CONTROLER,YELLOW_CONTROLER,GREEN_CONTROLER]
+export const PLAYER_CONTROLERS=[
+    {name:"Rouge", controler:RED_CONTROLER},
+    {name:"Bleu", controler:BLUE_CONTROLER},
+    {name:"Jaune", controler:YELLOW_CONTROLER},
+    {name:"Vert", controler:GREEN_CONTROLER}
+]
 
 export class WanderingControler extends Controler{
 
@@ -140,4 +147,8 @@ export class WanderingControler extends Controler{
     get team(){ return "purple" }
 }
 
-export const ALL_CONTROLERS_FACTORIES=[()=>ARROW_CONTROLER,...PLAYER_CONTROLERS.map(c=>()=>c),()=>new WanderingControler()]
+export const ALL_CONTROLERS=[
+    {name:"Neutre", factory:()=>ARROW_CONTROLER},
+    ...PLAYER_CONTROLERS.map(c=>{return {name:c.name, factory:()=>c.controler}}),
+    {name:"Sauvage", factory:()=>new WanderingControler()}
+]

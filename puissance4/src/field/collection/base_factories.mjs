@@ -13,8 +13,10 @@ import { PLAYER_CONTROLERS, WanderingControler } from "../../items/controler/Con
 
 
 const teamToControler=PLAYER_CONTROLERS
-    .map(c =>{return {[c.team]: c}})
+    .map(c =>{return {[c.controler.team]: c.controler}})
     .reduceRight((a, b) =>{Object.assign(a, b); return a});
+
+console.log(teamToControler)
 
 /**
  * Une usine à pièces glissantes

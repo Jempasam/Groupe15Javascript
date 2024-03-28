@@ -37,6 +37,7 @@ import { TripleItem } from "./items/TripleItem.mjs"
 import { EndScreen } from "../../samlib/gui/EndScreen.mjs"
 import { ARROW_CONTROLER, RED_CONTROLER, WanderingControler } from "./items/controler/Controlers.mjs"
 import { MouseItem } from "./items/MouseItem.mjs"
+import { MasterhandItem } from "./items/MasterhandItem.mjs"
 
 /* SETTINGS */
 let USED_STORAGE=ACCOUNT_STORAGE
@@ -225,7 +226,7 @@ function test(){
             game.set(7,9,new FruitItem())
             game.set(2,5,new FruitItem())
             game.set(1,5,new FruitItem())
-            game.set(5,5,new MouseItem())
+            game.set(5,5,new MasterhandItem(3,1))
         }
     )
 }

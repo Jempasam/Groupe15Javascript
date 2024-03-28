@@ -14,6 +14,7 @@ puissance-4-loader, puissance-4-editor{
     .menu{
         display: flex;
         flex-direction: column;
+        align-items: center;
         padding: 1em;
         border: gray 0.1em solid;
         >input[type=number], >input[type=text]{
@@ -23,6 +24,7 @@ puissance-4-loader, puissance-4-editor{
         }
         >input[type=button]{
             padding: 0.1em;
+            width: 100%;
             font-variant-caps: all-petite-caps;
             font-size: 1.2em;
             &:hover{
@@ -56,10 +58,12 @@ puissance-4-loader, puissance-4-editor{
         }
 
         >puissance-4{
-            padding: 20%;
             overflow: hidden;
             margin-top: 10%;
             margin-bottom: 10%;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 20%;
             border: black 0.1em solid;
         }
         

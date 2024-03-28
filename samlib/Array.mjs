@@ -28,10 +28,19 @@ Array.prototype.removeAll = function(a){
 }
 
 /**
- * @type {Array}
+ * @param {Array}
  */
 export function random(array){
     return array[Math.floor(Math.random()*array.length)]
+}
+
+/**
+ * 
+ * @param {Array} array 
+ * @param {number} index 
+ */
+export function roundGet(array,index){
+    return array[index%array.length]
 }
 
 /**

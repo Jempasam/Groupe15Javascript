@@ -90,7 +90,8 @@
     }
 
     /* holding characters */
-    .moblin, .link, .goomba, .lynel, .octorok, .pacman, .snake, .snake_body, .mouse{
+    .moblin, .link, .goomba, .lynel, .octorok, .pacman,
+    .snake, .snake_body, .mouse, .masterhand{
         position: relative;
         image-rendering: pixelated;
         &::after{
@@ -148,6 +149,27 @@
             top: -20%;
             left: 0;
             transform: scale(0.9);
+        }
+    }
+
+    .masterhand{
+        margin-left: -50%;
+        margin-top: -80%;
+        height: 200%;
+        width: 200%;
+        --image: url(../assets/masterhand/open.png);
+        &.closed{ --image: url(../assets/masterhand/closed.png); }
+        &.energized{ --image: url(../assets/masterhand/energized.png); }
+        &.escaping{ --image: url(../assets/masterhand/peace.png); }
+        &.shooting{
+            --image: url(../assets/masterhand/shoot.png);
+            animation: rotate 0.5s infinite linear;
+        }
+        z-index: 1;
+        >*{
+            top: 30%;
+            left: 0;
+            transform: scale(0.4);
         }
     }
 

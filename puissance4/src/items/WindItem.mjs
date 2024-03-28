@@ -34,8 +34,7 @@ export class WindItem extends Item{
                 if(moved){
                     let next=field.get(xx+dx,yy+dy)
                     if(next===null){
-                        field.set(xx,yy,null)
-                        field.set(xx+dx,yy+dy,moved)
+                        field.swap(xx,yy,xx+dx,yy+dy)
                     }
                 }
                 break
