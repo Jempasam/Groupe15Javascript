@@ -1,4 +1,5 @@
 import { adom } from "../../../samlib/DOM.mjs";
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
@@ -6,26 +7,33 @@ import { CoinItem } from "./CoinItem.mjs";
 import { FruitItem } from "./FruitItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
+import { Controler } from "./controler/Controlers.mjs";
 
 export class SnakeItem extends Item{
     
-    constructor(base, dx, dy, keySet){
+    /**
+     * 
+     * @param {Item?} base 
+     * @param {number} dx 
+     * @param {number} dy 
+     * @param {Controler} controler 
+     */
+    constructor(base, dx, dy, controler, growing=0){
         super()
         this.base=base
         this.dx=dx
         this.dy=dy
         this.time=0
         this.length=1
-        this.keySet=keySet
-        this.until_jump=Math.random()*5
-        this.px=0
-        this.py=0
+        this.growing=growing
+        this.controler=controler
+        this.can_move=true
     }
 
     getDisplay(...args){
         return adom/*html*/`
-            <div class="snake ${Class.direction(this.dx,this.dy)}">
-                ${this.base.getDisplay(...args)}
+            <div class="snake ${Class.direction(this.dx,this.dy)} ${this.controler.team}">
+                ${this.base?.getDisplay(...args)}
             <div>
         `
     }
@@ -36,34 +44,16 @@ export class SnakeItem extends Item{
 
     onTick(field,root,x,y){
         this.time++
-        if(this.keySet){
-            let ndx
-            let ndy
-            if(isKeyPressed(this.keySet[0])){
-                ndx=0
-                ndy=-1
+        if(this.can_move) this.controler.onAction(field,this.dx,this.dy,x,y,action=>{
+            if(action.isDirection && (action.dx!=-this.dx || action.dy!=-this.dy)){
+                this.length+=this.growing
+                this.dx=action.dx
+                this.dy=action.dy
+                this.can_move=false
             }
-            else if(isKeyPressed(this.keySet[1])){
-                ndx=1
-                ndy=0
-            }
-            else if(isKeyPressed(this.keySet[2])){
-                ndx=0
-                ndy=1
-            }
-            else if(isKeyPressed(this.keySet[3])){
-                ndx=-1
-                ndy=0
-            }
-            if(ndx!==undefined){
-                if(ndx!==-this.px || ndy!==-this.py){
-                    this.dx=ndx
-                    this.dy=ndy
-                    //field.updateElement(x,y)
-                }
-            }
-        }
+        })
         if(this.time>5){
+            this.can_move=true
             let dx=this.dx
             let dy=this.dy
             this.time=0
@@ -74,37 +64,14 @@ export class SnakeItem extends Item{
                     Sounds.CROCK.play()
                 }
 
-                // Rotation
-                if(this.keySet){
-                    this.canPress=true
-                    this.px=dx
-                    this.py=dy
-                }
-                else{
-                    this.until_jump--
-                    if(this.until_jump<0){
-                        this.until_jump=Math.random()*5
-                        this.length++
-                        if(Math.random()>0.5){
-                            this.dx=dy
-                            this.dy=-dx
-                        }
-                        else{
-                            this.dx=-dy
-                            this.dy=dx
-                        }
-                    }
-                }
-
                 field.swap(x,y, x+dx,y+dy)
-                field.set(x, y, new SnakeBodyItem(this.length*5))
-                //field.set(x+dx, y+dy, root)
-
+                field.set(x, y, new SnakeBodyItem(this.length*5,this.controler.team))
                 return
             }
             else{
                 field.set(x,y,this.base)
                 if(under)under.onTrigger(field, under, x+dx, y+dy)
+                observers(field,"on_die").notify(this,x,y)
             }
         }
         else field.schedule(x,y,root)
@@ -112,19 +79,20 @@ export class SnakeItem extends Item{
 
     rotate(field, root, x, y){
         Methods.rotate.dxdy.call(this, field , root, x, y)
-        this.base.rotate(field, root, x, y)
+        this.base?.rotate(field, root, x, y)
     }
 }
 
 class SnakeBodyItem extends Item{
 
-    constructor(time){
+    constructor(time,team){
         super()
         this.time=time
+        this.team=team
     }
 
     getClasses(...args){
-        return ["snake_body"]
+        return ["snake_body",this.team]
     }
 
     onAdd(field,root,x,y){

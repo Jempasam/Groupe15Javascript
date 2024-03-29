@@ -16,12 +16,14 @@ export class EditorSpawnable{
      * @param {string} name 
      * @param {string} desc 
      * @param {function(number):Item} factory 
+     * @param {function(number):string=} variantNames
      */
-    constructor(name,desc,price,factory){
+    constructor(name, desc, price, factory, variantNames=v=>"Normal"){
         this.name=name
         this.description=desc
         this.price=price
         this.factory=factory
+        this.variantNames=variantNames
     }
 }
 
@@ -65,7 +67,7 @@ export class Puissance4Field{
                     let item=spawnable.factory(variant)
                     target.set(x+ix,y+iy,item)
                     if(doWriteNames){
-                        item.factory=name
+                        item.spawnable=name
                         item.variant=variant
                     }
                 }
@@ -82,6 +84,7 @@ export class Puissance4Field{
 
 }
 
+const EMPTY=new EditorSpawnable("Empty","Empty cell",0,()=>undefined)
 export class Editor extends HTMLElement{
 
     /** @type {EditorSpawnableDict} */
@@ -90,11 +93,11 @@ export class Editor extends HTMLElement{
     /** @type {EditorSpawnableDict} */
     #collection
 
-    /** @type {function():Item|undefined} */
-    #factory= ()=>undefined
+    /** @type {EditorSpawnable?} */
+    #spawnable=EMPTY
 
-    /** @type {string|undefined} */
-    #factory_name=undefined
+    /** @type {string?} */
+    #spawnable_name=undefined
 
     /** @type {number} */
     #variant=0
@@ -109,24 +112,24 @@ export class Editor extends HTMLElement{
         // Field
         this.field=create("puissance-4._scrollable")
         this.field.oncelldraw=(obj,x,y,button)=>{
-            if(button%2==1){
-                let item=this.#factory(this.#variant)
+            if(button%2==1){ // Left click
+                let item=this.#spawnable.factory(this.#variant)
                 if(item){
-                    item.factory=this.#factory_name
+                    item.spawnable=this.#spawnable_name
                     item.variant=this.#variant
                 }
                 this.field.set(x,y,item)
             }
-            else if(button%4/2==1){
+            else if(button%4/2==1){ // Right click
                 this.field.set(x,y,null)
             }
-            else if(button%8/4==1){
+            else if(button%8/4==1){ // Middle click
                 let cell=this.field.get(x,y)
                 if(cell){
-                    let spawnable=this.#spawnables[cell.factory]
+                    let spawnable=this.#spawnables[cell.spawnable]
                     let variant=cell.variant
                     this.dom_variant.value=variant
-                    this.select(cell.factory,spawnable.factory)
+                    this.select(cell.spawnable,spawnable)
                 }
             }
         }
@@ -178,6 +181,10 @@ export class Editor extends HTMLElement{
         this.dom_exampel.height=1
         this.dom_menu.appendChild(this.dom_exampel)
 
+        // Variant Name
+        this.dom_variant_name=create("input[type=text][disabled]")
+        this.dom_menu.appendChild(this.dom_variant_name)
+
         this.createField()
     }
 
@@ -202,9 +209,9 @@ export class Editor extends HTMLElement{
         this.dom_file_menu.storage=value
     }
 
-    select(name,factory){
-        this.#factory_name=name
-        this.#factory=factory
+    select(name,spawnable){
+        this.#spawnable_name=name
+        this.#spawnable=spawnable
         this.updateExemple()
     }
 
@@ -213,10 +220,17 @@ export class Editor extends HTMLElement{
         this.updateExemple()
     }
 
-    updateExemple(index){
+    updateExemple(){
         this.#variant=this.dom_variant.value
-        if(this.#factory)this.dom_exampel.set(0,0,this.#factory(this.#variant))
-        else this.dom_exampel.set(0,0,null)
+        if(this.#spawnable){
+            console.log(this.#spawnable.factory(this.#variant))
+            this.dom_variant_name.value=this.#spawnable.variantNames(this.#variant)
+            this.dom_exampel.set(0,0,this.#spawnable.factory(this.#variant))
+        }
+        else {
+            this.dom_variant_name.value="None"
+            this.dom_exampel.set(0,0,null)
+        }
     }
 
     #createSelector(){
@@ -224,11 +238,11 @@ export class Editor extends HTMLElement{
 
         // Remover
         let option=dom`<sam-option><div class="remover"/></div></sam-option>`
-        option.addEventListener("select",event=>this.select(name,undefined))
+        option.addEventListener("select",event=>this.select(name,EMPTY))
         this.dom_selector.appendChild(option)
         for(let [name,spawnable] of Object.entries(this.#spawnables)){
             let option=create("sam-option")
-            option.addEventListener("select",event=>this.select(name,spawnable.factory))
+            option.addEventListener("select",event=>this.select(name,spawnable))
             let cell=dom`<puissance-4 width=1 height=1 />`
             cell.set(0,0,spawnable.factory(0))
             option.appendChild(cell)
@@ -259,7 +273,7 @@ export class Editor extends HTMLElement{
                 let item=this.field.get(x,y)
                 if(!item)column.push(undefined)
                 else{
-                    let name=item.factory
+                    let name=item.spawnable
                     let variant=item.variant
                     column.push([name,variant])
                 }

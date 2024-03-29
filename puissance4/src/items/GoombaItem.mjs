@@ -1,4 +1,5 @@
 import { adom } from "../../../samlib/DOM.mjs";
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 
@@ -29,6 +30,7 @@ export class GoombaItem extends Item{
 
     onTrigger(field,root,x,y){
         field.set(x,y,this.base)
+        observers(field,"on_die").notify(this,x,y)
     }
 
     onTick(field,root,x,y){

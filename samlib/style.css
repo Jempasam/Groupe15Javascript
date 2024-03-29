@@ -55,6 +55,7 @@ sam-gamemenu{
         width: 100%;
         align-items: center;
         justify-content: space-around;
+        flex-wrap: wrap;
         >*{
             cursor: pointer;
             transition: transform 0.2s;
@@ -357,6 +358,98 @@ sam-numberinput{
             border-top-right-radius: 40%;
             border-bottom-right-radius: 40%;
             border-left: none;
+        }
+    }
+}
+
+sam-endscreen{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+
+    padding: 1em;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8em;
+
+    >h2{
+        font-variant-caps: all-petite-caps;
+        font-size: 5em;
+        padding: 0;
+        margin: 0.1em;
+        text-shadow: 0.05em 0.05em 0 white, -0.05em -0.05em 0 white, 0.05em -0.05em 0 white, -0.05em 0.05em 0 white;
+    }
+
+    >._winner{
+        text-shadow: 0 0 0.4em white, 0 0 0.6em white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 4em;
+        font-weight: bold;
+        &::before{
+            font-size: 0.5em;
+            content: "Winner";
+            font-weight: normal;
+        }
+    }
+    
+    >*{
+        margin: 0.5em;
+    }
+
+    >._score{
+        font-size: 2em;
+        font-weight: bold;
+        &::before{
+            content: "Score: ";
+            font-weight: normal;
+        }
+    }
+
+    >._money{
+        background-color: rgb(255,255,255,0.4);
+        border: black 0.1em solid;
+        padding: 0.1em;
+        font-size: 2em;
+        font-weight: bold;
+        &::before{
+            content: "+";
+            font-weight: normal;
+        }
+        &::after{
+            content: "🪙";
+            font-weight: normal;
+        }
+    }
+
+    >._buttons{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        >*{
+            font-size: 1.5em;
+            background-color: rgb(255,255,255,0.4);
+            padding: 0.3em;
+            margin: 0.5em;
+            
+            width: 6em;
+            text-align: center;
+            border: black 0.1em solid;
+            cursor: pointer;
+            transition: transform 0.2s;
+            &:hover{
+                transform: scale(1.2);
+            }
         }
     }
 }

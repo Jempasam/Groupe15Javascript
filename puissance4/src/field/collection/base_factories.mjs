@@ -8,6 +8,15 @@ import { SlippyItem } from "../../items/SlippyItem.mjs"
 import { SnakeItem } from "../../items/SnakeItem.mjs"
 import { TetrisItem } from "../../items/TetrisItem.mjs"
 import { TripleItem } from "../../items/TripleItem.mjs"
+import { PLAYER_CONTROLERS, WanderingControler } from "../../items/controler/Controlers.mjs"
+
+
+
+const teamToControler=PLAYER_CONTROLERS
+    .map(c =>{return {[c.controler.team]: c.controler}})
+    .reduceRight((a, b) =>{Object.assign(a, b); return a});
+
+console.log(teamToControler)
 
 /**
  * Une usine à pièces glissantes
@@ -50,7 +59,7 @@ export function NEW_SNAKE_FACTORY(){
     let data={i:0}
     return function(team){
         let i = data.i = data.i + 1
-        if(i%3==1)return new SnakeItem(new CoinItem(team), 0, 1)
+        if(i%3==1)return new SnakeItem(new CoinItem(team), 0, 1, teamToControler[team]??new WanderingControler())
         else return new MovingItem(new CoinItem(team), 0, 1)
     }
 }
