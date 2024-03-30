@@ -453,3 +453,39 @@ sam-endscreen{
         }
     }
 }
+
+sam-onglets{
+    display: flex;
+    flex-wrap: wrap;
+    >sam-onglet{
+        background-color: rgba(255,255,255,0.5);
+        border: black 0.2em solid;
+        border-bottom: none;
+
+        border-top-left-radius: 0.5em;
+        border-top-right-radius: 0.5em;
+        margin: 0.1em;
+        margin-top: 0.4em;
+        padding: 0.2em;
+        padding-bottom: 0.6em;
+        margin-bottom: -0.4em;
+        flex-grow: 1;
+        cursor: pointer;
+        transition: translate 0.1s, background-color 0.3s;
+        &:hover{
+            translate: 0 -0.3em;
+            background-color: rgba(255,255,255,0.8);
+        }
+        &[selected=true]{
+            translate: 0 0.3em;
+            background-color: rgba(255,255,255,1);
+        }
+    }
+    >sam-page{
+        display:none;
+        &[selected=true]{
+            display: inherit;
+            width: 100%;
+        }
+    }
+}

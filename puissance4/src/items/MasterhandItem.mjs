@@ -217,12 +217,48 @@ class Teleporting extends State{
 }
 
 /**
+ * A drawing pencil
+ */
+class Pencil{
+
+    /**
+     * @param {Array<function(number):Item>} factories
+     * @param {Array<function(Item):Item>} decorators
+     */
+    constructor(factories,decorators){
+        // Pattern
+        let a=Math.floor(Math.random()*3)+1
+        let b=Math.floor(Math.random()*(a+1))
+        this.pattern = (i)=> i%a<=b
+
+        // Factory
+        this.variant=Math.round(Math.random()*1000) // Variant Center
+        this.variant_d=Math.max(0,Math.round(Math.random()*4)) // Variant Variation
+        this.factory=random(factories).factory
+
+        // Decorator
+        this.decorator=random(decorators)
+    }
+
+    create(){
+        return this.decorator(this.factory(this.variant+Math.round(Math.random()*this.variant_d)))
+    }
+}
+
+/**
  * a drawing state
  */
 class Drawing extends State{
 
     duration=0
 
+    
+    static random_pattern(){
+        let a=Math.floor(Math.random()*3)+1
+        let b=Math.floor(Math.random()*(a+1))
+        return i => i%a<=b
+    }
+    
     constructor(){
         super()
         // Length of line and timing of direciton change
@@ -230,12 +266,11 @@ class Drawing extends State{
         this.rotate_moment=Math.floor(Math.random()*8)+1
 
         // Pattern
-        this.a=Math.floor(Math.random()*3)+1
-        this.b=Math.floor(Math.random()*(this.a+1))
+        this.pattern=Drawing.random_pattern()
 
         // Factory
         this.variant=Math.round(Math.random()*1000)
-        this.variant_d=Math.max(0,Math.round(Math.random()*6-3))
+        this.variant_d=Math.max(0,Math.round(Math.random()*4))
         this.factory=random(Object.values(BASE_COLLECTION)).factory
 
         // Decorator
@@ -271,7 +306,7 @@ class Drawing extends State{
             const dx=mouse.dx
             const dy=mouse.dy
             mouse.move(field,x,y,dx,dy)
-            if(field.get(x,y)===null && this.length%this.a<=this.b){
+            if(field.get(x,y)===null && this.pattern(this.length)){
                 field.set(x,y,this.next)
                 Sounds.TOP.play()
                 this.next=this.decorator(this.factory(this.variant+Math.round(Math.random()*this.variant_d)))
@@ -313,6 +348,7 @@ class Shooting extends State{
         this.factory=random(Object.values(BASE_COLLECTION)).factory
         this.variant=Math.round(Math.random()*1000)
     }
+
     onTick(field,root,mouse,x,y){
         if(this.duration<=0){
             mouse.duration--
