@@ -45,6 +45,7 @@ export class Monster extends Entities {
             //se déplacer vers le point de départ
             this.move(player, listeMonstres, listeSol);
             
+            
         }
 
 
@@ -54,9 +55,20 @@ export class Monster extends Entities {
         this.vectorSpeed.x=0;
         this.vectorSpeed.y -= 0.005;
         this.vectorSpeed.z=0;
+        //si on est à peu près au point de départ et que le joueur n'est pas à moins de 10 unités de distance en x et z du monstre, le monstre s'arrête
+        if (Math.abs(this.mesh.position.x-this.positionDepart.x) < 0.1 && Math.abs(this.mesh.position.z-this.positionDepart.z) < 0.1){
+            if (Math.abs(player.mesh.position.x-this.mesh.position.x) > 10 || Math.abs(player.mesh.position.z-this.mesh.position.z) > 10){
+            this.vectorSpeed.x = 0;
+            this.vectorSpeed.z = 0;
+            }
+            else {
+                this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
+                this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
+            }
+        } else {
         this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
         this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
-
+        }
         this.groundCheck(listeSol);
         this.detectAttack(listeMonstres, false);
         this.playerCheck(player, listeMonstres);
@@ -100,8 +112,14 @@ export class Monster extends Entities {
                 this.vectorSpeed.y = -this.MonsterSpeed;
             }
         } else {
+            //si on est à peu près au point de départ, le monstre s'arrête
+            if (Math.abs(this.mesh.position.x-this.positionDepart.x) < 0.1 && Math.abs(this.mesh.position.z-this.positionDepart.z) < 0.1){
+                this.vectorSpeed.x = 0;
+                this.vectorSpeed.z = 0;
+            } else {
             this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
             this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
+            }
             if(this.positionDepart.y > this.mesh.position.y){
                 this.vectorSpeed.y = this.MonsterSpeed;
             } else {
