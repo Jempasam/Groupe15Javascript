@@ -31,6 +31,9 @@ export class Lvl1 {
         const wallL1P3 = new Wall("WallL1P3", -18, 11, 0, 37, 10, 8,this.scene);
         listes[2].push(wallL1P3);
 
+        const wallL1P4 = new Wall("WallL1P4", -6, 0, 0, 4, 20, 5,this.scene);
+        listes[2].push(wallL1P4);
+
         const groundE11 = new Ground("GroundE11",3, -3, 18, 11, 1, 5,this.scene);
         listes[1].push(groundE11);
         //créer un sol
