@@ -89,44 +89,17 @@ export class LvlTest {
     listes[1].push(ground6);
 
     //créer des monstres
-    const monster = new Monster("Monster1",-20, 0, 0, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
+    const monster = new Monster("Monster1","Panda", -20, 0, 0, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
     listes[0].push(monster);
-    //monster.mesh.isVisible = false;
-
-    /*BABYLON.SceneLoader.ImportMesh("", "../../olympia/assets/", "kangaroo2.glb", this.scene, function (meshes) {
-        
-        //récupérer le mesh
-        let kangaroo2 = meshes[0];
-
-        kangaroo2.scaling = new BABYLON.Vector3(0.2, 0.2, 0.2);
-        kangaroo2.isVisible = true;
-        //ajouter kangaroo1 en enfant de monster
-        monster.mesh.addChild(kangaroo2);
-        kangaroo2.position = new BABYLON.Vector3(0, -0.5, 0.5);
-        kangaroo2.rotation = new BABYLON.Vector3(0, 0, 0);
-    });*/
     
-    const monster2 = new Monster("Monster2",-23, 1.5, -5, 3, 3, 3, player.playerSpeed*2, 15, this.scene);
+    const monster2 = new Monster("Monster2","Kangaroo1", -23, 1.5, -5, 3, 3, 3, player.playerSpeed*2, 15, this.scene);
     listes[0].push(monster2);
-    //monster2.mesh.isVisible = false;
-    //récupérer modèle panda
-    /*BABYLON.SceneLoader.ImportMesh("", "../../olympia/assets/", "panda.glb", this.scene, function (meshes) {
-        let panda2 = meshes[0];
-        panda2.scaling = new BABYLON.Vector3(0.6, 0.6, 0.6);
-        panda2.isVisible = true;
-        //ajouter panda en enfant de monster
-        monster2.mesh.addChild(panda2);
-        panda2.position = new BABYLON.Vector3(0,-0.5,0);
-        panda2.rotation = new BABYLON.Vector3(0, 0, 0);
-
-    });*/
 
     //créer un monstre volant
-    const monster3 = new Monster("Monster3",-20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+    const monster3 = new Monster("Monster3","Kangaroo2", -20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
     listes[0].push(monster3);
     monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
     monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);
-    //monster3.mesh.isVisible = false;
     
     //créer un mur cassable
     const breakableWall = new BreakableWall("BreakableWall1",-9, 2, -7, 5, 1, 1, this.scene);

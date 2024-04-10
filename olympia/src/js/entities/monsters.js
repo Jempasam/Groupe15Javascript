@@ -14,7 +14,7 @@ function getMesh(scene){
 }
 
 export class Monster extends Entities {
-    constructor(name,x,y,z,xSize,ySize,zSize, MonsterSpeed, pv, scene) {
+    constructor(name, skin, x,y,z,xSize,ySize,zSize, MonsterSpeed, pv, scene) {
         super(name,x,y,z,xSize,ySize,zSize, getMesh(scene));
         this.vectorSpeed = new BABYLON.Vector3(0,0,0);
         this.MonsterSpeed = MonsterSpeed;
@@ -24,7 +24,47 @@ export class Monster extends Entities {
         this.positionDepart = new BABYLON.Vector3(x,y,z);
         this.pv = pv;
         this.canTakeDamage = true;
+        this.skinNom = skin;
+        this.setSkin(this.mesh, xSize, ySize, zSize, scene);
+        this.mesh.isVisible = false;
     }
+
+    toggleHitbox(){
+        this.mesh.isVisible = !this.mesh.isVisible;
+    }
+
+    //attribution d'un modèle 3d au monstre
+    setSkin(mesh, xSize, ySize, zSize, scene){
+        //récupérer modèle panda
+        let skinNom = this.skinNom;
+        BABYLON.SceneLoader.ImportMesh("", "../../olympia/assets/", this.skinNom+".glb", scene, function (meshes) {
+            let skin = meshes[0];
+            skin.scaling = new BABYLON.Vector3(0.2*xSize, 0.2*ySize, 0.2*zSize);
+            skin.isVisible = true;
+            //ajouter panda en enfant de monster
+            mesh.addChild(skin);
+            //placer le skin en fonction du modèle choisi
+            switch (skinNom){
+                case "Panda":
+                    skin.position = new BABYLON.Vector3(0, -0.5, 0);
+                    skin.rotation = new BABYLON.Vector3(0, 0, 0);
+                    break;
+                case "Kangaroo1":
+                    skin.position = new BABYLON.Vector3(0,-0.5,0.5);
+                    skin.rotation = new BABYLON.Vector3(0, Math.PI, 0);
+                    break;
+                case "Kangaroo2":
+                    skin.position = new BABYLON.Vector3(0,-0.5,0.5);
+                    skin.rotation = new BABYLON.Vector3(0, 0, 0);
+                    break;
+                default:
+                    skin.position = new BABYLON.Vector3(0,0,0);
+                    skin.rotation = new BABYLON.Vector3(0, 0, 0);
+                    break;
+            }
+        });
+    }
+
 
     //chercher si le joueur est dans le champ de vision
     //si oui, se diriger vers lui
