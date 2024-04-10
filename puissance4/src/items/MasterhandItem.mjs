@@ -3,7 +3,7 @@ import { random } from "../../../samlib/Array.mjs";
 import { adom } from "../../../samlib/DOM.mjs";
 import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
-import { BASE_COLLECTION } from "../field/collection/base_collection.mjs";
+import { BASE_SPAWNABLE } from "../field/collection/base_collection.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { BocalItem } from "./BocalItem.mjs";
 import { BubbleItem } from "./BubbleItem.mjs";
@@ -174,7 +174,7 @@ class Waiting extends State{
 
     onTick(field,root,mouse,x,y){
         if(this.duration<=0){
-            const base=random(Object.values(BASE_COLLECTION)).factory(Math.round(Math.random()*1000))
+            const base=random(Object.values(BASE_SPAWNABLE)).factory(Math.round(Math.random()*1000))
             if(Math.random()>0.2)mouse.setState(new Drawing())
             else mouse.setState(new Shooting())
         }
@@ -271,7 +271,7 @@ class Drawing extends State{
         // Factory
         this.variant=Math.round(Math.random()*1000)
         this.variant_d=Math.max(0,Math.round(Math.random()*4))
-        this.factory=random(Object.values(BASE_COLLECTION)).factory
+        this.factory=random(Object.values(BASE_SPAWNABLE)).factory
 
         // Decorator
         switch(Math.floor(Math.random()*11)){
@@ -345,7 +345,7 @@ class Shooting extends State{
     constructor(){
         super()
         this.duration=Math.round(Math.random()*8)
-        this.factory=random(Object.values(BASE_COLLECTION)).factory
+        this.factory=random(Object.values(BASE_SPAWNABLE)).factory
         this.variant=Math.round(Math.random()*1000)
     }
 

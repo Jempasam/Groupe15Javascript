@@ -114,7 +114,7 @@ export class Puissance4 extends HTMLElement{
      * Do nothing if the coordinates are out of the field.
      * @param {number} x 
      * @param {number} y 
-     * @param {Item} item 
+     * @param {Item?} item 
      * @param {boolean=} animate
      */
     set(x,y,item,animate=true){
@@ -208,6 +208,7 @@ export class Puissance4 extends HTMLElement{
     
 
 }
-mapAttribute(Puissance4)
 
+
+mapAttribute(Puissance4)
 customElements.define("puissance-4",Puissance4)

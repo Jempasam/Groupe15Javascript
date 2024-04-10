@@ -16,48 +16,34 @@ export class Onglets extends HTMLElement{
         super()
         this.addEventListener("click",e=>{
             const onglet=e.target
-            if(onglet instanceof Onglet && onglet.parentElement===this){
-                this.select(onglet.page)
+            if(onglet.parentElement.tagName==="NAV" && onglet.parentElement?.parentElement===this){
+                this.select(onglet.getAttribute("page"))
             }
         })
     }
 
     select(pageid){
-        for(const child of this.children){
-            if(child instanceof Onglet){
-                let nvalue=child.page===pageid
-                if(child.selected!==nvalue){
-                    child.selected=nvalue
-                    child.dispatchEvent(Onglets.#select)
-                }
+        const onglets=this.querySelector("&>nav")
+        const pages=this.querySelector("&>div")
+        for(const onglet of onglets.children){
+            const id=onglet.getAttribute("page")
+            if(id===pageid){
+                onglet.setAttribute("selected","")
             }
-            else if(child instanceof Page){
-                child.selected= child.page===pageid
+            else{
+                onglet.removeAttribute("selected")
+            }
+        }
+        for(const page of pages.children){
+            const id=page.getAttribute("page")
+            if(id===pageid){
+                page.setAttribute("selected","")
+            }
+            else{
+                page.removeAttribute("selected")
             }
         }
     }
 
 }
 customElements.define("sam-onglets", Onglets)
-
-export class Onglet extends HTMLElement{
-
-    static attributeMap={
-        "selected": { def:false, parser:s=>s==="true", serializer:n=>new String(n) },
-        "page": { def:"def", parser:s=>s, serializer:n=>n }
-    }
-
-}
-mapAttribute(Onglet)
-customElements.define("sam-onglet", Onglet)
-
-export class Page extends HTMLElement{
-
-    static attributeMap={
-        "selected": { def:false, parser:s=>s==="true", serializer:n=>new String(n) },
-        "page": { def:"def", parser:s=>s, serializer:n=>n }
-    }
-
-}
-mapAttribute(Page)
-customElements.define("sam-page", Page)

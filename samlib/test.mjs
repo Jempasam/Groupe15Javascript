@@ -6,14 +6,17 @@ import { Onglets } from "./gui/Onglets.mjs";
 let body=document.querySelector("body")
 
 body?.appendChild(adom/*html*/`
-    <sam-onglets>
-        <sam-onglet page=screen1>Screen 1</sam-onglet>
-        <sam-onglet page=screen2 class=shown>Screen 2</sam-onglet>
-        <sam-onglet page=screen3>Screen 3</sam-onglet>
-
-        <sam-page page=screen1>This is screen 1</sam-page>
-        <sam-page page=screen2 class=shown>This is screen 2</sam-page>
-        <sam-page page=screen3>This is screen 3</sam-page>
+    <sam-onglets style="height:300px;background:red;">
+        <nav>
+            <a page=screen1 selected>Screen 1</a>
+            <a page=screen2>Screen 2</a>
+            <a page=screen3>Screen 3</a>
+        </nav>
+        <div>
+            <div page=screen1 selected>This is screen 1</div>
+            <div page=screen2>This is screen 2</div>
+            <div page=screen3>This is screen 3</div>
+        </div>
     </sam-onglets>
 `)
 
