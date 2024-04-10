@@ -63,7 +63,7 @@ export class Lvl1 {
         listes[1].push(ground2);
 
         // Création d'un débloqueur d'attaque
-        const unlocker = new Unlocker("Unlocker1",0, 0, 10, 1, 1, 1, 1, this.scene);
+        const unlocker = new Unlocker("Unlocker1",0, 0, 10, 1, 1, 1, 2, this.scene);
         listes[8].push(unlocker);
 
         let PosMouvementY = -4.5;
@@ -87,13 +87,13 @@ export class Lvl1 {
         const murLvl2 = new BreakableWall("MurLvl2",51, -1.5, 20, 9.5, 4, 2, this.scene);
         listes[6].push(murLvl2);
 
-        const monster1 = new Monster("Monster1","Panda", 53, -4, 32, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
+        const monster1 = new Monster("Monster1", "Panda",53, -4, 32, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
         listes[0].push(monster1);
 
-        const monster2 = new Monster("Monster2","Panda", 53, -4, 30, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
+        const monster2 = new Monster("Monster2", "Panda", 53, -4, 30, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
         listes[0].push(monster2);
 
-        const monster4 = new Monster("Monster4","Panda", 50, -4, 19, 2, 2, 2, player.playerSpeed*3, 3, this.scene);
+        const monster4 = new Monster("Monster4", "Panda", 50, -4, 19, 2, 2, 2, player.playerSpeed*3, 3, this.scene);
         listes[0].push(monster4);
 
 
@@ -110,7 +110,7 @@ export class Lvl1 {
         const movingGround6 = new MovingGround("MovingGround6", 84, -4.5, 50, 7, 1, 8, 84, 2.5, 50, 0.03 ,this.scene);
         listes[7].push(movingGround6);
 
-        const monster3 = new Monster("Monster3","Panda", 84, 0, 50, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+        const monster3 = new Monster("Monster3", "Panda", 84, 0, 50, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
         listes[0].push(monster3);
         monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
         monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);
@@ -121,6 +121,42 @@ export class Lvl1 {
 
         const murLvl4 = new BreakableWall("MurLvl4",51, -3, 43, 9.5, 2, 2, this.scene);
         listes[6].push(murLvl4);
+
+        //Créer un sol
+        const groundE20 = new Ground("GroundE20",100, 2.5, 49, 25, 1, 10,this.scene);
+        listes[1].push(groundE20);
+        
+        const groundE21 = new Ground("GroundE21",112.5, 2.5, 45, 12.5, 1, 18,this.scene);
+        listes[1].push(groundE20);
+
+        const monster5 = new Monster("Monster5", "Panda", 102, 2.5, 50, 3, 3, 3, player.playerSpeed*2, 4, this.scene);
+        listes[0].push(monster5);
+
+        const monster6 = new Monster("Monster6", "Panda", 97, 2.5, 49, 1, 1, 1, player.playerSpeed*4, 2, this.scene);
+        listes[0].push(monster6);
+
+        const monster7 = new Monster("Monster7", "Panda", 97, 2.5, 51, 1, 1, 1, player.playerSpeed*4, 2, this.scene);
+        listes[0].push(monster7);
+
+        const murLvl5 = new BreakableWall("MurLvl5",88, 4, 49, 1, 2, 10, this.scene);
+        listes[6].push(murLvl5);
+
+
+        const groundE22 = new Ground("GroundE22",112.5, 2.5, 39, 12.5, 50, 1,this.scene);
+        listes[1].push(groundE22);
+        //créer un sol
+        const groundE23 = new Ground("GroundE23",3, -2, 16, 11, 1, 5,this.scene);
+        listes[1].push(groundE13);
+        //créer un sol
+        const groundE24 = new Ground("GroundE24",3, -1.5, 15, 11, 1, 5,this.scene);
+        listes[1].push(groundE14);
+        //créer un sol
+        const groundE25 = new Ground("GroundE25",3, -1, 14, 11, 1, 5,this.scene);
+        listes[1].push(groundE15);
+        const groundE26 = new Ground("GroundE26",3, -3.5, 19, 11, 1, 5,this.scene);
+        listes[1].push(groundE16);
+        const groundE27 = new Ground("GroundE27",3, -4, 20, 11, 1, 5,this.scene);
+        listes[1].push(groundE17);
 
         
     }
