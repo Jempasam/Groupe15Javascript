@@ -22,7 +22,7 @@ export class Canon extends Entities {
         this.mesh.lookAt(new BABYLON.Vector3(this.direction.x+this.mesh.position.x, this.direction.y+this.mesh.position.y, this.direction.z+this.mesh.position.z));
         
         //10 secondes avant de pouvoir être touché
-        this.timerBeforeHit = 1200;
+        this.timerBeforeHit = 120;
 
         //créer un carré rouge pour indiquer si le canon peut être touché
         this.voyant = BABYLON.MeshBuilder.CreateBox("voyant", {height: 0.2, width: 0.2, depth: 0.2}, scene);
@@ -57,7 +57,7 @@ export class Canon extends Entities {
                 //changer la couleur du voyant
                 this.voyant.material.diffuseColor = new BABYLON.Color3.Red();
                 //remettre le timer avant de pouvoir être touché
-                this.timerBeforeHit = 1200;
+                this.timerBeforeHit = 120;
 
             } else {
 

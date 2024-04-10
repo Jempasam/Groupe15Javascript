@@ -43,15 +43,15 @@ export class LvlBoss1 {
         listes[1].push(plateforme3);
 
         //créer des plateformes qui bougent verticalement pour atteindre les plateformes sous les murs cassables
-        const plateforme4 = new MovingGround("plateforme4",coordDepart.x-16, coordDepart.y+10, coordDepart.z-25, 5, 1, 5, coordDepart.x-16, coordDepart.y, coordDepart.z-25, 0.01, this.scene);
+        const plateforme4 = new MovingGround("plateforme4",coordDepart.x-16, coordDepart.y+10, coordDepart.z-25, 5, 1, 5, coordDepart.x-16, coordDepart.y, coordDepart.z-25, 0.1, this.scene);
         listes[7].push(plateforme4);
-        const plateforme5 = new MovingGround("plateforme5",coordDepart.x, coordDepart.y+10, coordDepart.z-25, 5, 1, 5, coordDepart.x, coordDepart.y, coordDepart.z-25, 0.01, this.scene);
+        const plateforme5 = new MovingGround("plateforme5",coordDepart.x, coordDepart.y+10, coordDepart.z-25, 5, 1, 5, coordDepart.x, coordDepart.y, coordDepart.z-25, 0.1, this.scene);
         listes[7].push(plateforme5);
-        const plateforme6 = new MovingGround("plateforme6",coordDepart.x+16, coordDepart.y+10, coordDepart.z-25, 5, 1, 5, coordDepart.x+16, coordDepart.y, coordDepart.z-25, 0.01, this.scene);
+        const plateforme6 = new MovingGround("plateforme6",coordDepart.x+16, coordDepart.y+10, coordDepart.z-25, 5, 1, 5, coordDepart.x+16, coordDepart.y, coordDepart.z-25, 0.1, this.scene);
         listes[7].push(plateforme6);
 
         //créer un boss
-        const boss = new BossBasket("boss",coordDepart.x, coordDepart.y, coordDepart.z-60, 20, 10, 10, 0.01, 3 ,this.scene);
+        const boss = new BossBasket("boss",coordDepart.x, coordDepart.y, coordDepart.z-60, 20, 10, 10, 0.05, 3 ,this.scene);
         listes[10].push(boss);
         /*//créer rectangle jaune représentant le boss
         const bossPoint = BABYLON.MeshBuilder.CreateBox("bossPoint", {height: 10, width: 20, depth: 10}, this.scene);

@@ -43,7 +43,7 @@ var createScene = function() {
     const light1 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 5,6));
 
     //créer un joueur
-    player = new Player("Player",0, 0, 0, 1, 1, 1, 0.008, 0.2, scene);
+    player = new Player("Player",0, 0, 0, 1, 1, 1, 0.03, 0.4, scene);
     //player = scene.player;
     camera.lockedTarget = player.mesh;
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
@@ -207,10 +207,7 @@ function changeLevel(){
     }
 }
 
-
-//boucle de rendu
-engine.runRenderLoop(function () {
-    sceneToRender.render();
+setInterval(function(){
     movePlayer();
     //faire chercher le joueur par les monstres
     listeMonstres.forEach(monstre => {
@@ -247,8 +244,13 @@ engine.runRenderLoop(function () {
     listeBombes.forEach(bombe => {
         bombe.detectTarget(player, listeBombes);
     });
+}, 30);
+
+//boucle de rendu
+engine.runRenderLoop(function () {
+    sceneToRender.render();
+    
     //afficher les pv actuels du joueur
     document.getElementById("pv").innerHTML = "PV: " + player.pv;
-
 
 });

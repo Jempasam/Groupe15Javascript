@@ -26,7 +26,7 @@ export class Monster extends Entities {
         this.canTakeDamage = true;
         this.skinNom = skin;
         this.setSkin(this.mesh, xSize, ySize, zSize, scene);
-        this.mesh.isVisible = false;
+        //this.mesh.isVisible = false;
     }
 
     toggleHitbox(){
@@ -92,9 +92,9 @@ export class Monster extends Entities {
     }
 
     move(player, listeMonstres, listeSol){
-        this.vectorSpeed.x=0;
-        this.vectorSpeed.y -= 0.005;
-        this.vectorSpeed.z=0;
+        this.vectorSpeed.x*=0.90;
+        this.vectorSpeed.y -= 0.02;
+        this.vectorSpeed.z*=0.90;
         //si on est à peu près au point de départ et que le joueur n'est pas à moins de 10 unités de distance en x et z du monstre, le monstre s'arrête
         if (Math.abs(this.mesh.position.x-this.positionDepart.x) < 0.1 && Math.abs(this.mesh.position.z-this.positionDepart.z) < 0.1){
             if (Math.abs(player.mesh.position.x-this.mesh.position.x) > 10 || Math.abs(player.mesh.position.z-this.mesh.position.z) > 10){
@@ -102,12 +102,12 @@ export class Monster extends Entities {
             this.vectorSpeed.z = 0;
             }
             else {
-                this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
-                this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
+                this.vectorSpeed.x += this.MonsterSpeed * Math.sin(this.mesh.rotation.y)*0.15;
+                this.vectorSpeed.z += this.MonsterSpeed * Math.cos(this.mesh.rotation.y)*0.15;
             }
         } else {
-        this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
-        this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
+        this.vectorSpeed.x += this.MonsterSpeed * Math.sin(this.mesh.rotation.y)*0.15;
+        this.vectorSpeed.z += this.MonsterSpeed * Math.cos(this.mesh.rotation.y)*0.15;
         }
         this.groundCheck(listeSol);
         this.detectAttack(listeMonstres, false);
@@ -140,16 +140,16 @@ export class Monster extends Entities {
     }
 
     flyingMove(player, listeMonstres, listeSol, playerFound){
-        this.vectorSpeed.x=0;
-        this.vectorSpeed.y=0;
-        this.vectorSpeed.z=0;
+        this.vectorSpeed.x*=0.98;
+        this.vectorSpeed.y*=0.98;
+        this.vectorSpeed.z*=0.98;
         if (playerFound){
-            this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
-            this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
+            this.vectorSpeed.x += this.MonsterSpeed * Math.sin(this.mesh.rotation.y)*0.15;
+            this.vectorSpeed.z += this.MonsterSpeed * Math.cos(this.mesh.rotation.y)*0.15;
             if(player.mesh.position.y > this.mesh.position.y){
-                this.vectorSpeed.y = this.MonsterSpeed;
+                this.vectorSpeed.y += this.MonsterSpeed;
             } else {
-                this.vectorSpeed.y = -this.MonsterSpeed;
+                this.vectorSpeed.y += -this.MonsterSpeed;
             }
         } else {
             //si on est à peu près au point de départ, le monstre s'arrête
@@ -157,13 +157,13 @@ export class Monster extends Entities {
                 this.vectorSpeed.x = 0;
                 this.vectorSpeed.z = 0;
             } else {
-            this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
-            this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
+            this.vectorSpeed.x += this.MonsterSpeed * Math.sin(this.mesh.rotation.y)*0.15;
+            this.vectorSpeed.z += this.MonsterSpeed * Math.cos(this.mesh.rotation.y)*0.15;
             }
             if(this.positionDepart.y > this.mesh.position.y){
-                this.vectorSpeed.y = this.MonsterSpeed;
+                this.vectorSpeed.y += this.MonsterSpeed;
             } else {
-                this.vectorSpeed.y = -this.MonsterSpeed;
+                this.vectorSpeed.y += -this.MonsterSpeed;
             }
         }
 
@@ -189,9 +189,9 @@ export class Monster extends Entities {
         if (this.canTakeDamage){
         this.pv -= 1;
         //reculer le monstre et l'empecher de prendre des dégats pendant 2 secondes
-        this.vectorSpeed.x = -this.vectorSpeed.x*80;
+        this.vectorSpeed.x = -this.vectorSpeed.x*2;
         this.vectorSpeed.y = 0.1;
-        this.vectorSpeed.z = -this.vectorSpeed.z*80;
+        this.vectorSpeed.z = -this.vectorSpeed.z*2;
         this.canTakeDamage = false;
         this.mesh.instancedBuffers.color = new BABYLON.Color3(1,0,1);
 
@@ -320,11 +320,11 @@ export class Monster extends Entities {
 
         if(BABYLON.Vector2.Distance(new BABYLON.Vector2(player.mesh.position.x, player.mesh.position.z), new BABYLON.Vector2(this.mesh.position.x, this.mesh.position.z)) < player.xSize/2 + this.xSize/2+0.1 && Math.abs(player.mesh.position.y-this.mesh.position.y) < player.ySize/2 + this.ySize/2+0.1){
             //reculer le joueur
-            player.vectorSpeed.x = this.vectorSpeed.x*8;
-            player.vectorSpeed.z = this.vectorSpeed.z*8;
+            player.vectorSpeed.x = this.vectorSpeed.x*4;
+            player.vectorSpeed.z = this.vectorSpeed.z*4;
             //reculer le monstre
-            this.vectorSpeed.x = -this.vectorSpeed.x*40;
-            this.vectorSpeed.z = -this.vectorSpeed.z*40;
+            this.vectorSpeed.x = -this.vectorSpeed.x*2;
+            this.vectorSpeed.z = -this.vectorSpeed.z*2;
             if(player.canTakeDamage && player.pv > 0){
                 player.takeDamage();
                 

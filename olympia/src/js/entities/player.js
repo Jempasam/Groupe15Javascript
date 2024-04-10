@@ -270,7 +270,7 @@ export class Player extends Entities {
     //bouge
     move(keyState, listes){
         this.vectorSpeed.x*=0.9;
-        this.vectorSpeed.y-=0.005;
+        this.vectorSpeed.y-=0.02;
         this.vectorSpeed.z*=0.9;
         //tourne vers la direction du mouvement
         this.direction = new BABYLON.Vector3(this.mesh.position.x+this.vectorSpeed.x,this.mesh.position.y,this.mesh.position.z+this.vectorSpeed.z);
