@@ -87,13 +87,13 @@ export class Lvl1 {
         const murLvl2 = new BreakableWall("MurLvl2",51, -1.5, 20, 9.5, 4, 2, this.scene);
         listes[6].push(murLvl2);
 
-        const monster1 = new Monster("Monster1",53, -4, 32, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
+        const monster1 = new Monster("Monster1","Panda", 53, -4, 32, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
         listes[0].push(monster1);
 
-        const monster2 = new Monster("Monster2",53, -4, 30, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
+        const monster2 = new Monster("Monster2","Panda", 53, -4, 30, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
         listes[0].push(monster2);
 
-        const monster4 = new Monster("Monster4",50, -4, 19, 2, 2, 2, player.playerSpeed*3, 3, this.scene);
+        const monster4 = new Monster("Monster4","Panda", 50, -4, 19, 2, 2, 2, player.playerSpeed*3, 3, this.scene);
         listes[0].push(monster4);
 
 
@@ -110,7 +110,7 @@ export class Lvl1 {
         const movingGround6 = new MovingGround("MovingGround6", 84, -4.5, 50, 7, 1, 8, 84, 2.5, 50, 0.03 ,this.scene);
         listes[7].push(movingGround6);
 
-        const monster3 = new Monster("Monster3",84, 0, 50, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+        const monster3 = new Monster("Monster3","Panda", 84, 0, 50, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
         listes[0].push(monster3);
         monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
         monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);

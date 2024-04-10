@@ -141,6 +141,9 @@ export class Monster extends Entities {
 
     flyingMove(player, listeMonstres, listeSol, playerFound){
         this.vectorSpeed.x*=0.98;
+        if (Math.abs(this.vectorSpeed.y) > 2){
+            this.vectorSpeed.y=2;
+        }
         this.vectorSpeed.y*=0.98;
         this.vectorSpeed.z*=0.98;
         if (playerFound){
@@ -179,19 +182,22 @@ export class Monster extends Entities {
     detectAttack(listeMonstres, isFlying){
         //si on touche le mesh attaque
         if (this.mesh.getScene().getMeshByName("attaque") && this.mesh.intersectsMesh(this.mesh.getScene().getMeshByName("attaque"))){
-        //if (this.mesh.intersectsMesh(this.mesh.getScene().getMeshByName("attaque"))){
+            //vecteur recul pour le monstre
+            let vectRecul = new BABYLON.Vector3(this.mesh.position.x-this.mesh.getScene().getMeshByName("attaque").position.x, 0, this.mesh.position.z-this.mesh.getScene().getMeshByName("attaque").position.z);
+            //normaliser le vecteur
+            vectRecul = vectRecul.normalize();
             //enlever un point de vie
-            this.takeDamage(listeMonstres, isFlying);
+            this.takeDamage(listeMonstres, isFlying, vectRecul);
         }
     }
 
-    takeDamage(listeMonstres, isFlying){
+    takeDamage(listeMonstres, isFlying, VectRecul){
         if (this.canTakeDamage){
         this.pv -= 1;
         //reculer le monstre et l'empecher de prendre des dégats pendant 2 secondes
-        this.vectorSpeed.x = -this.vectorSpeed.x*2;
+        this.vectorSpeed.x += VectRecul.x*0.5;
         this.vectorSpeed.y = 0.1;
-        this.vectorSpeed.z = -this.vectorSpeed.z*2;
+        this.vectorSpeed.z += VectRecul.z*0.5;
         this.canTakeDamage = false;
         this.mesh.instancedBuffers.color = new BABYLON.Color3(1,0,1);
 
@@ -268,13 +274,13 @@ export class Monster extends Entities {
             if (sol.mesh.rotation.z != 0 || sol.mesh.rotation.x != 0){
                 if (this.mesh.intersectsMesh(sol.mesh, true)){
                     //on arrête de tomber
-                    this.vectorSpeed.y = 0;
+                    this.vectorSpeed.y *= 0.9;
                     return;
                 }
             } else {
                 if (sol.mesh.intersectsPoint(point)){
                     //on arrête de tomber
-                    this.vectorSpeed.y = this.MonsterSpeed;
+                    this.vectorSpeed.y *= 0.9;
                     this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2)+0.1;
                 }
             }
@@ -319,12 +325,18 @@ export class Monster extends Entities {
         }*/
 
         if(BABYLON.Vector2.Distance(new BABYLON.Vector2(player.mesh.position.x, player.mesh.position.z), new BABYLON.Vector2(this.mesh.position.x, this.mesh.position.z)) < player.xSize/2 + this.xSize/2+0.1 && Math.abs(player.mesh.position.y-this.mesh.position.y) < player.ySize/2 + this.ySize/2+0.1){
+            //vecteur de recul
+            let vectRecul = new BABYLON.Vector3(player.mesh.position.x-this.mesh.position.x, 0, player.mesh.position.z-this.mesh.position.z);
+            //normaliser le vecteur
+            vectRecul = vectRecul.normalize();
             //reculer le joueur
-            player.vectorSpeed.x = this.vectorSpeed.x*4;
-            player.vectorSpeed.z = this.vectorSpeed.z*4;
+            player.vectorSpeed.x = vectRecul.x*0.5;
+            player.vectorSpeed.z = vectRecul.z*0.5;
+
             //reculer le monstre
-            this.vectorSpeed.x = -this.vectorSpeed.x*2;
-            this.vectorSpeed.z = -this.vectorSpeed.z*2;
+            this.vectorSpeed.x = -vectRecul.x*0.5;
+            this.vectorSpeed.z = -vectRecul.z*0.5;
+            
             if(player.canTakeDamage && player.pv > 0){
                 player.takeDamage();
                 
