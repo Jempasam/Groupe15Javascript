@@ -1,4 +1,5 @@
 import Entities from "./entities.js";
+import { MovingGround } from "./movingGrounds.js";
 
 let mesh;
 function getMesh(scene){
@@ -26,7 +27,7 @@ export class Monster extends Entities {
         this.canTakeDamage = true;
         this.skinNom = skin;
         this.setSkin(this.mesh, xSize, ySize, zSize, scene);
-        //this.mesh.isVisible = false;
+        this.mesh.isVisible = false;
     }
 
     toggleHitbox(){
@@ -141,18 +142,28 @@ export class Monster extends Entities {
 
     flyingMove(player, listeMonstres, listeSol, playerFound){
         this.vectorSpeed.x*=0.98;
-        if (Math.abs(this.vectorSpeed.y) > 2){
-            this.vectorSpeed.y=2;
+        if (Math.abs(this.vectorSpeed.y) > 1){
+            //= 1 ou -1
+            this.vectorSpeed.y = Math.sign(this.vectorSpeed.y);
         }
         this.vectorSpeed.y*=0.98;
         this.vectorSpeed.z*=0.98;
         if (playerFound){
             this.vectorSpeed.x += this.MonsterSpeed * Math.sin(this.mesh.rotation.y)*0.15;
             this.vectorSpeed.z += this.MonsterSpeed * Math.cos(this.mesh.rotation.y)*0.15;
-            if(player.mesh.position.y > this.mesh.position.y){
-                this.vectorSpeed.y += this.MonsterSpeed;
-            } else {
-                this.vectorSpeed.y += -this.MonsterSpeed;
+            //si on est à + de 5 unités de distance du joueur, monter
+            if(Math.abs(player.mesh.position.x-this.mesh.position.x) > 3 || Math.abs(player.mesh.position.z-this.mesh.position.z) > 3){
+                if(player.mesh.position.y+5 > this.mesh.position.y){
+                    this.vectorSpeed.y += this.MonsterSpeed;
+                } else {
+                    this.vectorSpeed.y += -this.MonsterSpeed;
+                }
+            }else{
+                if(player.mesh.position.y > this.mesh.position.y){
+                    this.vectorSpeed.y += this.MonsterSpeed*2;
+                } else {
+                    this.vectorSpeed.y += -this.MonsterSpeed;
+                }
             }
         } else {
             //si on est à peu près au point de départ, le monstre s'arrête
@@ -268,10 +279,10 @@ export class Monster extends Entities {
         //pointInMesh.position = pointIn;
         //pointInMesh.showBoundingBox = true;
 
-        //pour chaque sol
+        //pour chaque sol mouvant
         listeSol.forEach(sol => {
             //si le point est dans le sol (attention aux sols en pente)
-            if (sol.mesh.rotation.z != 0 || sol.mesh.rotation.x != 0){
+            /*if (sol.mesh.rotation.z != 0 || sol.mesh.rotation.x != 0){
                 if (this.mesh.intersectsMesh(sol.mesh, true)){
                     //on arrête de tomber
                     this.vectorSpeed.y *= 0.9;
@@ -282,6 +293,42 @@ export class Monster extends Entities {
                     //on arrête de tomber
                     this.vectorSpeed.y *= 0.9;
                     this.mesh.position.y = sol.mesh.position.y + (sol.ySize/2) + (this.ySize/2)+0.1;
+                }
+            }*/
+            //verifier si c'est un movingground
+            if(sol instanceof MovingGround){
+                //si le monstre touche le sol
+                console.log("sol mouvant");
+                if (this.mesh.intersectsMesh(sol.mesh, true)){
+                    //récupérer la direction du sol
+                    let direction = sol.direction;
+                    //normaliser la direction
+                    direction = direction.normalize();
+                    //verifier si le monstre va dans la direction du sol en y
+                    if (this.vectorSpeed.y*direction.y < 0){
+                        //si non, le repousser
+                        this.vectorSpeed.y += direction.y;
+                        this.mesh.position.y += direction.y;
+                        return;
+                    }else {
+                        //si oui, le repousser
+                        this.vectorSpeed.y -= direction.y;
+                        this.mesh.position.y -= direction.y;
+                    }
+                    //pousser le monstre dans la direction
+                    this.vectorSpeed.y += direction.y;
+                    this.mesh.position.y += direction.y;
+                    console.log("poussé");
+                    console.log(direction);
+
+                }
+            }
+            else {
+                if (this.mesh.intersectsMesh(sol.mesh, true)){
+                    this.vectorSpeed.y = 0;
+                    //repousser le monstre en y
+                    this.vectorSpeed.y += 0.1;
+
                 }
             }
         

@@ -70,9 +70,11 @@ export class Lvl1 {
         let PosMouvementZ = 30
         
         const movingGround1 = new MovingGround("MovingGround1", 20, PosMouvementY, PosMouvementZ, 6, 1, 6, 28, PosMouvementY, PosMouvementZ, 0.045 ,this.scene);
+        listes[1].push(movingGround1);
         listes[7].push(movingGround1);
 
         const movingGround2 = new MovingGround("MovingGround2", 40, PosMouvementY, PosMouvementZ, 6, 1, 6, 32, PosMouvementY, PosMouvementZ, 0.045 ,this.scene);
+        listes[1].push(movingGround2);
         listes[7].push(movingGround2);
 
         //Créer un sol
@@ -99,15 +101,19 @@ export class Lvl1 {
 
 
         const movingGround3 = new MovingGround("MovingGround3", 64, -4.3, 50, 6, 1, 8, 57, -4.3, 50, 0.03 ,this.scene);
+        listes[1].push(movingGround3);
         listes[7].push(movingGround3);
 
         const movingGround4 = new MovingGround("MovingGround4", 70, -4.5, 50, 7, 1, 8, 70, 2.5, 50, 0.03 ,this.scene);
+        listes[1].push(movingGround4);
         listes[7].push(movingGround4);
 
         const movingGround5 = new MovingGround("MovingGround5", 77, 2.5, 50, 7, 1, 8, 77, -4.5, 50, 0.03 ,this.scene);
+        listes[1].push(movingGround5);
         listes[7].push(movingGround5);
 
         const movingGround6 = new MovingGround("MovingGround6", 84, -4.5, 50, 7, 1, 8, 84, 2.5, 50, 0.03 ,this.scene);
+        listes[1].push(movingGround6);
         listes[7].push(movingGround6);
 
         const monster3 = new Monster("Monster3","Panda", 84, 0, 50, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
