@@ -30,8 +30,8 @@ export class Monster extends Entities {
         this.mesh.isVisible = false;
     }
 
-    toggleHitbox(){
-        this.mesh.isVisible = !this.mesh.isVisible;
+    toggleHitbox(vision){
+        this.mesh.isVisible = vision;
     }
 
     //attribution d'un modèle 3d au monstre
@@ -58,6 +58,9 @@ export class Monster extends Entities {
                     skin.position = new BABYLON.Vector3(0,-0.5,0.5);
                     skin.rotation = new BABYLON.Vector3(0, 0, 0);
                     break;
+                case "Bird":
+                    skin.position = new BABYLON.Vector3(0,-1,0);
+                    skin.rotation = new BABYLON.Vector3(0, 0, 0);
                 default:
                     skin.position = new BABYLON.Vector3(0,0,0);
                     skin.rotation = new BABYLON.Vector3(0, 0, 0);

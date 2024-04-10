@@ -96,7 +96,7 @@ export class LvlTest {
     listes[0].push(monster2);
 
     //créer un monstre volant
-    const monster3 = new Monster("Monster3","Kangaroo2", -20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+    const monster3 = new Monster("Monster3","Bird", -20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
     listes[0].push(monster3);
     monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
     monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);

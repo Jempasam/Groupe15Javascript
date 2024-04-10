@@ -116,7 +116,7 @@ export class Lvl1 {
         listes[1].push(movingGround6);
         listes[7].push(movingGround6);
 
-        const monster3 = new Monster("Monster3", "Panda", 84, 0, 50, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
+        const monster3 = new Monster("Monster3","Bird", 84, 0, 50, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
         listes[0].push(monster3);
         monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
         monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);
