@@ -3,7 +3,7 @@ import { random } from "../../../samlib/Array.mjs";
 import { adom } from "../../../samlib/DOM.mjs";
 import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
-import { BASE_COLLECTION } from "../field/collection/base_collection.mjs";
+import { BASE_SPAWNABLE } from "../field/collection/base_collection.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { BubbleItem } from "./BubbleItem.mjs";
 import { CoinItem } from "./CoinItem.mjs";
@@ -266,7 +266,7 @@ class Waiting extends State{
 
     onTick(field,root,mouse,x,y){
         if(this.duration<=0){
-            const base=random(Object.values(BASE_COLLECTION)).factory(Math.round(Math.random()*1000))
+            const base=random(Object.values(BASE_SPAWNABLE)).factory(Math.round(Math.random()*1000))
             Sounds.CLICK.play()
             mouse.setState(new Grabbed(base))
         }

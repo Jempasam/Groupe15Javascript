@@ -21,17 +21,18 @@ export class TetrisItem extends Item{
     onTick(field,root,x,y){
         for(let ox=0; ox<field.width; ox++){
             const element=field.get(ox,y)
-            if(!element?.associateWithTetris){
+            if(!element){
                 return
             }
         }
         for(let ox=0; ox<field.width; ox++){
-            field.set(ox,y,null)
-
-            for(let oy=y; oy>=0; oy--){
-                const over=field.get(ox,oy-1)
-                if(!over)break
-                field.swap(ox,oy,ox,oy-1)
+            if(field.get(ox,y)?.associateWithTetris){
+                field.set(ox,y,null)
+                for(let oy=y; oy>=0; oy--){
+                    const over=field.get(ox,oy-1)
+                    if(!over)break
+                    field.swap(ox,oy,ox,oy-1)
+                }
             }
         }
     }
