@@ -8,6 +8,7 @@ import { killZone } from "../entities/killZones.js";
 import { warpZone } from "../entities/warpZones.js";
 import { lvlWarp } from "../entities/lvlWarp.js";
 import { Unlocker } from "../entities/unlocker.js";
+import { MovingGround } from "../entities/movingGrounds.js";
 
 // Constructeur de niveau
 export class Lvl1 {
@@ -57,13 +58,70 @@ export class Lvl1 {
         const murLvl1 = new BreakableWall("MurLvl1",10, -2, 30.5, 2, 2, 15, this.scene);
         listes[6].push(murLvl1);
 
-        // Création d'un sol de départ
-        const ground2 = new Ground("Ground2",33, -4, 30, 75, 1, 15,this.scene);
+        // Création du sol principal
+        const ground2 = new Ground("Ground2",8, -4, 30, 22, 1, 15,this.scene);
         listes[1].push(ground2);
 
         // Création d'un débloqueur d'attaque
         const unlocker = new Unlocker("Unlocker1",0, 0, 10, 1, 1, 1, 1, this.scene);
         listes[8].push(unlocker);
+
+        let PosMouvementY = -4.5;
+        let PosMouvementZ = 30
+        
+        const movingGround1 = new MovingGround("MovingGround1", 20, PosMouvementY, PosMouvementZ, 6, 1, 6, 28, PosMouvementY, PosMouvementZ, 0.045 ,this.scene);
+        listes[7].push(movingGround1);
+
+        const movingGround2 = new MovingGround("MovingGround2", 40, PosMouvementY, PosMouvementZ, 6, 1, 6, 32, PosMouvementY, PosMouvementZ, 0.045 ,this.scene);
+        listes[7].push(movingGround2);
+
+        //Créer un sol
+        const groundE18 = new Ground("GroundE18",51, -4, 30, 19, 1, 13,this.scene);
+        listes[1].push(groundE18);
+
+        //Créer un sol
+        const groundE19 = new Ground("GroundE19",51, -4, 34, 9.5, 1, 40,this.scene);
+        listes[1].push(groundE19);
+
+        //créer un mur cassable
+        const murLvl2 = new BreakableWall("MurLvl2",51, -1.5, 20, 9.5, 4, 2, this.scene);
+        listes[6].push(murLvl2);
+
+        const monster1 = new Monster("Monster1",53, -4, 32, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
+        listes[0].push(monster1);
+
+        const monster2 = new Monster("Monster2",53, -4, 30, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
+        listes[0].push(monster2);
+
+        const monster4 = new Monster("Monster4",50, -4, 19, 2, 2, 2, player.playerSpeed*3, 3, this.scene);
+        listes[0].push(monster4);
+
+
+
+        const movingGround3 = new MovingGround("MovingGround3", 64, -4.3, 50, 6, 1, 8, 57, -4.3, 50, 0.03 ,this.scene);
+        listes[7].push(movingGround3);
+
+        const movingGround4 = new MovingGround("MovingGround4", 70, -4.5, 50, 7, 1, 8, 70, 2.5, 50, 0.03 ,this.scene);
+        listes[7].push(movingGround4);
+
+        const movingGround5 = new MovingGround("MovingGround5", 77, 2.5, 50, 7, 1, 8, 77, -4.5, 50, 0.03 ,this.scene);
+        listes[7].push(movingGround5);
+
+        const movingGround6 = new MovingGround("MovingGround6", 84, -4.5, 50, 7, 1, 8, 84, 2.5, 50, 0.03 ,this.scene);
+        listes[7].push(movingGround6);
+
+        const monster3 = new Monster("Monster3",84, 0, 50, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+        listes[0].push(monster3);
+        monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
+        monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);
+
+        //créer un mur cassable
+        const murLvl3 = new BreakableWall("MurLvl3",51, -3, 40, 9.5, 2, 2, this.scene);
+        listes[6].push(murLvl3);
+
+        const murLvl4 = new BreakableWall("MurLvl4",51, -3, 43, 9.5, 2, 2, this.scene);
+        listes[6].push(murLvl4);
+
         
     }
 }

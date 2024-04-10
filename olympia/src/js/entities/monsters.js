@@ -14,7 +14,7 @@ function getMesh(scene){
 }
 
 export class Monster extends Entities {
-    constructor(name,x,y,z,xSize,ySize,zSize, MonsterSpeed, pv, scene) {
+    constructor(name, skin, x,y,z,xSize,ySize,zSize, MonsterSpeed, pv, scene) {
         super(name,x,y,z,xSize,ySize,zSize, getMesh(scene));
         this.vectorSpeed = new BABYLON.Vector3(0,0,0);
         this.MonsterSpeed = MonsterSpeed;
@@ -24,7 +24,47 @@ export class Monster extends Entities {
         this.positionDepart = new BABYLON.Vector3(x,y,z);
         this.pv = pv;
         this.canTakeDamage = true;
+        this.skinNom = skin;
+        this.setSkin(this.mesh, xSize, ySize, zSize, scene);
+        this.mesh.isVisible = false;
     }
+
+    toggleHitbox(){
+        this.mesh.isVisible = !this.mesh.isVisible;
+    }
+
+    //attribution d'un modèle 3d au monstre
+    setSkin(mesh, xSize, ySize, zSize, scene){
+        //récupérer modèle panda
+        let skinNom = this.skinNom;
+        BABYLON.SceneLoader.ImportMesh("", "../../olympia/assets/", this.skinNom+".glb", scene, function (meshes) {
+            let skin = meshes[0];
+            skin.scaling = new BABYLON.Vector3(0.2*xSize, 0.2*ySize, 0.2*zSize);
+            skin.isVisible = true;
+            //ajouter panda en enfant de monster
+            mesh.addChild(skin);
+            //placer le skin en fonction du modèle choisi
+            switch (skinNom){
+                case "Panda":
+                    skin.position = new BABYLON.Vector3(0, -0.5, 0);
+                    skin.rotation = new BABYLON.Vector3(0, 0, 0);
+                    break;
+                case "Kangaroo1":
+                    skin.position = new BABYLON.Vector3(0,-0.5,0.5);
+                    skin.rotation = new BABYLON.Vector3(0, Math.PI, 0);
+                    break;
+                case "Kangaroo2":
+                    skin.position = new BABYLON.Vector3(0,-0.5,0.5);
+                    skin.rotation = new BABYLON.Vector3(0, 0, 0);
+                    break;
+                default:
+                    skin.position = new BABYLON.Vector3(0,0,0);
+                    skin.rotation = new BABYLON.Vector3(0, 0, 0);
+                    break;
+            }
+        });
+    }
+
 
     //chercher si le joueur est dans le champ de vision
     //si oui, se diriger vers lui
@@ -45,6 +85,7 @@ export class Monster extends Entities {
             //se déplacer vers le point de départ
             this.move(player, listeMonstres, listeSol);
             
+            
         }
 
 
@@ -54,9 +95,20 @@ export class Monster extends Entities {
         this.vectorSpeed.x=0;
         this.vectorSpeed.y -= 0.005;
         this.vectorSpeed.z=0;
+        //si on est à peu près au point de départ et que le joueur n'est pas à moins de 10 unités de distance en x et z du monstre, le monstre s'arrête
+        if (Math.abs(this.mesh.position.x-this.positionDepart.x) < 0.1 && Math.abs(this.mesh.position.z-this.positionDepart.z) < 0.1){
+            if (Math.abs(player.mesh.position.x-this.mesh.position.x) > 10 || Math.abs(player.mesh.position.z-this.mesh.position.z) > 10){
+            this.vectorSpeed.x = 0;
+            this.vectorSpeed.z = 0;
+            }
+            else {
+                this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
+                this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
+            }
+        } else {
         this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
         this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
-
+        }
         this.groundCheck(listeSol);
         this.detectAttack(listeMonstres, false);
         this.playerCheck(player, listeMonstres);
@@ -100,8 +152,14 @@ export class Monster extends Entities {
                 this.vectorSpeed.y = -this.MonsterSpeed;
             }
         } else {
+            //si on est à peu près au point de départ, le monstre s'arrête
+            if (Math.abs(this.mesh.position.x-this.positionDepart.x) < 0.1 && Math.abs(this.mesh.position.z-this.positionDepart.z) < 0.1){
+                this.vectorSpeed.x = 0;
+                this.vectorSpeed.z = 0;
+            } else {
             this.vectorSpeed.x = this.MonsterSpeed * Math.sin(this.mesh.rotation.y);
             this.vectorSpeed.z = this.MonsterSpeed * Math.cos(this.mesh.rotation.y);
+            }
             if(this.positionDepart.y > this.mesh.position.y){
                 this.vectorSpeed.y = this.MonsterSpeed;
             } else {

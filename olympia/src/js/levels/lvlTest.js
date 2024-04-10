@@ -89,13 +89,14 @@ export class LvlTest {
     listes[1].push(ground6);
 
     //créer des monstres
-    const monster = new Monster("Monster1",-20, 0, 0, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
+    const monster = new Monster("Monster1","Panda", -20, 0, 0, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
     listes[0].push(monster);
-    const monster2 = new Monster("Monster2",-23, 1.5, -5, 3, 3, 3, player.playerSpeed*2, 15, this.scene);
+    
+    const monster2 = new Monster("Monster2","Kangaroo1", -23, 1.5, -5, 3, 3, 3, player.playerSpeed*2, 15, this.scene);
     listes[0].push(monster2);
 
     //créer un monstre volant
-    const monster3 = new Monster("Monster3",-20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+    const monster3 = new Monster("Monster3","Kangaroo2", -20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
     listes[0].push(monster3);
     monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
     monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);
