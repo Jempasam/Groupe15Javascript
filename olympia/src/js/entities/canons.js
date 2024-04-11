@@ -20,7 +20,7 @@ export class Canon extends Entities {
         this.direction = direction;
         this.canBeHit = false;
         this.mesh.lookAt(new BABYLON.Vector3(this.direction.x+this.mesh.position.x, this.direction.y+this.mesh.position.y, this.direction.z+this.mesh.position.z));
-        
+        this.mesh.isVisible = false;
         //10 secondes avant de pouvoir être touché
         this.timerBeforeHit = 120;
 
@@ -38,6 +38,25 @@ export class Canon extends Entities {
         this.voyant.checkCollisions = false;
         this.voyant.isVisible = true;
 
+        this.setSkin(this.mesh, xSize, ySize, zSize, scene);
+
+    }
+
+    toggleHitbox(vision){
+        this.mesh.isVisible = vision;
+    }
+
+    setSkin(mesh, xSize, ySize, zSize, scene){
+        BABYLON.SceneLoader.ImportMesh("", "../../olympia/assets/", "Canon.glb", scene, function (meshes) {
+            let skin = meshes[0];
+            skin.scaling = new BABYLON.Vector3(0.5*xSize, 0.5*ySize, 0.5*zSize);
+            skin.isVisible = true;
+            //ajouter le skin en enfant du mesh
+            mesh.addChild(skin);
+            //placer le skin en fonction du modèle choisi
+            skin.position = new BABYLON.Vector3(0, 0, 0);
+            skin.rotation = new BABYLON.Vector3(0, 0, 0);
+        });
     }
 
     detectAttack(){
