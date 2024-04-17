@@ -10,10 +10,13 @@ import { BreakableWall } from "../entities/breakableWalls.js";
 import { MovingGround } from "../entities/movingGrounds.js";
 import { Unlocker } from "../entities/unlocker.js";
 import { Canon } from "../entities/canons.js";
+import { SimpleMeshEntity } from "../entity/entities/PhysicalEntity.mjs";
 
 // Constructeur de niveau
 export class LvlTest {
-    constructor(player, listes) {
+    constructor(player, listes, world) {
+    // reset le joueur
+    
     //listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, ListeCanons];
     //créer un sol de départ
     const ground = new Ground("Ground1",-9, -1, 0, 20, 1, 5,this.scene);
@@ -43,6 +46,9 @@ export class LvlTest {
 
     //ajouter un escalier à gauche du sol en hauteur
     //créer un sol
+    const test=new SimpleMeshEntity(world.models.PANDA)
+    world.add(test)
+
     const groundE11 = new Ground("GroundE11",-2, -1, -5, 4, 1, 5,this.scene);
     listes[1].push(groundE11);
     //créer un sol

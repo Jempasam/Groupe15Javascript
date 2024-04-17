@@ -7,6 +7,7 @@ import { EntityListHandler } from "./EntityListHandler.mjs"
  */
 export class World{
 
+    /** @type {Set<Entity>} */
     _objects=new Set()
 
     /** @type {Map<EntityListHandler,Set<Entity>>} */
@@ -83,5 +84,7 @@ export class World{
         for(const entity of this._objects){
             this.remove(entity)
         }
+        this._lists.clear()
+        if(this._objects.size>0)throw new Error("Failed to remove all entities")
     }
 }

@@ -3,11 +3,14 @@ import { LvlTest } from "./levels/lvlTest.js";
 import { LvlAccueil } from "./levels/lvlAccueil.js";
 import { Lvl1} from "./levels/lvl1.js";
 import { LvlBoss1} from "./levels/lvlBoss1.js";
+import { World } from "./entity/World.mjs";
+import { loadModels } from "./ressources/Models.mjs";
 
 const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true);
 let keyState = {};
 let scene;
+let world=new World()
 
 let camera;
 let player;
@@ -28,8 +31,10 @@ let decor;
 let nbLevel = -1;
 
 
-var createScene = function() {
+async function createScene() {
     scene = new BABYLON.Scene(engine);
+    world.scene = scene
+    world.models=await loadModels()
     scene.clearColor = new BABYLON.Color3.Black;
     const camY = 10;
     const camZ = -10;
@@ -55,7 +60,7 @@ var createScene = function() {
 
     return scene;
 }
-let sceneToRender = createScene();
+
 
 function definitEcouteurs() { 
     // Ecouteur sur le clavier pour bouger le monstre
@@ -188,10 +193,11 @@ function changeLevel(){
     listeBombes = [];
 
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
+    world.close()
     //supprimer le décor
     //changer de niveau
     if (nbLevel == -1){
-        decor = new LvlTest(player, listes);
+        decor = new LvlTest(player, listes, world);
     }
     if (nbLevel == 0){
         
@@ -207,48 +213,51 @@ function changeLevel(){
     }
 }
 
-
-//boucle de rendu
-engine.runRenderLoop(function () {
-    sceneToRender.render();
-    movePlayer();
-    //faire chercher le joueur par les monstres
-    listeMonstres.forEach(monstre => {
-        monstre.chercheJoueur(player, listeMonstres, listeGrounds);
-        //si le monstre touche un sol, arrete de tomber
-        /*monstre.mesh.onCollideObservable.add((collidedMesh)=>{
-            let touche = collidedMesh;
-            monstre.auSol(touche);
-        })*/
-    });
-    //detecter si on tape un breakableWall
-    listeBreakableWalls.forEach(breakableWall => {
-        breakableWall.detectAttack(listeBreakableWalls);
-    }
-    );
-    //detecter si on tape un canon
-    listeCanons.forEach(canon => {
-        canon.detectAttack();
-    }
-    );
-    listeMoveGrounds.forEach(moveGround => {
-        moveGround.move();
-    });
-    Boss.forEach(boss => {
-        boss.act(listes, player);
-        if (!boss.enVie){
-            boss.postDeath(listes);
-            boss = null;
-            //enlever le boss de la liste
-            let index = Boss.indexOf(boss);
-            Boss.splice(index, 1);
+async function main(){
+    let sceneToRender = await createScene();
+    //boucle de rendu
+    engine.runRenderLoop(function () {
+        sceneToRender.render();
+        movePlayer();
+        //faire chercher le joueur par les monstres
+        listeMonstres.forEach(monstre => {
+            monstre.chercheJoueur(player, listeMonstres, listeGrounds);
+            //si le monstre touche un sol, arrete de tomber
+            /*monstre.mesh.onCollideObservable.add((collidedMesh)=>{
+                let touche = collidedMesh;
+                monstre.auSol(touche);
+            })*/
+        });
+        //detecter si on tape un breakableWall
+        listeBreakableWalls.forEach(breakableWall => {
+            breakableWall.detectAttack(listeBreakableWalls);
         }
-    });
-    listeBombes.forEach(bombe => {
-        bombe.detectTarget(player, listeBombes);
-    });
-    //afficher les pv actuels du joueur
-    document.getElementById("pv").innerHTML = "PV: " + player.pv;
+        );
+        //detecter si on tape un canon
+        listeCanons.forEach(canon => {
+            canon.detectAttack();
+        }
+        );
+        listeMoveGrounds.forEach(moveGround => {
+            moveGround.move();
+        });
+        Boss.forEach(boss => {
+            boss.act(listes, player);
+            if (!boss.enVie){
+                boss.postDeath(listes);
+                boss = null;
+                //enlever le boss de la liste
+                let index = Boss.indexOf(boss);
+                Boss.splice(index, 1);
+            }
+        });
+        listeBombes.forEach(bombe => {
+            bombe.detectTarget(player, listeBombes);
+        });
+        //afficher les pv actuels du joueur
+        document.getElementById("pv").innerHTML = "PV: " + player.pv;
 
 
-});
+    });
+}
+main()

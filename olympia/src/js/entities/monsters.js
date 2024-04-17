@@ -46,7 +46,8 @@ export class Monster extends Entities {
             //placer le skin en fonction du modèle choisi
             switch (skinNom){
                 case "Panda":
-                    skin.position = new BABYLON.Vector3(0, -0.5, 0);
+                    skin.scaling = new BABYLON.Vector3(xSize, ySize, zSize);
+                    skin.position = new BABYLON.Vector3(0, 0, 0);
                     skin.rotation = new BABYLON.Vector3(0, 0, 0);
                     break;
                 case "Kangaroo1":
