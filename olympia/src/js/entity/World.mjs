@@ -13,6 +13,9 @@ export class World{
     /** @type {Map<EntityListHandler,Set<Entity>>} */
     _lists=new Map()
 
+    /** @type {Array<EntityListHandler>} */
+    _lists_list=new Array()
+
     /**
      * Ajoute un objet au monde
      * @param {Entity} entity 
@@ -26,6 +29,8 @@ export class World{
             for(const list of lists){
                 if(!this._lists.has(list)){
                     this._lists.set(list,new Set())
+                    this._lists_list.push(list)
+                    this._lists_list.sort((a,b)=>a.order-b.order)
                 }
                 this._lists.get(list)?.add(entity)
                 list.on_add(this,entity)
@@ -73,7 +78,7 @@ export class World{
     }
 
     tick(){
-        for(let list of this._lists.keys())list.on_tick(this)
+        for(let list of this._lists_list)list.on_tick(this)
     }
 
     /**
@@ -85,6 +90,7 @@ export class World{
             this.remove(entity)
         }
         this._lists.clear()
+        this._lists_list.length=0
         if(this._objects.size>0)throw new Error("Failed to remove all entities")
     }
 }

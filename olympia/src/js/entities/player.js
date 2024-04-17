@@ -284,24 +284,19 @@ export class Player extends Entities {
         
         //avance dans la direction du mouvement
         if (keyState['KeyW']) {
-            console.log("z");
             this.vectorSpeed.z-= this.playerSpeed;
         }
         if (keyState['KeyS']) {
-            console.log("s");
             this.vectorSpeed.z+= this.playerSpeed;
         }
         if (keyState['KeyA']) {
-            console.log("q");
             this.vectorSpeed.x+= this.playerSpeed;
         }
         if (keyState['KeyD']) {
-            console.log("d");
             this.vectorSpeed.x-= this.playerSpeed;
         }
         if (keyState['Space'] && this.canJump) {
             if (this.maxJump > 0){
-            console.log("space");
             this.vectorSpeed.y+= this.jumpPower;
             }
         }

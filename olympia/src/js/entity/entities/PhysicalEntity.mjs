@@ -19,7 +19,6 @@ class MeshELHClass extends EntityListHandler{
         if(!world.scene)return
         for(let entity of world.of(this)){
             if(!entity.placeMesh)return
-            console.log("place mesh")
             entity.placeMesh(world,world.scene)
         }
     }
@@ -51,6 +50,12 @@ export class SimpleMeshEntity extends MeshEntity{
     }
 
     createMesh(world,scene){
+        this.mesh = this.factory(scene)
+    }
+
+    setMesh(factory){
+        const scene=this.mesh.getScene()
+        this.mesh.dispose()
         this.mesh = this.factory(scene)
     }
 

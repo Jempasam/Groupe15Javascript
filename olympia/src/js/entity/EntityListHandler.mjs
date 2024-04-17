@@ -26,4 +26,6 @@ export class EntityListHandler{
      * @param {World} world 
      */
     on_tick(world){}
+
+    get order(){ return 0 }
 }

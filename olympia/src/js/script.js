@@ -216,7 +216,8 @@ function changeLevel(){
 async function main(){
     let sceneToRender = await createScene();
     setInterval(function(){
-        movePlayer();
+        world.tick()
+        movePlayer()
         //faire chercher le joueur par les monstres
         listeMonstres.forEach(monstre => {
             monstre.chercheJoueur(player, listeMonstres, listeGrounds);
