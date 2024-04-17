@@ -102,7 +102,7 @@ export class LvlTest {
     listes[0].push(monster2);
 
     //créer un monstre volant
-    const monster3 = new Monster("Monster3","Kangaroo2", -20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+    const monster3 = new Monster("Monster3","Bird", -20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
     listes[0].push(monster3);
     monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
     monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);
@@ -117,7 +117,7 @@ export class LvlTest {
     listes[7].push(movingGround);*/
 
     //créer un sol qui bouge
-    const movingGround2 = new MovingGround("MovingGround2",0, 1, -15.5, 8, 1, 8, 10, 5, -15.5, 0.01 ,this.scene);
+    const movingGround2 = new MovingGround("MovingGround2",0, 1, -15.5, 8, 1, 8, 10, 5, -15.5, 0.1 ,this.scene);
     listes[1].push(movingGround2);
     listes[7].push(movingGround2);
 
