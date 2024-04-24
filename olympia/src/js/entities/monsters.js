@@ -302,7 +302,6 @@ export class Monster extends Entities {
             //verifier si c'est un movingground
             if(sol instanceof MovingGround){
                 //si le monstre touche le sol
-                console.log("sol mouvant");
                 if (this.mesh.intersectsMesh(sol.mesh, true)){
                     //récupérer la direction du sol
                     let direction = sol.direction;
