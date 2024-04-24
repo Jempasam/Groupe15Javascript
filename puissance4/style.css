@@ -10,13 +10,22 @@ puissance-4-loader, puissance-4-editor{
     margin: auto;
     box-sizing: border-box;
     height: 100%;
-
+    
     .menu{
+        border: gray 0.1em solid;
+        sam-onglet{
+            height: 1em;
+            text-align: center;
+        }
+    }
+    sam-onglets.menu>div>div, .menu:not(sam-onglets){
+        padding: 1em;
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 1em;
-        border: gray 0.1em solid;
+        height: 100%;
+        box-sizing: border-box;
+
         >input[type=number], >input[type=text]{
             text-align: center;
             width: 6em;
@@ -31,6 +40,12 @@ puissance-4-loader, puissance-4-editor{
                 background-color: lightskyblue;
             }
         }
+
+        >label{
+            font-family: Arial, Helvetica, sans-serif;
+            font-variant-caps: all-petite-caps;
+        }
+
 
         >sam-numberinput{
             margin-bottom: 0.5em;
@@ -61,9 +76,9 @@ puissance-4-loader, puissance-4-editor{
             overflow: hidden;
             margin-top: 10%;
             margin-bottom: 10%;
-            width: 100%;
+            width: 70%;
             box-sizing: border-box;
-            padding: 20%;
+            padding: 15%;
             border: black 0.1em solid;
         }
         

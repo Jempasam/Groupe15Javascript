@@ -1,14 +1,39 @@
-import { view } from "./Template.mjs";
-import { EndScreen } from "./gui/EndScreen.mjs";
+import { merge } from "./inheritance/merge.mjs"
 
-let body=document.querySelector("body")
 
-let endScreen=new EndScreen()
-endScreen.money=100
-endScreen.score=100
-endScreen.winner="Player 1"
-endScreen.actions={
-    "Restart":()=>{console.log("Restart")},
-    "Quit":()=>{console.log("Quit")}
+class Animal{
+    get(){
+        console.log("Fur")
+    }
+    waf(){
+        console.log("Waf")
+    }
 }
-body?.appendChild(endScreen)
+
+class Eatable{
+    get(){
+        console.log("Food")
+    }
+    eatable(){
+        console.log("I'm eatable")
+    }
+}
+
+class Pork{
+    jam(){
+        console.log("I'm pork")
+    }
+}
+function Date(){
+
+}
+Date.prototype={
+    get(){
+        console.log("Date")
+    }
+}
+
+console.log(Animal)
+console.log(Eatable)
+console.log(Pork)
+console.log(merge(Date,Eatable,Pork))

@@ -1,20 +1,18 @@
-// @ts-nocheck
 
 import { mapAttribute } from "../../../samlib/CustomElement.mjs"
-import { create, dom, html } from "../../../samlib/DOM.mjs"
-import { Puissance4 } from "../field/Puissance4.mjs"
-import { SamSelector } from "../../../samlib/gui/Selector.mjs"
+import { create } from "../../../samlib/DOM.mjs"
 import { Item } from "../field/Item.mjs"
-import { LOCAL_STORAGE, OBJECT_DATA } from "../../../samlib/Storage.mjs"
+import { Puissance4 } from "../field/Puissance4.mjs"
+import { ItemField } from "../field/field/ItemField.mjs"
 import { FileMenu } from "./FileMenu.mjs"
-import { Puissance4Field } from "./Editor.mjs"
-/** @typedef {import("./Editor.mjs").EditorSpawnableDict} EditorSpawnableDict*/
+/** @typedef {import("../field/field/ItemField.mjs").ItemCollection} ItemCollection*/
+/** @typedef {import("./Editor.mjs").ItemFieldContent} ItemFieldContent */
 
 
 export class Loader extends HTMLElement{
 
-    /** @type {EditorSpawnableDict} */
-    #spawnables
+    /** @type {ItemCollection} */
+    #collection
 
     #selected_field
 
@@ -24,14 +22,14 @@ export class Loader extends HTMLElement{
     /** @type {string|undefined} */
     #factory_name=undefined
 
-    /** @type {undefined|function(Puissance4Field):void} */
-    onplay
+    /** @type {undefined|function(ItemFieldContent):void} */
+    onstart
 
     constructor(){
         super()
 
         // Field
-        this.field=create("puissance-4._scrollable")
+        this.field=create(new Puissance4(), "&._scrollable")
         this.appendChild(this.field)
 
         // Menu
@@ -41,38 +39,40 @@ export class Loader extends HTMLElement{
         // File Menu
         this.dom_file_menu=new FileMenu()
         this.dom_file_menu.onselect= input=>{
-            this.#selected_field=new Puissance4Field(this.#spawnables,input)
+            this.#selected_field=new ItemField(this.#collection,input)
             this.load(this.#selected_field)
         }
         this.dom_file_menu.classList.add("menu")
         this.dom_menu.appendChild(this.dom_file_menu)
 
         // Play Button
-        this.dom_play=create("input[type=button][value=Play]")
+        
+        this.dom_play=/**@type {HTMLInputElement}*/(create("input[type=button][value=Play]"))
         this.dom_play.onclick=()=>{
-            if(this.onplay)this.onplay(this.#selected_field)
+            if(this.onstart)this.onstart(this.#selected_field)
         }
         this.dom_menu.appendChild(this.dom_play)
 
         this.field.width=1
         this.field.height=1
     }
+    
     /**
-     * @param {EditorSpawnableDict} spawnables
+     * @param {ItemCollection} collection
      */
-    set spawnables(spawnables){
-        this.#spawnables=spawnables
+    set collection(collection){
+        this.#collection=collection
     }
 
     /**
      * Load a field into the editor
-     * @param {Puissance4Field} field_definition 
+     * @param {ItemField} field_definition 
      */
     load(field_definition){
         this.field.width=field_definition.content.width
         this.field.height=field_definition.content.height
-        this.#spawnables=field_definition.dictionnary
-        field_definition.load(this.field,0,0,true)
+        this.#collection=field_definition.collection
+        field_definition.write_field(this.field,0,0,true)
     }
 
     set storage(value){

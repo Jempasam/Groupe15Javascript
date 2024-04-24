@@ -10,10 +10,13 @@ import { BreakableWall } from "../entities/breakableWalls.js";
 import { MovingGround } from "../entities/movingGrounds.js";
 import { Unlocker } from "../entities/unlocker.js";
 import { Canon } from "../entities/canons.js";
+import { SimpleMeshEntity } from "../entity/entities/PhysicalEntity.mjs";
 
 // Constructeur de niveau
 export class LvlTest {
-    constructor(player, listes) {
+    constructor(player, listes, world) {
+    // reset le joueur
+    
     //listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, ListeCanons];
     //créer un sol de départ
     const ground = new Ground("Ground1",-9, -1, 0, 20, 1, 5,this.scene);
@@ -43,6 +46,9 @@ export class LvlTest {
 
     //ajouter un escalier à gauche du sol en hauteur
     //créer un sol
+    const test=new SimpleMeshEntity(world.models.PANDA)
+    world.add(test)
+
     const groundE11 = new Ground("GroundE11",-2, -1, -5, 4, 1, 5,this.scene);
     listes[1].push(groundE11);
     //créer un sol
@@ -89,13 +95,14 @@ export class LvlTest {
     listes[1].push(ground6);
 
     //créer des monstres
-    const monster = new Monster("Monster1",-20, 0, 0, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
+    const monster = new Monster("Monster1","Panda", -20, 0, 0, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
     listes[0].push(monster);
-    const monster2 = new Monster("Monster2",-23, 1.5, -5, 3, 3, 3, player.playerSpeed*2, 15, this.scene);
+    
+    const monster2 = new Monster("Monster2","Kangaroo1", -23, 1.5, -5, 3, 3, 3, player.playerSpeed*2, 15, this.scene);
     listes[0].push(monster2);
 
     //créer un monstre volant
-    const monster3 = new Monster("Monster3",-20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+    const monster3 = new Monster("Monster3","Bird", -20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
     listes[0].push(monster3);
     monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
     monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);
@@ -110,7 +117,7 @@ export class LvlTest {
     listes[7].push(movingGround);*/
 
     //créer un sol qui bouge
-    const movingGround2 = new MovingGround("MovingGround2",0, 1, -15.5, 8, 1, 8, 10, 5, -15.5, 0.01 ,this.scene);
+    const movingGround2 = new MovingGround("MovingGround2",0, 1, -15.5, 8, 1, 8, 10, 5, -15.5, 0.1 ,this.scene);
     listes[1].push(movingGround2);
     listes[7].push(movingGround2);
 
