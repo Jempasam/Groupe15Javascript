@@ -114,7 +114,12 @@ function helpScreen(){
         <div class="help">
             <h1>Help</h1>
             <h2>Magasin</h2>
-            <p>Vous pouvez acheter des objets au magasin pour pouvoir les utiliser dans l'éditeur.</p>
+            <p>Vous pouvez acheter des objets au magasin pour pouvoir les utiliser dans l'éditeur. Pour cela il vous faut des pièces que vous gagnez en faisant des parties.</p>
+            <h2>Editeur</h2>
+            <p>Vous pouvez créer vos propres niveaux dans l'éditeur. Vous pouvez placer des objets et des modificateurs pour créer des niveaux uniques</p>
+            <h2>Variantes</h2>
+            <p>Il existe plusieurs variantes d'objet. Des variantes des canons pour chaque équipe par exemple.</p>
+            
         </div>
     `)
 }
