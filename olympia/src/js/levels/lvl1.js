@@ -190,6 +190,26 @@ export class Lvl1 {
         const groundE28 = new Ground("GroundE28",130, -4, 49, 15, 8, 10,this.scene);
         listes[1].push(groundE28);
 
+
+
+        for (let i = 0; i < 12; i++) // On boucle le nombre de marche
+        { 
+            const ground = new Ground
+            (
+                "GroundE" + (i + 62), // Nom unique pour chaque marche
+                130, //PosX de la première marche
+                -6 + (i * 0.5), //PosY + PosY pour chaque prochaine marche
+                38 - (i * - 1), // PosZ + PosZ pour chaque prochaine marche
+                8, //TailleX pour chaque marche
+                1, //TailleY Pour chaque marche
+                10, //TailleZ pour chaque marche
+                this.scene
+            );
+
+            listes[1].push(ground);
+        }
+
+
         // Dernière zone avant boss final
 
         const movingGround7 = new MovingGround("MovingGround7", 141, -0.5, 49, 8, 1, 6, 141, -0.5, 30, 0.15 ,this.scene);
