@@ -10,14 +10,13 @@
     height : 100%;
     width : 100%;
     margin : auto;
-    background-color: cyan;
   }
 
   #ecranGameOver {
     display: none; /* Le menu est initialement caché */
     top : 25%;
-    left : 25%;
-    width : 50%;
+    left : 30%;
+    width : 40%;
     height : 50%;
     position: absolute;
     background-color: palevioletred;
@@ -29,12 +28,14 @@
 
   #myCanvas {
     border: 1px solid black;
-    background-color : green;
-    text-align: center;
-    aspect-ratio : 1;
-    margin : auto;
-    height: 100%;
-  }
+    background-color: green;
+    display: block;
+    margin: 0 auto; /* Pour centrer horizontalement */
+    aspect-ratio: 1; /* Conserver un rapport d'aspect carré */
+    width: 80%; /* Ajuster la taille en fonction de la largeur disponible */
+    height: 100%; /* Ajuster la taille en fonction de la hauteur de la fenêtre du navigateur */
+}
+
 
   #score {
     border: 1px solid black;
@@ -43,7 +44,8 @@
     position: absolute;
     top: 5%;
     right: 0;
-    height: 6em;
+    height: auto;
+    width: 10%;
   }
 
   #menuJeu {
@@ -58,16 +60,20 @@
 
   #menuPrincipal {
     background: linear-gradient(to bottom, cyan 60%, green 40%);
-    width : 100%;
+    width : 75%;
     height : 100%;
     border-radius : 10%;
   }
 
   #toggleMenuButton {
-    position: absolute;
     border-radius : 50%;
-    margin-bottom: 80px;
     padding : 20px;
+    position: absolute;
+    width: 10%; /* Ajuste la largeur selon tes besoins */
+    height: 13%; /* Ajuste la hauteur automatiquement pour garder les proportions */
+    cursor: pointer;
+    top: 30%;
+    left: 45%;
   }
 
   #boutonReset {
@@ -75,8 +81,8 @@
     border-radius : 30%;
     top : 80%;
     left : 33%;
-    width : 100px;
-    height: 40px;
+    width : 35%;
+    height: 15%;
   }
 
   #boutonReset p {
@@ -88,74 +94,71 @@
   }
 
   #toggleMenuButton img {
-    width : 40px;
-    height : 40px;
+    width : 100%;
+    height : 100%;
   }
 
-  #modeVitesse {
+#modeVitesse,
+#modeInversion,
+#modeMiamFast,
+#modeSerpentLent {
     position: absolute;
-    transform: translateX(-575%);
-    border: 2px solid black;
-    border-radius: 5px;
+    width: 5%; /* Ajuste la largeur selon tes besoins */
+    height: 5%; /* Ajuste la hauteur automatiquement pour garder les proportions */
     cursor: pointer;
-    margin-bottom: 100px;
-  }
+}
 
-  #modeInversion {
-    position: absolute;
-    transform: translateX(-575%);
-    border: 2px solid black;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 20px;
-  }
+#modeVitesse {
+    top: 40%; /* Ajuste la position verticale en pourcentage */
+    left: 20%; /* Ajuste la position horizontale en pourcentage */
+}
 
-  #modeMiamFast {
-    position: absolute;
-    transform: translateX(-540%);
-    border: 2px solid black;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom : -60px;
-  }
+#modeInversion {
+    top: 47%; /* Ajuste la position verticale en pourcentage */
+    left: 20%; /* Ajuste la position horizontale en pourcentage */
+}
 
-  #modeSerpentLent {
-    position: absolute;
-    transform: translateX(-545%);
-    border: 2px solid black;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom : 180px;
-  }
+#modeMiamFast {
+    top: 54%; /* Ajuste la position verticale en pourcentage */
+    left: 20%; /* Ajuste la position horizontale en pourcentage */
+}
+
+#modeSerpentLent {
+    top: 33%; /* Ajuste la position verticale en pourcentage */
+    left: 20%; /* Ajuste la position horizontale en pourcentage */
+}
+
+
 
   #boutonSkin {
     position: absolute;
-    transform : translateY(350%);
     border: 2px solid black;
     border-radius: 5px;
     cursor: pointer;
-    width : 125px;
-    height : 50px;
+    width : 15%;
+    height : 5%;
+    top: 70%;
   }
 
   #boutonSon {
     position: absolute;
-    top : 0;
-    right : 0;
+    top : 5%;
+    right : 20%;
     border: 2px solid black;
     border-radius: 5px;
     cursor: pointer;
-    width : 4em;
-    height : 4em;
+    width : 5%;
+    height : 6%;
   }
 
   #boutonSon img
   {
-    width: 4em;
+    width: 100%;
   }
 
   #boutonSkin img{
     width: 50px;
+    height: 20px;
 
   }
 
@@ -177,21 +180,20 @@
 
   .ScoreAffichage img
   {
-    margin-left: 25%;
-    margin-top : -20px;
-    width : 50px;
-    height: 50px;
+    width : 100%;
+    height: auto;
+    margin-top : -5px;
   }
 
   .NombrePoints
   {
     text-transform: uppercase;
-    font-size: calc(12px + 2vw);
+    font-size: 1.5vw;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     font-family: 'Arial Black', sans-serif;
 
     text-align: center;
-    margin-top : -10px;
+    margin-top : -5px;
   }
 
   #ResultatFruit {
@@ -213,7 +215,7 @@
   .ScoreNow
   {
     position: absolute;
-    top: -1%;
+    top: 10%;
     left: 50%;
 
     text-transform: uppercase;
@@ -227,7 +229,7 @@
   .HighScoreChiffre
   {
     position: absolute;
-    top: 30%;
+    top: 42%;
     left: 50%;
 
     text-transform: uppercase;
@@ -243,6 +245,8 @@
     position:absolute;
     top : 65%;
     left : 10%;
+    height:auto;
+    width: 8%;
   }
 
   #ModeDeJeu2
@@ -250,6 +254,8 @@
     position:absolute;
     top : 65%;
     left : 30%;
+    height:auto;
+    width: 8%;
   }
 
   #ModeDeJeu3
@@ -257,6 +263,8 @@
     position:absolute;
     top : 65%;
     left : 55%;
+    height:auto;
+    width: 8%;
   }
 
   #ModeDeJeu4
@@ -264,24 +272,33 @@
     position:absolute;
     top : 65%;
     left : 75%;
+    height:auto;
+    width: 8%;
   }
 
 
   .easterEgg
   {
     position: absolute;
-    margin-bottom: -20%;
-    animation: shake 1.5s infinite;
+    width: 10%; /* Ajuste la largeur selon tes besoins */
+    height: auto; /* Ajuste la hauteur automatiquement pour garder les proportions */
     cursor: pointer;
+    top: 60%;
+    left: 45%;
   }
 
+  .easterEgg img {
+    width: 100%; /* Utilise un pourcentage pour la largeur */
+    height: auto; /* Laisse la hauteur ajustée automatiquement pour garder les proportions */
+}
 
 
-  @keyframes shake {
+
+ /* @keyframes shake {
     from { transform: translateX(-200px); }
     to { transform: translateX(200px); }
   }
-
+*/
   .bouton-active {
     box-shadow: 0 0 10px yellow; /* Ombre jaune */
   }
