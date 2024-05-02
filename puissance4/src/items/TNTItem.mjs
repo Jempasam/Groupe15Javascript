@@ -1,3 +1,4 @@
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 
@@ -20,9 +21,11 @@ export class TNTItem extends Item{
                     let target=field.get(x+px,y+py)
                     if(target){
                         field.set(x+px,y+py,null)
+                        if(px!=0 || py!=0)observers(field,"on_destroy").notify(this, x, y, target, x+px, y+py)
                     }
                 }
             }
+            observers(field,"on_explode").notify(this,x,y)
             Sounds.BOMB.play()
         }
         else field.schedule(x,y,root)

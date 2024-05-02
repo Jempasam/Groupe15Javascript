@@ -158,7 +158,6 @@ export class Editor extends HTMLElement{
             }
             else if(button%8/4==1){ // Middle click
                 let cell=this.field.get(x,y)
-                console.log(cell)
                 this.select(cell?.spawnable)
                 this.selectVariant(cell?.variant??0)
                 this.selectModifier(cell?.modifier)
@@ -193,6 +192,7 @@ export class Editor extends HTMLElement{
         this.#createModifSelector()
     }
 
+    /** @param {Storage} */
     set storage(value){
         this.dom_file_menu.storage=value
     }
@@ -204,7 +204,7 @@ export class Editor extends HTMLElement{
     }
 
     selectVariant(index){
-        this.#spawnable_variant=index
+        this.dom_spwn.variant.value=index
         this.updateExemple()
     }
 
@@ -215,7 +215,7 @@ export class Editor extends HTMLElement{
     }
 
     selectModifierVariant(index){
-        this.#modifier_variant=index
+        this.dom_deco.variant.value=index
         this.updateExemple()
     }
 

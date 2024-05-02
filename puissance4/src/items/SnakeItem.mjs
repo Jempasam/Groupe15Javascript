@@ -62,6 +62,7 @@ export class SnakeItem extends Item{
                 if(under!=null){
                     this.length++
                     Sounds.CROCK.play()
+                    observers(field,"on_eat").notify(this,under,x,y)
                 }
 
                 field.swap(x,y, x+dx,y+dy)

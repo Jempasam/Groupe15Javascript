@@ -87,8 +87,9 @@ export class LinkItem extends Item{
             facing.onTrigger(field,root,x+dx,y+dy)
             this.attack_time=10
             this.dx=dx
-        this.dy=dy
+            this.dy=dy
             field.updateElement(x,y)
+            observers(field,"on_attack").notify(this, x, y, facing, x+dx, y+dy)
         }
         return true
     }

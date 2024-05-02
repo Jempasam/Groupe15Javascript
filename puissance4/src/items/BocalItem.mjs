@@ -1,5 +1,6 @@
 import { adom } from "../../../samlib/DOM.mjs";
 import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
+import { achievement_registry } from "../../../site/js/achievement_list.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
