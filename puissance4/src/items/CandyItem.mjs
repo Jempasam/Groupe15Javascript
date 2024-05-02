@@ -3,6 +3,7 @@ import { observers } from "../../../samlib/observers/ObserverGroup.mjs"
 import { Item } from "../field/Item.mjs"
 import { Sounds } from "../sounds/SoundBank.mjs"
 import { Methods } from "./ItemUtils.mjs"
+import { on_crushed } from "./events"
 
 export class CandyItem extends Item{
     
@@ -33,7 +34,7 @@ export class CandyItem extends Item{
                     else break
                 }
             }
-            observers(field,"on_crushed").notify(found)
+            observers(field,on_crushed).notify(found)
             Sounds.CROCK.play()
         }
         else{

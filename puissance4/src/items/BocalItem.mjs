@@ -7,6 +7,7 @@ import { CoinItem } from "./CoinItem.mjs";
 import { FruitItem } from "./FruitItem.mjs";
 import { Class } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
+import { on_broken } from "./events";
 
 export class BocalItem extends Item{
     
@@ -25,7 +26,7 @@ export class BocalItem extends Item{
 
     onTrigger(field,root,x,y){
         field.set(x,y,this.base)
-        observers(field,"on_broken").notify(this,x,y)
+        observers(field,on_broken).notify({item:this,pos:[x,y]})
     }
 
     rotate(field, root, x, y){

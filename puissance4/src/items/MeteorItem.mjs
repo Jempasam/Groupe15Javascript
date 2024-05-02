@@ -5,6 +5,7 @@ import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
+import { on_destroy } from "./events";
 
 export class MeteorItem extends Item{
     
@@ -42,7 +43,7 @@ export class MeteorItem extends Item{
                     field.set(x+dx, y+dy, new MovingItem(this.base, dx, dy))
                     field.set(x, y, null)
                     Sounds.TOP.play()
-                    observers(field,"on_destroy").notify(this, x+dx, y+dy, underder, x+dx*2, y+dy*2)
+                    observers(field,on_destroy).notify({pos:[x+dx,y+dy], item:this, destroyed:underder, destroyed_pos:[x+dx*2, y+dy*2]})
                 }
                 else{
                     field.swap(x,y, x+dx,y+dy)

@@ -2,6 +2,7 @@ import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { FallingPlatformItem } from "./FallingPlatformItem.mjs";
+import { on_broken } from "./events";
 
 export class BrokablePlatformItem extends Item{
     
@@ -16,7 +17,7 @@ export class BrokablePlatformItem extends Item{
 
     onTrigger(field,root,x,y){
         field.set(x,y,new FallingPlatformItem())
-        observers(field,"on_broken").notify(this,x,y)
+        observers(field, on_broken).notify({item:this,pos:[x,y]})
         Sounds.TCHI.play()
     }
 }

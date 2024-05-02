@@ -1,15 +1,40 @@
 
+let id_counter=0
+
 /**
+ * @template T Event object
+ */
+export class ObserverKey{
+    /** @type {string} */
+    name
+    constructor(name="unamed"){
+        this.name=name+id_counter
+        id_counter++
+    }
+}
+
+
+/**
+ * @template O The target object
+ * @template T The event object
  * A group of observers
  */
 export class ObserverGroup{
-    /** @type {Object.<string|number,(function(...any):void)[]>} */
+
+    constructor(holder){
+        this.#holder=holder
+    }
+
+    /** @type {O} */
+    #holder
+
+    /** @type {Object.<string|number,(function(O,T):void)[]>} */
     #observers={}
 
     /**
      * Register an observer
      * @param {string|number} name
-     * @param {function(...any):void} observer
+     * @param {function(O,T):void} observer
      */
     add(name,observer){
         this.#observers[name]=observer
@@ -25,11 +50,11 @@ export class ObserverGroup{
 
     /**
      * Notify all observers
-     * @param {any} value
+     * @param {T} value
      */
-    notify(...value){
+    notify(value){
         for(let observer of Object.values(this.#observers)){
-            observer(...value)
+            observer(this.#holder,value)
         }
     }
 
@@ -38,15 +63,17 @@ export class ObserverGroup{
 
 /**
  * Get an observer group from an object, or create it if it doesn't exist
- * @param {any} object 
- * @param {string} name 
- * @returns {ObserverGroup}
+ * @template O
+ * @template T
+ * @param {O} object 
+ * @param {ObserverKey<T>} key 
+ * @returns {ObserverGroup<O,T>}
  */
-export function observers(object,name){
-    let group=object["observers_"+name]
+export function observers(object,key){
+    let group=object["observers_"+key.name]
     if(!group){
-        group=new ObserverGroup()
-        object["observers_"+name]=group
+        group=new ObserverGroup(this)
+        object["observers_"+key.name]=group
     }
     return group
 }

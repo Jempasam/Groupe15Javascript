@@ -3,6 +3,7 @@ import { CoinItem } from "./CoinItem.mjs";
 import { eatKeyPress, isKeyPressed } from "../controls/Keyboard.mjs"
 import { adom, dom } from "../../../samlib/DOM.mjs";
 import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
+import { on_summon } from "./events";
 
 export class SpawnerItem extends Item{
     
@@ -39,7 +40,7 @@ export class SpawnerItem extends Item{
                     field.set(sx,sy,next)
                     this.next=this.factory()
                     field.updateElement(x,y)
-                    observers(field,"on_summon").notify(this, x, y, next, sx, sy)
+                    observers(field, on_summon) .notify({pos:[x,y], item:this, summoned:next, summoned_pos:[sx,sy]})
                     break;
                 }
             }

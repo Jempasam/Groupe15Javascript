@@ -16,6 +16,7 @@ import { MovingItem } from "./MovingItem.mjs";
 import { SnakeItem } from "./SnakeItem.mjs";
 import { SpawnerItem } from "./SpawnerItem.mjs";
 import { TNTItem } from "./TNTItem.mjs";
+import { on_summon } from "./events";
 
 export class MasterhandItem extends Item{
 
@@ -311,7 +312,7 @@ class Drawing extends State{
                 field.set(x,y,next)
                 Sounds.TOP.play()
                 this.next=this.decorator(this.factory(this.variant+Math.round(Math.random()*this.variant_d)))
-                observers(field,"on_summon").notify(root, fx, fy, next, x, y)
+                observers(field, on_summon) .notify({pos:[fx,fy], item:root, summoned:next, summoned_pos:[x,y]})
             }
             if(this.length==this.rotate_moment){
                 let ro=Math.floor(Math.random()*2)

@@ -3,6 +3,7 @@ import { achievement_registry } from "../../../site/js/achievement_list.mjs";
 import { Item } from "../field/Item.mjs";
 import { ActivatedCoinItem } from "./ActivatedCoinItem.mjs";
 import { Methods } from "./ItemUtils.mjs";
+import { on_alignement } from "./events";
 
 export class CoinItem extends Item{
     
@@ -25,7 +26,7 @@ export class CoinItem extends Item{
                 field.set(a,b,new ActivatedCoinItem(this.team))
             }
             field.set(x,y,new ActivatedCoinItem(this.team))
-            observers(field,"on_alignement").notify([[x,y],...aligneds])
+            observers(field,on_alignement).notify([[x,y],...aligneds])
         }
     }
 

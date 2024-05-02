@@ -4,6 +4,7 @@ import { eatKeyPress, isKeyPressed } from "../controls/Keyboard.mjs"
 import { adom, dom } from "../../../samlib/DOM.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
+import { on_summon } from "./events";
 
 export class PlayerItem extends Item{
     
@@ -56,7 +57,7 @@ export class PlayerItem extends Item{
                 this.next=this.factory(this.team)
                 Sounds.POP.play()
                 field.updateElement(x,y)
-                observers(field,"on_summon").notify(this, x, y, next, x, y+1)
+                observers(field,on_summon) .notify({pos:[x,y], item:this, summoned:next, summoned_pos:[x,y+1]})
             }
         }
         field.schedule(x,y,root)

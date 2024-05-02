@@ -9,6 +9,7 @@ import { MeteorItem } from "./MeteorItem.mjs";
 import { MoblinItem } from "./MoblinItem.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 import { TNTItem } from "./TNTItem.mjs";
+import { on_attack, on_die, on_grab } from "./events";
 
 export class LynelItem extends Item{
     /**
@@ -26,6 +27,9 @@ export class LynelItem extends Item{
         this.life=life
     }
 
+    /**
+     * @type {Item['getDisplay']}
+     */
     getDisplay(...args){
         return adom/*html*/`
             <div class="lynel ${this.attack_time>0?"_attack":""} _life${this.life} ${Class.direction(this.dx,this.dy)}">
@@ -42,7 +46,7 @@ export class LynelItem extends Item{
         this.life--
         if(this.life==0){
             field.set(x,y,this.base)
-            observers(field,"on_die").notify(this,x,y)
+            observers(field,on_die).notify({item:this, pos:[x,y]})
         }
         else field.updateElement(x,y)
     }
@@ -109,7 +113,7 @@ export class LynelItem extends Item{
                                 const previous=this.base
                                 this.base=already
                                 if(already){
-                                    observers(field,"on_grab").notify(this, x, y, previous, this.base, x+this.dx, y+this.dy)
+                                    observers(field, on_grab) .notify({pos:[x,y], item:this, previous, grabbed:already, grabbed_pos:[x+this.dx, y+this.dy]})
                                 }
                             }
                         }
@@ -122,7 +126,7 @@ export class LynelItem extends Item{
                                 field.set(taken[1],taken[2],null)
                                 const previous=this.base
                                 this.base=taken[0]
-                                observers(field,"on_grab").notify(this, x, y, previous, this.base, taken[1], taken[2])
+                                observers(field, on_grab) .notify({pos:[x,y], item:this, previous, grabbed:taken[0], grabbed_pos:[taken[1], taken[2]]})
                             }
                             else{
                                 const object=Math.floor(Math.random()*3)
@@ -151,7 +155,7 @@ export class LynelItem extends Item{
                 if(facing!==null){
                     if(facing!==undefined){
                         facing.onTrigger(field,root,x+this.dx,y+this.dy)
-                        observers(field,"on_attack").notify(this, x, y, facing, x+this.dx, y+this.dy)
+                        observers(field,on_attack).notify({pos:[x,y], attacker:this, attacked:facing, attacked_pos:[x+this.dx,y+this.dy]})
                     }
                     this.dx=-this.dx
                     this.dy=-this.dy

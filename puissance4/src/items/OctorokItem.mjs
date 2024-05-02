@@ -5,6 +5,7 @@ import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
+import { on_die } from "./events";
 
 export class OctorokItem extends Item{
     /**
@@ -21,7 +22,10 @@ export class OctorokItem extends Item{
         this.duration=0
         this.shooting_time=0
     }
-
+    
+    /**
+     * @type {Item['getDisplay']}
+     */
     getDisplay(...args){
         return adom/*html*/`
             <div class="octorok ${Class.direction(this.dx,this.dy)} ${this.shooting_time>0?"_shooting":""}">
@@ -36,7 +40,7 @@ export class OctorokItem extends Item{
 
     onTrigger(field,root,x,y){
         field.set(x,y,this.base)
-        observers(field,"on_die").notify(this,x,y)
+        observers(field,on_die).notify({item:this, pos:[x,y]})
     }
 
     onTick(field,root,x,y){
