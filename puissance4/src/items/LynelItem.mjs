@@ -106,7 +106,11 @@ export class LynelItem extends Item{
 
                                 }
                                 field.set(x+this.dx,y+this.dy,item)
+                                const previous=this.base
                                 this.base=already
+                                if(already){
+                                    observers(field,"on_grab").notify(this, x, y, previous, this.base, x+this.dx, y+this.dy)
+                                }
                             }
                         }
                         else{
@@ -116,7 +120,9 @@ export class LynelItem extends Item{
                             taken=taken[0] ?? [field.get(x+0,y-1),x+0,y-1]
                             if(taken[0]){
                                 field.set(taken[1],taken[2],null)
+                                const previous=this.base
                                 this.base=taken[0]
+                                observers(field,"on_grab").notify(this, x, y, previous, this.base, taken[1], taken[2])
                             }
                             else{
                                 const object=Math.floor(Math.random()*3)
@@ -145,6 +151,7 @@ export class LynelItem extends Item{
                 if(facing!==null){
                     if(facing!==undefined){
                         facing.onTrigger(field,root,x+this.dx,y+this.dy)
+                        observers(field,"on_attack").notify(this, x, y, facing, x+this.dx, y+this.dy)
                     }
                     this.dx=-this.dx
                     this.dy=-this.dy

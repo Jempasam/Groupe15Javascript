@@ -51,6 +51,7 @@ export class MoblinItem extends Item{
                     if(facing!==undefined){
                         Sounds.ITCHIK.play()
                         facing.onTrigger(field,root,x+this.dx,y+this.dy)
+                        observers(field,"on_attack").notify(this, x, y, facing, x+this.dx, y+this.dy)
                     }
                     this.dx=-this.dx
                     this.dy=-this.dy

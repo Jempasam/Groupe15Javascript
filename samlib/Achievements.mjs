@@ -29,6 +29,12 @@ export class AchievementsStorage{
         ACCOUNT_STORAGE.set("achievements",OBJECT_DATA,null)
     }
 
+    clearGame(gameid){
+        ACCOUNT_STORAGE.edit("achievements",OBJECT_DATA,(user)=>{
+            delete user[gameid]
+        })
+    }
+
 
     /** User Achievements */
     getUserAchievements(){
@@ -45,7 +51,7 @@ export class AchievementsStorage{
         const previous=this.get(gameid,achid)
         if(previous!==undefined){
             const max=this.achievements[gameid].achievements[achid].max
-            const now=callback(previous,max)
+            const now=Math.min(max,Math.max(0,callback(previous,max)))
             if(now!=previous)this.set(gameid,achid,now)
         }
     }

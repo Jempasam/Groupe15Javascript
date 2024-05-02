@@ -305,11 +305,13 @@ class Drawing extends State{
         else{
             const dx=mouse.dx
             const dy=mouse.dy
-            mouse.move(field,x,y,dx,dy)
+            const [fx,fy]=mouse.move(field,x,y,dx,dy)
             if(field.get(x,y)===null && this.pattern(this.length)){
-                field.set(x,y,this.next)
+                const next=this.next
+                field.set(x,y,next)
                 Sounds.TOP.play()
                 this.next=this.decorator(this.factory(this.variant+Math.round(Math.random()*this.variant_d)))
+                observers(field,"on_summon").notify(root, fx, fy, next, x, y)
             }
             if(this.length==this.rotate_moment){
                 let ro=Math.floor(Math.random()*2)
