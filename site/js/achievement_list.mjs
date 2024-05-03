@@ -226,6 +226,71 @@ export const achievement_list = {
                 max:1
             },
         }
+    },
+    "snake":{
+        name:"Snake",
+        achievements:{
+            "game1":{
+                name: "Vers de pomme",
+                desc: "Jouer 1 partie",
+                img: "../../snake/assets/fruit1.png",
+                max:1
+            },
+            "win1":{
+                name: "1 pomme par jour éloigne le médecin",
+                desc: "Obtenir 1 point",
+                img: "../../snake/assets/fruit1.png",
+                max:1
+            },
+            "win10":{
+                name: "Serpent gourmet",
+                desc: "Obtenir 10 points",
+                img: "../../snake/assets/fruit1.png",
+                max:10
+            },
+            "win20":{
+                name: "Maître serpent",
+                desc: "Obtenir 20 points",
+                img: "../../snake/assets/fruit1.png",
+                max:20
+            },
+            "win50":{
+                name: "Roi des serpents",
+                desc: "Obtenir 50 points",
+                img: "../../snake/assets/fruit1.png",
+                max:50
+            },
+            "win100":{
+                name: "SSSSSSSSERPENT",
+                desc: "Obtenir 100 points",
+                img: "../../snake/assets/fruit1.png",
+                max:100
+            },
+            "win0":{
+                name: "Faux départ",
+                desc: "Obtenir 0 point",
+                img: "../../snake/assets/fruit1.png",
+                max: 1
+            },
+            "Gamemode4":{
+                name: "Fiesta",
+                desc: "Jouer avec les 4 modes de jeux en même temps",
+                img: "../../snake/assets/fruit1.png",
+                max: 1
+            },
+            "SkinClick":{
+                name: "Diplome",
+                desc: "Avoir cliquer sur un skin pour accéder à sa page wikipédia",
+                img: "../../snake/assets/fruit1.png",
+                max: 1
+            },
+            "noisrevnI":{
+                name: "noisrevnI",
+                desc: "Avoir marqué 10 points avec le mode de jeu Inversion",
+                img: "../../snake/assets/fruit1.png",
+                max: 10
+            }
+        }
     }
 }
 
