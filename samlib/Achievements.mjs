@@ -17,6 +17,10 @@ export class AchievementsStorage{
     }
 
 
+    /** @type {((gameid:string, achid:string, ach:Achievement)=>void)?} */
+    on_complete=null
+
+
     /** Achievment List */
     /**
      * Check if an achievement exists
@@ -50,9 +54,10 @@ export class AchievementsStorage{
     edit(gameid,achid,callback){
         const previous=this.get(gameid,achid)
         if(previous!==undefined){
-            const max=this.achievements[gameid].achievements[achid].max
-            const now=Math.min(max,Math.max(0,callback(previous,max)))
-            if(now!=previous)this.set(gameid,achid,now)
+            const achievements=this.achievements[gameid].achievements[achid]
+            const max=achievements.max
+            const now=callback(previous,max)
+            if(now!=previous) this.set(gameid,achid,now)
         }
     }
     
@@ -94,13 +99,18 @@ export class AchievementsStorage{
         if(ach){
             if(value>ach.max){
                 value=ach.max;
-                console.warn(`Trying to set an achievement to a value higher than the max of "${gameid}:${achid}, ${value} > ${ach.max}"`)
+                //console.warn(`Trying to set an achievement to a value higher than the max of "${gameid}:${achid}, ${value} > ${ach.max}"`)
             }
             else if(value<0){
                 value=0;
-                console.warn(`Trying to set an achievement to a value lower than 0 "${gameid}:${achid}"`)
+                //console.warn(`Trying to set an achievement to a value lower than 0 "${gameid}:${achid}"`)
             }
             this._set(gameid,achid,value)
+
+            const previous=this.get(gameid,achid)
+            if(value!=previous && value==ach.max && this.on_complete){
+                this.on_complete(gameid,achid,ach)
+            }
         }
         else{
             console.warn(`Trying to set an achievement that doesn't exist "${gameid}:${achid}"`)

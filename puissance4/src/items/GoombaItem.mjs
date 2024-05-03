@@ -2,7 +2,7 @@ import { adom } from "../../../samlib/DOM.mjs";
 import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
-import { on_die } from "./events";
+import { on_die } from "./events.js";
 
 export class GoombaItem extends Item{
     /**

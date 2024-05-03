@@ -16,7 +16,7 @@ import { MovingItem } from "./MovingItem.mjs";
 import { SnakeItem } from "./SnakeItem.mjs";
 import { SpawnerItem } from "./SpawnerItem.mjs";
 import { TNTItem } from "./TNTItem.mjs";
-import { on_summon } from "./events";
+import { on_summon } from "./events.js";
 
 export class MasterhandItem extends Item{
 

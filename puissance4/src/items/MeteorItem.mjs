@@ -5,7 +5,7 @@ import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
-import { on_destroy } from "./events";
+import { on_destroy } from "./events.js";
 
 export class MeteorItem extends Item{
     

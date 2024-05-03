@@ -2,7 +2,7 @@ import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { FallingPlatformItem } from "./FallingPlatformItem.mjs";
-import { on_broken } from "./events";
+import { on_broken } from "./events.js";
 
 export class BrokablePlatformItem extends Item{
     

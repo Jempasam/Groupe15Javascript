@@ -181,6 +181,27 @@ export const achievement_list = {
                 img: img("../img/achievement/puissance4/dollar.png"),
                 max: 40
             },
+
+            "goomba":{
+                name: "Tu ne tueras point",
+                desc: "Tuez 200 goomba",
+                img: img("../../puissance4/assets/goomba.webp"),
+                max: 200
+            },
+
+            "meteor":{
+                name: "Alors il fit pleuvoir du soufre et du feu",
+                desc: "Détruisez 40 jeton avec des objets météores",
+                img: img("../../puissance4/assets/fire.png"),
+                max: 40
+            },
+
+            "snakeunlock":{
+                name: "Tu marcheras sur ton ventre",
+                desc: "Débloquez 4 objets liés à Snake.",
+                img: img("../img/achievement/puissance4/snake.png"),
+                max: 4
+            }
         }
     },
     "tictactoe":{

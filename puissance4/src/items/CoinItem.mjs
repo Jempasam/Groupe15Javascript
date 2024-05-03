@@ -3,7 +3,7 @@ import { achievement_registry } from "../../../site/js/achievement_list.mjs";
 import { Item } from "../field/Item.mjs";
 import { ActivatedCoinItem } from "./ActivatedCoinItem.mjs";
 import { Methods } from "./ItemUtils.mjs";
-import { on_alignement } from "./events";
+import { on_alignement } from "./events.js";
 
 export class CoinItem extends Item{
     

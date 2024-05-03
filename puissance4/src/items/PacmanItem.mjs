@@ -8,7 +8,7 @@ import { FruitItem } from "./FruitItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 import { Controler } from "./controler/Controlers.mjs";
-import { on_eat } from "./events";
+import { on_eat } from "./events.js";
 
 export class PacmanItem extends Item{
     

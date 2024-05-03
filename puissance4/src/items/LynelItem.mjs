@@ -9,7 +9,7 @@ import { MeteorItem } from "./MeteorItem.mjs";
 import { MoblinItem } from "./MoblinItem.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 import { TNTItem } from "./TNTItem.mjs";
-import { on_attack, on_die, on_grab } from "./events";
+import { on_attack, on_die, on_grab } from "./events.js";
 
 export class LynelItem extends Item{
     /**

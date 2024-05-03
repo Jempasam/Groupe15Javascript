@@ -12,7 +12,7 @@ import { MeteorItem } from "../../puissance4/src/items/MeteorItem.mjs"
 import { SnakeItem } from "../../puissance4/src/items/SnakeItem.mjs"
 import { SpawnerItem } from "../../puissance4/src/items/SpawnerItem.mjs"
 import { TNTItem } from "../../puissance4/src/items/TNTItem.mjs"
-import { on_alignement, on_attack, on_broken, on_crushed, on_destroy, on_eat, on_grab, on_summon } from "../../puissance4/src/items/events"
+import { on_alignement, on_attack, on_broken, on_crushed, on_destroy, on_die, on_eat, on_grab, on_summon } from "../../puissance4/src/items/events.js"
 import { observers } from "../../samlib/observers/ObserverGroup.mjs"
 import { achievement_registry } from "./achievement_list.mjs"
 
@@ -73,8 +73,11 @@ game.on_start_game=function(field){
             achievement_registry.edit("puissance4", "20boom", v=>v+1)
             achievement_registry.edit("puissance4", "200boom", v=>v+1)
         }
-        if(item instanceof MeteorItem && destroyed instanceof GoombaItem){
-            achievement_registry.edit("puissance4", "goomboom", v=>v+1)
+        if(item instanceof MeteorItem){
+            achievement_registry.edit("puissance4", "meteor", v=>v+1)
+            if(destroyed instanceof GoombaItem){
+                achievement_registry.edit("puissance4", "goomboom", v=>v+1)
+            }
         }
     })
 
@@ -101,6 +104,12 @@ game.on_start_game=function(field){
         }
         if(item instanceof SpawnerItem){
             achievement_registry.edit("puissance4", "spawner", v=>v+1)
+        }
+    })
+
+    observers(field,on_die).add("achievements",(field,{item})=>{
+        if(item instanceof GoombaItem){
+            achievement_registry.edit("puissance4", "goomba", v=>v+1)
         }
     })
 

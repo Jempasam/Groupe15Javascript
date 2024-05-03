@@ -1,13 +1,7 @@
 import { adom } from "../../../samlib/DOM.mjs";
 import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
-import { achievement_registry } from "../../../site/js/achievement_list.mjs";
-import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { Item } from "../field/Item.mjs";
-import { CoinItem } from "./CoinItem.mjs";
-import { FruitItem } from "./FruitItem.mjs";
-import { Class } from "./ItemUtils.mjs";
-import { MovingItem } from "./MovingItem.mjs";
-import { on_broken } from "./events";
+import { on_broken } from "./events.js";
 
 export class BocalItem extends Item{
     

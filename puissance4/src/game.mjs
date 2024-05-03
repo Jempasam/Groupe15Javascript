@@ -5,7 +5,7 @@ import { adom, create } from "../../samlib/DOM.mjs"
 import { Loader } from "./editor/Loader.mjs"
 import { GameHeader } from "../../samlib/gui/GameHeader.mjs"
 import { Shop, ShopData } from "../../samlib/gui/Shop.mjs"
-import { ACCOUNT_STORAGE, OBJECT_DATA, Storage } from "../../samlib/Storage.mjs"
+import { ACCOUNT_STORAGE, Storage } from "../../samlib/Storage.mjs"
 import { SnakeItem } from "./items/SnakeItem.mjs"
 import { FruitItem } from "./items/FruitItem.mjs"
 import { EndScreen } from "../../samlib/gui/EndScreen.mjs"
@@ -13,7 +13,6 @@ import { RED_CONTROLER } from "./items/controler/Controlers.mjs"
 import { MasterhandItem } from "./items/MasterhandItem.mjs"
 import { Editor } from "./editor/Editor.mjs"
 import { ItemCollection, ItemField } from "./field/field/ItemField.mjs"
-import { AchievementsStorage } from "../../samlib/Achievements.mjs"
 import { achievement_registry } from "../../site/js/achievement_list.mjs"
 
 
@@ -22,9 +21,15 @@ export class Puissance4Game{
 
     /**
      * When a game start
-     * @type {(Puissance4)=>void}
+     * @type {(field:Puissance4)=>void}
      */
     on_start_game=()=>{}
+
+    /**
+     * When a shop is opened
+     * @type {(shop:Shop)=>void}
+     */
+    on_shop_opened=()=>{}
 
     /**
      * @param {HTMLElement} host
@@ -39,7 +44,6 @@ export class Puissance4Game{
         this.host.innerHTML=""
         host.appendChild(this.header)
         host.appendChild(create("div"))
-
         this.openMenu()
     }
 
@@ -154,8 +158,8 @@ export class Puissance4Game{
         shop.storage=this.used_storage
         shop.title="Shop"
         shop.shop_content=BASE_SPAWNABLE
-        shop.shop_id="test"
-
+        shop.shop_id="puissance4"
+        this.on_shop_opened(shop)
         this.#setMenu(shop, ()=>this.openMenu(), ()=>this.openMenu())
 
     }
@@ -177,7 +181,7 @@ export class Puissance4Game{
 
     /**
      * 
-     * @param {import("./editor/Editor.mjs").ItemFieldContent} field 
+     * @param {ItemField} field 
      */
     play(field){
         this.playGame(
@@ -205,6 +209,15 @@ export class Puissance4Game{
                 game.set(5,5,new MasterhandItem(3,1))
             }
         )
+    }
+
+    /**
+     * @param {(data:ShopData)=>void} callback
+     */
+    editShopData(callback){
+        const data=ShopData.get(this.used_storage, "puissance4")
+        callback(data)
+        ShopData.set(data)
     }
 
 }
