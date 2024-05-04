@@ -144,7 +144,7 @@ export class Puissance4Game{
                     <p>
                         Après avoir tiré, un joueur doit attendre que son canon se <em>recharge</em>.
                         Lorsqu'un joueur se déplace vers l'emplacement d'un autre joueur, les deux joueurs échangent leur place. Pour empêcher
-                        les abus, un joueur ne peut initier ce genre d'échange que si son canon es chargé.
+                        les abus, un joueur ne peut initier ce genre d'échange que si son canon est chargé.
                     </p>
                     <p><em>Snake/Link/Pacman neutre</em>: flèches directionelles</p>
                     <p><em>Sanke/Link/Pacman colorés</em>: Les mêmes contrôles que les joueurs.</p>
@@ -156,7 +156,10 @@ export class Puissance4Game{
                 <h2>Editeur</h2>
                 <p>Vous pouvez créer vos <em>propres niveaux</em> dans l'éditeur. Vous pouvez placer des objets et des modificateurs pour créer des niveaux uniques</p>
                 <h2>Variantes</h2>
-                <p>Il existe plusieurs <em>variantes</em> d'objet. Des variantes des canons pour chaque équipe par exemple.</p>
+                <p>
+                    Il existe plusieurs <em>variantes</em> d'objet. Des variantes des canons pour chaque équipe par exemple.
+                    Pour <em>choisir la variante</em> utilisez l'entrée numérique au dessus de la petite fenêtre d'exemple en bas du panneau gauche de l'éditeur.
+                </p>
             </div>
         `
         this.#setMenu(help, ()=>this.openMenu(), ()=>this.openMenu())
