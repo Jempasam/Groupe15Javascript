@@ -14,10 +14,13 @@ import { MasterhandItem } from "./items/MasterhandItem.mjs"
 import { Editor } from "./editor/Editor.mjs"
 import { ItemCollection, ItemField } from "./field/field/ItemField.mjs"
 import { achievement_registry } from "../../site/js/achievement_list.mjs"
+import { ObserverGroup, ObserverKey } from "../../samlib/observers/ObserverGroup.mjs"
 
 
 export class Puissance4Game{
 
+    /** @type {ObserverGroup<Puissance4Game,{previous:number, actual:number, gained:number}>} */
+    on_get_money=new ObserverGroup(this)
 
     /**
      * When a game start
@@ -61,7 +64,7 @@ export class Puissance4Game{
         menu.onplay= ()=> this.openLoader()
         menu.onshop= ()=> this.openShop()
         menu.actions={
-            "Editor": ()=> this.openEditor(),
+            "Editeur": ()=> this.openEditor(),
             "Test": ()=> this.test(),
             "Reset": ()=>{
                 let shopdata=ShopData.get(this.used_storage,"test")
@@ -70,13 +73,13 @@ export class Puissance4Game{
                 achievement_registry.clearGame("puissance4")
                 ShopData.set(shopdata)
             },
-            "God": ()=>{
+            "Cheat": ()=>{
                 let shopdata=ShopData.get(this.used_storage,"test")
                 shopdata.money=100000
                 for(let a in BASE_SPAWNABLE)shopdata.buyeds.add(a)
                 ShopData.set(shopdata)
             },
-            "Help": ()=> this.helpScreen(),
+            "Aide": ()=> this.helpScreen(),
         }
 
         this.#setMenu(menu, ()=>undefined, ()=>undefined)
@@ -117,8 +120,8 @@ export class Puissance4Game{
         endScreen.score=score
         endScreen.winner=winner
         endScreen.actions={
-            "Restart":()=>{this.play(field)},
-            "Quit":()=>{this.openMenu()}
+            "Recommencer":()=>{this.play(field)},
+            "Quitter":()=>{this.openMenu()}
         }
 
         this.#setMenu(endScreen, ()=>undefined, ()=>this.openMenu())
@@ -128,12 +131,32 @@ export class Puissance4Game{
         let help=adom/*html*/`
             <div class="help">
                 <h1>Help</h1>
+                <h2>Introduction</h2>
+                <p>Un <em>super puissance 4 génial</em>! Il n'y a pas de but, définissez vous même la condition de victoire.</p>
+                <h2>Contrôles</h2>
+                    <p>Respectivement pour gauche, tirer, droite:</p>
+                    <ol>
+                        <li><em>Rouge</em>: A Z E</li>
+                        <li><em>Bleu</em>: U I O</li>
+                        <li><em>Jaune</em>: R T Y</li>
+                        <li><em>Vert</em>: V B N</li>
+                    </ol>
+                    <p>
+                        Après avoir tiré, un joueur doit attendre que son canon se <em>recharge</em>.
+                        Lorsqu'un joueur se déplace vers l'emplacement d'un autre joueur, les deux joueurs échangent leur place. Pour empêcher
+                        les abus, un joueur ne peut initier ce genre d'échange que si son canon es chargé.
+                    </p>
+                    <p><em>Snake/Link/Pacman neutre</em>: flèches directionelles</p>
+                    <p><em>Sanke/Link/Pacman colorés</em>: Les mêmes contrôles que les joueurs.</p>
                 <h2>Magasin</h2>
-                <p>Vous pouvez acheter des objets au magasin pour pouvoir les utiliser dans l'éditeur. Pour cela il vous faut des pièces que vous gagnez en faisant des parties.</p>
+                <p>
+                    Vous pouvez acheter des objets au magasin pour pouvoir les utiliser dans l'éditeur
+                    Pour cela il vous faut des <em>pièces</em> que vous gagnez en faisant des parties.
+                </p>
                 <h2>Editeur</h2>
-                <p>Vous pouvez créer vos propres niveaux dans l'éditeur. Vous pouvez placer des objets et des modificateurs pour créer des niveaux uniques</p>
+                <p>Vous pouvez créer vos <em>propres niveaux</em> dans l'éditeur. Vous pouvez placer des objets et des modificateurs pour créer des niveaux uniques</p>
                 <h2>Variantes</h2>
-                <p>Il existe plusieurs variantes d'objet. Des variantes des canons pour chaque équipe par exemple.</p>
+                <p>Il existe plusieurs <em>variantes</em> d'objet. Des variantes des canons pour chaque équipe par exemple.</p>
             </div>
         `
         this.#setMenu(help, ()=>this.openMenu(), ()=>this.openMenu())
@@ -156,7 +179,7 @@ export class Puissance4Game{
             return ret
         })
         shop.storage=this.used_storage
-        shop.title="Shop"
+        shop.title="Magasin"
         shop.shop_content=BASE_SPAWNABLE
         shop.shop_id="puissance4"
         this.on_shop_opened(shop)
@@ -218,6 +241,13 @@ export class Puissance4Game{
         const data=ShopData.get(this.used_storage, "puissance4")
         callback(data)
         ShopData.set(data)
+    }
+
+    /**
+     * @param {number} money 
+     */
+    giveMoney(money){
+        this.editShopData(data=>data.money+=money)
     }
 
 }

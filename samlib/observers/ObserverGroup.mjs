@@ -21,6 +21,8 @@ export class ObserverKey{
  */
 export class ObserverGroup{
 
+    static main_handler="__MAIN_HANDLER__"
+
     constructor(holder){
         this.#holder=holder
     }
@@ -38,6 +40,15 @@ export class ObserverGroup{
      */
     add(name,observer){
         this.#observers[name]=observer
+    }
+
+    /**
+     * Register the main observer
+     * @param {(function(O,T):void)?} observer
+     */
+    set(observer){
+        if(observer)this.add(ObserverGroup.main_handler,observer)
+        else this.remove(ObserverGroup.main_handler)
     }
 
     /**

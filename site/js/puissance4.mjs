@@ -13,6 +13,7 @@ import { SnakeItem } from "../../puissance4/src/items/SnakeItem.mjs"
 import { SpawnerItem } from "../../puissance4/src/items/SpawnerItem.mjs"
 import { TNTItem } from "../../puissance4/src/items/TNTItem.mjs"
 import { on_alignement, on_attack, on_broken, on_crushed, on_destroy, on_die, on_eat, on_grab, on_summon } from "../../puissance4/src/items/events.js"
+import { Shop } from "../../samlib/gui/Shop.mjs"
 import { observers } from "../../samlib/observers/ObserverGroup.mjs"
 import { achievement_registry } from "./achievement_list.mjs"
 
@@ -113,4 +114,19 @@ game.on_start_game=function(field){
         }
     })
 
+}
+
+/**
+ * 
+ * @param {Shop} shop 
+ */
+game.on_shop_opened=function(shop){
+    shop.on_buy=(itemid,price)=>{
+        achievement_registry.edit("puissance4", "buy5", v=>v+1)
+        achievement_registry.edit("puissance4", "buy20", v=>v+1)
+        achievement_registry.edit("puissance4", "buy40", v=>v+1)
+        if(itemid.includes("snake") || itemid.includes("fruit")){
+            achievement_registry.edit("puissance4", "snakeunlock", v=>v+1)
+        }
+    }
 }
