@@ -227,7 +227,7 @@ export class Lvl1 {
         const movingGround11 = new MovingGround("MovingGround11", 135, -0.5, 7, 5, 1, 6, 150, -0.5, 7, 0.2 ,this.scene);
         listes[7].push(movingGround11);
 
-        const groundE29 = new Ground("GroundE29",144, -0.5, -3, 8, 1, 15,this.scene);
+        const groundE29 = new Ground("GroundE29",144, -4, -3, 8, 8, 15,this.scene);
         listes[1].push(groundE29);
 
 
@@ -238,15 +238,29 @@ export class Lvl1 {
                 "GroundE" + (i + 30), // Nom unique pour chaque marche
                 144, //PosX de la première marche
                 0 + (i * 0.5), //PosY + PosY pour chaque prochaine marche
-                -5 - (i * 1), // PosZ + PosZ pour chaque prochaine marche
+                -11 - (i * 1), // PosZ + PosZ pour chaque prochaine marche
                 8, //TailleX pour chaque marche
                 1, //TailleY Pour chaque marche
-                12, //TailleZ pour chaque marche
+                24, //TailleZ pour chaque marche
                 this.scene
             );
 
             listes[1].push(ground);
         }
+
+        const wallL1F1 = new Wall("WallL1F1", 149, 18, -43, 2, 10, 12,this.scene);
+        listes[2].push(wallL1F1);
+
+        const wallL1F2 = new Wall("WallL1F2", 139, 18, -43, 2, 10, 12,this.scene);
+        listes[2].push(wallL1F2);
+
+        const wallL1F3 = new Wall("WallL1F3", 144, 20, -43, 12, 3, 12,this.scene);
+        listes[2].push(wallL1F3);
+
+        const lvlWarp1 = new lvlWarp("lvlWarp1",144, 18, -46, 8, 6, 2, -2,this.scene);
+        listes[5].push(lvlWarp1);
+
+        
     }
 }
 
