@@ -3,7 +3,10 @@ import Entities from "./entities.js";
 let mesh;
 function getMesh(scene){
     if(!mesh){
-        mesh = BABYLON.MeshBuilder.CreateBox("unlocker", {height: 1, width: 1, depth: 1}, scene);
+        //créer un anneau de taille 1
+        mesh = BABYLON.MeshBuilder.CreateTorus("unlocker", {diameter: 1, thickness: 0.1, tessellation: 32}, scene);
+        //tourner à la verticale
+        mesh.rotation.x = Math.PI/2;
         mesh.isVisible = false;
         mesh.registerInstancedBuffer("color", 4);
         mesh.material = new BABYLON.StandardMaterial("unlockerMaterial", scene);
