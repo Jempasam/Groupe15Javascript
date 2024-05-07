@@ -130,6 +130,9 @@ export class LvlTest {
     //créer un débloqueur de bouclier
     const unlocker3 = new Unlocker("Unlocker3",-10, 2, -20, 1, 1, 1, 3, this.scene);
     listes[8].push(unlocker3);
+    //créer un débloqueur de dash
+    const unlocker4 = new Unlocker("Unlocker4",-10, 2, -25, 1, 1, 1, 4, this.scene);
+    listes[8].push(unlocker4);
 
     //créer un lvlWarp vers le boss1
     const lvlWarpBoss1 = new lvlWarp("lvlWarpBoss1",-12, 2, -25, 1, 1, 1, -2,this.scene);

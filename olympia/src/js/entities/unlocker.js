@@ -33,6 +33,9 @@ export class Unlocker extends Entities {
             case 3:
                 this.mesh.instancedBuffers.color = new BABYLON.Color3(0.5,0.25,0);
                 break;
+            case 4:
+                this.mesh.instancedBuffers.color = new BABYLON.Color3(1,1,0);
+                break;
             default:
                 break;
         }
@@ -52,6 +55,10 @@ export class Unlocker extends Entities {
             case 3:
                 player.unlockShield = true;
                 console.log("shield unlocked");
+                break;
+            case 4:
+                player.unlockDash = true;
+                console.log("dash unlocked");
                 break;
             default:
                 break;
@@ -83,6 +90,13 @@ export class Unlocker extends Entities {
             document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué le bouclier! Appuyez sur 'O' pour immobiliser les ennemis proches!";
             //ajouter une bordure verte au div
             document.getElementById("infoJoueur").style.border = "2px solid black";
+            //arrondir les coins du div
+            document.getElementById("infoJoueur").style.borderRadius = "10px";
+        }
+        if(nbPower === 4){
+            document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué la charge! Appuyez sur 'Maj Gauche' pour charger dans une direction!";
+            //ajouter une bordure verte au div
+            document.getElementById("infoJoueur").style.border = "2px solid yellow";
             //arrondir les coins du div
             document.getElementById("infoJoueur").style.borderRadius = "10px";
         }
