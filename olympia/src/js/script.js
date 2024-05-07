@@ -11,6 +11,7 @@ const engine = new BABYLON.Engine(canvas, true);
 let keyState = {};
 let scene;
 let world=new World()
+let pause = false;
 
 let camera;
 let player;
@@ -216,53 +217,77 @@ function changeLevel(){
 
 async function main(){
     let sceneToRender = await createScene();
-    setInterval(function(){
-        world.tick()
-        movePlayer()
-        //faire chercher le joueur par les monstres
-        listeMonstres.forEach(monstre => {
-            monstre.chercheJoueur(player, listeMonstres, listeGrounds);
-            //si le monstre touche un sol, arrete de tomber
-            /*monstre.mesh.onCollideObservable.add((collidedMesh)=>{
-                let touche = collidedMesh;
-                monstre.auSol(touche);
-            })*/
-        });
-        //detecter si on tape un breakableWall
-        listeBreakableWalls.forEach(breakableWall => {
-            breakableWall.detectAttack(listeBreakableWalls);
-        }
-        );
-        //detecter si on tape un canon
-        listeCanons.forEach(canon => {
-            canon.detectAttack();
-        }
-        );
-        listeMoveGrounds.forEach(moveGround => {
-            moveGround.move();
-        });
-        Boss.forEach(boss => {
-            boss.act(listes, player);
-            if (!boss.enVie){
-                boss.postDeath(listes);
-                boss = null;
-                //enlever le boss de la liste
-                let index = Boss.indexOf(boss);
-                Boss.splice(index, 1);
+    //si le jeu n'est pas en pause, faire avancer le jeu
+    //si on appuie sur la touche P, mettre le jeu en pause en arrétant la boucle de rendu
+    window.addEventListener('keydown', function(evt) {
+        if (evt.code == "KeyP"){
+            console.log("pause");
+            pause = !pause;
+            if (pause){
+                // écrire pause sur l'écran dans la div infoJoueur
+                document.getElementById("infoJoueur").innerHTML = "PAUSE";
+                //ajouter une bordure rouge au div
+                document.getElementById("infoJoueur").style.border = "2px solid red";
+                //arrondir les coins du div
+                document.getElementById("infoJoueur").style.borderRadius = "10px";
+                //ajouter un fond blanc au div
+                document.getElementById("infoJoueur").style.backgroundColor = "white";
+                
+
+
             }
-        });
-        listeBombes.forEach(bombe => {
-            bombe.detectTarget(player, listeBombes);
-        });
-    }, 30);
-
-    //boucle de rendu
-    engine.runRenderLoop(function () {
-        sceneToRender.render();
-        
-        //afficher les pv actuels du joueur
-        document.getElementById("pv").innerHTML = "PV: " + player.pv;
-
+        }
     });
+        setInterval(function(){
+            if (!pause){
+                world.tick()
+                movePlayer()
+                //faire chercher le joueur par les monstres
+                listeMonstres.forEach(monstre => {
+                    monstre.chercheJoueur(player, listeMonstres, listeGrounds);
+                    //si le monstre touche un sol, arrete de tomber
+                    /*monstre.mesh.onCollideObservable.add((collidedMesh)=>{
+                        let touche = collidedMesh;
+                        monstre.auSol(touche);
+                    })*/
+                });
+                //detecter si on tape un breakableWall
+                listeBreakableWalls.forEach(breakableWall => {
+                    breakableWall.detectAttack(listeBreakableWalls);
+                }
+                );
+                //detecter si on tape un canon
+                listeCanons.forEach(canon => {
+                    canon.detectAttack();
+                }
+                );
+                listeMoveGrounds.forEach(moveGround => {
+                    moveGround.move();
+                });
+                Boss.forEach(boss => {
+                    boss.act(listes, player);
+                    if (!boss.enVie){
+                        boss.postDeath(listes);
+                        boss = null;
+                        //enlever le boss de la liste
+                        let index = Boss.indexOf(boss);
+                        Boss.splice(index, 1);
+                    }
+                });
+                listeBombes.forEach(bombe => {
+                    bombe.detectTarget(player, listeBombes);
+                });
+            }
+        }, 30);
+        
+        //boucle de rendu
+        engine.runRenderLoop(function () {
+            sceneToRender.render();
+            
+            //afficher les pv actuels du joueur
+            document.getElementById("pv").innerHTML = "PV: " + player.pv;
+
+        });
+    
 }
 main()

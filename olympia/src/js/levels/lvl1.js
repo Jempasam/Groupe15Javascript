@@ -119,6 +119,7 @@ export class Lvl1 {
 
         const monster4 = new Monster("Monster4", "Panda", 50, -4, 19, 2, 2, 2, player.playerSpeed*3, 3, this.scene);
         listes[0].push(monster4);
+        monster4.toggleHitbox(true);
 
         const murLvl3 = new BreakableWall("MurLvl3",51, -3, 40, 9.5, 2, 2, this.scene);
         listes[6].push(murLvl3);
