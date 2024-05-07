@@ -5,7 +5,7 @@ import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
 import { Controler } from "./controler/Controlers.mjs";
-import { on_attack, on_die } from "./events";
+import { on_attack, on_die } from "./events.js";
 
 export class LinkItem extends Item{
     /**

@@ -184,6 +184,30 @@ div.presentation{
         background-color: rgba(255,255,255,0.3);
         margin-bottom: 0.1em;
     }
+    ol{
+        margin-left: 3em;
+        margin-right: 2em;
+        padding: 1em;
+        background-color: rgba(255,255,255,0.3);
+        margin-bottom: 0.1em;
+        list-style: none;
+        li{
+            &::before{
+                content: " ";
+                display: inline-block;
+                width: 0.6em;
+                height: 0.6em;
+                margin-right: 0.2em;
+                background-color: rgba(255,255,255,0.5);
+            }
+        }
+    }
+    em{
+        font-style: normal;
+        font-weight: bolder;
+        color: white;
+        text-shadow: black 0em 0em 0.2em, black 0em 0em 0.2em;
+    }
     p{
         margin-left: 2em;
         margin-right: 2em;

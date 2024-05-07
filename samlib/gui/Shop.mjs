@@ -13,6 +13,9 @@ export class Shop extends HTMLElement{
         "title":{def:""}
     }
 
+    /** @type {(buyed:string,price:number)=>void} */
+    on_buy=null
+
     /**
      * @param {(string)=>Element} display_getter
      */
@@ -55,6 +58,15 @@ export class Shop extends HTMLElement{
         this.reloadShop()
     }
 
+    /**
+     * @param {(data:ShopData)=>void} callback
+     */
+    editShopData(callback){
+        const data=ShopData.get(this.#storage, this.#shop_id)
+        callback(data)
+        ShopData.set(data)
+    }
+
     reloadShop(){
         const dom_items=this.dom_items
         dom_items.innerHTML=""
@@ -78,9 +90,11 @@ export class Shop extends HTMLElement{
             item.onclick=()=>{
                 if(save.isBuyed(id))return
                 if(save.money<price)return
-                save.money-=price
-                save.buyeds.add(id)
-                ShopData.set(save)
+                this.editShopData(data=>{
+                    data.money-=price
+                    data.buyeds.add(id)
+                })
+                if(this.on_buy)this.on_buy(id,price)
                 this.reloadShop()
             }
             item.querySelector(".illustration").appendChild(this.display_getter(id))

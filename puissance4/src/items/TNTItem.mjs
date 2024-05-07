@@ -1,7 +1,7 @@
 import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
-import { on_destroy, on_explode } from "./events";
+import { on_destroy, on_explode } from "./events.js";
 
 export class TNTItem extends Item{
     

@@ -5,7 +5,7 @@ import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
-import { on_die } from "./events";
+import { on_die } from "./events.js";
 
 export class OctorokItem extends Item{
     /**

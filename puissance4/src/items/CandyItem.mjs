@@ -3,7 +3,7 @@ import { observers } from "../../../samlib/observers/ObserverGroup.mjs"
 import { Item } from "../field/Item.mjs"
 import { Sounds } from "../sounds/SoundBank.mjs"
 import { Methods } from "./ItemUtils.mjs"
-import { on_crushed } from "./events"
+import { on_crushed } from "./events.js"
 
 export class CandyItem extends Item{
     

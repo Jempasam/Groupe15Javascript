@@ -18,7 +18,7 @@ import { BocalItem } from "../../items/BocalItem.mjs";
 import { LinkItem } from "../../items/LinkItem.mjs";
 import { MoblinItem } from "../../items/MoblinItem.mjs";
 import { PacmanItem } from "../../items/PacmanItem.mjs";
-import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_BUBBLE_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SNAKE_FACTORY, NEW_TETRIS_FACTORY, SLIPPY_FACTORY, WILD_CANDY_FACTORY, WILD_TETRIS_FACTORY } from "./base_factories.mjs";
+import { FALLING_FACTORY, NEW_BICOLOR_FACTORY, NEW_BUBBLE_FACTORY, NEW_CANDY_FACTORY, NEW_METEOR_FACTORY, NEW_SLIPPY_FACTORY, NEW_SNAKE_FACTORY, NEW_TETRIS_FACTORY, SLIPPY_FACTORY, WILD_CANDY_FACTORY, WILD_TETRIS_FACTORY } from "./base_factories.mjs";
 import { BubbleItem } from "../../items/BubbleItem.mjs";
 import { LynelItem } from "../../items/LynelItem.mjs";
 import { OctorokItem } from "../../items/OctorokItem.mjs";
@@ -379,9 +379,9 @@ export const BASE_SPAWNABLE={
     ),
     player_slippy: new ItemSpawnable(
         `Joueur Glissant`,
-        `Un joueur qui glisse.`,
+        `Un joueur dont un jeton sur deux est glissant.`,
         10,
-        v=>new PlayerItem(vTEAMS[v%4], SLIPPY_FACTORY, ...vKEYS[v%4]),
+        v=>new PlayerItem(vTEAMS[v%4], NEW_SLIPPY_FACTORY(), ...vKEYS[v%4]),
         v=>vTEAMS_NAMES[v%4]
     ),
     player_snake: new ItemSpawnable(

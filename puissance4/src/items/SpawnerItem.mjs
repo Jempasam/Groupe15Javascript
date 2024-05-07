@@ -3,7 +3,7 @@ import { CoinItem } from "./CoinItem.mjs";
 import { eatKeyPress, isKeyPressed } from "../controls/Keyboard.mjs"
 import { adom, dom } from "../../../samlib/DOM.mjs";
 import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
-import { on_summon } from "./events";
+import { on_summon } from "./events.js";
 
 export class SpawnerItem extends Item{
     
