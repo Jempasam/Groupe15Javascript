@@ -41,7 +41,7 @@ export class Unlocker extends Entities {
     //afficher le message de déblocage
     displayMessage(nbPower){
         if(nbPower === 1){
-            document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué l'attaque! Faites un clic gauche pour attaquer devant vous!";
+            document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué l'attaque! Appuyez sur 'K' pour attaquer devant vous!";
             //ajouter une bordure rouge au div
             document.getElementById("infoJoueur").style.border = "2px solid red";
             //arrondir les coins du div

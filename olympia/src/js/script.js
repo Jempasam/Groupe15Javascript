@@ -63,6 +63,7 @@ async function createScene() {
 
 
 function definitEcouteurs() { 
+    console.log(scene.animationGroups);
     // Ecouteur sur le clavier pour bouger le monstre
     window.addEventListener('keydown', function(evt) {
         keyState[evt.code] = true;
@@ -75,10 +76,10 @@ function definitEcouteurs() {
             evt.preventDefault();
         }
     });
-    //detecter un clic gauche
+    /*//detecter un clic gauche
     window.addEventListener("click", function(evt){
         player.attaquer();
-    });
+    });*/
     
 }
 

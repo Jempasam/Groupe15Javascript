@@ -300,6 +300,12 @@ export class Player extends Entities {
             this.vectorSpeed.y+= this.jumpPower;
             }
         }
+        //attaquer avec la touche K
+        if (keyState['KeyK']) {
+            this.attaquer();
+            
+        }
+
     
     
         this.canJump = false;
