@@ -25,7 +25,7 @@ export class LvlTest {
     const ground2= new Ground("Ground2",-21.5, -1, -7.5, 5, 1, 20,this.scene);
     listes[1].push(ground2);
     //créer un sol en hauteur
-    const ground3 = new Ground("Ground3",-9, 0.5, -10, 10, 2, 15,this.scene);
+    const ground3 = new Ground("Ground3",-9, 0.5, -15, 10, 2, 25,this.scene);
     listes[1].push(ground3);
 
     //créer une rampe en tournant le sol
@@ -127,9 +127,12 @@ export class LvlTest {
     //créer un débloqueur de saut
     const unlocker2 = new Unlocker("Unlocker2",-10, 2, -10, 1, 1, 1, 2, this.scene);
     listes[8].push(unlocker2);
+    //créer un débloqueur de bouclier
+    const unlocker3 = new Unlocker("Unlocker3",-10, 2, -20, 1, 1, 1, 3, this.scene);
+    listes[8].push(unlocker3);
 
     //créer un lvlWarp vers le boss1
-    const lvlWarpBoss1 = new lvlWarp("lvlWarpBoss1",-12, 2, -18, 1, 1, 1, -2,this.scene);
+    const lvlWarpBoss1 = new lvlWarp("lvlWarpBoss1",-12, 2, -25, 1, 1, 1, -2,this.scene);
     listes[5].push(lvlWarpBoss1);
 
     //créer un canon

@@ -115,7 +115,7 @@ export class Monster extends Entities {
         this.vectorSpeed.z += this.MonsterSpeed * Math.cos(this.mesh.rotation.y)*0.15;
         }
         this.groundCheck(listeSol);
-        this.detectAttack(listeMonstres, false);
+        this.detectHit(listeMonstres, false);
         this.playerCheck(player, listeMonstres);
         this.mesh.moveWithCollisions(this.vectorSpeed);
         this.x = this.mesh.position.x;
@@ -186,7 +186,7 @@ export class Monster extends Entities {
         }
 
         this.flyingGroundCheck(listeSol);
-        this.detectAttack(listeMonstres, true);
+        this.detectHit(listeMonstres, true);
         this.playerCheck(player, listeMonstres);
         this.mesh.moveWithCollisions(this.vectorSpeed);
         this.x = this.mesh.position.x;
@@ -194,7 +194,7 @@ export class Monster extends Entities {
         this.z = this.mesh.position.z;
     }
 
-    detectAttack(listeMonstres, isFlying){
+    detectHit(listeMonstres, isFlying){
         //si on touche le mesh attaque
         if (this.mesh.getScene().getMeshByName("attaque") && this.mesh.intersectsMesh(this.mesh.getScene().getMeshByName("attaque"))){
             //vecteur recul pour le monstre
@@ -203,6 +203,17 @@ export class Monster extends Entities {
             vectRecul = vectRecul.normalize();
             //enlever un point de vie
             this.takeDamage(listeMonstres, isFlying, vectRecul);
+        }
+        //si on touche le mesh bouclier
+        if (this.mesh.getScene().getMeshByName("bouclier") && this.mesh.intersectsMesh(this.mesh.getScene().getMeshByName("bouclier"))){
+            //vecteur recul pour le monstre
+            let vectRecul = new BABYLON.Vector3(this.mesh.position.x-this.mesh.getScene().getMeshByName("bouclier").position.x, 0, this.mesh.position.z-this.mesh.getScene().getMeshByName("bouclier").position.z);
+            //normaliser le vecteur
+            vectRecul = vectRecul.normalize();
+            this.vectorSpeed.x += VectRecul.x*0.5;
+            this.vectorSpeed.y = 0.1;
+            this.vectorSpeed.z += VectRecul.z*0.5;
+            
         }
     }
 

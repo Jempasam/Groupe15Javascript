@@ -29,7 +29,9 @@ export class Player extends Entities {
         //console.log(this.mesh.ellipsoidOffset);
         this.canTakeDamage = true;
         this.unlockAttack = false;
+        this.unlockShield = false;
         this.canAttack = true;
+        this.canShield = true;
         this.pvMax = 5;
         this.pv = this.pvMax;
 
@@ -266,6 +268,37 @@ export class Player extends Entities {
         }
     }
 
+    bouclier(){
+        //si le joueur a débloqué le bouclier
+        if (this.unlockShield){
+            if (this.canShield){
+                this.canShield = false;
+                //créer un mesh en sphère autour du joueur
+                let bouclier = BABYLON.MeshBuilder.CreateSphere("bouclier", {diameter: 3, segments: 16}, this.scene);
+                bouclier.position = this.mesh.position;
+                bouclier.material = new BABYLON.StandardMaterial("bouclierMaterial", this.scene);
+                // couleur marron
+                bouclier.material.diffuseColor = new BABYLON.Color3(0.5,0.25,0);
+                bouclier.checkCollisions = false;
+                //rendre le mesh de plus en plus transparent chaque 0.1 seconde
+                let interval = setInterval(() => {
+                    bouclier.visibility -= 0.05;
+                    if (bouclier.visibility <= 0){
+                        clearInterval(interval);
+                    }
+                }, 100);
+                //attendre 2 seconde avant de faire disparaitre le bouclier
+                setTimeout(() => {
+                    bouclier.dispose();
+                    //ne pas pouvoir le réutiliser tout de suite
+                    setTimeout(() => {
+                        this.canShield = true;
+                        }, 4000);
+                }, 2000);
+            }
+        }
+    }
+
 
     //bouge
     move(keyState, listes){
@@ -303,7 +336,9 @@ export class Player extends Entities {
         //attaquer avec la touche K
         if (keyState['KeyK']) {
             this.attaquer();
-            
+        }
+        if (keyState['KeyO']) {
+            this.bouclier();
         }
 
     

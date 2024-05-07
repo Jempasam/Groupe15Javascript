@@ -5,8 +5,9 @@ function getMesh(scene){
     if(!mesh){
         mesh = BABYLON.MeshBuilder.CreateBox("unlocker", {height: 1, width: 1, depth: 1}, scene);
         mesh.isVisible = false;
+        mesh.registerInstancedBuffer("color", 4);
         mesh.material = new BABYLON.StandardMaterial("unlockerMaterial", scene);
-        mesh.material.diffuseColor = new BABYLON.Color3(0.5,1,1);
+        mesh.material.diffuseColor = new BABYLON.Color3(1,1,1);
         mesh.checkCollisions = false;
     }
     return mesh;
@@ -17,21 +18,42 @@ export class Unlocker extends Entities {
     constructor(name,x,y,z,xSize,ySize,zSize, nbPower, scene) {
         super(name,x,y,z,xSize,ySize,zSize, getMesh(scene));
         this.nbPower = nbPower;
+        this.mesh.instancedBuffers.color = BABYLON.Color3.White();
         this.mesh.checkCollisions = false;
+        switch(nbPower){
+            case 1:
+                this.mesh.instancedBuffers.color = new BABYLON.Color3(1,0,0);
+                break;
+            case 2:
+                this.mesh.instancedBuffers.color = new BABYLON.Color3(0,0.5,0);
+                break;
+            case 3:
+                this.mesh.instancedBuffers.color = new BABYLON.Color3(0.5,0.25,0);
+                break;
+            default:
+                break;
+        }
     }
 
     //débloquer une capacité
     unlock(player){
-        //défini la capacité du joueur débloquée
-        // 1 = attaque
-        if (this.nbPower === 1){
-            player.unlockAttack = true;
-            
-        } 
-        // 2 = saut
-        if (this.nbPower === 2){
-            player.maxJump =1;
+        switch(this.nbPower){
+            case 1:
+                player.unlockAttack = true;
+                console.log("attack unlocked");
+                break;
+            case 2:
+                player.maxJump =1;
+                console.log("jump unlocked");
+                break;
+            case 3:
+                player.unlockShield = true;
+                console.log("shield unlocked");
+                break;
+            default:
+                break;
         }
+        
 
         //afficher le message de déblocage
         this.displayMessage(this.nbPower);
@@ -48,9 +70,16 @@ export class Unlocker extends Entities {
             document.getElementById("infoJoueur").style.borderRadius = "10px";
         }
         if(nbPower === 2){
-            document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué le saut! Appuyez sur espace pour sauter!";
+            document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué le saut! Appuyez sur 'espace' pour sauter!";
             //ajouter une bordure verte au div
             document.getElementById("infoJoueur").style.border = "2px solid green";
+            //arrondir les coins du div
+            document.getElementById("infoJoueur").style.borderRadius = "10px";
+        }
+        if(nbPower === 3){
+            document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué le bouclier! Appuyez sur 'O' pour immobiliser les ennemis proches!";
+            //ajouter une bordure verte au div
+            document.getElementById("infoJoueur").style.border = "2px solid black";
             //arrondir les coins du div
             document.getElementById("infoJoueur").style.borderRadius = "10px";
         }
