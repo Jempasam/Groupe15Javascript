@@ -8,7 +8,7 @@ export class ObserverKey{
     /** @type {string} */
     name
     constructor(name="unamed"){
-        this.name=name+id_counter
+        this.name=name+"_"+id_counter
         id_counter++
     }
 }

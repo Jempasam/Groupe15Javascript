@@ -53,3 +53,13 @@ Array.prototype.fastRemove = function fastDelete(index){
     this[index]=this[array.length-1]
     array.pop()
 }
+
+/**
+ * Supprime un élément rapidement (sans conserver l'ordre)
+ * @param {Array} array
+ * @param {number} index 
+ */
+export function fastRemove(array,index){
+    array[index]=array[array.length-1]
+    array.pop()
+}

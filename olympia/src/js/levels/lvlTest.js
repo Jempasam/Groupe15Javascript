@@ -2,7 +2,6 @@
 import { Player } from "../entities/player.js";
 import { Monster } from "../entities/monsters.js";
 import { Ground } from "../entities/grounds.js";
-import { Wall } from "../entities/walls.js";
 import { killZone } from "../entities/killZones.js";
 import { warpZone } from "../entities/warpZones.js";
 import { lvlWarp } from "../entities/lvlWarp.js";
@@ -10,10 +9,28 @@ import { BreakableWall } from "../entities/breakableWalls.js";
 import { MovingGround } from "../entities/movingGrounds.js";
 import { Unlocker } from "../entities/unlocker.js";
 import { Canon } from "../entities/canons.js";
-import { SimpleMeshEntity } from "../entity/entities/PhysicalEntity.mjs";
+import { World } from "../objects/world/World.mjs";
+import { MeshBehaviour } from "../objects/behaviour/MeshBehaviour.mjs";
+import { MESH, MeshModel } from "../objects/model/MeshModel.mjs";
+import { MovementBehaviour } from "../objects/behaviour/MovementBehaviour.mjs";
+import { MOVEMENT, MovementModel } from "../objects/model/MovementModel.mjs";
+import { Vector3 } from "../../../../babylonjs/index.js";
+import { TRANSFORM, TransformModel } from "../objects/model/TransformModel.mjs";
+import { HitboxBehaviour } from "../objects/behaviour/HitboxBehaviour.mjs";
+import { PlayerBehaviour } from "../objects/behaviour/PlayerBehaviour.mjs";
+import { ConstantForceBehaviour } from "../objects/behaviour/ConstantForceBehaviour.mjs";
+import { SimpleCollisionBehaviour } from "../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
+import { PushCollisionBehaviour } from "../objects/behaviour/PushCollisionBehaviour.mjs";
 
 // Constructeur de niveau
 export class LvlTest {
+
+    /**
+     * 
+     * @param {*} player 
+     * @param {*} listes 
+     * @param {World} world 
+     */
     constructor(player, listes, world) {
     // reset le joueur
     
@@ -46,8 +63,39 @@ export class LvlTest {
 
     //ajouter un escalier à gauche du sol en hauteur
     //créer un sol
-    const test=new SimpleMeshEntity(world.models.PANDA)
-    world.add(test)
+    world.addBehaviours("object", 
+        [new HitboxBehaviour(),2], 
+        [new MeshBehaviour(),2], 
+        [new MovementBehaviour(0.95), 1],
+        new SimpleCollisionBehaviour()
+    )
+
+    world.addBehaviours("player", 
+        new PlayerBehaviour(["ArrowLeft","ArrowUp","ArrowRight","ArrowDown"],0.03,0.05),
+        new ConstantForceBehaviour(new Vector3(0,-0.01,0)),
+        new PushCollisionBehaviour()
+    )
+
+    world.add("object",
+        [MESH, new MeshModel(world.models["CUBE"])],
+        [TRANSFORM, new TransformModel({position:new Vector3(0, -1, 4), scale:new Vector3(4,1,5)})]
+    )
+
+    world.add("object",
+        [MESH, new MeshModel(world.models["CUBE"])],
+        [TRANSFORM, new TransformModel({position:new Vector3(4, 0, 4), scale:new Vector3(4,2,5)})]
+    )
+
+    world.add("object",
+        [MESH, new MeshModel(world.models["CUBE"])],
+        [TRANSFORM, new TransformModel({position:new Vector3(-3.5, 0.5, 4), rotation:new Vector3(0,0,-4), scale:new Vector3(4,1,5)})]
+    )
+
+    world.add(["object","player"],
+        [MESH, new MeshModel(world.models["PANDA"])],
+        [MOVEMENT, new MovementModel(new Vector3(0.1,0,0))],
+        [TRANSFORM, new TransformModel({position:new Vector3(0, 2, 4)})]
+    )
 
     const groundE11 = new Ground("GroundE11",-2, -1, -5, 4, 1, 5,this.scene);
     listes[1].push(groundE11);
@@ -87,6 +135,9 @@ export class LvlTest {
     //créer un lvlWarp
     const lvlWarp0 = new lvlWarp("lvlWarp0",-12, 2, -5, 1, 1, 1, 0,this.scene);
     listes[5].push(lvlWarp0);
+
+    const lvlWarpSam = new lvlWarp("lvlWarp0",-5, 2, -5, 1, 1, 1, 260402,this.scene);
+    listes[5].push(lvlWarpSam);
     //créer une killZone
     const killZone1 = new killZone("KillZone1",-15, 0.5, -5, 2, 2, 5,this.scene);
     listes[3].push(killZone1);

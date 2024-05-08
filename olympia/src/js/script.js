@@ -1,10 +1,12 @@
 import { Player } from "./entities/player.js";
+import { SamLevel } from "./levels/SamLevel.mjs"
 import { LvlTest } from "./levels/lvlTest.js";
 import { LvlAccueil } from "./levels/lvlAccueil.js";
 import { Lvl1} from "./levels/lvl1.js";
 import { LvlBoss1} from "./levels/lvlBoss1.js";
-import { World } from "./entity/World.mjs";
+import { World } from "./objects/world/World.mjs";
 import { loadModels } from "./ressources/Models.mjs";
+import { Level } from "./levels/Level.mjs";
 
 const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true);
@@ -85,7 +87,7 @@ function definitEcouteurs() {
 //déplacer le joueur
 function movePlayer(){
     //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
-    player.move(keyState, listes);
+    if(nbLevel!=260402)player.move(keyState, listes);
     detectLvlWarp();
     
     //si on est dans le niveau d'accueil, la camera suit le joueur en z
@@ -105,6 +107,9 @@ function movePlayer(){
             camera.position.x = player.mesh.position.x;
             camera.position.z = player.mesh.position.z + 20;
             camera.position.y = player.mesh.position.y + 10;
+            break;
+
+        case 260402:
             break;
 
         default:
@@ -194,8 +199,13 @@ function changeLevel(){
 
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
     world.close()
+    
     //supprimer le décor
     //changer de niveau
+    if(nbLevel == 260402){
+        decor = new SamLevel();
+        decor.start(world, {camera: camera})
+    }
     if (nbLevel == -1){
         decor = new LvlTest(player, listes, world);
     }
@@ -217,6 +227,7 @@ async function main(){
     let sceneToRender = await createScene();
     setInterval(function(){
         world.tick()
+        if(decor instanceof Level)decor.tick(world, {camera: camera})
         movePlayer()
         //faire chercher le joueur par les monstres
         listeMonstres.forEach(monstre => {

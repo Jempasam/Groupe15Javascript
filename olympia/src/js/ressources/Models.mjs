@@ -8,6 +8,8 @@ async function model(scene,name){
 
 export async function loadModels(scene){
     const panda=await model(scene,"Panda");
+    const block=await model(scene,"block");
+    const pillar=await model(scene,"Pillar");
     return {
         CUBE: function(scene){
             const mesh = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
@@ -15,9 +17,8 @@ export async function loadModels(scene){
             mesh.material.diffuseColor = BABYLON.Color3.White();
             return mesh
         },
-        PANDA: function(scene){
-            const mesh = panda.clone()
-            return mesh
-        }
+        PANDA: function(scene){ return panda.clone() },
+        BLOCK: function(scene){ return block.clone() },
+        PILLAR: function(scene){ return pillar.clone() }
     }
 }
