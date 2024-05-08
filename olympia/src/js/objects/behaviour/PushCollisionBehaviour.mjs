@@ -23,13 +23,25 @@ export class PushCollisionBehaviour extends Behaviour{
                     if(hitbox.position.y+hitbox.scaling.y/2 < self_hitbox.position.y+self_hitbox.scaling.y/2){
                         const depth=hitbox.position.y+hitbox.scaling.y/2 - self_hitbox.position.y + self_hitbox.scaling.y/2
                         movement.inertia.y=Math.max(movement.inertia.y, Math.min(0.2,depth/4))
+
+                        // Friction
+                        const under=object.get(MOVEMENT)
+                        if(under){
+                            if(movement.inertia.x>under.inertia.x)movement.inertia.x-=0.01
+                            else movement.inertia.x+=0.01
+                            if(movement.inertia.z>under.inertia.z)movement.inertia.z-=0.01
+                            else movement.inertia.z+=0.01
+                        }
                     }
                     else{
                         const top=self_hitbox.position.clone()
                         top.addInPlaceFromFloats(0, self_hitbox.scaling.y, 0)
                         if(hitbox.intersectsPoint(top)){
                             const movement=obj.get(MOVEMENT)
-                            if(movement)movement.inertia.y=-0.05
+                            if(movement){
+                                const depth=(self_hitbox.position.y-self_hitbox.scaling.y/2) - (hitbox.position.y-hitbox.scaling.y/2)
+                                movement.inertia.y=Math.min(-0.2,-depth/4)
+                            }
                         }
                         else{
                             const offset=hitbox.position.subtract(self_hitbox.position).asArray()

@@ -46,7 +46,6 @@ export class PlayerBehaviour extends Behaviour{
             dx*=this.acceleration
             dz*=this.acceleration
             for(let obj of objects){
-                console.log(obj.id,dx,dz)
                 let movement=obj.get(MOVEMENT)
                 if(!movement)continue
 

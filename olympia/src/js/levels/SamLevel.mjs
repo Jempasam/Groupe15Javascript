@@ -4,7 +4,6 @@ import { Level } from "./Level.mjs";
 import { MeshBehaviour } from "../objects/behaviour/MeshBehaviour.mjs";
 import { MESH, MeshModel } from "../objects/model/MeshModel.mjs";
 import { MovementBehaviour } from "../objects/behaviour/MovementBehaviour.mjs";
-import { MOVEMENT, MovementModel } from "../objects/model/MovementModel.mjs";
 import { UniversalCamera, Vector3 } from "../../../../babylonjs/index.js";
 import { TRANSFORM, TransformModel } from "../objects/model/TransformModel.mjs";
 import { HitboxBehaviour } from "../objects/behaviour/HitboxBehaviour.mjs";
@@ -12,6 +11,7 @@ import { PlayerBehaviour } from "../objects/behaviour/PlayerBehaviour.mjs";
 import { ConstantForceBehaviour } from "../objects/behaviour/ConstantForceBehaviour.mjs";
 import { SimpleCollisionBehaviour } from "../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { PushCollisionBehaviour } from "../objects/behaviour/PushCollisionBehaviour.mjs";
+import { PathBehaviour } from "../objects/behaviour/movement/PathBehaviour.mjs";
 import { HITBOX } from "../objects/model/HitboxModel.mjs";
 import { forMap } from "../objects/world/WorldUtils.mjs";
 import { ModelKey } from "../objects/world/GameObject.mjs";
@@ -32,11 +32,22 @@ export class SamLevel extends Level{
             [new MovementBehaviour(0.95), 1],
             new SimpleCollisionBehaviour()
         )
-    
-        world.addBehaviours("player", 
-            new PlayerBehaviour(["KeyA","KeyW","KeyD","KeyS"],0.03,0.1),
+
+        world.addBehaviours("physic",
             new ConstantForceBehaviour(new Vector3(0,-0.01,0)),
             new PushCollisionBehaviour()
+        )
+    
+        world.addBehaviours("player", 
+            new PlayerBehaviour(["KeyA","KeyW","KeyD","KeyS"],0.03,0.1)
+        )
+
+        world.addBehaviour("elevator",
+            new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02)
+        )
+
+        world.addBehaviour("moving",
+            new PathBehaviour([new Vector3(-6,0,0),new Vector3(6,0,0),new Vector3(6,5,0)], 0.1, 0.02, 0.04)
         )
 
         /*for(let i=0; i<20; i++){
@@ -62,11 +73,11 @@ d07   b21-..-..d05      |       |            |_____________|
       b11-..-..   d06   |_______|
    b01-..-..-..-..
    a09   c10   a09
-         c10
+      e10c10               f10
    a09   c10   a09
    b01-..-..-..-..
 `,
-            [-4,-8], [20,22],
+            [-4,-8], [26,22],
             (letter, pos, size)=>{
                 if(letter[0]==" ")return
                 /**
@@ -77,6 +88,8 @@ d07   b21-..-..d05      |       |            |_____________|
                     ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.BLOCK)]]} },
                     ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.BRIDGE)]]} },
                     ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.STONE)]]} },
+                    ()=>{return {tags:["object","elevator"], data:[[MESH, new MeshModel(models.BLOCK)]]} },
+                    ()=>{return {tags:["object","moving"], data:[[MESH, new MeshModel(models.BLOCK)]]} },
                 ]
                 console.log(letter)
                 const bottom=codeToNum(letter.charCodeAt(1))
@@ -90,10 +103,14 @@ d07   b21-..-..d05      |       |            |_____________|
             3
         )
 
-        this.player=world.add(["object","player"],
+        this.player=world.add(["object","player","physic"],
             [MESH, new MeshModel(models.PANDA)],
-            [MOVEMENT, new MovementModel(new Vector3(0.1,0,0))],
             [TRANSFORM, new TransformModel({position:new Vector3(0, 2, 4)})]
+        )
+
+        world.add(["object","physic"],
+            [MESH, new MeshModel(models.BLOCK)],
+            [TRANSFORM, new TransformModel({position:new Vector3(0, 4, 4)})]
         )
 
         options.camera.lockedTarget=this.player.get(HITBOX)?.hitbox
