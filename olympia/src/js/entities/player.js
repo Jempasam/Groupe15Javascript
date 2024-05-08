@@ -310,16 +310,16 @@ export class Player extends Entities {
                 this.canDash = false;
                 //augmenter la vitesse en fonction de la direction du joueur
                 if (keyState['KeyW']) {
-                    this.vectorSpeed.z-= this.playerSpeed*75;
+                    this.vectorSpeed.z-= this.playerSpeed*60;
                 }
                 if (keyState['KeyS']) {
-                    this.vectorSpeed.z+= this.playerSpeed*75;
+                    this.vectorSpeed.z+= this.playerSpeed*60;
                 }
                 if (keyState['KeyA']) {
-                    this.vectorSpeed.x+= this.playerSpeed*75;
+                    this.vectorSpeed.x+= this.playerSpeed*60;
                 }
                 if (keyState['KeyD']) {
-                    this.vectorSpeed.x-= this.playerSpeed*75;
+                    this.vectorSpeed.x-= this.playerSpeed*60;
                 }
 
                 //attendre 2 seconde avant de pouvoir refaire un dash
