@@ -5,6 +5,27 @@ import { playToDeath } from './Menu.js';
 
 import { ACCOUNT_STORAGE, OBJECT_DATA } from '../../samlib/Storage.mjs';
 
+//Ajout des succès 
+
+import {AchievementsStorage} from '../../samlib/Achievements.mjs';
+
+const achievementsStorage = new AchievementsStorage({
+    "snake": {
+        name: "TestMiam",
+        achievements: {
+            "high_score": {
+                name: "TestMiam",
+                desc: "Ceci est un test",
+                img: "../assets/fruit1.png",
+                max: 2
+            },
+            // Ajoutez d'autres achievements ici...
+        }
+    }
+});
+
+
+
 let inputStates = {};
 let vitesse = 5;
 let vitesseP = 0;

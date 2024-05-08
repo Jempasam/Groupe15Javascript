@@ -29,7 +29,11 @@ export class Player extends Entities {
         //console.log(this.mesh.ellipsoidOffset);
         this.canTakeDamage = true;
         this.unlockAttack = false;
+        this.unlockShield = false;
+        this.unlockDash = false;
         this.canAttack = true;
+        this.canShield = true;
+        this.canDash = true;
         this.pvMax = 5;
         this.pv = this.pvMax;
 
@@ -266,6 +270,66 @@ export class Player extends Entities {
         }
     }
 
+    bouclier(){
+        //si le joueur a débloqué le bouclier
+        if (this.unlockShield){
+            if (this.canShield){
+                this.canShield = false;
+                //créer un mesh en sphère autour du joueur
+                let bouclier = BABYLON.MeshBuilder.CreateSphere("bouclier", {diameter: 3, segments: 16}, this.scene);
+                bouclier.position = this.mesh.position;
+                bouclier.material = new BABYLON.StandardMaterial("bouclierMaterial", this.scene);
+                // couleur marron
+                bouclier.material.diffuseColor = new BABYLON.Color3(0.5,0.25,0);
+                bouclier.checkCollisions = false;
+                //rendre le mesh de plus en plus transparent chaque 0.1 seconde
+                let interval = setInterval(() => {
+                    bouclier.visibility -= 0.05;
+                    if (bouclier.visibility <= 0){
+                        clearInterval(interval);
+                    }
+                }, 100);
+                //attendre 2 seconde avant de faire disparaitre le bouclier
+                setTimeout(() => {
+                    bouclier.dispose();
+                    //ne pas pouvoir le réutiliser tout de suite
+                    setTimeout(() => {
+                        this.canShield = true;
+                        }, 4000);
+                }, 2000);
+            }
+        }
+    }
+
+    dash(keyState){
+        if (this.unlockDash){
+            if (this.canDash){
+                //reinitialiser la vitesse
+                this.vectorSpeed.x = 0;
+                this.vectorSpeed.z = 0;
+                this.canDash = false;
+                //augmenter la vitesse en fonction de la direction du joueur
+                if (keyState['KeyW']) {
+                    this.vectorSpeed.z-= this.playerSpeed*75;
+                }
+                if (keyState['KeyS']) {
+                    this.vectorSpeed.z+= this.playerSpeed*75;
+                }
+                if (keyState['KeyA']) {
+                    this.vectorSpeed.x+= this.playerSpeed*75;
+                }
+                if (keyState['KeyD']) {
+                    this.vectorSpeed.x-= this.playerSpeed*75;
+                }
+
+                //attendre 2 seconde avant de pouvoir refaire un dash
+                setTimeout(() => {
+                    this.canDash = true;
+                }, 2000);
+            }
+        }
+    }
+
 
     //bouge
     move(keyState, listes){
@@ -295,11 +359,25 @@ export class Player extends Entities {
         if (keyState['KeyD']) {
             this.vectorSpeed.x-= this.playerSpeed;
         }
+        //attaquer avec la touche K
+        if (keyState['KeyK']) {
+            this.attaquer();
+        }
+        //sauter avec la touche Espace
         if (keyState['Space'] && this.canJump) {
             if (this.maxJump > 0){
             this.vectorSpeed.y+= this.jumpPower;
             }
         }
+        //bouclier avec la touche O
+        if (keyState['KeyO']) {
+            this.bouclier();
+        }
+        //dash avec la touche Maj gauche
+        if (keyState['ShiftLeft']) {
+            this.dash(keyState);
+        }
+
     
     
         this.canJump = false;

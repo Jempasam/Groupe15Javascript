@@ -42,7 +42,7 @@ export class LvlTest {
     const ground2= new Ground("Ground2",-21.5, -1, -7.5, 5, 1, 20,this.scene);
     listes[1].push(ground2);
     //créer un sol en hauteur
-    const ground3 = new Ground("Ground3",-9, 0.5, -10, 10, 2, 15,this.scene);
+    const ground3 = new Ground("Ground3",-9, 0.5, -15, 10, 2, 25,this.scene);
     listes[1].push(ground3);
 
     //créer une rampe en tournant le sol
@@ -148,13 +148,17 @@ export class LvlTest {
     //créer des monstres
     const monster = new Monster("Monster1","Panda", -20, 0, 0, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
     listes[0].push(monster);
+    monster.toggleHitbox(true);
     
-    const monster2 = new Monster("Monster2","Kangaroo1", -23, 1.5, -5, 3, 3, 3, player.playerSpeed*2, 15, this.scene);
+    const monster2 = new Monster("Monster2","Kangaroo1", -23, 1.5, -5, 1, 1, 1, player.playerSpeed*2, 15, this.scene);
     listes[0].push(monster2);
+    monster2.toggleHitbox(true);
 
     //créer un monstre volant
     const monster3 = new Monster("Monster3","Bird", -20, 3, -10, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
     listes[0].push(monster3);
+    monster3.toggleHitbox(true);
+
     monster3.chercheJoueur = Monster.prototype.flyingChercheJoueur;
     monster3.mesh.instancedBuffers.color = new BABYLON.Color3(1,0.5,0);
     
@@ -178,9 +182,15 @@ export class LvlTest {
     //créer un débloqueur de saut
     const unlocker2 = new Unlocker("Unlocker2",-10, 2, -10, 1, 1, 1, 2, this.scene);
     listes[8].push(unlocker2);
+    //créer un débloqueur de bouclier
+    const unlocker3 = new Unlocker("Unlocker3",-10, 2, -20, 1, 1, 1, 3, this.scene);
+    listes[8].push(unlocker3);
+    //créer un débloqueur de dash
+    const unlocker4 = new Unlocker("Unlocker4",-10, 2, -25, 1, 1, 1, 4, this.scene);
+    listes[8].push(unlocker4);
 
     //créer un lvlWarp vers le boss1
-    const lvlWarpBoss1 = new lvlWarp("lvlWarpBoss1",-12, 2, -18, 1, 1, 1, -2,this.scene);
+    const lvlWarpBoss1 = new lvlWarp("lvlWarpBoss1",-12, 2, -25, 1, 1, 1, -2,this.scene);
     listes[5].push(lvlWarpBoss1);
 
     //créer un canon

@@ -25,7 +25,7 @@ export class Lvl1 {
 
 
         // Création avec la sortie de la TP
-        const ground = new Ground("Ground1",3, -1, 5, 14, 1, 20,this.scene);
+        const ground = new Ground("Ground1",3, -3, 5, 14, 5, 20,this.scene);
         listes[1].push(ground);
 
         const wallL1P1 = new Wall("WallL1P1", -18, 6, -5, 37, 20, 5,this.scene);
@@ -43,27 +43,42 @@ export class Lvl1 {
         const unlocker = new Unlocker("Unlocker1",0, 0, 10, 1, 1, 1, 2, this.scene);
         listes[8].push(unlocker);
 
+        const wallL1P5 = new Wall("WallL1P5", 5, 0, -5, 10, 1.5, 1,this.scene);
+        listes[2].push(wallL1P5);
+
+        const wallL1P6 = new Wall("WallL1P6", 10, 0, 4.75, 1, 1.5, 20.75,this.scene);
+        listes[2].push(wallL1P6);
+
+        const wallL1P7 = new Wall("WallL1P7", -4, 0.5, 11, 1, 1.5, 8,this.scene);
+        listes[2].push(wallL1P7);
+
+        const wallL1P8 = new Wall("WallL1P8", -3.5, 0.5, 15, 2, 1.5, 1,this.scene);
+        listes[2].push(wallL1P8);
+
+        const wallL1P9 = new Wall("WallL1P9", 9, 0, 15, 1.5, 1.5, 0.5,this.scene);
+        listes[2].push(wallL1P9);
+
 
         // Escalier 
-        const groundE11 = new Ground("GroundE11",3, -3, 18, 11, 1, 5,this.scene);
+        const groundE11 = new Ground("GroundE11",3, -4, 18, 11, 3, 5,this.scene);
         listes[1].push(groundE11);
 
-        const groundE12 = new Ground("GroundE12",3, -2.5, 17, 11, 1, 5,this.scene);
+        const groundE12 = new Ground("GroundE12",3, -3.5, 17, 11, 3, 5,this.scene);
         listes[1].push(groundE12);
 
-        const groundE13 = new Ground("Groun9E13",3, -2, 16, 11, 1, 5,this.scene);
+        const groundE13 = new Ground("Groun9E13",3, -3, 16, 11, 3, 5,this.scene);
         listes[1].push(groundE13);
 
-        const groundE14 = new Ground("GroundE14",3, -1.5, 15, 11, 1, 5,this.scene);
+        const groundE14 = new Ground("GroundE14",3, -2.5, 15, 11, 3, 5,this.scene);
         listes[1].push(groundE14);
 
-        const groundE15 = new Ground("GroundE15",3, -1, 14, 11, 1, 5,this.scene);
+        const groundE15 = new Ground("GroundE15",3, -2, 14, 11, 3, 5,this.scene);
         listes[1].push(groundE15);
 
-        const groundE16 = new Ground("GroundE16",3, -3.5, 19, 11, 1, 5,this.scene);
+        const groundE16 = new Ground("GroundE16",3, -4.5, 19, 11, 3, 5,this.scene);
         listes[1].push(groundE16);
 
-        const groundE17 = new Ground("GroundE17",3, -4, 20, 11, 1, 5,this.scene);
+        const groundE17 = new Ground("GroundE17",3, -5, 20, 11, 3, 5,this.scene);
         listes[1].push(groundE17);
 
 
@@ -71,7 +86,7 @@ export class Lvl1 {
         const murLvl1 = new BreakableWall("MurLvl1",10, -2, 30.5, 2, 2, 15, this.scene);
         listes[6].push(murLvl1);
 
-        const ground2 = new Ground("Ground2",8, -4, 30, 22, 1, 15,this.scene);
+        const ground2 = new Ground("Ground2",8, -6, 30, 22, 5, 15,this.scene);
         listes[1].push(ground2);
 
         const groundEZ1 = new Ground("GrounEZ1",3, -4, 36, 11, 1, 5,this.scene);
@@ -94,18 +109,18 @@ export class Lvl1 {
         let PosMouvementY = -4.5;
         let PosMouvementZ = 30
         
-        const movingGround1 = new MovingGround("MovingGround1", 20, PosMouvementY, PosMouvementZ, 6, 1, 6, 28, PosMouvementY, PosMouvementZ, 0.045 ,this.scene);
+        const movingGround1 = new MovingGround("MovingGround1", 20, PosMouvementY, PosMouvementZ, 6, 1, 6, 28, PosMouvementY, PosMouvementZ, 0.12 ,this.scene);
         listes[7].push(movingGround1);
 
-        const movingGround2 = new MovingGround("MovingGround2", 40, PosMouvementY, PosMouvementZ, 6, 1, 6, 32, PosMouvementY, PosMouvementZ, 0.045 ,this.scene);
+        const movingGround2 = new MovingGround("MovingGround2", 40, PosMouvementY, PosMouvementZ, 6, 1, 6, 32, PosMouvementY, PosMouvementZ, 0.12 ,this.scene);
         listes[7].push(movingGround2);
 
 
         // Première zone de combat
-        const groundE18 = new Ground("GroundE18",51, -4, 30, 19, 1, 13,this.scene);
+        const groundE18 = new Ground("GroundE18",51, -5, 30, 19, 3, 13,this.scene);
         listes[1].push(groundE18);
 
-        const groundE19 = new Ground("GroundE19",51, -4, 34, 9.5, 1, 40,this.scene);
+        const groundE19 = new Ground("GroundE19",51, -5, 34, 9.5, 3, 40,this.scene);
         listes[1].push(groundE19);
 
         const murLvl2 = new BreakableWall("MurLvl2",51, -1.5, 20, 9.5, 4, 2, this.scene);
@@ -119,6 +134,7 @@ export class Lvl1 {
 
         const monster4 = new Monster("Monster4", "Panda", 50, -4, 19, 2, 2, 2, player.playerSpeed*3, 3, this.scene);
         listes[0].push(monster4);
+        monster4.toggleHitbox(true);
 
         const murLvl3 = new BreakableWall("MurLvl3",51, -3, 40, 9.5, 2, 2, this.scene);
         listes[6].push(murLvl3);
@@ -128,16 +144,16 @@ export class Lvl1 {
 
 
         // Jonglage entre les plateformes mouvantes après première zone de combat
-        const movingGround3 = new MovingGround("MovingGround3", 64, -4.3, 50, 6, 1, 8, 57, -4.3, 50, 0.03 ,this.scene);
+        const movingGround3 = new MovingGround("MovingGround3", 64, -4.3, 50, 6, 1, 8, 57, -4.3, 50, 0.1 ,this.scene);
         listes[7].push(movingGround3);
 
-        const movingGround4 = new MovingGround("MovingGround4", 70, -4.5, 50, 7, 1, 8, 70, 2.5, 50, 0.03 ,this.scene);
+        const movingGround4 = new MovingGround("MovingGround4", 70, -4.5, 50, 7, 1, 8, 70, 2.5, 50, 0.1 ,this.scene);
         listes[7].push(movingGround4);
 
-        const movingGround5 = new MovingGround("MovingGround5", 77, 2.5, 50, 7, 1, 8, 77, -4.5, 50, 0.03 ,this.scene);
+        const movingGround5 = new MovingGround("MovingGround5", 77, 2.5, 50, 7, 1, 8, 77, -4.5, 50, 0.1 ,this.scene);
         listes[7].push(movingGround5);
 
-        const movingGround6 = new MovingGround("MovingGround6", 84, -4.5, 50, 7, 1, 8, 84, 2.5, 50, 0.03 ,this.scene);
+        const movingGround6 = new MovingGround("MovingGround6", 84, -4.5, 50, 7, 1, 8, 84, 2.5, 50, 0.1 ,this.scene);
         listes[7].push(movingGround6);
 
         //const monster3 = new Monster("Monster3", "Panda", 84, 0, 50, 1, 1, 1, player.playerSpeed*3, 2, this.scene);
@@ -152,9 +168,9 @@ export class Lvl1 {
         listes[1].push(groundE20);
         
         const groundE21 = new Ground("GroundE21",112.5, -1, 45, 12.5, 8, 18,this.scene);
-        listes[1].push(groundE20);
+        listes[1].push(groundE21);
 
-        const monster5 = new Monster("Monster5", "Panda", 102, 2.5, 50, 3, 3, 3, player.playerSpeed*2, 4, this.scene);
+        const monster5 = new Monster("Monster5", "Panda", 110, 2.5, 50, 2, 2, 2, player.playerSpeed*2, 4, this.scene);
         listes[0].push(monster5);
 
         const monster6 = new Monster("Monster6", "Panda", 97, 2.5, 49, 1, 1, 1, player.playerSpeed*4, 2, this.scene);
@@ -165,6 +181,19 @@ export class Lvl1 {
 
         const murLvl5 = new BreakableWall("MurLvl5",88, 4, 49, 1, 2, 10, this.scene);
         listes[6].push(murLvl5);
+
+        const groundP1 = new Ground("GroundP1",95, 4, 49, 1.25, 4, 1.25,this.scene);
+        listes[1].push(groundP1);
+
+        const groundP2 = new Ground("GroundP2",100, 4, 50, 1.25, 4, 1.25,this.scene);
+        listes[1].push(groundP2);
+
+        const groundP3 = new Ground("GroundP2",105, 4, 47, 1.25, 4, 1.25,this.scene);
+        listes[1].push(groundP3);
+
+        const murLvl6 = new BreakableWall("MurLvl6",118, 4, 49, 1, 2, 10, this.scene);
+        listes[6].push(murLvl6);
+
 
 
         // Escaliers après 2ème zone de combat
@@ -189,6 +218,13 @@ export class Lvl1 {
 
         const groundE28 = new Ground("GroundE28",130, -4, 49, 15, 8, 10,this.scene);
         listes[1].push(groundE28);
+
+        const monster8 = new Monster("Monster8", "Panda", 130, -4, 49, 1.5, 1.5, 1.5, player.playerSpeed*2.5, 3, this.scene);
+        listes[0].push(monster8);
+
+            //créer un monstre volant
+        const monster9 = new Monster("Monster9","Bird", 135, -4, 49, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
+        listes[0].push(monster9);
 
 
 
@@ -227,7 +263,7 @@ export class Lvl1 {
         const movingGround11 = new MovingGround("MovingGround11", 135, -0.5, 7, 5, 1, 6, 150, -0.5, 7, 0.2 ,this.scene);
         listes[7].push(movingGround11);
 
-        const groundE29 = new Ground("GroundE29",144, -0.5, -3, 8, 1, 15,this.scene);
+        const groundE29 = new Ground("GroundE29",144, -4, -3, 8, 8, 15,this.scene);
         listes[1].push(groundE29);
 
 
@@ -238,15 +274,29 @@ export class Lvl1 {
                 "GroundE" + (i + 30), // Nom unique pour chaque marche
                 144, //PosX de la première marche
                 0 + (i * 0.5), //PosY + PosY pour chaque prochaine marche
-                -5 - (i * 1), // PosZ + PosZ pour chaque prochaine marche
+                -11 - (i * 1), // PosZ + PosZ pour chaque prochaine marche
                 8, //TailleX pour chaque marche
                 1, //TailleY Pour chaque marche
-                12, //TailleZ pour chaque marche
+                24, //TailleZ pour chaque marche
                 this.scene
             );
 
             listes[1].push(ground);
         }
+
+        const wallL1F1 = new Wall("WallL1F1", 149, 18, -43, 2, 10, 12,this.scene);
+        listes[2].push(wallL1F1);
+
+        const wallL1F2 = new Wall("WallL1F2", 139, 18, -43, 2, 10, 12,this.scene);
+        listes[2].push(wallL1F2);
+
+        const wallL1F3 = new Wall("WallL1F3", 144, 20, -43, 12, 3, 12,this.scene);
+        listes[2].push(wallL1F3);
+
+        const lvlWarp1 = new lvlWarp("lvlWarp1",144, 18, -46, 8, 6, 2, -2,this.scene);
+        listes[5].push(lvlWarp1);
+
+        
     }
 }
 
