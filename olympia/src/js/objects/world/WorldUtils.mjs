@@ -6,7 +6,7 @@
  * @param {[number,number]} size 
  * @param {(letter:string, pos:[number,number], size:[number,number])=>void} factory 
  */
-export function forMap(map, position, size, factory){
+export function forMap(map, position, size, factory, tilesize=1){
 
     /** @type {Array<Array<string?>>} */
     let table=[]
@@ -25,8 +25,10 @@ export function forMap(map, position, size, factory){
             column=[]
         }
         else{
+            const letter=map.substring(i,i+tilesize)
+            i+=tilesize-1
             widtha++
-            column.push(map[i])
+            column.push(letter)
         }
     }
     table.push(column)
@@ -35,8 +37,8 @@ export function forMap(map, position, size, factory){
     console.log(table)
     const get_size= (x,y)=>{
         let height=1, width=1
-        while(table[y]?.[x+width]=="-") width++
-        while(table[y+height]?.[x]=="|") height++
+        while(table[y]?.[x+width]?.[0]=="-") width++
+        while(table[y+height]?.[x]?.[0]=="|") height++
         for(let xx=0; xx<width; xx++){
             for(let yy=0; yy<height; yy++){
                 if(table[y+yy]?.[x+xx]!==undefined)table[y+yy][x+xx]=null

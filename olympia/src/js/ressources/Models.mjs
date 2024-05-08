@@ -10,6 +10,8 @@ export async function loadModels(scene){
     const panda=await model(scene,"Panda");
     const block=await model(scene,"block");
     const pillar=await model(scene,"Pillar");
+    const bridge=await model(scene,"Bridge");
+    const stone=await model(scene,"Stone");
     return {
         CUBE: function(scene){
             const mesh = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
@@ -19,6 +21,8 @@ export async function loadModels(scene){
         },
         PANDA: function(scene){ return panda.clone() },
         BLOCK: function(scene){ return block.clone() },
-        PILLAR: function(scene){ return pillar.clone() }
+        PILLAR: function(scene){ return pillar.clone() },
+        BRIDGE: function(scene){ return bridge.clone() },
+        STONE: function(scene){ return stone.clone() },
     }
 }

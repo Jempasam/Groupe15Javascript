@@ -14,6 +14,7 @@ import { SimpleCollisionBehaviour } from "../objects/behaviour/collision/SimpleC
 import { PushCollisionBehaviour } from "../objects/behaviour/PushCollisionBehaviour.mjs";
 import { HITBOX } from "../objects/model/HitboxModel.mjs";
 import { forMap } from "../objects/world/WorldUtils.mjs";
+import { ModelKey } from "../objects/world/GameObject.mjs";
 
 
 export class SamLevel extends Level{
@@ -38,47 +39,55 @@ export class SamLevel extends Level{
             new PushCollisionBehaviour()
         )
 
-        for(let i=0; i<20; i++){
+        /*for(let i=0; i<20; i++){
             world.add("object",
                 [MESH, new MeshModel(models.BLOCK)],
                 [TRANSFORM, new TransformModel({position:new Vector3(0, -1+i*0.5, -1-i), scale:new Vector3(4,1,1)})]
             )
+        }*/
+
+        function codeToNum(code){
+            if('0'.charCodeAt(0)<=code && code<='9'.charCodeAt(0)) return code-'0'.charCodeAt(0)+1
+            else return code-'a'.charCodeAt(0)+11
         }
 
         forMap(
 `
-H----
-|....
-|....
- G--
-dF--d
- E--
-bD--b
- C--
-9BBB9
-B----
-|....
-|....
-9BBB9`,
-            [-4,-8], [8,22],
+d03b06-..-..-..-..   d09                     b08-..-..-..-..
+   |             |b51a06b51a06b51a06b51a07b71|             |
+d09|_____________|      d05                  |             |
+   d06b41-..-..d03                           |             |
+      b31-..-..         d0f-..-..            |             |
+d07   b21-..-..d05      |       |            |_____________|
+      b11-..-..   d06   |_______|
+   b01-..-..-..-..
+   a09   c10   a09
+         c10
+   a09   c10   a09
+   b01-..-..-..-..
+`,
+            [-4,-8], [20,22],
             (letter, pos, size)=>{
-                if(letter.match(/[0-9a-z]/)){
-                    let height
-                    if(letter.match(/[0-9]/)) height=letter.charCodeAt(0)-'0'.charCodeAt(0)+1
-                    else height=letter.charCodeAt(0)-'a'.charCodeAt(0)+11
-                    world.add("object",
-                        [MESH, new MeshModel(models.PILLAR)],
-                        [TRANSFORM, new TransformModel({position:new Vector3(pos[0]+size[0]/2, height/4-1, pos[1]+size[1]/2), scale:new Vector3(size[0],height/2,size[1])})]
-                    )
-                }
-                else if(letter.match(/[A-Z]/)){
-                    let height=letter.charCodeAt(0)-'A'.charCodeAt(0)+1
-                    world.add("object",
-                        [MESH, new MeshModel(models.BLOCK)],
-                        [TRANSFORM, new TransformModel({position:new Vector3(pos[0]+size[0]/2, height/4-1, pos[1]+size[1]/2), scale:new Vector3(size[0],height/2,size[1])})]
-                    )
-                }
-            }
+                if(letter[0]==" ")return
+                /**
+                 * @type {Array< ()=>{tags: Array<string>, data: Array<[ModelKey<any>,any]>}>}
+                 */
+                const objects=[
+                    ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.PILLAR)]]} },
+                    ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.BLOCK)]]} },
+                    ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.BRIDGE)]]} },
+                    ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.STONE)]]} },
+                ]
+                console.log(letter)
+                const bottom=codeToNum(letter.charCodeAt(1))
+                const height=codeToNum(letter.charCodeAt(2))
+                const type=objects[letter.charCodeAt(0)-"a".charCodeAt(0)]()
+                world.add(type.tags,
+                    ...type.data,
+                    [TRANSFORM, new TransformModel({position:new Vector3(pos[0]+size[0]/2, bottom/2+height/4-1, pos[1]+size[1]/2), scale:new Vector3(size[0],height/2,size[1])})]
+                )
+            },
+            3
         )
 
         this.player=world.add(["object","player"],

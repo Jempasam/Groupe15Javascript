@@ -75,9 +75,7 @@ export class TaggedDict{
      * @param {T} entry 
      */
     remove(entry){
-        for(const tag of entry.tags){
-            this.removeTag(entry,tag)
-        }
+        while(entry.tags.length>0)this.removeTag(entry,entry.tags[0])
     }
     
 }

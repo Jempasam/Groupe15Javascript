@@ -42,11 +42,11 @@ export class PlayerBehaviour extends Behaviour{
         if(isKeyPressed(this.bottom))dz+=1
         if(isKeyPressed(this.left))dx+=1
         if(isKeyPressed(this.right))dx-=1
-
         if(dx!=0 || dz!=0){
             dx*=this.acceleration
             dz*=this.acceleration
             for(let obj of objects){
+                console.log(obj.id,dx,dz)
                 let movement=obj.get(MOVEMENT)
                 if(!movement)continue
 
