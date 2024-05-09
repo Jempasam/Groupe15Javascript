@@ -244,27 +244,27 @@ export const achievement_list = {
             },
             "win10":{
                 name: "Serpent gourmet",
-                desc: "Obtenir 10 points",
+                desc: "Obtenir 10 points en 1 partie",
                 img: "../../snake/assets/fruit1.png",
-                max:10
+                max:1
             },
             "win20":{
                 name: "Maître serpent",
-                desc: "Obtenir 20 points",
+                desc: "Obtenir 20 points en 1 partie",
                 img: "../../snake/assets/fruit1.png",
-                max:20
+                max:1
             },
             "win50":{
                 name: "Roi des serpents",
-                desc: "Obtenir 50 points",
+                desc: "Obtenir 50 points en 1 partie",
                 img: "../../snake/assets/fruit1.png",
-                max:50
+                max:1
             },
             "win100":{
                 name: "SSSSSSSSERPENT",
-                desc: "Obtenir 100 points",
+                desc: "Obtenir 100 points en 1 partie",
                 img: "../../snake/assets/fruit1.png",
-                max:100
+                max:1
             },
             "win0":{
                 name: "Faux départ",
@@ -274,13 +274,7 @@ export const achievement_list = {
             },
             "Gamemode4":{
                 name: "Fiesta",
-                desc: "Jouer avec les 4 modes de jeux en même temps",
-                img: "../../snake/assets/fruit1.png",
-                max: 1
-            },
-            "SkinClick":{
-                name: "Diplome",
-                desc: "Avoir cliquer sur un skin pour accéder à sa page wikipédia",
+                desc: "Obtenir 5 points avec les 4 modes de jeux en même temps",
                 img: "../../snake/assets/fruit1.png",
                 max: 1
             },
@@ -288,7 +282,7 @@ export const achievement_list = {
                 name: "noisrevnI",
                 desc: "Avoir marqué 10 points avec le mode de jeu Inversion",
                 img: "../../snake/assets/fruit1.png",
-                max: 10
+                max: 1
             }
         }
     }
