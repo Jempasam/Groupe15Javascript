@@ -12,6 +12,7 @@ export async function loadModels(scene){
     const pillar=await model(scene,"Pillar");
     const bridge=await model(scene,"Bridge");
     const stone=await model(scene,"Stone");
+    const artifact=await model(scene,"Artifact");
     return {
         CUBE: function(scene){
             const mesh = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
@@ -24,5 +25,6 @@ export async function loadModels(scene){
         PILLAR: function(scene){ return pillar.clone() },
         BRIDGE: function(scene){ return bridge.clone() },
         STONE: function(scene){ return stone.clone() },
+        ARTIFACT: function(scene){ return artifact.clone() },
     }
 }

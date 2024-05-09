@@ -29,12 +29,12 @@ export class SamLevel extends Level{
         world.addBehaviours("object", 
             [new HitboxBehaviour(), 2], 
             [new MeshBehaviour(), 2], 
-            [new MovementBehaviour(0.95), 1],
+            [new MovementBehaviour(0.98), 1],
             new SimpleCollisionBehaviour()
         )
 
         world.addBehaviours("physic",
-            new ConstantForceBehaviour(new Vector3(0,-0.01,0)),
+            new ConstantForceBehaviour(new Vector3(0,-0.015,0)),
             new PushCollisionBehaviour()
         )
     
@@ -61,47 +61,65 @@ export class SamLevel extends Level{
             if('0'.charCodeAt(0)<=code && code<='9'.charCodeAt(0)) return code-'0'.charCodeAt(0)+1
             else return code-'a'.charCodeAt(0)+11
         }
-
+        
+        const objectSpawner=(letter, pos, size)=>{
+            if(letter[0]==" ")return
+            /**
+             * @type {Array< ()=>{tags: Array<string>, data: Array<[ModelKey<any>,any]>}>}
+             */
+            const objects=[
+                ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.PILLAR)]]} },//A
+                ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.BLOCK)]]} },//B
+                ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.BRIDGE)]]} },//C
+                ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.STONE)]]} },//D
+                ()=>{return {tags:["object","elevator"], data:[[MESH, new MeshModel(models.BLOCK)]]} },//E
+                ()=>{return {tags:["object","moving"], data:[[MESH, new MeshModel(models.BLOCK)]]} },//F
+                ()=>{return {tags:["object","elevator"], data:[[MESH, new MeshModel(models.ARTIFACT)]]} },//G
+                ()=>{return {tags:["object","physic"], data:[[MESH, new MeshModel(models.BLOCK)]]} },//H
+            ]
+            console.log(letter)
+            const bottom=codeToNum(letter.charCodeAt(1))
+            const height=codeToNum(letter.charCodeAt(2))
+            const type=objects[letter.charCodeAt(0)-"a".charCodeAt(0)]()
+            world.add(type.tags,
+                ...type.data,
+                [TRANSFORM, new TransformModel({position:new Vector3(pos[0]+size[0]/2, bottom/2+height/4-1, pos[1]+size[1]/2), scale:new Vector3(size[0],height/2,size[1])})]
+            )
+        }
         forMap(
 `
 d03b06-..-..-..-..   d09                     b08-..-..-..-..
    |             |b51a06b51a06b51a06b51a07b71|             |
 d09|_____________|      d05                  |             |
    d06b41-..-..d03                           |             |
-      b31-..-..         d0f-..-..            |             |
+      b31-..-..g31      d0f-..-..            |             |
 d07   b21-..-..d05      |       |            |_____________|
-      b11-..-..   d06   |_______|
-   b01-..-..-..-..
-   a09   c10   a09
-      e10c10               f10
-   a09   c10   a09
+      b11-..-..   d06   |_______|                  b06
+   b01-..-..-..-..                                 |..
+   a09   c10   a09                                 |..
+      e10c10               f10               b08-..-..-..-..
+   a09   c10   a09                           |_____________|
    b01-..-..-..-..
 `,
-            [-4,-8], [26,22],
-            (letter, pos, size)=>{
-                if(letter[0]==" ")return
-                /**
-                 * @type {Array< ()=>{tags: Array<string>, data: Array<[ModelKey<any>,any]>}>}
-                 */
-                const objects=[
-                    ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.PILLAR)]]} },
-                    ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.BLOCK)]]} },
-                    ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.BRIDGE)]]} },
-                    ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.STONE)]]} },
-                    ()=>{return {tags:["object","elevator"], data:[[MESH, new MeshModel(models.BLOCK)]]} },
-                    ()=>{return {tags:["object","moving"], data:[[MESH, new MeshModel(models.BLOCK)]]} },
-                ]
-                console.log(letter)
-                const bottom=codeToNum(letter.charCodeAt(1))
-                const height=codeToNum(letter.charCodeAt(2))
-                const type=objects[letter.charCodeAt(0)-"a".charCodeAt(0)]()
-                world.add(type.tags,
-                    ...type.data,
-                    [TRANSFORM, new TransformModel({position:new Vector3(pos[0]+size[0]/2, bottom/2+height/4-1, pos[1]+size[1]/2), scale:new Vector3(size[0],height/2,size[1])})]
-                )
-            },
-            3
+            [-4,-8], [26,20], objectSpawner, 3
         )
+        forMap(
+`
+         g71                                    h91   h91   
+                                                   h91-..
+                                                   |____|
+   
+   
+   
+   
+   
+   
+   
+   
+   
+`,
+                        [-4,-8], [26,20], objectSpawner, 3
+                    )
 
         this.player=world.add(["object","player","physic"],
             [MESH, new MeshModel(models.PANDA)],
@@ -110,7 +128,7 @@ d07   b21-..-..d05      |       |            |_____________|
 
         world.add(["object","physic"],
             [MESH, new MeshModel(models.BLOCK)],
-            [TRANSFORM, new TransformModel({position:new Vector3(0, 4, 4)})]
+            [TRANSFORM, new TransformModel({position:new Vector3(0, 4, 2)})]
         )
 
         options.camera.lockedTarget=this.player.get(HITBOX)?.hitbox

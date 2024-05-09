@@ -20,17 +20,18 @@ export class PushCollisionBehaviour extends Behaviour{
             obj.observers(ON_COLLISION).add("PushCollisionBehaviour",(self,{self_hitbox,object,hitbox})=>{
                 const movement=obj.get(MOVEMENT)
                 if(movement){
-                    if(hitbox.position.y+hitbox.scaling.y/2 < self_hitbox.position.y+self_hitbox.scaling.y/2){
+                    if(hitbox.position.y+hitbox.scaling.y/2 < self_hitbox.position.y+self_hitbox.scaling.y/4){
                         const depth=hitbox.position.y+hitbox.scaling.y/2 - self_hitbox.position.y + self_hitbox.scaling.y/2
                         movement.inertia.y=Math.max(movement.inertia.y, Math.min(0.2,depth/4))
 
                         // Friction
                         const under=object.get(MOVEMENT)
                         if(under){
-                            if(movement.inertia.x>under.inertia.x)movement.inertia.x-=0.01
-                            else movement.inertia.x+=0.01
-                            if(movement.inertia.z>under.inertia.z)movement.inertia.z-=0.01
-                            else movement.inertia.z+=0.01
+                            if(movement.inertia.x>under.inertia.x+0.001)movement.inertia.x-=0.01
+                            else if(movement.inertia.x<under.inertia.x-0.001)movement.inertia.x+=0.01
+
+                            if(movement.inertia.z>under.inertia.z+0.001)movement.inertia.z-=0.01
+                            else if(movement.inertia.z<under.inertia.z-0.001)movement.inertia.z+=0.01
                         }
                     }
                     else{
