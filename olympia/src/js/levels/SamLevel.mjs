@@ -123,7 +123,7 @@ d07   b21-..-..d05      |       |            |_____________|
 
         this.player=world.add(["object","player","physic"],
             [MESH, new MeshModel(models.PANDA)],
-            [TRANSFORM, new TransformModel({position:new Vector3(0, 2, 4)})]
+            [TRANSFORM, new TransformModel({position:new Vector3(0, 2, 10)})]
         )
 
         world.add(["object","physic"],
@@ -142,7 +142,12 @@ d07   b21-..-..d05      |       |            |_____________|
         const pos=this?.player?.get(TRANSFORM)?.position
         if(pos){
             options.camera.position.copyFrom(pos)
-            options.camera.position.addInPlaceFromFloats(0,6,8)
+            options.camera.position
+            .addInPlaceFromFloats(0,6,8)
+
+            if(pos.y<-10){
+                pos.copyFromFloats(0,2,10)
+            }
         }
     }
 
