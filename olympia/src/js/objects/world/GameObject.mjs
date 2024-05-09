@@ -74,6 +74,30 @@ export class GameObject{
     /**
      * @template T
      * @param {ModelKey<T>} key
+     * @param {(value:T)=>void} callback
+     */
+    apply(key,callback){
+        let value=this.get(key)
+        if(value!==null)callback(value)
+    }
+
+    /**
+     * @template T
+     * @param {ModelKey<T>} key
+     * @param {()=>T} constructor
+     */
+    getOrSet(key, constructor){
+        let value=this.get(key)
+        if(value===null){
+            value=constructor()
+            this.set(key,value)
+        }
+        return value
+    }
+
+    /**
+     * @template T
+     * @param {ModelKey<T>} key
      * @param {T?} value
      */
     set(key,value){

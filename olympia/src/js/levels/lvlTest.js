@@ -17,7 +17,7 @@ import { MOVEMENT, MovementModel } from "../objects/model/MovementModel.mjs";
 import { Vector3 } from "../../../../babylonjs/index.js";
 import { TRANSFORM, TransformModel } from "../objects/model/TransformModel.mjs";
 import { HitboxBehaviour } from "../objects/behaviour/HitboxBehaviour.mjs";
-import { PlayerBehaviour } from "../objects/behaviour/PlayerBehaviour.mjs";
+import { PlayerBehaviour } from "../objects/behaviour/controls/PlayerBehaviour.mjs";
 import { ConstantForceBehaviour } from "../objects/behaviour/ConstantForceBehaviour.mjs";
 import { SimpleCollisionBehaviour } from "../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { PushCollisionBehaviour } from "../objects/behaviour/PushCollisionBehaviour.mjs";

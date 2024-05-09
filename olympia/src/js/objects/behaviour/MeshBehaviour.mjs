@@ -13,7 +13,16 @@ export class MeshBehaviour extends Behaviour{
      * @param {ObjectQuery} objects
      */
     init(world,objects){
-        for(let obj of objects) obj.get(MESH)?.createMesh(world["scene"])
+        for(let obj of objects){
+            const mesh=obj.get(MESH)
+            mesh?.createMesh(world["scene"])
+            if(mesh && mesh.mesh){
+                const transform=obj.get(TRANSFORM); if(!transform)continue
+                mesh.mesh.position.copyFrom(transform.position)
+                mesh.mesh.rotation.copyFrom(transform.rotation)
+                mesh.mesh.scaling.copyFrom(transform.scale)
+            }
+        }
     }
 
     /**

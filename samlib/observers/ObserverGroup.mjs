@@ -35,11 +35,33 @@ export class ObserverGroup{
 
     /**
      * Register an observer
+     * @param {string|number} prefix
+     * @returns {string}
+     */
+    static generateName(prefix=""){
+        const rand=crypto.getRandomValues(new Uint8Array(2))
+        return prefix+"auto_"+performance.now()+"_"+rand[0]+"_"+rand[1]
+    }
+
+    /**
+     * Register an observer
      * @param {string|number} name
      * @param {function(O,T):void} observer
      */
     add(name,observer){
         this.#observers[name]=observer
+    }
+
+    /**
+     * Register an observer with an automaticcaly generated name
+     * @param {function(O,T):void} observer
+     * @param {string=} prefix A prefix for the auto-generated name
+     * @returns {string} The name of the observer
+     */
+    addAuto(observer,prefix=""){
+        const name=ObserverGroup.generateName(prefix)
+        this.#observers[name]=observer
+        return name
     }
 
     /**

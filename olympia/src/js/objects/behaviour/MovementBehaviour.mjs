@@ -41,8 +41,8 @@ export class MovementBehaviour extends Behaviour{
             transform.position.addInPlace(movement.inertia)
             movement.inertia= movement.inertia.scale(this.speed_preservation)
 
-            const strength=movement.inertia.length()
-            if(strength>0.05){
+            const strength=movement.inertia.multiplyByFloats(1,0,1).length()
+            if(strength>0.03){
                 const quat = new Quaternion()
                 Quaternion.FromUnitVectorsToRef(new Vector3(0,0,1), movement.inertia.normalizeToNew(), quat)
                 const angles=quat.toEulerAngles()
@@ -51,7 +51,7 @@ export class MovementBehaviour extends Behaviour{
                 let offset=angles.y-transform.rotation.y
                 if(offset>Math.PI)offset-=Math.PI*2
                 else if(offset<-Math.PI)offset+=Math.PI*2
-                transform.rotation.y+=offset*0.2
+                transform.rotation.y+=offset*0.1
             }
         }
     }

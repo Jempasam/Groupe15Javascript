@@ -3,7 +3,7 @@ import { MESH } from "../model/MeshModel.mjs";
 import { ObjectQuery, World } from "../world/World.mjs";
 import { Behaviour } from "./Behaviour.mjs";
 import { ON_COLLISION } from "./collision/SimpleCollisionBehaviour.mjs";
-import { MOVEMENT } from "../model/MovementModel.mjs";
+import { MOVEMENT, accelerate, accelerateX, accelerateY, accelerateZ } from "../model/MovementModel.mjs";
 import { Ray, Vector3 } from "../../../../../babylonjs/index.js";
 
 
@@ -20,42 +20,42 @@ export class PushCollisionBehaviour extends Behaviour{
             obj.observers(ON_COLLISION).add("PushCollisionBehaviour",(self,{self_hitbox,object,hitbox})=>{
                 const movement=obj.get(MOVEMENT)
                 if(movement){
-                    if(hitbox.position.y+hitbox.scaling.y/2 < self_hitbox.position.y+self_hitbox.scaling.y/4){
+                    if(
+                        hitbox.position.y+hitbox.scaling.y/2 < self_hitbox.position.y+self_hitbox.scaling.y/4 &&
+                        hitbox.scaling.x+hitbox.scaling.z > (self_hitbox.scaling.x + self_hitbox.scaling.z)/3
+                    ){
                         const depth=hitbox.position.y+hitbox.scaling.y/2 - self_hitbox.position.y + self_hitbox.scaling.y/2
-                        movement.inertia.y=Math.max(movement.inertia.y, Math.min(0.2,depth/4))
+                        if(depth>0)accelerateY(movement.inertia, depth/3, depth/3)
 
                         // Friction
                         const under=object.get(MOVEMENT)
                         if(under){
-                            if(movement.inertia.x>under.inertia.x+0.001)movement.inertia.x-=0.01
-                            else if(movement.inertia.x<under.inertia.x-0.001)movement.inertia.x+=0.01
-
-                            if(movement.inertia.z>under.inertia.z+0.001)movement.inertia.z-=0.01
-                            else if(movement.inertia.z<under.inertia.z-0.001)movement.inertia.z+=0.01
+                            movement.inertia.multiplyInPlace(new Vector3(0.98,0.98,0.98))
+                            accelerate(
+                                movement.inertia, 
+                                Math.sign(under.inertia.x)*0.01, Math.sign(under.inertia.y)*0.01, Math.sign(under.inertia.z)*0.01,
+                                Math.abs(under.inertia.x), Math.abs(under.inertia.y), Math.abs(under.inertia.z)
+                            )
                         }
                     }
                     else{
-                        const top=self_hitbox.position.clone()
-                        top.addInPlaceFromFloats(0, self_hitbox.scaling.y, 0)
-                        if(hitbox.intersectsPoint(top)){
-                            const movement=obj.get(MOVEMENT)
-                            if(movement){
-                                const depth=(self_hitbox.position.y-self_hitbox.scaling.y/2) - (hitbox.position.y-hitbox.scaling.y/2)
-                                movement.inertia.y=Math.min(-0.2,-depth/4)
-                            }
+                        if(
+                            self_hitbox.position.y+self_hitbox.scaling.y/2 < hitbox.position.y+hitbox.scaling.y/4 &&
+                            self_hitbox.scaling.x+self_hitbox.scaling.z > (hitbox.scaling.x + hitbox.scaling.z)/3
+                        ){
+                            const depth=(self_hitbox.position.y+self_hitbox.scaling.y/2) - (hitbox.position.y-hitbox.scaling.y/2)
+                            if(depth>0)accelerateY(movement.inertia, -depth/2, depth/2)
                         }
                         else{
-                            const offset=hitbox.position.subtract(self_hitbox.position).asArray()
-                            const ostrength=offset.map(Math.abs)
-                            const maxi=ostrength.indexOf(Math.max(...ostrength))
-                            const inertia=movement.inertia.asArray()
-                            if(offset[maxi]<0){
-                                inertia[maxi]=Math.max(0.05, -inertia[maxi], inertia[maxi])
+                            const offset=hitbox.position.subtract(self_hitbox.position)
+                            if(Math.abs(offset.x)*hitbox.scaling.x>Math.abs(offset.z)*hitbox.scaling.z){
+                                const strength=((hitbox.scaling.x+self_hitbox.scaling.x)/2-Math.abs(hitbox.position.x-self_hitbox.position.x))/4
+                                if(strength>0)accelerateX(movement.inertia, strength*-Math.sign(offset.x), strength)
                             }
                             else{
-                                inertia[maxi]=Math.min(-0.05, -inertia[maxi], inertia[maxi])
+                                const strength=((hitbox.scaling.z+self_hitbox.scaling.z)/2-Math.abs(hitbox.position.z-self_hitbox.position.z))/4
+                                if(strength>0)accelerateZ(movement.inertia, strength*-Math.sign(offset.z), strength)
                             }
-                            movement.inertia.fromArray(inertia)
                         }
                     }
                 }

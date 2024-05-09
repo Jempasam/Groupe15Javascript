@@ -7,6 +7,7 @@ import { LvlBoss1} from "./levels/lvlBoss1.js";
 import { World } from "./objects/world/World.mjs";
 import { loadModels } from "./ressources/Models.mjs";
 import { Level } from "./levels/Level.mjs";
+import { SSAO2RenderingPipeline } from "../../../babylonjs/index.js";
 
 const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true);
@@ -37,7 +38,7 @@ let nbLevel = -1;
 async function createScene() {
     scene = new BABYLON.Scene(engine);
     world.scene = scene
-    world.models=await loadModels()
+    world.models=await loadModels(scene)
     scene.clearColor = new BABYLON.Color3.Black;
     const camY = 10;
     const camZ = -10;
@@ -46,6 +47,9 @@ async function createScene() {
     camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, camY, camZ), scene);
     camera.setTarget(BABYLON.Vector3.Zero());
     camera.attachControl(canvas, true);
+
+    const ssao = new SSAO2RenderingPipeline("ssaopipeline", scene, 2, [camera]);
+
 
     //créer une lumière
     const light1 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 5,6));

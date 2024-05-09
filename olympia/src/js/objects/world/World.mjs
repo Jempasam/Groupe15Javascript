@@ -102,7 +102,6 @@ export class World{
         while(this.behaviours_list.length>0) this.removeBehaviour(this.behaviours_list[0])
         this.age=0
         this.obj_state_age=0
-        console.log("behaviours",this.behaviours_list)
     }
 
     /**
@@ -297,6 +296,15 @@ export class ObjectQuery{
             }
         }
         return this.set.has(object.id)
+    }
+
+    /**
+     * Vérifie si un objet correspond aux tags de la requête
+     * @param {GameObject} object 
+     * @returns {boolean}
+     */
+    match(object){
+        return !this.tags.every(tag=>!object.tags.includes(tag))
     }
 }
 

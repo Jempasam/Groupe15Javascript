@@ -57,7 +57,6 @@ export class PathBehaviour extends Behaviour{
             speed.minimizeInPlaceFromFloats(this.max_speed,this.max_speed,this.max_speed)
             speed.maximizeInPlaceFromFloats(-this.max_speed,-this.max_speed,-this.max_speed)
             movement.inertia.copyFrom(speed)
-            console.log(offset.length())
             if(offset.length()<this.validation_distance)path.next()
         }
     }

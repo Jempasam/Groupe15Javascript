@@ -14,7 +14,14 @@ export class HitboxBehaviour extends Behaviour{
      */
     init(world,objects){
         for(let obj of objects){
-            obj.set(HITBOX,new HitboxModel(world))
+            obj.getOrSet(HITBOX,()=>{
+                const ret=new HitboxModel(world)
+                const transform=obj.get(TRANSFORM); if(!transform)return ret
+                ret.hitbox.position=transform.position
+                ret.hitbox.rotation=transform.rotation
+                ret.hitbox.scaling=transform.scale
+                return ret
+            })
         }
     }
 

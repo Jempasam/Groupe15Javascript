@@ -1,9 +1,9 @@
-import { MOVEMENT, MovementModel } from "../model/MovementModel.mjs";
-import { ObjectQuery, World } from "../world/World.mjs";
-import { Behaviour } from "./Behaviour.mjs";
-import { Vector3 } from "../../../../../babylonjs/index.js";
-import { TRANSFORM } from "../model/TransformModel.mjs";
-import { isKeyPressed} from "../../controls/Keyboard.mjs"
+import { MOVEMENT, MovementModel, accelerateX, accelerateZ } from "../../model/MovementModel.mjs";
+import { ObjectQuery, World } from "../../world/World.mjs";
+import { Behaviour } from "../Behaviour.mjs";
+import { Vector3 } from "../../../../../../babylonjs/index.js";
+import { TRANSFORM } from "../../model/TransformModel.mjs";
+import { isKeyPressed} from "../../../controls/Keyboard.mjs"
 
 export class PlayerBehaviour extends Behaviour{
 
@@ -48,13 +48,8 @@ export class PlayerBehaviour extends Behaviour{
             for(let obj of objects){
                 let movement=obj.get(MOVEMENT)
                 if(!movement)continue
-
-                dx+=movement.inertia.x
-                dz+=movement.inertia.z
-                dx=Math.max(-this.max_speed, Math.min(dx, this.max_speed))
-                dz=Math.max(-this.max_speed, Math.min(dz, this.max_speed))
-                movement.inertia.x=dx
-                movement.inertia.z=dz
+                accelerateX(movement.inertia, dx, this.max_speed)
+                accelerateZ(movement.inertia, dz, this.max_speed)
             }
         }
 
