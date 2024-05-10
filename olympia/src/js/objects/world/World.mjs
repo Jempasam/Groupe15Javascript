@@ -40,10 +40,14 @@ export class World{
      */
 
     /**
+     * @typedef {import("./GameObject.mjs").KeyedModel} KeyedModel
+     */
+
+    /**
      * Ajoute un objet au monde
      * @param {number} count Le nombre d'objet à ajouter, 1 par défaut
      * @param {Tag|Tag[]} tags Les tags de l'objet
-     * @param {...ModelPair<*>} data Les données de l'objet
+     * @param {...(ModelPair<*>|KeyedModel)} data Les données de l'objet
      * @returns {GameObject[]} Un tableau des objets ajoutés
      */
     addMany(count, tags, ...data){
@@ -57,7 +61,10 @@ export class World{
             let object=new GameObject(this)
             this.objects.add(tags,object)
             this.objects_list.push(object)
-            for(let [key,value] of data) object.set(key,value)
+            for(let model of data){
+                if(Array.isArray(model))object.set(model[0],model[1])
+                else object.setAuto(model)
+            }
             addeds.push(object)
         }
         // Init behaviours
@@ -73,7 +80,7 @@ export class World{
     /**
      * Ajoute un objet au monde
      * @param {Tag|Tag[]} tags Les tags de l'objet
-     * @param {...ModelPair<*>} data Les données de l'objet
+     * @param {...(ModelPair<*>|KeyedModel)} data Les données de l'objet
      * @returns {GameObject} Un tableau des objets ajoutés
      */
     add(tags, ...data){

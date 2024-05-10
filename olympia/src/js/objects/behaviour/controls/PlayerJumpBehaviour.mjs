@@ -1,4 +1,4 @@
-import { MOVEMENT, MovementModel, accelerateX, accelerateZ } from "../../model/MovementModel.mjs";
+import { MOVEMENT, MovementModel, accelerateX, accelerateY, accelerateZ } from "../../model/MovementModel.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
 import { Vector3 } from "../../../../../../babylonjs/index.js";
@@ -54,12 +54,10 @@ export class PlayerJumpBehaviour extends Behaviour{
                 if(isKeyPressed(this.key) && jump.remaining_jump>0){
                     console.log("jump")
                     obj.apply(MOVEMENT, move=>{
-                        move.inertia.y+=this.strength
-                        if(this.particle)obj.apply(TRANSFORM, transform=>{
-                            world.add(this.particle,
-                                [TRANSFORM, new TransformModel({position:transform.position.clone(), scale:transform.scale.clone()})]
-                            )
-                            console.log("particle")
+                        accelerateY(move.inertia, this.strength*2, this.strength)
+                        const particle=this.particle
+                        if(particle)obj.apply(TRANSFORM, tf=>{
+                            world.add(particle, new TransformModel({copied:tf}))
                         })
                     })
                     jump.cooldown=14

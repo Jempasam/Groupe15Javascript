@@ -26,6 +26,11 @@ export class ModelKey{
     }
 }
 
+
+/**
+ * @typedef {{model_key:ModelKey<*>}} KeyedModel
+ */
+
 /**
  * Represents a game object.
  * @satisfies {any}
@@ -103,6 +108,13 @@ export class GameObject{
     set(key,value){
         if(value)this[key.name]=value
         else this.remove(key)
+    }$
+    /**
+     * @template {KeyedModel} T
+     * @param {T} value
+     */
+    setAuto(value){
+        this.set(value.model_key,value)
     }
 
     /**

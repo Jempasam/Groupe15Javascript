@@ -17,7 +17,8 @@ import { HITBOX } from "../objects/model/HitboxModel.mjs";
 import { forMap } from "../objects/world/WorldUtils.mjs";
 import { ModelKey } from "../objects/world/GameObject.mjs";
 import { MOVEMENT } from "../objects/model/MovementModel.mjs";
-import { PlayerJumpBehaviour } from "../objects/behaviour/controls/PlayerJumpBehavior.mjs";
+import { PlayerJumpBehaviour } from "../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
+import { PlayerDashBehaviour } from "../objects/behaviour/controls/PlayerDashBehaviour.mjs";
 import { SimpleParticleBehaviour } from "../objects/behaviour/particle/SimpleParticleBehaviour.mjs";
 
 
@@ -58,6 +59,7 @@ export class SamLevel extends Level{
         world.addBehaviours("player", 
             new PlayerBehaviour(["KeyA","KeyW","KeyD","KeyS"],0.03,0.1),
             new PlayerJumpBehaviour("Space", 0.3, 2, ["cloud"]),
+            new PlayerDashBehaviour("KeyQ", 0.3, 40, 1, ["small_cloud"])
         )
 
         world.addBehaviour("elevator",
@@ -76,6 +78,12 @@ export class SamLevel extends Level{
             new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.1,1.05,1.1), 20),
             new MovementBehaviour(0.98),
             new MeshBehaviour(models.PARTICLE_WIND),
+        )
+
+        world.addBehaviours("small_cloud",
+            new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.1,1.1,1.1), 15),
+            new MovementBehaviour(0.98),
+            new MeshBehaviour(models.PARTICLE_CLOUD),
         )
 
         function codeToNum(code){
@@ -104,7 +112,7 @@ export class SamLevel extends Level{
             const type=objects[letter.charCodeAt(0)-"a".charCodeAt(0)]()
             world.add(type.tags,
                 ...type.data,
-                [TRANSFORM, new TransformModel({position:new Vector3(pos[0]+size[0]/2, bottom/2+height/4-1, pos[1]+size[1]/2), scale:new Vector3(size[0],height/2,size[1])})]
+                new TransformModel({position:new Vector3(pos[0]+size[0]/2, bottom/2+height/4-1, pos[1]+size[1]/2), scale:new Vector3(size[0],height/2,size[1])})
             )
         }
         forMap(
