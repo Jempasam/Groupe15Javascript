@@ -73,7 +73,7 @@ export class SamLevel extends Level{
         )
 
         world.addBehaviours("cloud",
-            new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.05,0.95,1.05), 20),
+            new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.1,1.05,1.1), 20),
             new MovementBehaviour(0.98),
             new MeshBehaviour(models.PARTICLE_WIND),
         )
