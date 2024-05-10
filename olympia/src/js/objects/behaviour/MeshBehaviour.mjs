@@ -1,11 +1,21 @@
 import { TRANSFORM, TransformModel } from "../model/TransformModel.mjs";
-import { MESH } from "../model/MeshModel.mjs";
+import { MESH, MeshModel } from "../model/MeshModel.mjs";
 import { ObjectQuery, World } from "../world/World.mjs";
 import { Behaviour } from "./Behaviour.mjs";
+import { Scene } from "../../../../../babylonjs/scene.js";
+import { Mesh } from "../../../../../babylonjs/index.js";
+
 
 
 export class MeshBehaviour extends Behaviour{
 
+    /**
+     * @param {(scene:Scene)=>Mesh} factory 
+     */
+    constructor(factory){
+        super()
+        this.factory=factory
+    }
 
     /**
      * @override
@@ -14,14 +24,14 @@ export class MeshBehaviour extends Behaviour{
      */
     init(world,objects){
         for(let obj of objects){
-            const mesh=obj.get(MESH)
-            mesh?.createMesh(world["scene"])
-            if(mesh && mesh.mesh){
-                const transform=obj.get(TRANSFORM); if(!transform)continue
-                mesh.mesh.position.copyFrom(transform.position)
-                mesh.mesh.rotation.copyFrom(transform.rotation)
-                mesh.mesh.scaling.copyFrom(transform.scale)
-            }
+            const mesh=this.factory(world["scene"])
+            mesh.rotationQuaternion=null
+            obj.apply(TRANSFORM,transform=>{
+                mesh.position.copyFrom(transform.position)
+                mesh.rotation.copyFrom(transform.rotation)
+                mesh.scaling.copyFrom(transform.scale)
+            })
+            obj.set(MESH,new MeshModel(mesh))
         }
     }
 
@@ -49,6 +59,9 @@ export class MeshBehaviour extends Behaviour{
      * @param {ObjectQuery} objects
      */
     finish(world,objects){
-        for(let obj of objects) obj.get(MESH)?.disposeMesh()
+        for(let obj of objects){
+            obj.apply(MESH,mesh=>mesh.mesh.dispose())
+            obj.remove(MESH)
+        }
     }
 }

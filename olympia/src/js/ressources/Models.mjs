@@ -1,20 +1,14 @@
 
-async function model(scene,name){
-    const model=(await BABYLON.SceneLoader.ImportMeshAsync("", "../../olympia/assets/",  `${name}.glb`, scene)).meshes[0]
+async function model(scene,name,dir=""){
+    if(dir.length>0)dir+="/"
+    const model=(await BABYLON.SceneLoader.ImportMeshAsync("", "../../olympia/assets/"+dir,  `${name}.glb`, scene)).meshes[0]
     console.log(model)
     model.position.x=99999
-    return model
+    return function(scene){ return model.clone() }
 }
 
 export async function loadModels(scene){
-    scene=undefined
-    const panda=await model(scene,"Panda");
-    const block=await model(scene,"block");
-    const pillar=await model(scene,"Pillar");
-    const bridge=await model(scene,"Bridge");
-    const stone=await model(scene,"Stone");
-    const artifact=await model(scene,"Artifact");
-    const sphinx=await model(scene,"sphinx");
+
     return {
         CUBE: function(scene){
             const mesh = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
@@ -22,13 +16,21 @@ export async function loadModels(scene){
             mesh.material.diffuseColor = BABYLON.Color3.White();
             return mesh
         },
-        PANDA: function(scene){ return panda.clone() },
-        BLOCK: function(scene){ return block.clone() },
-        PILLAR: function(scene){ return pillar.clone() },
-        BRIDGE: function(scene){ return bridge.clone() },
-        STONE: function(scene){ return stone.clone() },
-        ARTIFACT: function(scene){ return artifact.clone() },
-        SPHINX: function(scene){ return sphinx.clone() },
+        PANDA: await model(scene,"Panda"),
+        BLOCK: await model(scene,"block"),
+        PILLAR: await model(scene,"Pillar"),
+        BRIDGE: await model(scene,"Bridge"),
+        STONE: await model(scene,"Stone"),
+        ARTIFACT: await model(scene,"Artifact"),
+        SPHINX: await model(scene,"sphinx"),
+
+        PARTICLE_CLOUD: await model(scene,"cloud","particle"),
+        PARTICLE_FIRE: await model(scene,"fire","particle"),
+        PARTICLE_ROCK: await model(scene,"rock","particle"),
+        PARTICLE_WATER: await model(scene,"water","particle"),
+        PARTICLE_WIND: await model(scene,"wind","particle"),
+        PARTICLE_BATS: await model(scene,"bats","particle"),
+        PARTICLE_VORTEX: await model(scene,"vortex","particle"),
     }
 }
 

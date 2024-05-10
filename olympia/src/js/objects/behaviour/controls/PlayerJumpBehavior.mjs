@@ -2,7 +2,7 @@ import { MOVEMENT, MovementModel, accelerateX, accelerateZ } from "../../model/M
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
 import { Vector3 } from "../../../../../../babylonjs/index.js";
-import { TRANSFORM } from "../../model/TransformModel.mjs";
+import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
 import { isKeyPressed} from "../../../controls/Keyboard.mjs"
 import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs";
@@ -14,13 +14,15 @@ export class PlayerJumpBehaviour extends Behaviour{
      * 
      * @param {string} key 
      * @param {number} strength 
-     * @param {number} jump_count 
+     * @param {number} jump_count
+     * @param {string[]=} particle
      */
-    constructor(key, strength, jump_count){
+    constructor(key, strength, jump_count, particle=undefined){
         super()
         this.key=key
         this.strength=strength
         this.jump_count=jump_count
+        this.particle=particle
     }
 
     /**
@@ -53,6 +55,12 @@ export class PlayerJumpBehaviour extends Behaviour{
                     console.log("jump")
                     obj.apply(MOVEMENT, move=>{
                         move.inertia.y+=this.strength
+                        if(this.particle)obj.apply(TRANSFORM, transform=>{
+                            world.add(this.particle,
+                                [TRANSFORM, new TransformModel({position:transform.position.clone(), scale:transform.scale.clone()})]
+                            )
+                            console.log("particle")
+                        })
                     })
                     jump.cooldown=14
                     jump.remaining_jump--

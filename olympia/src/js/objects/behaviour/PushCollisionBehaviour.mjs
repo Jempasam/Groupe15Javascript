@@ -22,7 +22,7 @@ export class PushCollisionBehaviour extends Behaviour{
                 if(movement){
                     if(
                         hitbox.position.y+hitbox.scaling.y/2 < self_hitbox.position.y+self_hitbox.scaling.y/4 &&
-                        hitbox.scaling.x+hitbox.scaling.z > (self_hitbox.scaling.x + self_hitbox.scaling.z)/3
+                        hitbox.scaling.x+hitbox.scaling.z > (self_hitbox.scaling.x+self_hitbox.scaling.z)/3
                     ){
                         const depth=hitbox.position.y+hitbox.scaling.y/2 - self_hitbox.position.y + self_hitbox.scaling.y/2
                         if(depth>0)accelerateY(movement.inertia, depth/3, depth/3)
@@ -40,11 +40,10 @@ export class PushCollisionBehaviour extends Behaviour{
                     }
                     else{
                         if(
-                            self_hitbox.position.y+self_hitbox.scaling.y/2 < hitbox.position.y+hitbox.scaling.y/4 &&
-                            self_hitbox.scaling.x+self_hitbox.scaling.z > (hitbox.scaling.x + hitbox.scaling.z)/3
+                            self_hitbox.position.y < hitbox.position.y-hitbox.scaling.y/2
                         ){
                             const depth=(self_hitbox.position.y+self_hitbox.scaling.y/2) - (hitbox.position.y-hitbox.scaling.y/2)
-                            if(depth>0)accelerateY(movement.inertia, -depth/2, depth/2)
+                            if(depth>0)accelerateY(movement.inertia, -depth/6, depth/6)
                         }
                         else{
                             const offset=hitbox.position.subtract(self_hitbox.position)

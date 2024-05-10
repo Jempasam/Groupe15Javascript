@@ -4,26 +4,11 @@ import { ModelKey } from "../world/GameObject.mjs";
 
 export class MeshModel{
 
-    /** @type {Mesh?} */
-    #mesh=null
-    
     /**
-     * @param {(scene:Scene)=>any} factory 
+     * @param {Mesh} mesh 
      */
-    constructor(factory){
-        this.factory=factory
-    }
-
-    get mesh(){ return this.#mesh }
-
-    createMesh(scene){
-        this.#mesh = this.factory(scene)
-        if(this.#mesh)this.#mesh.rotationQuaternion=null
-    }
-
-    disposeMesh(){
-        this.#mesh?.dispose()
-        this.#mesh=null
+    constructor(mesh){
+        this.mesh=mesh
     }
 }
 

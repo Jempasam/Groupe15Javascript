@@ -18,6 +18,7 @@ import { forMap } from "../objects/world/WorldUtils.mjs";
 import { ModelKey } from "../objects/world/GameObject.mjs";
 import { MOVEMENT } from "../objects/model/MovementModel.mjs";
 import { PlayerJumpBehaviour } from "../objects/behaviour/controls/PlayerJumpBehavior.mjs";
+import { SimpleParticleBehaviour } from "../objects/behaviour/particle/SimpleParticleBehaviour.mjs";
 
 
 
@@ -36,10 +37,18 @@ export class SamLevel extends Level{
 
         world.addBehaviours("object", 
             [new HitboxBehaviour(), 2], 
-            [new MeshBehaviour(), 2], 
             [new MovementBehaviour(0.98), 1],
             new SimpleCollisionBehaviour()
         )
+
+        world.addBehaviour("block",[new MeshBehaviour(models.BLOCK),2])
+        world.addBehaviour("pillar",[new MeshBehaviour(models.PILLAR),2])
+        world.addBehaviour("bridge",[new MeshBehaviour(models.BRIDGE),2])
+        world.addBehaviour("stone",[new MeshBehaviour(models.STONE),2])
+        world.addBehaviour("artifact",[new MeshBehaviour(models.ARTIFACT),2])
+        world.addBehaviour("sphinx",[new MeshBehaviour(models.SPHINX),2])
+        world.addBehaviour("panda",[new MeshBehaviour(models.PANDA),2])
+
 
         world.addBehaviours("physic",
             new ConstantForceBehaviour(new Vector3(0,-0.015,0)),
@@ -48,7 +57,7 @@ export class SamLevel extends Level{
     
         world.addBehaviours("player", 
             new PlayerBehaviour(["KeyA","KeyW","KeyD","KeyS"],0.03,0.1),
-            new PlayerJumpBehaviour("Space", 0.3, 2),
+            new PlayerJumpBehaviour("Space", 0.3, 2, ["cloud"]),
         )
 
         world.addBehaviour("elevator",
@@ -63,6 +72,12 @@ export class SamLevel extends Level{
             new MeleeAttackBehaviour(0.02,0.04,8,3)
         )
 
+        world.addBehaviours("cloud",
+            new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.05,0.95,1.05), 20),
+            new MovementBehaviour(0.98),
+            new MeshBehaviour(models.PARTICLE_CLOUD),
+        )
+
         function codeToNum(code){
             if('0'.charCodeAt(0)<=code && code<='9'.charCodeAt(0)) return code-'0'.charCodeAt(0)+1
             else return code-'a'.charCodeAt(0)+11
@@ -74,15 +89,15 @@ export class SamLevel extends Level{
              * @type {Array< ()=>{tags: Array<string>, data: Array<[ModelKey<any>,any]>}>}
              */
             const objects=[
-                ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.PILLAR)]]} },//A
-                ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.BLOCK)]]} },//B
-                ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.BRIDGE)]]} },//C
-                ()=>{return {tags:["object"], data:[[MESH, new MeshModel(models.STONE)]]} },//D
-                ()=>{return {tags:["object","elevator"], data:[[MESH, new MeshModel(models.BLOCK)]]} },//E
-                ()=>{return {tags:["object","moving"], data:[[MESH, new MeshModel(models.BLOCK)]]} },//F
-                ()=>{return {tags:["object","elevator"], data:[[MESH, new MeshModel(models.ARTIFACT)]]} },//G
-                ()=>{return {tags:["object","physic"], data:[[MESH, new MeshModel(models.BLOCK)]]} },//H
-                ()=>{return {tags:["object","physic","ennemy"], data:[[MESH, new MeshModel(models.SPHINX)]]} },//I
+                ()=>{return {tags:["object","pillar"], data:[]} },//A
+                ()=>{return {tags:["object","block"], data:[]} },//B
+                ()=>{return {tags:["object","bridge"], data:[]} },//C
+                ()=>{return {tags:["object","stone"], data:[]} },//D
+                ()=>{return {tags:["object","elevator","block"], data:[]} },//E
+                ()=>{return {tags:["object","moving","block"], data:[]} },//F
+                ()=>{return {tags:["object","elevator","artifact"], data:[]} },//G
+                ()=>{return {tags:["object","physic","block"], data:[]} },//H
+                ()=>{return {tags:["object","physic","ennemy","sphinx"], data:[]} },//I
             ]
             const bottom=codeToNum(letter.charCodeAt(1))
             const height=codeToNum(letter.charCodeAt(2))
@@ -103,7 +118,7 @@ d07   b21-..-..d05      |       |            |________________|
       b11-..-..   d06   |_______|                  b06
    b01-..-..-..-..                                 |..
    a09   c10   a09                                 |..
-      e10c10               f10               b08-..-..-..-..
+      e01c10               f01               b08-..-..-..-..
    a09   c10   a09                           |             |
    b01-..-..-..-..                           |             |
                                              |             |
@@ -144,13 +159,11 @@ d07   b21-..-..d05      |       |            |________________|
             [-4,-8], [1.5,1.5], objectSpawner, 3, true
         )
 
-        this.player=world.add(["object","player","physic"],
-            [MESH, new MeshModel(models.PANDA)],
+        this.player=world.add(["object","player","physic","panda"],
             [TRANSFORM, new TransformModel({ position: SamLevel.playerPos.clone() })]
         )
 
-        world.add(["object","physic"],
-            [MESH, new MeshModel(models.BLOCK)],
+        world.add(["object","physic","block"],
             [TRANSFORM, new TransformModel({ position: SamLevel.playerPos.add(new Vector3(0, -2, 8)) })]
         )
 

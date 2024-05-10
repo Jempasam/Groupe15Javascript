@@ -65,10 +65,12 @@ export class LvlTest {
     //créer un sol
     world.addBehaviours("object", 
         [new HitboxBehaviour(),2], 
-        [new MeshBehaviour(),2], 
         [new MovementBehaviour(0.95), 1],
         new SimpleCollisionBehaviour()
     )
+
+    world.addBehaviour("cube", [new MeshBehaviour(world.models["CUBE"]),2])
+    world.addBehaviour("panda", [new MeshBehaviour(world.models["PANDA"]),2])
 
     world.addBehaviours("player", 
         new PlayerBehaviour(["ArrowLeft","ArrowUp","ArrowRight","ArrowDown"],0.03,0.05),
@@ -76,23 +78,19 @@ export class LvlTest {
         new PushCollisionBehaviour()
     )
 
-    world.add("object",
-        [MESH, new MeshModel(world.models["CUBE"])],
+    world.add(["object","cube"],
         [TRANSFORM, new TransformModel({position:new Vector3(0, -1, 4), scale:new Vector3(4,1,5)})]
     )
 
-    world.add("object",
-        [MESH, new MeshModel(world.models["CUBE"])],
+    world.add(["object","cube"],
         [TRANSFORM, new TransformModel({position:new Vector3(4, 0, 4), scale:new Vector3(4,2,5)})]
     )
 
-    world.add("object",
-        [MESH, new MeshModel(world.models["CUBE"])],
+    world.add(["object","cube"],
         [TRANSFORM, new TransformModel({position:new Vector3(-3.5, 0.5, 4), rotation:new Vector3(0,0,-4), scale:new Vector3(4,1,5)})]
     )
 
-    world.add(["object","player"],
-        [MESH, new MeshModel(world.models["PANDA"])],
+    world.add(["object","player","panda"],
         [MOVEMENT, new MovementModel(new Vector3(0.1,0,0))],
         [TRANSFORM, new TransformModel({position:new Vector3(0, 2, 4)})]
     )
