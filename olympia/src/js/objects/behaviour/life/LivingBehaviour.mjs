@@ -1,9 +1,9 @@
-import { TRANSFORM, TransformModel } from "../model/TransformModel.mjs";
-import { HITBOX, HitboxModel } from "../model/HitboxModel.mjs";
-import { ObjectQuery, World } from "../world/World.mjs";
-import { Behaviour } from "./Behaviour.mjs";
-import { LIVING, LivingModel } from "../model/LivingModel.mjs";
-import { ObserverKey, observers } from "../../../../../samlib/observers/ObserverGroup.mjs";
+import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
+import { HITBOX, HitboxModel } from "../../model/HitboxModel.mjs";
+import { ObjectQuery, World } from "../../world/World.mjs";
+import { Behaviour } from "../Behaviour.mjs";
+import { LIVING, LivingModel } from "../../model/LivingModel.mjs";
+import { ObserverKey, observers } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 
 
 export class LivingBehaviour extends Behaviour{

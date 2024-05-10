@@ -3,14 +3,14 @@ import { MESH, MeshModel } from "../model/MeshModel.mjs";
 import { ObjectQuery, World } from "../world/World.mjs";
 import { Behaviour } from "./Behaviour.mjs";
 import { Scene } from "../../../../../babylonjs/core/scene.js";
-import { Mesh } from "../../../../../babylonjs/core/index.js";
+import { AbstractMesh, Mesh } from "../../../../../babylonjs/core/index.js";
 
 
 
 export class MeshBehaviour extends Behaviour{
 
     /**
-     * @param {(scene:Scene)=>Mesh} factory 
+     * @param {(scene:Scene)=>AbstractMesh} factory 
      */
     constructor(factory){
         super()

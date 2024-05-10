@@ -1,8 +1,8 @@
 import { Behaviour } from "../Behaviour.mjs"
-import { ModelKey } from "../../world/GameObject.mjs"
+import { GameObject, ModelKey } from "../../world/GameObject.mjs"
 import { ObjectQuery, World } from "../../world/World.mjs"
 import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs"
-import { TRANSFORM } from "../../model/TransformModel.mjs"
+import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs"
 import { Vector3 } from "../../../../../../babylonjs/core/index.js"
 import { MESH } from "../../model/MeshModel.mjs"
 
@@ -59,6 +59,25 @@ export class SimpleParticleBehaviour extends Behaviour{
     }
 
     finish(){ }
+}
+
+/**
+ * @param {World} world
+ * @param {TransformModel} transform 
+ * @param {import("../../world/TaggedDict.mjs").Tag[]} particle_tags
+ * @param {Vector3} particle_size
+ */
+export function generateParticle(world, transform, particle_tags, particle_size){
+    const position=transform.scale.clone()
+    position.multiplyInPlace(Vector3.Random(0,1))
+    position.subtractInPlace(transform.scale.scale(0.5))
+    position.addInPlace(transform.position)
+    world.add(particle_tags, new TransformModel({position:position, scale:particle_size}))
+    /*let position=transform.scale.clone()
+    position.multiplyInPlace(Vector3.Random(0,1))
+    position.subtractInPlace(transform.scale.scale(0.5))
+    position.addInPlace(transform.position)
+    world.add(particle_tags, new TransformModel({scale:particle_size, position}))*/
 }
 
 

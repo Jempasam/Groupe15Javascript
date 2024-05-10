@@ -1,11 +1,10 @@
-import { Mesh } from "../../../../../babylonjs/core/index.js";
-import { Scene } from "../../../../../babylonjs/core/scene.js";
+import { AbstractMesh } from "../../../../../babylonjs/core/index.js";
 import { ModelKey } from "../world/GameObject.mjs";
 
 export class MeshModel{
 
     /**
-     * @param {Mesh} mesh 
+     * @param {AbstractMesh} mesh 
      */
     constructor(mesh){
         this.mesh=mesh

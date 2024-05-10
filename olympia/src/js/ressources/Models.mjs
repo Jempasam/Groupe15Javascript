@@ -1,11 +1,14 @@
-import { Scene, SceneLoader } from "../../../../babylonjs/core/index.js"
+import { AbstractMesh, Color3, Color4, Mesh, Scene, SceneLoader } from "../../../../babylonjs/core/index.js"
 import "../../../../babylonjs/loaders/index.js"
 
+
+/**
+ * @returns {Promise<(scene:Scene)=>AbstractMesh>}
+ */
 async function model(scene,name,dir=""){
     if(dir.length>0)dir+="/"
     //const model=(await SceneLoader.ImportMeshAsync("", "../../olympia/assets/"+dir,  `${name}.glb`, scene)).meshes[0]
     const assets=await SceneLoader.LoadAssetContainerAsync("../../olympia/assets/"+dir, `${name}.glb`, scene)
-    console.log(model)
     //model.position.x=99999
     return function(scene){
         const node=assets.instantiateModelsToScene(()=>name,false,{doNotInstantiate: false})
@@ -44,6 +47,8 @@ export async function loadModels(scene){
         PARTICLE_WIND: await model(scene,"wind","particle"),
         PARTICLE_BATS: await model(scene,"bats","particle"),
         PARTICLE_VORTEX: await model(scene,"vortex","particle"),
+        PARTICLE_SMOKE: await model(scene,"smoke","particle"),
+        PARTICLE_SLASH: await model(scene,"slash","particle"),
 
         _nothing: scene.createDefaultEnvironment({createSkybox:false,createGround:false,toneMappingEnabled:false})
     }

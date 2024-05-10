@@ -26,6 +26,8 @@ export class LivingModel{
     damage(amount){
         this.life-=Math.round(amount*this.armor)
     }
+
+    get model_key(){ return LIVING }
 }
 
 /** @type {ModelKey<LivingModel>} */

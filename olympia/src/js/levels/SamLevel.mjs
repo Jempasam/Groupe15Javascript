@@ -20,6 +20,9 @@ import { MOVEMENT } from "../objects/model/MovementModel.mjs";
 import { PlayerJumpBehaviour } from "../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
 import { PlayerDashBehaviour } from "../objects/behaviour/controls/PlayerDashBehaviour.mjs";
 import { SimpleParticleBehaviour } from "../objects/behaviour/particle/SimpleParticleBehaviour.mjs";
+import { LivingBehaviour, ON_DEATH } from "../objects/behaviour/life/LivingBehaviour.mjs";
+import { ParticleLivingBehaviour } from "../objects/behaviour/life/ParticleLivingBehaviour.mjs";
+import { LIVING, LivingModel } from "../objects/model/LivingModel.mjs";
 
 
 
@@ -59,7 +62,9 @@ export class SamLevel extends Level{
         world.addBehaviours("player", 
             new PlayerBehaviour(["KeyA","KeyW","KeyD","KeyS"],0.03,0.1),
             new PlayerJumpBehaviour("Space", 0.3, 2, ["cloud"]),
-            new PlayerDashBehaviour("KeyQ", 0.3, 40, 1, ["small_cloud"])
+            new PlayerDashBehaviour("KeyQ", 0.3, 40, 1, ["small_cloud"]),
+            new ParticleLivingBehaviour(["smoke"], new Vector3(0.4,0.4,0.4)),
+            [new LivingBehaviour(),2],
         )
 
         world.addBehaviour("elevator",
@@ -78,6 +83,12 @@ export class SamLevel extends Level{
             new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.1,1.05,1.1), 20),
             new MovementBehaviour(0.98),
             new MeshBehaviour(models.PARTICLE_WIND),
+        )
+
+        world.addBehaviours("smoke",
+            new SimpleParticleBehaviour(new Vector3(0,0.01,0), new Vector3(0,0.1,0), new Vector3(1.03,1.03,1.03), 40),
+            new MovementBehaviour(0.98),
+            new MeshBehaviour(models.PARTICLE_SMOKE),
         )
 
         world.addBehaviours("small_cloud",
@@ -168,8 +179,14 @@ d07   b21-..-..d05      |       |            |________________|
         )
 
         this.player=world.add(["object","player","physic","panda"],
-            [TRANSFORM, new TransformModel({ position: SamLevel.playerPos.clone() })]
+            new TransformModel({ position: SamLevel.playerPos.clone() }),
+            new LivingModel(3)
         )
+
+        this.player.observers(ON_DEATH).add("SamLevel",(obj,_)=>{
+            this.player?.apply(LIVING, living=>living.life=3)
+            this.player?.apply(TRANSFORM, tf=>tf.position.y=-100)
+        })
 
         world.add(["object","physic","block"],
             [TRANSFORM, new TransformModel({ position: SamLevel.playerPos.add(new Vector3(0, -2, 8)) })]

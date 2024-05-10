@@ -87,6 +87,87 @@ export class GameObject{
     }
 
     /**
+     * @template A,B
+     * @param {ModelKey<A>} keyA @param {ModelKey<B>} keyB
+     * @param {(valA:A, valB:B)=>void} callback
+     */
+    apply2(keyA,keyB,callback){
+        let valA=this.get(keyA); if(valA==null)return
+        let valB=this.get(keyB); if(valB==null)return
+        callback(valA,valB)
+    }
+
+    /**
+     * @template A,B,C
+     * @param {ModelKey<A>} keyA @param {ModelKey<B>} keyB @param {ModelKey<C>} keyC
+     * @param {(valA:A, valB:B, valC:C)=>void} callback
+     */
+    apply3(keyA,keyB,keyC,callback){
+        let valA=this.get(keyA); if(valA==null)return
+        let valB=this.get(keyB); if(valB==null)return
+        let valC=this.get(keyC); if(valC==null)return
+        callback(valA,valB,valC)
+    }
+
+    /**
+     * @template A,B,C,D
+     * @param {ModelKey<A>} keyA @param {ModelKey<B>} keyB @param {ModelKey<C>} keyC @param {ModelKey<D>} keyD
+     * @param {(valA:A, valB:B, valC:C, valD:D)=>void} callback
+     */
+    apply4(keyA,keyB,keyC,keyD,callback){
+        let valA=this.get(keyA); if(valA==null)return
+        let valB=this.get(keyB); if(valB==null)return
+        let valC=this.get(keyC); if(valC==null)return
+        let valD=this.get(keyD); if(valD==null)return
+        callback(valA,valB,valC,valD)
+    }
+
+    /**
+     * @template A,B,C,D,E
+     * @param {ModelKey<A>} keyA @param {ModelKey<B>} keyB @param {ModelKey<C>} keyC @param {ModelKey<D>} keyD @param {ModelKey<E>} keyE
+     * @param {(valA:A, valB:B, valC:C, valD:D, valE:E)=>void} callback
+     */
+    apply5(keyA,keyB,keyC,keyD,keyE,callback){
+        let valA=this.get(keyA); if(valA==null)return
+        let valB=this.get(keyB); if(valB==null)return
+        let valC=this.get(keyC); if(valC==null)return
+        let valD=this.get(keyD); if(valD==null)return
+        let valE=this.get(keyE); if(valE==null)return
+        callback(valA,valB,valC,valD,valE)
+    }
+
+    /**
+     * @template A,B,C,D,E,F
+     * @param {ModelKey<A>} keyA @param {ModelKey<B>} keyB @param {ModelKey<C>} keyC @param {ModelKey<D>} keyD @param {ModelKey<E>} keyE @param {ModelKey<F>} keyF
+     * @param {(valA:A, valB:B, valC:C, valD:D, valE:E, valF:F)=>void} callback
+     */
+    apply6(keyA,keyB,keyC,keyD,keyE,keyF,callback){
+        let valA=this.get(keyA); if(valA==null)return
+        let valB=this.get(keyB); if(valB==null)return
+        let valC=this.get(keyC); if(valC==null)return
+        let valD=this.get(keyD); if(valD==null)return
+        let valE=this.get(keyE); if(valE==null)return
+        let valF=this.get(keyF); if(valF==null)return
+        callback(valA,valB,valC,valD,valE,valF)
+    }
+
+    /**
+     * @template A,B,C,D,E,F,G
+     * @param {ModelKey<A>} keyA @param {ModelKey<B>} keyB @param {ModelKey<C>} keyC @param {ModelKey<D>} keyD @param {ModelKey<E>} keyE @param {ModelKey<F>} keyF @param {ModelKey<G>} keyG
+     * @param {(valA:A, valB:B, valC:C, valD:D, valE:E, valF:F, valG:G)=>void} callback
+     */
+    apply7(keyA,keyB,keyC,keyD,keyE,keyF,keyG,callback){
+        let valA=this.get(keyA); if(valA==null)return
+        let valB=this.get(keyB); if(valB==null)return
+        let valC=this.get(keyC); if(valC==null)return
+        let valD=this.get(keyD); if(valD==null)return
+        let valE=this.get(keyE); if(valE==null)return
+        let valF=this.get(keyF); if(valF==null)return
+        let valG=this.get(keyG); if(valG==null)return
+        callback(valA,valB,valC,valD,valE,valF,valG)
+    }
+
+    /**
      * @template T
      * @param {ModelKey<T>} key
      * @param {()=>T} constructor
@@ -108,7 +189,8 @@ export class GameObject{
     set(key,value){
         if(value)this[key.name]=value
         else this.remove(key)
-    }$
+    }
+    
     /**
      * @template {KeyedModel} T
      * @param {T} value
