@@ -1,9 +1,11 @@
 import { Vector3 } from "../../../../../../babylonjs/core/index.js";
+import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { LIVING } from "../../model/LivingModel.mjs";
 import { TRANSFORM } from "../../model/TransformModel.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
 import { generateParticle } from "../particle/SimpleParticleBehaviour.mjs";
+import { ON_LIVE_CHANGE } from "./LivingBehaviour.mjs";
 
 
 export class ParticleLivingBehaviour extends Behaviour{
@@ -18,7 +20,22 @@ export class ParticleLivingBehaviour extends Behaviour{
         this.size=size
     }
     
-    init(){ }
+    /**
+     * @override
+     * @param {World} world
+     * @param {ObjectQuery} objects
+     */
+    init(world,objects){
+        this.eventid=ObserverGroup.generateName("particleliving")
+        for(const obj of objects){
+            obj.observers(ON_LIVE_CHANGE).add(this.eventid, (target,change)=>{
+                if(change<0)obj.apply(TRANSFORM, tf=>{
+                    for(let i=0; i<8; i++)generateParticle(world,tf,this.tags,this.size.clone())
+                    console.log("DAMAGED")
+                })
+            })
+        }
+    }
 
     /**
      * @override
@@ -35,5 +52,14 @@ export class ParticleLivingBehaviour extends Behaviour{
         }
     }
 
-    finish(){ }
+    /**
+     * @override
+     * @param {World} world
+     * @param {ObjectQuery} objects
+     */
+    finish(world,objects){
+        if(this.eventid)for(const obj of objects){
+            obj.observers(ON_LIVE_CHANGE).remove(this.eventid)
+        }
+    }
 }

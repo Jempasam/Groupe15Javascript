@@ -9,6 +9,8 @@ export class MovementModel{
     constructor(inertia){
         this.inertia=inertia
     }
+
+    get model_key(){return MOVEMENT}
 }
 
 /** @type {ModelKey<MovementModel>} */

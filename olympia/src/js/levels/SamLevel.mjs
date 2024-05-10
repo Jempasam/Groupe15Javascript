@@ -23,7 +23,8 @@ import { SimpleParticleBehaviour } from "../objects/behaviour/particle/SimplePar
 import { LivingBehaviour, ON_DEATH } from "../objects/behaviour/life/LivingBehaviour.mjs";
 import { ParticleLivingBehaviour } from "../objects/behaviour/life/ParticleLivingBehaviour.mjs";
 import { LIVING, LivingModel } from "../objects/model/LivingModel.mjs";
-
+import { PlayerShootBehaviour } from "../objects/behaviour/controls/PlayerShootBehaviour.mjs";
+import { ProjectileBehaviour } from "../objects/behaviour/life/ProjectileBehaviour.mjs";
 
 
 export class SamLevel extends Level{
@@ -53,7 +54,6 @@ export class SamLevel extends Level{
         world.addBehaviour("sphinx",[new MeshBehaviour(models.SPHINX),2])
         world.addBehaviour("panda",[new MeshBehaviour(models.PANDA),2])
 
-
         world.addBehaviours("physic",
             new ConstantForceBehaviour(new Vector3(0,-0.015,0)),
             new PushCollisionBehaviour()
@@ -63,6 +63,10 @@ export class SamLevel extends Level{
             new PlayerBehaviour(["KeyA","KeyW","KeyD","KeyS"],0.03,0.1),
             new PlayerJumpBehaviour("Space", 0.3, 2, ["cloud"]),
             new PlayerDashBehaviour("KeyQ", 0.3, 40, 1, ["small_cloud"]),
+            new PlayerShootBehaviour("KeyE", 0.1, 40, ["object","slashing"], new Vector3(1.5,0.8,1.5), 1, 20, 0.1)
+        )
+
+        world.addBehaviours("living",
             new ParticleLivingBehaviour(["smoke"], new Vector3(0.4,0.4,0.4)),
             [new LivingBehaviour(),2],
         )
@@ -97,6 +101,12 @@ export class SamLevel extends Level{
             new MeshBehaviour(models.PARTICLE_CLOUD),
         )
 
+        world.addBehaviours("fireball", [new MeshBehaviour(models.PARTICLE_FIRE),2])
+        world.addBehaviour(["fireball","living"], new ProjectileBehaviour(1,0.3,30))
+
+        world.addBehaviours("slashing", [new MeshBehaviour(models.PARTICLE_SLASH),2])
+        world.addBehaviour(["slashing","ennemy"], new ProjectileBehaviour(1,2,10))
+
         function codeToNum(code){
             if('0'.charCodeAt(0)<=code && code<='9'.charCodeAt(0)) return code-'0'.charCodeAt(0)+1
             else return code-'a'.charCodeAt(0)+11
@@ -105,7 +115,8 @@ export class SamLevel extends Level{
         const objectSpawner=(letter, pos, size)=>{
             if(letter[0]==" ")return
             /**
-             * @type {Array< ()=>{tags: Array<string>, data: Array<[ModelKey<any>,any]>}>}
+             * @typedef {import("../objects/world/GameObject.mjs").KeyedModel} KeyedModel
+             * @type {Array< ()=>{tags: Array<string>, data: Array<[ModelKey<any>,any]|KeyedModel>}>}
              */
             const objects=[
                 ()=>{return {tags:["object","pillar"], data:[]} },//A
@@ -116,7 +127,7 @@ export class SamLevel extends Level{
                 ()=>{return {tags:["object","moving","block"], data:[]} },//F
                 ()=>{return {tags:["object","elevator","artifact"], data:[]} },//G
                 ()=>{return {tags:["object","physic","block"], data:[]} },//H
-                ()=>{return {tags:["object","physic","ennemy","sphinx"], data:[]} },//I
+                ()=>{return {tags:["object","physic","ennemy","sphinx","living"], data:[new LivingModel(10)]} },//I
             ]
             const bottom=codeToNum(letter.charCodeAt(1))
             const height=codeToNum(letter.charCodeAt(2))
@@ -178,7 +189,7 @@ d07   b21-..-..d05      |       |            |________________|
             [-4,-8], [1.5,1.5], objectSpawner, 3, true
         )
 
-        this.player=world.add(["object","player","physic","panda"],
+        this.player=world.add(["object","player","physic","panda","living"],
             new TransformModel({ position: SamLevel.playerPos.clone() }),
             new LivingModel(3)
         )
