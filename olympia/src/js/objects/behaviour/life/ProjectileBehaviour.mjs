@@ -36,6 +36,8 @@ export class ProjectileBehaviour extends Behaviour{
             obj.getOrSet(PROJECTILE, ()=>({age:0}))
             obj.observers(ON_COLLISION).add(this.eventid, (_,{object,self_hitbox,hitbox})=>{
                 if(!shootable.match(object))return
+                if(obj.get(PROJECTILE)?.dying??false)return
+
                 object.apply(LIVING,living=>{
                     living.damage(this.damage)
                 })
@@ -48,7 +50,10 @@ export class ProjectileBehaviour extends Behaviour{
                         accelerate(movement.inertia, offset.x, this.knockback/8, offset.z, this.knockback, this.knockback/8, this.knockback)
                     })
                 })
-                world.remove(obj)
+                obj.apply(PROJECTILE, it=>{
+                    it.dying=true
+                    it.age=Math.max(it.age, this.lifetime-10)
+                })
             })
         }
     }
@@ -84,5 +89,5 @@ export class ProjectileBehaviour extends Behaviour{
 /** @type {ObserverKey<number>} */
 export const ON_ATTACK=new ObserverKey("on_attack")
 
-/** @type {ModelKey<{age:number}>} */
+/** @type {ModelKey<{age:number,dying:boolean}>} */
 export const PROJECTILE=new ModelKey("projectile")

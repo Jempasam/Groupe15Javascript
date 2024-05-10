@@ -19,7 +19,11 @@ export function forMap(map, position, size, factory, wordLength=1, isSizeOfTile=
     let height=0
     let widtha=0
     for(let i=0; i<map.length; i++){
-        if(map[i]==='\n'){
+        if(map[i]===']'){
+            column=[]
+            widtha=0
+        }
+        else if(map[i]==='\n'){
             height++
             width=Math.max(width, widtha)
             widtha=0

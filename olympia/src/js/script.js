@@ -38,7 +38,6 @@ let nbLevel = -1;
 
 async function createScene() {
     scene = new BABYLON.Scene(engine);
-    scene.debugLayer.show();
     SceneOptimizer.OptimizeAsync(scene, new SceneOptimizerOptions(60))
     //scene.debugLayer.show();
     scene.clearColor = new BABYLON.Color3.Black();
