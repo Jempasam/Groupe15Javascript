@@ -1,4 +1,4 @@
-import { Color3, MeshBuilder, Vector3 } from "../../../../../babylonjs/index.js";
+import { BoundingBox, Color3, MeshBuilder, TransformNode, Vector3 } from "../../../../../babylonjs/core/index.js";
 import { ModelKey } from "../world/GameObject.mjs";
 import { World } from "../world/World.mjs";
 

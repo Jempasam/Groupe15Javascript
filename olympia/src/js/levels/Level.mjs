@@ -1,5 +1,5 @@
 import { World } from "../objects/world/World.mjs";
-import { Camera } from "../../../../babylonjs/Cameras/camera.js"
+import { Camera } from "../../../../babylonjs/core/Cameras/camera.js"
 
 
 

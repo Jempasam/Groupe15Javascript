@@ -3,7 +3,7 @@ import { ModelKey } from "../../world/GameObject.mjs"
 import { ObjectQuery, World } from "../../world/World.mjs"
 import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs"
 import { TRANSFORM } from "../../model/TransformModel.mjs"
-import { Vector3 } from "../../../../../../babylonjs/index.js"
+import { Vector3 } from "../../../../../../babylonjs/core/index.js"
 import { MESH } from "../../model/MeshModel.mjs"
 
 

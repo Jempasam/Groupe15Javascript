@@ -1,12 +1,25 @@
+import { Scene, SceneLoader } from "../../../../babylonjs/core/index.js"
+import "../../../../babylonjs/loaders/index.js"
 
 async function model(scene,name,dir=""){
     if(dir.length>0)dir+="/"
-    const model=(await BABYLON.SceneLoader.ImportMeshAsync("", "../../olympia/assets/"+dir,  `${name}.glb`, scene)).meshes[0]
+    //const model=(await SceneLoader.ImportMeshAsync("", "../../olympia/assets/"+dir,  `${name}.glb`, scene)).meshes[0]
+    const assets=await SceneLoader.LoadAssetContainerAsync("../../olympia/assets/"+dir, `${name}.glb`, scene)
     console.log(model)
-    model.position.x=99999
-    return function(scene){ return model.clone() }
+    //model.position.x=99999
+    return function(scene){
+        const node=assets.instantiateModelsToScene(()=>name,false,{doNotInstantiate: false})
+        node.animationGroups.forEach(ag=>ag.start(true))
+        return node.rootNodes[0]
+    }
+    //return function(scene){ return assets.meshes[0].clone(name,null) }
 }
 
+/**
+ * 
+ * @param {Scene} scene 
+ * @returns 
+ */
 export async function loadModels(scene){
 
     return {
@@ -31,6 +44,8 @@ export async function loadModels(scene){
         PARTICLE_WIND: await model(scene,"wind","particle"),
         PARTICLE_BATS: await model(scene,"bats","particle"),
         PARTICLE_VORTEX: await model(scene,"vortex","particle"),
+
+        _nothing: scene.createDefaultEnvironment({createSkybox:false,createGround:false,toneMappingEnabled:false})
     }
 }
 

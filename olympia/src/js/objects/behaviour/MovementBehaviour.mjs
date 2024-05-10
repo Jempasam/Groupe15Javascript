@@ -1,7 +1,7 @@
 import { MOVEMENT, MovementModel } from "../model/MovementModel.mjs";
 import { ObjectQuery, World } from "../world/World.mjs";
 import { Behaviour } from "./Behaviour.mjs";
-import { Angle, Quaternion, Vector3 } from "../../../../../babylonjs/index.js";
+import { Angle, Quaternion, Vector3 } from "../../../../../babylonjs/core/index.js";
 import { TRANSFORM } from "../model/TransformModel.mjs";
 
 

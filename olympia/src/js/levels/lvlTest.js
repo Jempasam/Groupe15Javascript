@@ -14,7 +14,7 @@ import { MeshBehaviour } from "../objects/behaviour/MeshBehaviour.mjs";
 import { MESH, MeshModel } from "../objects/model/MeshModel.mjs";
 import { MovementBehaviour } from "../objects/behaviour/MovementBehaviour.mjs";
 import { MOVEMENT, MovementModel } from "../objects/model/MovementModel.mjs";
-import { Vector3 } from "../../../../babylonjs/index.js";
+import { Vector3 } from "../../../../babylonjs/core/index.js";
 import { TRANSFORM, TransformModel } from "../objects/model/TransformModel.mjs";
 import { HitboxBehaviour } from "../objects/behaviour/HitboxBehaviour.mjs";
 import { PlayerBehaviour } from "../objects/behaviour/controls/PlayerBehaviour.mjs";

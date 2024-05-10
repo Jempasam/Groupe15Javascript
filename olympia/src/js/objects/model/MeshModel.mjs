@@ -1,5 +1,5 @@
-import { Mesh } from "../../../../../babylonjs/index.js";
-import { Scene } from "../../../../../babylonjs/scene.js";
+import { Mesh } from "../../../../../babylonjs/core/index.js";
+import { Scene } from "../../../../../babylonjs/core/scene.js";
 import { ModelKey } from "../world/GameObject.mjs";
 
 export class MeshModel{

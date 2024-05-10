@@ -7,9 +7,10 @@ import { LvlBoss1} from "./levels/lvlBoss1.js";
 import { World } from "./objects/world/World.mjs";
 import { loadModels } from "./ressources/Models.mjs";
 import { Level } from "./levels/Level.mjs";
-import { SSAO2RenderingPipeline } from "../../../babylonjs/index.js";
+import { Engine, SSAO2RenderingPipeline, SceneOptimizer, SceneOptimizerOptions } from "../../../babylonjs/core/index.js";
 
 const canvas = document.getElementById("renderCanvas");
+/** @type {Engine} */
 const engine = new BABYLON.Engine(canvas, true);
 let keyState = {};
 let scene;
@@ -37,9 +38,11 @@ let nbLevel = -1;
 
 async function createScene() {
     scene = new BABYLON.Scene(engine);
+    SceneOptimizer.OptimizeAsync(scene, new SceneOptimizerOptions(60))
+    //scene.debugLayer.show();
+    scene.clearColor = new BABYLON.Color3.Black();
     world.scene = scene
     world.models=await loadModels(scene)
-    scene.clearColor = new BABYLON.Color3.Black;
     const camY = 10;
     const camZ = -10;
 
@@ -70,7 +73,6 @@ async function createScene() {
 
 
 function definitEcouteurs() { 
-    console.log(scene.animationGroups);
     // Ecouteur sur le clavier pour bouger le monstre
     window.addEventListener('keydown', function(evt) {
         keyState[evt.code] = true;
@@ -294,7 +296,7 @@ async function main(){
                 });
             }
         }, 30);
-        
+
         //boucle de rendu
         engine.runRenderLoop(function () {
             sceneToRender.render();

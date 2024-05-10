@@ -1,7 +1,7 @@
 import { MOVEMENT, MovementModel, accelerateX, accelerateY, accelerateZ } from "../../model/MovementModel.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
-import { Vector3 } from "../../../../../../babylonjs/index.js";
+import { Vector3 } from "../../../../../../babylonjs/core/index.js";
 import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
 import { isKeyPressed} from "../../../controls/Keyboard.mjs"
 import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.mjs";

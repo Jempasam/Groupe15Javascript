@@ -1,10 +1,10 @@
-import { Camera } from "../../../../babylonjs/Cameras/camera.js";
+import { Camera } from "../../../../babylonjs/core/Cameras/camera.js";
 import { World } from "../objects/world/World.mjs";
 import { Level } from "./Level.mjs";
 import { MeshBehaviour } from "../objects/behaviour/MeshBehaviour.mjs";
 import { MESH, MeshModel } from "../objects/model/MeshModel.mjs";
 import { MovementBehaviour } from "../objects/behaviour/MovementBehaviour.mjs";
-import { UniversalCamera, Vector3 } from "../../../../babylonjs/index.js";
+import { UniversalCamera, Vector3 } from "../../../../babylonjs/core/index.js";
 import { TRANSFORM, TransformModel } from "../objects/model/TransformModel.mjs";
 import { HitboxBehaviour } from "../objects/behaviour/HitboxBehaviour.mjs";
 import { PlayerBehaviour } from "../objects/behaviour/controls/PlayerBehaviour.mjs";

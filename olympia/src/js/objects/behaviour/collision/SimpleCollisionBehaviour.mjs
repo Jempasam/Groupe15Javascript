@@ -1,4 +1,4 @@
-import { Mesh, Vector3 } from "../../../../../../babylonjs/index.js";
+import { Mesh, Vector3 } from "../../../../../../babylonjs/core/index.js";
 import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { HITBOX } from "../../model/HitboxModel.mjs";
 import { GameObject } from "../../world/GameObject.mjs";
