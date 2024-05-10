@@ -105,7 +105,7 @@ export class SamLevel extends Level{
         world.addBehaviour(["fireball","living"], new ProjectileBehaviour(1,0.3,30))
 
         world.addBehaviours("slashing", [new MeshBehaviour(models.PARTICLE_SLASH),2])
-        world.addBehaviour(["slashing","ennemy"], new ProjectileBehaviour(1,2,10))
+        world.addBehaviour(["slashing","ennemy"], new ProjectileBehaviour(1,0.2,10))
 
         function codeToNum(code){
             if('0'.charCodeAt(0)<=code && code<='9'.charCodeAt(0)) return code-'0'.charCodeAt(0)+1

@@ -69,10 +69,7 @@ export class MeleeAttackBehaviour extends Behaviour{
                     const movement=obj.get(MOVEMENT); if(!movement)continue
                     offset.normalize()
                     offset.scaleInPlace(this.acceleration)
-                    offset.addInPlace(movement.inertia)
-                    offset.maximizeInPlaceFromFloats(-this.max_speed, -this.max_speed, -this.max_speed)
-                    offset.minimizeInPlaceFromFloats(this.max_speed, this.max_speed, this.max_speed)
-                    movement.inertia.copyFrom(offset)
+                    accelerate(movement.inertia, offset.x, offset.y, offset.z, this.max_speed, this.max_speed, this.max_speed)
                 }
             }
         }

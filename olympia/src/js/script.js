@@ -38,6 +38,7 @@ let nbLevel = -1;
 
 async function createScene() {
     scene = new BABYLON.Scene(engine);
+    scene.debugLayer.show();
     SceneOptimizer.OptimizeAsync(scene, new SceneOptimizerOptions(60))
     //scene.debugLayer.show();
     scene.clearColor = new BABYLON.Color3.Black();
@@ -51,7 +52,7 @@ async function createScene() {
     camera.setTarget(BABYLON.Vector3.Zero());
     camera.attachControl(canvas, true);
 
-    const ssao = new SSAO2RenderingPipeline("ssaopipeline", scene, 2, [camera]);
+    //const ssao = new SSAO2RenderingPipeline("ssaopipeline", scene, 2, [camera]);
 
 
     //créer une lumière

@@ -5,7 +5,7 @@ import { TRANSFORM } from "../../model/TransformModel.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
 import { generateParticle } from "../particle/SimpleParticleBehaviour.mjs";
-import { ON_LIVE_CHANGE } from "./LivingBehaviour.mjs";
+import { ON_DEATH, ON_LIVE_CHANGE } from "./LivingBehaviour.mjs";
 
 
 export class ParticleLivingBehaviour extends Behaviour{
@@ -31,7 +31,11 @@ export class ParticleLivingBehaviour extends Behaviour{
             obj.observers(ON_LIVE_CHANGE).add(this.eventid, (target,change)=>{
                 if(change<0)obj.apply(TRANSFORM, tf=>{
                     for(let i=0; i<8; i++)generateParticle(world,tf,this.tags,this.size.clone())
-                    console.log("DAMAGED")
+                })
+            })
+            obj.observers(ON_DEATH).add(this.eventid, (target)=>{
+                obj.apply(TRANSFORM, tf=>{
+                    for(let i=0; i<20; i++)generateParticle(world,tf,this.tags,this.size.clone())
                 })
             })
         }
@@ -60,6 +64,7 @@ export class ParticleLivingBehaviour extends Behaviour{
     finish(world,objects){
         if(this.eventid)for(const obj of objects){
             obj.observers(ON_LIVE_CHANGE).remove(this.eventid)
+            obj.observers(ON_DEATH).remove(this.eventid)
         }
     }
 }

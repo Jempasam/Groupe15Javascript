@@ -45,7 +45,7 @@ export class ProjectileBehaviour extends Behaviour{
                         offset.y=0
                         offset.normalize()
                         offset.scaleInPlace(this.knockback)
-                        accelerate(movement.inertia, offset.x, offset.y+this.knockback/4, offset.z, this.knockback, this.knockback, this.knockback)
+                        accelerate(movement.inertia, offset.x, this.knockback/8, offset.z, this.knockback, this.knockback/8, this.knockback)
                     })
                 })
                 world.remove(obj)
