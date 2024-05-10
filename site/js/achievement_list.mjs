@@ -231,57 +231,57 @@ export const achievement_list = {
         name:"Snake",
         achievements:{
             "game1":{
-                name: "Vers de pomme",
+                name: "Ver de pomme",
                 desc: "Jouer 1 partie",
-                img: "../../snake/assets/fruit1.png",
+                img: "../img/achievement/Snake/VerDePomme.png",
                 max:1
             },
             "win1":{
                 name: "1 pomme par jour éloigne le médecin",
                 desc: "Obtenir 1 point",
-                img: "../../snake/assets/fruit1.png",
+                img: "../img/achievement/Snake/PommeEloigneMedic.png",
                 max:1
             },
             "win10":{
                 name: "Serpent gourmet",
                 desc: "Obtenir 10 points en 1 partie",
-                img: "../../snake/assets/fruit1.png",
+                img: "../img/achievement/Snake/SerpentGourmet.png",
                 max:1
             },
             "win20":{
                 name: "Maître serpent",
                 desc: "Obtenir 20 points en 1 partie",
-                img: "../../snake/assets/fruit1.png",
+                img: "../img/achievement/Snake/MaitreSerpent.png",
                 max:1
             },
             "win50":{
                 name: "Roi des serpents",
                 desc: "Obtenir 50 points en 1 partie",
-                img: "../../snake/assets/fruit1.png",
+                img: "../img/achievement/Snake/RoiSerpent.png",
                 max:1
             },
             "win100":{
                 name: "SSSSSSSSERPENT",
                 desc: "Obtenir 100 points en 1 partie",
-                img: "../../snake/assets/fruit1.png",
+                img: "../img/achievement/Snake/SSSSSERPENT.png",
                 max:1
             },
             "win0":{
                 name: "Faux départ",
                 desc: "Obtenir 0 point",
-                img: "../../snake/assets/fruit1.png",
+                img: "../img/achievement/Snake/FauxDepart.png",
                 max: 1
             },
             "Gamemode4":{
                 name: "Fiesta",
                 desc: "Obtenir 5 points avec les 4 modes de jeux en même temps",
-                img: "../../snake/assets/fruit1.png",
+                img: "../img/achievement/Snake/Fiesta.png",
                 max: 1
             },
             "noisrevnI":{
                 name: "noisrevnI",
                 desc: "Avoir marqué 10 points avec le mode de jeu Inversion",
-                img: "../../snake/assets/fruit1.png",
+                img: "../img/achievement/Snake/noisrevnI.png",
                 max: 1
             }
         }
