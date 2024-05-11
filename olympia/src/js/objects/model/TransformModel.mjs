@@ -1,5 +1,5 @@
 import { Color3, MeshBuilder, Vector3 } from "../../../../../babylonjs/core/index.js";
-import { ModelKey } from "../world/GameObject.mjs";
+import { ModelKey } from "../world/ModelHolder.mjs";
 import { World } from "../world/World.mjs";
 
 export class TransformModel{

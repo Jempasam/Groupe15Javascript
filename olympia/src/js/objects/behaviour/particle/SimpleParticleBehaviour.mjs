@@ -1,12 +1,14 @@
 import { Behaviour } from "../Behaviour.mjs"
-import { GameObject, ModelKey } from "../../world/GameObject.mjs"
 import { ObjectQuery, World } from "../../world/World.mjs"
 import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs"
 import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs"
 import { Vector3 } from "../../../../../../babylonjs/core/index.js"
-import { MESH } from "../../model/MeshModel.mjs"
+import { ModelKey } from "../../world/ModelHolder.mjs"
 
 
+/**
+ * Comportement de particule simple, déplace la particule grâce à l'inertie.
+ */
 export class SimpleParticleBehaviour extends Behaviour{
 
     /**
@@ -43,7 +45,7 @@ export class SimpleParticleBehaviour extends Behaviour{
             const state=obj.get(LOCAL); if(!state)continue
             state.age++
             if(state.age>this.duration){
-                world.remove(obj)
+                obj.kill()
                 continue
             }
 

@@ -1,22 +1,22 @@
-import { MOVEMENT, MovementModel, accelerateX, accelerateY, accelerateZ } from "../../model/MovementModel.mjs";
+import { isKeyPressed } from "../../../controls/Keyboard.mjs";
+import { MOVEMENT, accelerateX, accelerateZ } from "../../model/MovementModel.mjs";
+import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
+import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
-import { Vector3 } from "../../../../../../babylonjs/core/index.js";
-import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
-import { isKeyPressed} from "../../../controls/Keyboard.mjs"
-import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.mjs";
-import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs";
-import { ModelKey } from "../../world/GameObject.mjs";
 
+/**
+ * Fait dasher lors de l'appui sur une touche
+ * Agit sur l'intertie.
+ */
 export class PlayerDashBehaviour extends Behaviour{
 
     /**
-     * 
-     * @param {string} key 
-     * @param {number} strength 
-     * @param {number} cooldown
-     * @param {number} dash_count
-     * @param {string[]=} particle
+     * @param {string} key La touche à presser pour dasher
+     * @param {number} strength La force du dash
+     * @param {number} cooldown Le temps de rechargement du dash
+     * @param {number} dash_count Le nombre de dash possible avant de recharger
+     * @param {import("../../world/TaggedDict.mjs").Tag[]=} particle Les tags à donner aux particules
      */
     constructor(key, strength, cooldown, dash_count, particle=undefined){
         super()

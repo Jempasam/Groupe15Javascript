@@ -1,9 +1,7 @@
-import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
-import { HITBOX, HitboxModel } from "../../model/HitboxModel.mjs";
+import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
+import { LIVING, LivingModel } from "../../model/LivingModel.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
-import { LIVING, LivingModel } from "../../model/LivingModel.mjs";
-import { ObserverKey, observers } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 
 
 export class LivingBehaviour extends Behaviour{
@@ -33,7 +31,7 @@ export class LivingBehaviour extends Behaviour{
                     obj.observers(ON_LIVE_CHANGE).notify(living.life-living._previous_life)
                     if(living.life<=0){
                         obj.observers(ON_DEATH).notify()
-                        if(living.life<=0)world.remove(obj)
+                        if(living.life<=0)obj.kill()
                     }
                     living._previous_life=living.life
                 }

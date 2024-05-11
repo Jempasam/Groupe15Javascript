@@ -1,10 +1,12 @@
-import { MOVEMENT, MovementModel, accelerateX, accelerateZ } from "../../model/MovementModel.mjs";
+import { isKeyPressed } from "../../../controls/Keyboard.mjs";
+import { MOVEMENT, accelerateX, accelerateZ } from "../../model/MovementModel.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
-import { Vector3 } from "../../../../../../babylonjs/core/index.js";
-import { TRANSFORM } from "../../model/TransformModel.mjs";
-import { isKeyPressed} from "../../../controls/Keyboard.mjs"
 
+/**
+ * Fait bouger un objet lors de l'appui sur des touches
+ * Agit sur l'intertie.
+ */
 export class PlayerBehaviour extends Behaviour{
 
     /**

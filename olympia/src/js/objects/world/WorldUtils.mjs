@@ -1,3 +1,5 @@
+import { GameObject } from "./GameObject.mjs"
+import { ModelKey } from "./ModelHolder.mjs"
 
 /**
  * 

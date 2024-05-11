@@ -1,5 +1,5 @@
 import { AbstractMesh } from "../../../../../babylonjs/core/index.js";
-import { ModelKey } from "../world/GameObject.mjs";
+import { ModelKey } from "../world/ModelHolder.mjs";
 
 export class MeshModel{
 

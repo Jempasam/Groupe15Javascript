@@ -1,21 +1,23 @@
-import { MOVEMENT, MovementModel, accelerateX, accelerateY, accelerateZ } from "../../model/MovementModel.mjs";
+import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.mjs";
+import { isKeyPressed } from "../../../controls/Keyboard.mjs";
+import { MOVEMENT, accelerateY } from "../../model/MovementModel.mjs";
+import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
+import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
-import { Vector3 } from "../../../../../../babylonjs/core/index.js";
-import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
-import { isKeyPressed} from "../../../controls/Keyboard.mjs"
-import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs";
-import { ModelKey } from "../../world/GameObject.mjs";
 
+/**
+ * Fait sauter lors de l'appui sur une touche
+ * Agit sur l'intertie.
+ */
 export class PlayerJumpBehaviour extends Behaviour{
 
     /**
-     * 
-     * @param {string} key 
-     * @param {number} strength 
-     * @param {number} jump_count
-     * @param {string[]=} particle
+     * @param {string} key La touche à presser pour sauter
+     * @param {number} strength La force du saut
+     * @param {number} jump_count Le nombre de saut possible avant de retoucher le sol
+     * @param {import("../../world/TaggedDict.mjs").Tag[]=} particle Les tags à donner aux particules
      */
     constructor(key, strength, jump_count, particle=undefined){
         super()

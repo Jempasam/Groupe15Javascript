@@ -1,11 +1,10 @@
+import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.mjs";
+import { LIVING } from "../../model/LivingModel.mjs";
 import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs";
+import { TRANSFORM } from "../../model/TransformModel.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
-import { isKeyPressed} from "../../../controls/Keyboard.mjs"
-import { TRANSFORM } from "../../model/TransformModel.mjs";
-import { ObserverGroup, observers } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs";
-import { LIVING } from "../../model/LivingModel.mjs";
 
 export class MeleeAttackBehaviour extends Behaviour{
 

@@ -1,7 +1,7 @@
 import { TaggedDict } from "./TaggedDict.mjs"
-import { GameObject, ModelKey } from "./GameObject.mjs"
+import { GameObject } from "./GameObject.mjs"
 import { Behaviour } from "../behaviour/Behaviour.mjs"
-import { fastRemove } from "../../../../../samlib/Array.mjs";
+import { fastKeep, fastRemove, fastRemoveValue } from "../../../../../samlib/Array.mjs";
 
 
 /** @typedef {import("./TaggedDict.mjs").Tag} Tag */
@@ -31,23 +31,52 @@ export class World{
         for(let behav of this.behaviours_list){
             behav.behaviour.tick(this,...this.#getParams(behav))
         }
+        for(let i=this.objects_list.length-1; i>=0; i--){
+            if(!this.objects_list[i].alive){
+                this.remove(this.objects_list[i])
+            }
+        }
         this.age++;
     }
 
+
     /**
-     * @template T
-     * @typedef {[ModelKey<T>,T]} ModelPair
+     * @typedef {import("./ModelHolder.mjs").ModelAndKey} ModelAndKey
      */
 
     /**
-     * @typedef {import("./GameObject.mjs").KeyedModel} KeyedModel
+     * Add tags to an object.
+     * @param {GameObject} object 
+     * @param {Tag[]} tags 
      */
+    addTags(object, tags){
+        const added_tags=[...tags]
+        fastRemoveValue(added_tags,object.tags)
+        this.objects.add(added_tags,object)
+        this.forBehav(added_tags, behaviour=>{
+            behaviour.behaviour.init(this,...this.#getParamsOf(behaviour,added_tags,[object]))
+        })
+    }
+
+    /**
+     * Remove tags from an object.
+     * @param {GameObject} object 
+     * @param {Tag[]} tags 
+     */
+    removeTags(object,tags){
+        const removed_tags=[...tags]
+        fastKeep(removed_tags,object.tags)
+        removed_tags.forEach(tag => this.objects.removeTag(object,tag))
+        this.forBehav(removed_tags, behaviour=>{
+            behaviour.behaviour.finish(this,...this.#getParamsOf(behaviour,removed_tags,[object]))
+        })
+    }
 
     /**
      * Ajoute un objet au monde
      * @param {number} count Le nombre d'objet à ajouter, 1 par défaut
      * @param {Tag|Tag[]} tags Les tags de l'objet
-     * @param {...(ModelPair<*>|KeyedModel)} data Les données de l'objet
+     * @param {...ModelAndKey} data Les données de l'objet
      * @returns {GameObject[]} Un tableau des objets ajoutés
      */
     addMany(count, tags, ...data){
@@ -62,8 +91,7 @@ export class World{
             this.objects.add(tags,object)
             this.objects_list.push(object)
             for(let model of data){
-                if(Array.isArray(model))object.set(model[0],model[1])
-                else object.setAuto(model)
+                object.setAuto(model)
             }
             addeds.push(object)
         }
@@ -80,7 +108,7 @@ export class World{
     /**
      * Ajoute un objet au monde
      * @param {Tag|Tag[]} tags Les tags de l'objet
-     * @param {...(ModelPair<*>|KeyedModel)} data Les données de l'objet
+     * @param {...ModelAndKey} data Les données de l'objet
      * @returns {GameObject} Un tableau des objets ajoutés
      */
     add(tags, ...data){

@@ -4,7 +4,7 @@ import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
 import { LIVING, LivingModel } from "../../model/LivingModel.mjs";
 import { ObserverGroup, ObserverKey, observers } from "../../../../../../samlib/observers/ObserverGroup.mjs";
-import { ModelKey } from "../../world/GameObject.mjs";
+import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs";
 import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs"
 

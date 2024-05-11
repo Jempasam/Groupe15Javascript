@@ -1,5 +1,5 @@
 import { Vector3 } from "../../../../../babylonjs/core/Maths/math.js";
-import { ModelKey } from "../world/GameObject.mjs";
+import { ModelKey } from "../world/ModelHolder.mjs";
 
 export class MovementModel{
     

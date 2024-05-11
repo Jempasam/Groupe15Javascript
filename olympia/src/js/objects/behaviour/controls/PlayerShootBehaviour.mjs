@@ -1,25 +1,25 @@
-import { MOVEMENT, MovementModel, accelerateX, accelerateY, accelerateZ } from "../../model/MovementModel.mjs";
+import { Vector3 } from "../../../../../../babylonjs/core/index.js";
+import { isKeyPressed } from "../../../controls/Keyboard.mjs";
+import { MOVEMENT, MovementModel, accelerateX, accelerateZ } from "../../model/MovementModel.mjs";
+import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
+import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
-import { Vector3 } from "../../../../../../babylonjs/core/index.js";
-import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
-import { isKeyPressed} from "../../../controls/Keyboard.mjs"
-import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.mjs";
-import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs";
-import { ModelKey } from "../../world/GameObject.mjs";
 
+/**
+ * Fait tirer un objet lors de l'appui sur une touche
+ */
 export class PlayerShootBehaviour extends Behaviour{
 
     /**
-     * 
-     * @param {string} key 
-     * @param {number} strength 
-     * @param {number} reloading_time
-     * @param {string[]} particle_tags
-     * @param {Vector3} size
-     * @param {number=} shoot_count
-     * @param {number=} cadency
-     * @param {number=} knockback
+     * @param {string} key La touche à presser pour tirer
+     * @param {number} strength La force du tir
+     * @param {number} reloading_time Le temps de rechargement
+     * @param {import("../../world/TaggedDict.mjs").Tag[]} particle_tags Les tags à donner aux projectiles
+     * @param {Vector3} size La taille des projectiles
+     * @param {number=} shoot_count Le nombre de projectiles tirable à chaque rechargement
+     * @param {number=} cadency La cadence de tir
+     * @param {number=} knockback Le recul infligé au tireur
      */
     constructor(key, strength, reloading_time, particle_tags, size, shoot_count=1, cadency=20, knockback=1){
         super()

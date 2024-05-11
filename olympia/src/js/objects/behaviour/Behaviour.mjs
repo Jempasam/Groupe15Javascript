@@ -4,8 +4,11 @@ let id_counter=0
 
 export class Behaviour{
 
-    /** @type number */
+    /** @type {number} */
     id;
+
+    /** @type {string?}  */
+    #unique_id=null
 
     constructor(){
         this.id=id_counter++
@@ -62,5 +65,15 @@ export class Behaviour{
      */
     close(world){
 
+    }
+
+    /**
+     * Returns a unique id for the behaviour
+     * @param {string=} prefix 
+     * @returns {string}
+     */
+    uniqueId(prefix=""){
+        if(this.#unique_id==null)this.#unique_id=prefix+"_behav_"+this.constructor.name+"_"+this.id
+        return this.#unique_id
     }
 }
