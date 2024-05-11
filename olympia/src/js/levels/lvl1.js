@@ -170,26 +170,44 @@ export class Lvl1 {
         const groundE21 = new Ground("GroundE21",112.5, -1, 45, 12.5, 8, 18,this.scene);
         listes[1].push(groundE21);
 
-        const monster5 = new Monster("Monster5", "Panda", 110, 2.5, 50, 2, 2, 2, player.playerSpeed*2, 4, this.scene);
+        const monster5 = new Monster("Monster5", "Panda", 113, 2.5, 48, 1.85, 1.85, 1.85, player.playerSpeed*3, 4, this.scene);
         listes[0].push(monster5);
 
-        const monster6 = new Monster("Monster6", "Panda", 97, 2.5, 49, 1, 1, 1, player.playerSpeed*4, 2, this.scene);
+        const monster6 = new Monster("Monster6", "Panda", 97, 2.5, 49, 1, 1, 1, player.playerSpeed*5, 2, this.scene);
         listes[0].push(monster6);
 
-        const monster7 = new Monster("Monster7", "Panda", 97, 2.5, 51, 1, 1, 1, player.playerSpeed*4, 2, this.scene);
+        const monster10 = new Monster("Monster10", "Panda", 110, 2.5, 48, 1, 1, 1, player.playerSpeed*5, 2, this.scene);
+        listes[0].push(monster10);
+
+        const monster7 = new Monster("Monster7", "Panda", 97, 2.5, 51, 1, 1, 1, player.playerSpeed*5, 2, this.scene);
         listes[0].push(monster7);
 
         const murLvl5 = new BreakableWall("MurLvl5",88, 4, 49, 1, 2, 10, this.scene);
         listes[6].push(murLvl5);
 
-        const groundP1 = new Ground("GroundP1",95, 4, 49, 1.25, 4, 1.25,this.scene);
+        const groundP1 = new Ground("GroundP1",95, 4, 49, 1.2, 6, 1.2,this.scene);
         listes[1].push(groundP1);
 
-        const groundP2 = new Ground("GroundP2",100, 4, 50, 1.25, 4, 1.25,this.scene);
+        const groundP2 = new Ground("GroundP2",100, 4, 50, 1.2, 6, 1.2,this.scene);
         listes[1].push(groundP2);
 
-        const groundP3 = new Ground("GroundP2",105, 4, 47, 1.25, 4, 1.25,this.scene);
+        const groundP3 = new Ground("GroundP3",105, 4, 47, 1.2, 6, 1.2,this.scene);
         listes[1].push(groundP3);
+
+        const groundP4 = new Ground("GroundP4",110, 4, 50, 1.2, 6, 1.2,this.scene);
+        listes[1].push(groundP4);
+
+        const groundP6 = new Ground("GroundP6",110, 4, 44, 1.2, 6, 1.2,this.scene);
+        listes[1].push(groundP6);
+
+        const groundP7 = new Ground("GroundP7",115, 4, 49, 1.2, 6, 10,this.scene);
+        listes[1].push(groundP7);
+
+        const groundP8 = new Ground("GroundP8",115, 4, 44, 1.2, 6, 1.2,this.scene);
+        listes[1].push(groundP8);
+
+        const wallL1P10 = new Wall("WallL1P10", 103, 3.5, 54.5, 32, 1, 0.5,this.scene);
+        listes[2].push(wallL1P10);
 
         const murLvl6 = new BreakableWall("MurLvl6",118, 4, 49, 1, 2, 10, this.scene);
         listes[6].push(murLvl6);
