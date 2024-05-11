@@ -44,6 +44,7 @@ export class PlayerDashBehaviour extends Behaviour{
      * @param {ObjectQuery} objects
      */
     tick(world, objects){
+        const particle=this.particle
         for(const obj of objects){
             const dash=obj.get(DASH); if(!dash)continue
             const movement=obj.get(MOVEMENT); if(!movement)continue
@@ -57,7 +58,6 @@ export class PlayerDashBehaviour extends Behaviour{
                         console.log(direction)
                         accelerateX(move.inertia, direction.x*2, Math.abs(direction.x))
                         accelerateZ(move.inertia, direction.z*2, Math.abs(direction.z))
-                        const particle=this.particle
                         if(particle)obj.apply(TRANSFORM, tf=>{
                             world.add(particle, new TransformModel({copied:tf}))
                         })
@@ -70,10 +70,14 @@ export class PlayerDashBehaviour extends Behaviour{
             }
             else dash.load_cooldown--
             
-            if(dash.cooldown==0)dash.remaining_dash=this.dash_count
+            // Reload dashes
+            if(dash.cooldown==0){
+                dash.remaining_dash=this.dash_count
+                if(particle) obj.apply(TRANSFORM, tf=>world.add(particle, new TransformModel({copied:tf})))
+            }
             if(dash.cooldown>=0)dash.cooldown--
 
-            const particle=this.particle
+            // Dash middle particle
             if(particle){
                 if(dash.particle_cooldown==1)obj.apply(TRANSFORM, tf=>world.add(particle, new TransformModel({copied:tf})))
                 if(dash.particle_cooldown>0){
