@@ -63,6 +63,7 @@ export class PlayerDashBehaviour extends Behaviour{
                         })
                     })
                     dash.load_cooldown=10
+                    dash.particle_cooldown=Math.floor(20*this.strength)
                     dash.cooldown=this.cooldown
                     dash.remaining_dash--
                 }
@@ -71,6 +72,15 @@ export class PlayerDashBehaviour extends Behaviour{
             
             if(dash.cooldown==0)dash.remaining_dash=this.dash_count
             if(dash.cooldown>=0)dash.cooldown--
+
+            const particle=this.particle
+            if(particle){
+                if(dash.particle_cooldown==1)obj.apply(TRANSFORM, tf=>world.add(particle, new TransformModel({copied:tf})))
+                if(dash.particle_cooldown>0){
+                    dash.particle_cooldown--
+                    console.log(dash.particle_cooldown)
+                }
+            }
         }
     }
 
@@ -90,6 +100,7 @@ export class DashModel{
     load_cooldown=0
     cooldown=0
     remaining_dash=0
+    particle_cooldown=0
 }
 
 /** @type {ModelKey<DashModel>} */
