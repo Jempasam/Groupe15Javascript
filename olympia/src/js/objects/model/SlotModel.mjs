@@ -16,6 +16,7 @@ import { ModelKey } from "../world/ModelHolder.mjs"
 export function equip(obj, slot, tags){
     if(slot!=null){
         const slots=obj.getOrSet(SLOTS,()=>({}))
+        console.log("slot",slots,slot,tags)
         const previous=slots[slot]
         if(previous){
             obj.removeTag(...previous)
@@ -23,6 +24,7 @@ export function equip(obj, slot, tags){
         slots[slot]=tags
         if(tags.length==0)delete slots[slot]
         if(tags.length>0)obj.addTag(...tags)
+        console.log("after slot",slots,slot,tags)
     }
     else obj.addTag(...tags)
 }

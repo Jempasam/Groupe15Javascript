@@ -37,6 +37,7 @@ export class EquipperBehaviour extends Behaviour{
                     it.equippedTime=20
                     equip(object,this.slot,this.given)
                     obj.observers(ON_EQUIP).notify({equipped:object, equipper:this})
+                    object.observers(ON_EQUIPPED).notify({giver:obj, equipper:this})
                 })
             })
         }
@@ -52,10 +53,8 @@ export class EquipperBehaviour extends Behaviour{
             obj.apply(EQUIPPER, it=>{
                 if(it.equippedTime==1){
                     obj.kill()
-                    console.log("remove",obj)
                 }
                 if(it.equippedTime>0){
-                    console.log("tick",it.equippedTime)
                     it.equippedTime--
                     obj.apply(TRANSFORM, it=>it.scale.scaleInPlace(0.9))
                 }
@@ -82,3 +81,6 @@ export const EQUIPPER=new ModelKey("equipper")
 
 /** @type {ObserverKey<{equipped:GameObject, equipper:EquipperBehaviour}>} */
 export const ON_EQUIP=new ObserverKey("onEquip")
+
+/** @type {ObserverKey<{giver:GameObject, equipper:EquipperBehaviour}>} */
+export const ON_EQUIPPED=new ObserverKey("onEquipped")

@@ -26,13 +26,13 @@ import { LIVING, LivingModel } from "../objects/model/LivingModel.mjs";
 import { PlayerShootBehaviour } from "../objects/behaviour/controls/PlayerShootBehaviour.mjs";
 import { ProjectileBehaviour } from "../objects/behaviour/life/ProjectileBehaviour.mjs";
 import { EmitterBehaviour } from "../objects/behaviour/particle/EmitterBehaviour.mjs";
-import { EquipperBehaviour } from "../objects/behaviour/slot/EquipperBehaviour.mjs";
+import { EquipperBehaviour, ON_EQUIPPED } from "../objects/behaviour/slot/EquipperBehaviour.mjs";
 import { Behaviour } from "../objects/behaviour/Behaviour.mjs";
 
 
 export class SamLevel extends Level{
 
-   static playerPos=new Vector3(2, 3, 11)
+   static playerPos=new Vector3(1.5, 2, 9.5)
 
    /**
     * @param {World} world 
@@ -90,6 +90,9 @@ export class SamLevel extends Level{
       const OBJ_WIND=[PARTICLE_WIND, PARTICLE_SPREAD, MOVEMENT]
       const OBJ_SMOKE=[PARTICLE_SMOKE, PARTICLE_UP, MOVEMENT]
       const OBJ_CLOUD=[PARTICLE_SMOKE, PARTICLE_STAY, MOVEMENT]
+      const OBJ_FIRE=[PARTICLE_FIRE, PARTICLE_UP, MOVEMENT]
+
+      const PARTICLE_SMOKE_EMITTER=behav(new EmitterBehaviour(OBJ_CLOUD, new Vector3(0.5, 0.5, 0.5), 5))
 
       // Living
       const ALIVE=behav(
@@ -105,16 +108,19 @@ export class SamLevel extends Level{
       const MELEE_PROJECTILE=id()
       world.addBehaviour([MELEE_PROJECTILE, ENNEMY], new ProjectileBehaviour(1,0.2,10))
       const RANGED_PROJECTILE=id()
-      world.addBehaviour([RANGED_PROJECTILE, ENNEMY], new ProjectileBehaviour(1,0.3,30))
+      world.addBehaviour([RANGED_PROJECTILE, ENNEMY], new ProjectileBehaviour(2,0.3,30))
       const OBJ_SLASH_ATTACK=[MOVEMENT, COLLISION, MELEE_PROJECTILE, PARTICLE_SLASH]
-      const OBJ_SHOOT_ATTACK=[MOVEMENT, COLLISION, RANGED_PROJECTILE, PARTICLE_FIRE]
+      const OBJ_SHOOT_ATTACK=[MOVEMENT, COLLISION, RANGED_PROJECTILE, PARTICLE_FIRE, PARTICLE_SMOKE_EMITTER]
 
       // Player
       world.addBehaviour(PLAYER, new PlayerBehaviour(["KeyA","KeyW","KeyD","KeyS"],0.03,0.1))
       const PLAYER_DASH=behav(new PlayerDashBehaviour("KeyQ", 0.4, 40, 1, OBJ_CLOUD))
       const PLAYER_ATTACK=behav(new PlayerShootBehaviour("KeyE", 0.1, 40, OBJ_SLASH_ATTACK, new Vector3(1.5,0.8,1.5), 1, 20, 0.1))
-      const PLAYER_SHOOT=behav(new PlayerShootBehaviour("KeyE", 0.1, 40, OBJ_SHOOT_ATTACK, new Vector3(1.5,0.8,1.5), 1, 20, 0.1))
-      const PLAYER_JUMP=behav(new PlayerJumpBehaviour("Space", 0.3, 2, OBJ_WIND))
+      const PLAYER_SHOOT=behav(
+         new PlayerShootBehaviour("KeyE", 0.2, 40, OBJ_SHOOT_ATTACK, new Vector3(1.5,0.8,1.5), 1, 20, 0.3),
+         new EmitterBehaviour(OBJ_FIRE, new Vector3(0.3, 0.3, 0.3), 10),
+      )
+      const PLAYER_JUMP=behav(new PlayerJumpBehaviour("Space", 0.3, 1, OBJ_WIND))
 
       // Equipper
       const JUMP_EQUIPPER=id()
@@ -129,6 +135,10 @@ export class SamLevel extends Level{
       world.addBehaviours([ATTACK_EQUIPPER,PLAYER], new EquipperBehaviour([PLAYER_ATTACK],"attack"),)
       world.addBehaviours([ATTACK_EQUIPPER], new EmitterBehaviour(OBJ_SLASH_ATTACK, new Vector3(0.5, 0.5, 0.5), 10))
 
+      const SHOOT_EQUIPPER=id()
+      world.addBehaviours([SHOOT_EQUIPPER,PLAYER], new EquipperBehaviour([PLAYER_SHOOT],"attack"),)
+      world.addBehaviours([SHOOT_EQUIPPER], new EmitterBehaviour(OBJ_FIRE, new Vector3(0.5, 0.5, 0.5), 10))
+
       // Ennemy
       world.addBehaviour([ENNEMY, PLAYER], new MeleeAttackBehaviour(0.02,0.04,8,3))
 
@@ -140,92 +150,6 @@ export class SamLevel extends Level{
       const OBJ_PHYSIC=[MOVEMENT, COLLISION, PUSHABLE, FALLING]
       const OBJ_PLAYER=[...OBJ_PHYSIC, ALIVE, PLAYER]
       const OBJ_ENNEMY=[...OBJ_PHYSIC, ALIVE, ENNEMY]
-
-      // Particles
-      /*world.addBehaviours("cloud",
-         new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.1,1.05,1.1), 20),
-         new MovementBehaviour(0.98),
-         new MeshBehaviour(models.PARTICLE_WIND),
-      )
-
-      world.addBehaviours("fire",
-         new SimpleParticleBehaviour(new Vector3(0,0.01,0), new Vector3(0,0.1,0), new Vector3(1.03,1.03,1.03), 40),
-         new MovementBehaviour(0.98),
-         new MeshBehaviour(models.PARTICLE_FIRE),
-      )
-
-      world.addBehaviours("smoke",
-         new SimpleParticleBehaviour(new Vector3(0,0.01,0), new Vector3(0,0.1,0), new Vector3(1.03,1.03,1.03), 40),
-         new MovementBehaviour(0.98),
-         new MeshBehaviour(models.PARTICLE_SMOKE),
-      )
-
-      world.addBehaviours("small_cloud",
-         new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.1,1.1,1.1), 15),
-         new MovementBehaviour(0.98),
-         new MeshBehaviour(models.PARTICLE_SMOKE),
-      )
-
-      world.addBehaviours("object", 
-         [new HitboxBehaviour(), 2], 
-         [new MovementBehaviour(0.98), 1],
-         new SimpleCollisionBehaviour()
-      )*/
-
-      /*world.addBehaviour("block",[new MeshBehaviour(models.BLOCK),2])
-      world.addBehaviour("pillar",[new MeshBehaviour(models.PILLAR),2])
-      world.addBehaviour("bridge",[new MeshBehaviour(models.BRIDGE),2])
-      world.addBehaviour("stone",[new MeshBehaviour(models.STONE),2])
-      world.addBehaviour("artifact",[new MeshBehaviour(models.ARTIFACT),2])
-      world.addBehaviour("sphinx",[new MeshBehaviour(models.SPHINX),2])
-      world.addBehaviour("panda",[new MeshBehaviour(models.PANDA),2])*/
-
-      /*world.addBehaviours("physic",
-         new ConstantForceBehaviour(new Vector3(0,-0.015,0)),
-         new PushCollisionBehaviour()
-      )
-   
-      world.addBehaviours("player", 
-         new PlayerBehaviour(["KeyA","KeyW","KeyD","KeyS"],0.03,0.1),
-         new PlayerDashBehaviour("KeyQ", 0.4, 40, 1, ["small_cloud"]),
-         new PlayerShootBehaviour("KeyE", 0.1, 40, ["object","slashing"], new Vector3(1.5,0.8,1.5), 1, 20, 0.1),
-         new EmitterBehaviour(["fire"], new Vector3(0.5, 0.5, 0.5), 10),
-      )*/
-
-      /*world.addBehaviours("jumper",
-         new PlayerJumpBehaviour("Space", 0.3, 2, ["cloud"]),
-      )*/
-
-      /*world.addBehaviours(["jump_giver","player"],
-         new EquipperBehaviour(["jumper"],"jump")
-      )
-      world.addBehaviours("jump_giver",
-         [new MeshBehaviour(models.ARTIFACT),2],
-         new EmitterBehaviour(["small_cloud"], new Vector3(0.5, 0.5, 0.5), 10),
-      )
-
-      world.addBehaviours("living",
-         new ParticleLivingBehaviour(["smoke"], new Vector3(0.4,0.4,0.4)),
-         [new LivingBehaviour(),2],
-      )
-
-      world.addBehaviour("elevator",
-         new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02)
-      )
-
-      world.addBehaviour("moving",
-         new PathBehaviour([new Vector3(-7,0,0),new Vector3(7,0,0),new Vector3(7,5,0)], 0.1, 0.02, 0.04)
-      )
-
-      world.addBehaviour(["ennemy","player"],
-         new MeleeAttackBehaviour(0.02,0.04,8,3)
-      )*/
-      /*
-      world.addBehaviours("fireball", [new MeshBehaviour(models.PARTICLE_FIRE),2])
-      world.addBehaviour(["fireball","living"], new ProjectileBehaviour(1,0.3,30))
-
-      world.addBehaviours("slashing", [new MeshBehaviour(models.PARTICLE_SLASH),2])
-      world.addBehaviour(["slashing","ennemy"], new ProjectileBehaviour(1,0.2,10))*/
 
       function codeToNum(code){
          if('0'.charCodeAt(0)<=code && code<='9'.charCodeAt(0)) return code-'0'.charCodeAt(0)+1
@@ -249,6 +173,7 @@ export class SamLevel extends Level{
             ()=>{return {tags:[...OBJ_PHYSIC,BLOCK], data:[]} },//H
             ()=>{return {tags:[...OBJ_ENNEMY, SPHINX], data:[new LivingModel(10)]} },//I
             ()=>{return {tags:[COLLISION,ARTIFACT,ATTACK_EQUIPPER], data:[]} },//J
+            ()=>{return {tags:[COLLISION,ARTIFACT,SHOOT_EQUIPPER], data:[]} },//K
          ]
          const bottom=codeToNum(letter.charCodeAt(1))
          const height=codeToNum(letter.charCodeAt(2))
@@ -297,7 +222,7 @@ export class SamLevel extends Level{
       10 ]                                                   h91
       11 ]   
       12 ]   
-      13 ]                     
+      13 ]                     kS2
       14 ]   
       15 ]                                                   i74-..
       16 ]                                                   |____|
@@ -317,6 +242,14 @@ export class SamLevel extends Level{
       this.player.observers(ON_DEATH).add("SamLevel",(obj,_)=>{
          this.player?.apply(LIVING, living=>living.life=3)
          this.player?.apply(TRANSFORM, tf=>tf.position.y=-100)
+      })
+
+      this.player.observers(ON_EQUIPPED).add("SamLevel",(obj,{equipper})=>{
+         const infoJoueur=document.querySelector("#infoJoueur"); if(!infoJoueur)return
+         if(equipper.given.includes(PLAYER_JUMP))infoJoueur.innerHTML="Sautez avec ESPACE"
+         if(equipper.given.includes(PLAYER_DASH))infoJoueur.innerHTML="Dash avec A"
+         if(equipper.given.includes(PLAYER_ATTACK))infoJoueur.innerHTML="Attaquez avec E"
+         if(equipper.given.includes(PLAYER_SHOOT))infoJoueur.innerHTML="Tirez avec E"
       })
 
       world.add([...OBJ_PHYSIC,BLOCK],

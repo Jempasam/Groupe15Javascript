@@ -55,7 +55,6 @@ export class PlayerDashBehaviour extends Behaviour{
                         direction.y=0
                         direction.normalize()
                         direction.scaleInPlace(this.strength)
-                        console.log(direction)
                         accelerateX(move.inertia, direction.x*2, Math.abs(direction.x))
                         accelerateZ(move.inertia, direction.z*2, Math.abs(direction.z))
                         if(particle)obj.apply(TRANSFORM, tf=>{
@@ -82,7 +81,6 @@ export class PlayerDashBehaviour extends Behaviour{
                 if(dash.particle_cooldown==1)obj.apply(TRANSFORM, tf=>world.add(particle, new TransformModel({copied:tf})))
                 if(dash.particle_cooldown>0){
                     dash.particle_cooldown--
-                    console.log(dash.particle_cooldown)
                 }
             }
         }
