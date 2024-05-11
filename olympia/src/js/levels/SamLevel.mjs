@@ -116,6 +116,19 @@ export class SamLevel extends Level{
       const PLAYER_SHOOT=behav(new PlayerShootBehaviour("KeyE", 0.1, 40, OBJ_SHOOT_ATTACK, new Vector3(1.5,0.8,1.5), 1, 20, 0.1))
       const PLAYER_JUMP=behav(new PlayerJumpBehaviour("Space", 0.3, 2, OBJ_WIND))
 
+      // Equipper
+      const JUMP_EQUIPPER=id()
+      world.addBehaviours([JUMP_EQUIPPER,PLAYER], new EquipperBehaviour([PLAYER_JUMP],"jump"),)
+      world.addBehaviours([JUMP_EQUIPPER], new EmitterBehaviour(OBJ_WIND, new Vector3(0.5, 0.5, 0.5), 10),)
+
+      const DASH_EQUIPPER=id()
+      world.addBehaviours([DASH_EQUIPPER,PLAYER], new EquipperBehaviour([PLAYER_DASH],"dash"),)
+      world.addBehaviours([DASH_EQUIPPER], new EmitterBehaviour(OBJ_CLOUD, new Vector3(0.5, 0.5, 0.5), 10))
+
+      const ATTACK_EQUIPPER=id()
+      world.addBehaviours([ATTACK_EQUIPPER,PLAYER], new EquipperBehaviour([PLAYER_ATTACK],"attack"),)
+      world.addBehaviours([ATTACK_EQUIPPER], new EmitterBehaviour(OBJ_SLASH_ATTACK, new Vector3(0.5, 0.5, 0.5), 10))
+
       // Ennemy
       world.addBehaviour([ENNEMY, PLAYER], new MeleeAttackBehaviour(0.02,0.04,8,3))
 
@@ -230,11 +243,12 @@ export class SamLevel extends Level{
             ()=>{return {tags:[COLLISION,BLOCK], data:[]} },//B
             ()=>{return {tags:[COLLISION,BRIDGE], data:[]} },//C
             ()=>{return {tags:[COLLISION,STONE], data:[]} },//D
-            ()=>{return {tags:[COLLISION,ELEVATOR,BLOCK], data:[]} },//E
-            ()=>{return {tags:[COLLISION,MOVING,BLOCK], data:[]} },//F
-            ()=>{return {tags:[COLLISION,ARTIFACT], data:[]} },//G
+            ()=>{return {tags:[COLLISION,MOVEMENT,ELEVATOR,BLOCK], data:[]} },//E
+            ()=>{return {tags:[COLLISION,MOVEMENT,MOVING,BLOCK], data:[]} },//F
+            ()=>{return {tags:[COLLISION,ARTIFACT,JUMP_EQUIPPER], data:[]} },//G
             ()=>{return {tags:[...OBJ_PHYSIC,BLOCK], data:[]} },//H
             ()=>{return {tags:[...OBJ_ENNEMY, SPHINX], data:[new LivingModel(10)]} },//I
+            ()=>{return {tags:[COLLISION,ARTIFACT,ATTACK_EQUIPPER], data:[]} },//J
          ]
          const bottom=codeToNum(letter.charCodeAt(1))
          const height=codeToNum(letter.charCodeAt(2))
@@ -245,53 +259,57 @@ export class SamLevel extends Level{
          )
       }
       forMap(`
-         ]d03b06-..-..-..-..   d09                     b08-..-..-..-..-..
-         ]   |             |b51a06b51a06b51a06b51a07b71|                |
-         ]d09|_____________|      d05                  |                |
-         ]   d06b41-..-..d03                           |                |
-         ]      b31-..-..g31      d0F-..-..            |                |
-         ]d07   b21-..-..d05      |       |            |________________|
-         ]      b11-..-..   d06   |_______|                  b06
-         ]   b01-..-..-..-..                                 |..
-         ]   a09   c10   a09                                 |..
-         ]      e01c10               f01               b08-..-..-..-..
-         ]   a09   c10   a09                           |             |
-         ]   b01-..-..-..-..                           |             |
-         ]                     bP2-..                  |             |
-         ]                     |____|                  |             |
-         ]                                             |_____________|
-         ]                     eJ1-..                        c71     
-         ]                     bJ1-..                        c71
-         ]                                                   c71
-         ]                     eC1-..                        c71
-         ]                  b0D-..-..-..               b08-..-..-..-..
-         ]                  |          |               |             |
-         ]                  |          |bB1a0Bb91a09b71|             |
-         ]                  |          |bB1a0Bb91a09b71|             |
-         ]                  |__________|               |_____________|`,
+      1  ]d03b06-..-..-..-..   d09                     b08-..-..-..-..-..
+      2  ]   |             |b51a06b51a06b51a06b51a07b71|                |
+      3  ]d09|_____________|      d05                  |                |
+      4  ]   d06b41-..-..d03                           |                |
+      5  ]      b31-..-..         d0F-..-..            |                |
+      6  ]d07   b21-..-..d05      |       |            |________________|
+      7  ]      b11-..-..   d06   |_______|                  b06
+      8  ]   b01-..-..-..-..                                 |..
+      9  ]   a09   c10   a09                                 |..
+      10 ]      e01c10               f01               b08-..-..-..-..
+      11    ]   a09   c10   a09                           |             |12       ]   b01-..-..-..-..                           |             |
+      12 ]                     bP2-..                  |             |
+      13 ]                     |____|                  |             |
+      14 ]                                             |_____________|
+      15 ]                     eJ1-..                        c71     
+      16 ]                     bJ1-..                        c71
+      17 ]                                                   c71
+      18 ]                     eC1-..                        c71
+      19 ]                  b0D-..-..-..               b08-..-..-..-..
+      20 ]                  |          |               |             |
+      21 ]                  |          |bB1a0Bb91a09b71|             |
+      22 ]                  |          |bB1a0Bb91a09b71|             |
+      23 ]                  |__________|               |_____________|`,
          [-4,-8], [1.5,1.5], objectSpawner, 3, true
       )
       forMap(`
-         ]                                                h91   h91
-         ]                                                   h91-..
-         ]                                                   |____|
-         ]                                                         
-         ]                                                         
-         ]                                                         
-         ]                                                         
-         ]                                                   
-         ]   
-         ]                                                   h91
-         ]   
-         ]   
-         ]   
-         ]   
-         ]                                                   i74-..
-         ]                                                   |____|`,
+      1  ]                                                h91   h91
+      2  ]                                                   h91-..
+      3  ]                                                   |____|
+      4  ]                                                         
+      5  ]                                                         
+      6  ]                                                         
+      7  ]                                                         
+      8  ]                                                   
+      9  ]   
+      10 ]                                                   h91
+      11 ]   
+      12 ]   
+      13 ]                     
+      14 ]   
+      15 ]                                                   i74-..
+      16 ]                                                   |____|
+      17 ]                              
+      18 ]   
+      19 ]                     
+      20 ]   
+      21 ]                     gE2                           j92`,
          [-4,-8], [1.5,1.5], objectSpawner, 3, true
       )
 
-      this.player=world.add([...OBJ_PLAYER, PANDA, PLAYER_ATTACK, PLAYER_DASH, PLAYER_JUMP],
+      this.player=world.add([...OBJ_PLAYER, PANDA, PLAYER_DASH],
          new TransformModel({ position: SamLevel.playerPos.clone() }),
          new LivingModel(3)
       )
