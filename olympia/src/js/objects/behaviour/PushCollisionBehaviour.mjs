@@ -47,7 +47,7 @@ export class PushCollisionBehaviour extends Behaviour{
                         }
                         else{
                             const offset=hitbox.position.subtract(self_hitbox.position)
-                            if(Math.abs(offset.x)*hitbox.scaling.x>Math.abs(offset.z)*hitbox.scaling.z){
+                            if(Math.abs(offset.x)/hitbox.scaling.x>Math.abs(offset.z)/hitbox.scaling.z){
                                 const strength=((hitbox.scaling.x+self_hitbox.scaling.x)/2-Math.abs(hitbox.position.x-self_hitbox.position.x))/4
                                 if(strength>0)accelerateX(movement.inertia, strength*-Math.sign(offset.x), strength)
                             }

@@ -81,18 +81,21 @@ export class SamLevel extends Level{
       const PARTICLE_SLASH=behav([new MeshBehaviour(models.PARTICLE_SLASH),2])
       const PARTICLE_BATS=behav([new MeshBehaviour(models.PARTICLE_BATS),2])
       const PARTICLE_CLOUD=behav([new MeshBehaviour(models.PARTICLE_CLOUD),2])
+      const PARTICLE_FLAME=behav([new MeshBehaviour(models.PARTICLE_FLAME),2])
 
       // Particles
       const PARTICLE_UP=behav(new SimpleParticleBehaviour(new Vector3(0,0.01,0), new Vector3(0,0.1,0), new Vector3(1.03,1.03,1.03), 40))
+      const PARTICLE_FIRE_UP=behav(new SimpleParticleBehaviour(new Vector3(0,0.05,0), new Vector3(0,0.05,0), new Vector3(0.97,0.97,0.97), 40))
       const PARTICLE_STAY=behav(new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.1,1.05,1.1), 20))
       const PARTICLE_SPREAD=behav(new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.1,1.05,1.1), 20))
 
       const OBJ_WIND=[PARTICLE_WIND, PARTICLE_SPREAD, MOVEMENT]
       const OBJ_SMOKE=[PARTICLE_SMOKE, PARTICLE_UP, MOVEMENT]
       const OBJ_CLOUD=[PARTICLE_SMOKE, PARTICLE_STAY, MOVEMENT]
-      const OBJ_FIRE=[PARTICLE_FIRE, PARTICLE_UP, MOVEMENT]
+      const OBJ_FIRE=[PARTICLE_FLAME, PARTICLE_FIRE_UP, MOVEMENT]
 
       const PARTICLE_SMOKE_EMITTER=behav(new EmitterBehaviour(OBJ_CLOUD, new Vector3(0.5, 0.5, 0.5), 5))
+      const PARTICLE_FIRE_EMITTER=behav(new EmitterBehaviour(OBJ_FIRE, new Vector3(1, 1, 1), 5))
 
       // Living
       const ALIVE=behav(
@@ -118,7 +121,7 @@ export class SamLevel extends Level{
       const PLAYER_ATTACK=behav(new PlayerShootBehaviour("KeyE", 0.1, 40, OBJ_SLASH_ATTACK, new Vector3(1.5,0.8,1.5), 1, 20, 0.1))
       const PLAYER_SHOOT=behav(
          new PlayerShootBehaviour("KeyE", 0.2, 40, OBJ_SHOOT_ATTACK, new Vector3(1.5,0.8,1.5), 1, 20, 0.3),
-         new EmitterBehaviour(OBJ_FIRE, new Vector3(0.3, 0.3, 0.3), 10),
+         new EmitterBehaviour(OBJ_FIRE, new Vector3(1.2,1.2,1.2), 10),
       )
       const PLAYER_JUMP=behav(new PlayerJumpBehaviour("Space", 0.3, 1, OBJ_WIND))
 
@@ -137,7 +140,7 @@ export class SamLevel extends Level{
 
       const SHOOT_EQUIPPER=id()
       world.addBehaviours([SHOOT_EQUIPPER,PLAYER], new EquipperBehaviour([PLAYER_SHOOT],"attack"),)
-      world.addBehaviours([SHOOT_EQUIPPER], new EmitterBehaviour(OBJ_FIRE, new Vector3(0.5, 0.5, 0.5), 10))
+      world.addBehaviours([SHOOT_EQUIPPER], new EmitterBehaviour(OBJ_FIRE, new Vector3(0.8, 0.8, 0.8), 10))
 
       // Ennemy
       world.addBehaviour([ENNEMY, PLAYER], new MeleeAttackBehaviour(0.02,0.04,8,3))
@@ -174,6 +177,7 @@ export class SamLevel extends Level{
             ()=>{return {tags:[...OBJ_ENNEMY, SPHINX], data:[new LivingModel(10)]} },//I
             ()=>{return {tags:[COLLISION,ARTIFACT,ATTACK_EQUIPPER], data:[]} },//J
             ()=>{return {tags:[COLLISION,ARTIFACT,SHOOT_EQUIPPER], data:[]} },//K
+            ()=>{return {tags:[COLLISION,ARTIFACT,DASH_EQUIPPER], data:[]} },//L
          ]
          const bottom=codeToNum(letter.charCodeAt(1))
          const height=codeToNum(letter.charCodeAt(2))
@@ -194,24 +198,25 @@ export class SamLevel extends Level{
       8  ]   b01-..-..-..-..                                 |..
       9  ]   a09   c10   a09                                 |..
       10 ]      e01c10               f01               b08-..-..-..-..
-      11    ]   a09   c10   a09                           |             |12       ]   b01-..-..-..-..                           |             |
-      12 ]                     bP2-..                  |             |
-      13 ]                     |____|                  |             |
-      14 ]                                             |_____________|
-      15 ]                     eJ1-..                        c71     
-      16 ]                     bJ1-..                        c71
-      17 ]                                                   c71
-      18 ]                     eC1-..                        c71
-      19 ]                  b0D-..-..-..               b08-..-..-..-..
-      20 ]                  |          |               |             |
-      21 ]                  |          |bB1a0Bb91a09b71|             |
+      11 ]   a09   c10   a09                           |             |
+      12 ]   b01-..-..-..-..                           |             |
+      13 ]                     bP2-..                  |             |
+      14 ]                     |____|   bM1            |             |
+      15 ]                                             |_____________|
+      16 ]                                                   c71     
+      17 ]                     bJ1-..                        c71
+      18 ]                                                   c71
+      19 ]                     eC1-..                        c71
+      20 ]                  b0D-..-..-..               b08-..-..-..-..
+      21 ]                  |          |               |             |
       22 ]                  |          |bB1a0Bb91a09b71|             |
-      23 ]                  |__________|               |_____________|`,
+      23 ]                  |          |bB1a0Bb91a09b71|             |
+      24 ]                  |__________|               |_____________|`,
          [-4,-8], [1.5,1.5], objectSpawner, 3, true
       )
       forMap(`
       1  ]                                                h91   h91
-      2  ]                                                   h91-..
+      2  ]         l72                                       h91-..
       3  ]                                                   |____|
       4  ]                                                         
       5  ]                                                         
@@ -230,11 +235,12 @@ export class SamLevel extends Level{
       18 ]   
       19 ]                     
       20 ]   
-      21 ]                     gE2                           j92`,
+      21 ]   
+      22 ]                     gE2                           j92`,
          [-4,-8], [1.5,1.5], objectSpawner, 3, true
       )
 
-      this.player=world.add([...OBJ_PLAYER, PANDA, PLAYER_DASH],
+      this.player=world.add([...OBJ_PLAYER, PANDA],
          new TransformModel({ position: SamLevel.playerPos.clone() }),
          new LivingModel(3)
       )
