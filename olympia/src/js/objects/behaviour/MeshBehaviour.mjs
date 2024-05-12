@@ -1,5 +1,5 @@
 import { TRANSFORM, TransformModel } from "../model/TransformModel.mjs";
-import { MESH, MeshModel } from "../model/MeshModel.mjs";
+import { MESH, MeshModel, SCENE } from "../model/MeshModel.mjs";
 import { ObjectQuery, World } from "../world/World.mjs";
 import { Behaviour } from "./Behaviour.mjs";
 import { Scene } from "../../../../../babylonjs/core/scene.js";
@@ -24,7 +24,7 @@ export class MeshBehaviour extends Behaviour{
      */
     init(world,objects){
         for(let obj of objects){
-            const mesh=this.factory(world["scene"])
+            const mesh=this.factory(world.get(SCENE))
             mesh.rotationQuaternion=null
             obj.apply(TRANSFORM,transform=>{
                 mesh.position.copyFrom(transform.position)

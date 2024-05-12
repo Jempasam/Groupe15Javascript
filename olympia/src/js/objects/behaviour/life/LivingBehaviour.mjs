@@ -28,12 +28,13 @@ export class LivingBehaviour extends Behaviour{
             const living=obj.get(LIVING)
             if(living){
                 if(living.life!=living._previous_life){
-                    obj.observers(ON_LIVE_CHANGE).notify(living.life-living._previous_life)
+                    const offset=living.life-living._previous_life
+                    living._previous_life=living.life
+                    obj.observers(ON_LIVE_CHANGE).notify(offset)
                     if(living.life<=0){
                         obj.observers(ON_DEATH).notify()
                         if(living.life<=0)obj.kill()
                     }
-                    living._previous_life=living.life
                 }
             }
         }

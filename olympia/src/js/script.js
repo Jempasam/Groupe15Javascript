@@ -8,10 +8,25 @@ import { World } from "./objects/world/World.mjs";
 import { loadModels } from "./ressources/Models.mjs";
 import { Level } from "./levels/Level.mjs";
 import { Engine, SSAO2RenderingPipeline, SceneOptimizer, SceneOptimizerOptions } from "../../../babylonjs/core/index.js";
+import { SCENE } from "./objects/model/MeshModel.mjs";
+import { adom, create } from "../../../samlib/DOM.mjs";
+import { MessageManager } from "./messages/MessageManager.mjs";
 
-const canvas = document.getElementById("renderCanvas");
-/** @type {Engine} */
-const engine = new BABYLON.Engine(canvas, true);
+/** Récupère et crée la fenêtre de jeu */
+const gameElement = document.getElementById("olympia");
+if(!gameElement){
+    window.alert("Impossible de trouver l'élément pour y insérer le jeu!")
+    throw new Error("Impossible de trouver l'élément pour y insérer le jeu!")
+}
+gameElement.innerHTML=""
+const canvas=adom/*html*/`<canvas width=800 height=500></canvas>`
+const infoJoueur=create("div.olympia-messages")
+export const message= new MessageManager(infoJoueur)
+gameElement.appendChild(canvas)
+gameElement.appendChild(infoJoueur)
+
+/** @type {Engine} */ const engine = new BABYLON.Engine(canvas, true);
+
 let keyState = {};
 let scene;
 let world=new World()
@@ -33,7 +48,9 @@ let Boss = [];
 let listeBombes = [];
 let listes;
 let decor;
+
 let nbLevel = -1;
+/** @type {Level?} */ let currentLevel=null
 
 
 async function createScene() {
@@ -41,12 +58,12 @@ async function createScene() {
     SceneOptimizer.OptimizeAsync(scene, new SceneOptimizerOptions(60))
     //scene.debugLayer.show();
     scene.clearColor = new BABYLON.Color3.Black();
-    world.scene = scene
+    world.set(SCENE,scene)
     world.models=await loadModels(scene)
     const camY = 10;
     const camZ = -10;
 
-    //créer une camera qui regarde en 0,0,0
+    // Créer une camera qui regarde en 0,0,0
     camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, camY, camZ), scene);
     camera.setTarget(BABYLON.Vector3.Zero());
     camera.attachControl(canvas, true);
@@ -54,48 +71,24 @@ async function createScene() {
     //const ssao = new SSAO2RenderingPipeline("ssaopipeline", scene, 2, [camera]);
 
 
-    //créer une lumière
+    // Créer une lumière
     const light1 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 5,6));
 
-    //créer un joueur
+    // Créer un joueur
     player = new Player("Player",0, 0, 0, 1, 1, 1, 0.03, 0.4, scene);
-    //player = scene.player;
+    // player = scene.player;
     camera.lockedTarget = player.mesh;
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
-    //appeler le niveau
+    // Appeler le niveau
     changeLevel();
     
-
-    definitEcouteurs();
-
     return scene;
-}
-
-
-function definitEcouteurs() { 
-    // Ecouteur sur le clavier pour bouger le monstre
-    window.addEventListener('keydown', function(evt) {
-        keyState[evt.code] = true;
-    }, true);
-    window.addEventListener('keyup', function(evt) {
-        delete keyState[evt.code];
-    }, true);
-    window.addEventListener('keydown', function(evt) {
-        if (evt.code != 'F12') {
-            evt.preventDefault();
-        }
-    });
-    /*//detecter un clic gauche
-    window.addEventListener("click", function(evt){
-        player.attaquer();
-    });*/
-    
 }
 
 //déplacer le joueur
 function movePlayer(){
     //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
-    if(nbLevel!=260402)player.move(keyState, listes);
+    player.move(listes);
     detectLvlWarp();
     
     //si on est dans le niveau d'accueil, la camera suit le joueur en z
@@ -115,9 +108,6 @@ function movePlayer(){
             camera.position.x = player.mesh.position.x;
             camera.position.z = player.mesh.position.z + 20;
             camera.position.y = player.mesh.position.y + 10;
-            break;
-
-        case 260402:
             break;
 
         default:
@@ -206,12 +196,14 @@ function changeLevel(){
     listeBombes = [];
 
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
+    
     world.close()
+    currentLevel=null
     
     //supprimer le décor
     //changer de niveau
     if(nbLevel == 260402){
-        decor = new SamLevel();
+        currentLevel = decor = new SamLevel();
         decor.start(world, {camera: camera})
     }
     if (nbLevel == -1){
@@ -240,25 +232,18 @@ async function main(){
             console.log("pause");
             pause = !pause;
             if (pause){
-                // écrire pause sur l'écran dans la div infoJoueur
-                document.getElementById("infoJoueur").innerHTML = "PAUSE";
-                //ajouter une bordure rouge au div
-                document.getElementById("infoJoueur").style.border = "2px solid red";
-                //arrondir les coins du div
-                document.getElementById("infoJoueur").style.borderRadius = "10px";
-                //ajouter un fond blanc au div
-                document.getElementById("infoJoueur").style.backgroundColor = "white";
-                
-
-
+                message.send("PAUSE", MessageManager.FOREVER, "pause");
+            }
+            else{
+                message.clear("pause");
             }
         }
     });
         setInterval(function(){
             if (!pause){
                 world.tick()
-                if(decor instanceof Level)decor.tick(world, {camera: camera})
-        movePlayer()
+                if(decor instanceof Level) decor.tick(world, {camera: camera})
+                if(!currentLevel) movePlayer()
                 //faire chercher le joueur par les monstres
                 listeMonstres.forEach(monstre => {
                     monstre.chercheJoueur(player, listeMonstres, listeGrounds);
@@ -300,10 +285,7 @@ async function main(){
         //boucle de rendu
         engine.runRenderLoop(function () {
             sceneToRender.render();
-            
-            //afficher les pv actuels du joueur
-            document.getElementById("pv").innerHTML = "PV: " + player.pv;
-
+            if(currentLevel===null)message.send("PV: " + player.pv, MessageManager.FOREVER, "pv");
         });
     
 }

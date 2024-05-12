@@ -2,6 +2,7 @@ import { TaggedDict } from "./TaggedDict.mjs"
 import { GameObject } from "./GameObject.mjs"
 import { Behaviour } from "../behaviour/Behaviour.mjs"
 import { fastKeep, fastRemove, fastRemoveValue } from "../../../../../samlib/Array.mjs";
+import { ModelHolder } from "./ModelHolder.mjs";
 
 
 /** @typedef {import("./TaggedDict.mjs").Tag} Tag */
@@ -9,7 +10,7 @@ import { fastKeep, fastRemove, fastRemoveValue } from "../../../../../samlib/Arr
 /**
  * Représente un monde qui contient des objets associés à des tags, et de comportements associés à des tags.
  */
-export class World{
+export class World extends ModelHolder{
 
     obj_state_age=0
 

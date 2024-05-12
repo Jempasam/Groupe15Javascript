@@ -9,7 +9,7 @@ import { TRANSFORM, TransformModel } from "../objects/model/TransformModel.mjs";
 import { HitboxBehaviour } from "../objects/behaviour/HitboxBehaviour.mjs";
 import { PlayerBehaviour } from "../objects/behaviour/controls/PlayerBehaviour.mjs";
 import { ConstantForceBehaviour } from "../objects/behaviour/ConstantForceBehaviour.mjs";
-import { SimpleCollisionBehaviour } from "../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
+import { ON_COLLISION, SimpleCollisionBehaviour } from "../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { PushCollisionBehaviour } from "../objects/behaviour/PushCollisionBehaviour.mjs";
 import { MeleeAttackBehaviour } from "../objects/behaviour/controls/MeleeAttackBehaviour.mjs";
 import { PathBehaviour } from "../objects/behaviour/movement/PathBehaviour.mjs";
@@ -21,16 +21,18 @@ import { MOVEMENT } from "../objects/model/MovementModel.mjs";
 import { PlayerJumpBehaviour } from "../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
 import { PlayerDashBehaviour } from "../objects/behaviour/controls/PlayerDashBehaviour.mjs";
 import { SimpleParticleBehaviour } from "../objects/behaviour/particle/SimpleParticleBehaviour.mjs";
-import { LivingBehaviour, ON_DEATH } from "../objects/behaviour/life/LivingBehaviour.mjs";
+import { LivingBehaviour, ON_DEATH, ON_LIVE_CHANGE } from "../objects/behaviour/life/LivingBehaviour.mjs";
 import { ParticleLivingBehaviour } from "../objects/behaviour/life/ParticleLivingBehaviour.mjs";
 import { LIVING, LivingModel } from "../objects/model/LivingModel.mjs";
 import { PlayerShootBehaviour } from "../objects/behaviour/controls/PlayerShootBehaviour.mjs";
 import { ProjectileBehaviour } from "../objects/behaviour/life/ProjectileBehaviour.mjs";
 import { EmitterBehaviour } from "../objects/behaviour/particle/EmitterBehaviour.mjs";
 import { EquipperBehaviour, ON_EQUIPPED } from "../objects/behaviour/slot/EquipperBehaviour.mjs";
-import { Behaviour, behaviour, behaviourEach } from "../objects/behaviour/Behaviour.mjs";
+import { Behaviour, behaviour, behaviourEach, behaviourObserve } from "../objects/behaviour/Behaviour.mjs";
 import { SummonerBehaviour } from "../objects/behaviour/SummonerBehaviour.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
+import { message } from "../script.js";
+import { MessageManager } from "../messages/MessageManager.mjs";
 
 
 export class SamLevel extends Level{
@@ -42,6 +44,9 @@ export class SamLevel extends Level{
     * @param {{camera:UniversalCamera}} options 
     */
    start(world,options){
+
+      message.send("Bienvenue dans le niveau de Sam",6000,"info")
+      message.send("PV: 3", MessageManager.FOREVER, "pv")
 
       // Setup
       /** @type {import("../ressources/Models.mjs").ModelLibrary} */
@@ -79,6 +84,8 @@ export class SamLevel extends Level{
       const SPHINX=behav([new MeshBehaviour(models.SPHINX),2])
       const HOLE=behav([new MeshBehaviour(models.HOLE),2])
       const PANDA=behav([new MeshBehaviour(models.PANDA),2])
+      const QUESTION=behav([new MeshBehaviour(models.QUESTION_MARK),2])
+      const EXCLAMATION=behav([new MeshBehaviour(models.EXCLAMATION_MARK),2])
       const PARTICLE_WIND=behav([new MeshBehaviour(models.PARTICLE_WIND),2])
       const PARTICLE_FIRE=behav([new MeshBehaviour(models.PARTICLE_FIRE),2])
       const PARTICLE_SMOKE=behav([new MeshBehaviour(models.PARTICLE_SMOKE),2])
@@ -173,6 +180,28 @@ export class SamLevel extends Level{
       const INVOCATION_PANDA=id()
       world.addBehaviour([INVOCATION_PANDA,PLAYER],new SummonerBehaviour([NO_FRICTION_MOVE, COLLISION, PUSHABLE, FALLING, ALIVE, PANDA, ENNEMY, ENNEMY_CLOSE_FAST], new Vector3(.5,.5,.5), 3, 100, 15, 20))
 
+      // Hint
+      const UNLOCK_HINT=behav(behaviourObserve(ON_COLLISION,(obj,{object})=>{
+         if(object.tags.includes(PLAYER)){
+            message.send("Vous pouvez débloquer des améliorations grâce aux artefactes dorés!",6000,"hint")
+            obj.kill()
+         }
+      }))
+
+      const PUSH_HINT=behav(behaviourObserve(ON_COLLISION,(obj,{object})=>{
+         if(object.tags.includes(PLAYER)){
+            message.send("Ces caisses peuvent être déplacées, peut être qu'elles peuvent vous être utile.",6000,"hint")
+            obj.kill()
+         }
+      }))
+
+      const DAMAGE_HINT=behav(behaviourObserve(ON_COLLISION,(obj,{object})=>{
+         if(object.tags.includes(PLAYER)){
+            message.send("Attention aux dégats! Si vous fumez, il ne faut plus vous faire toucher. ",6000,"hint")
+            obj.kill()
+         }
+      }))
+
       function codeToNum(code){
          if('0'.charCodeAt(0)<=code && code<='9'.charCodeAt(0)) return code-'0'.charCodeAt(0)+1
          else return code-'A'.charCodeAt(0)+11
@@ -199,6 +228,9 @@ export class SamLevel extends Level{
             ()=>{return {tags:[COLLISION,ARTIFACT,DASH_EQUIPPER], data:[]} },//L
             ()=>{return {tags:[COLLISION,HOLE,INVOCATION_PANDA], data:[]} },//M
             ()=>{return {tags:[COLLISION,BLOCK,MOVE,PUSHABLE], data:[]} },//N
+            ()=>{return {tags:[COLLISION,QUESTION,UNLOCK_HINT], data:[]} },//O
+            ()=>{return {tags:[COLLISION,QUESTION,DAMAGE_HINT], data:[]} },//P
+            ()=>{return {tags:[COLLISION,QUESTION,PUSH_HINT], data:[]} },//Q
          ]
          const bottom=codeToNum(letter.charCodeAt(1))
          const height=codeToNum(letter.charCodeAt(2))
@@ -238,14 +270,14 @@ export class SamLevel extends Level{
       )
       forMap(`
       1  ]                                                h91   h91
-      2  ]         l72                                       h91-..
+      2  ]         l72                                       h91-..   qA3
       3  ]                                                   |____|
       4  ]                                                         
       5  ]                                                         
       6  ]                                                         
-      7  ]                                                         
-      8  ]                                                   
-      9  ]   
+      7  ]                                                      
+      8  ]         o23                                       pA3
+      9  ]                                                   
       10 ]                                                   h91
       11 ]   
       12 ]   
@@ -280,12 +312,15 @@ export class SamLevel extends Level{
          })
       })
 
+      this.player.observers(ON_LIVE_CHANGE).add("SamLevel",(obj,{})=>{
+         message.send("PV: "+(obj.get(LIVING)?.life ?? 0), MessageManager.FOREVER, "pv")
+      })
+
       this.player.observers(ON_EQUIPPED).add("SamLevel",(obj,{equipper})=>{
-         const infoJoueur=document.querySelector("#infoJoueur"); if(!infoJoueur)return
-         if(equipper.given.includes(PLAYER_JUMP))infoJoueur.innerHTML="Sautez avec ESPACE"
-         if(equipper.given.includes(PLAYER_DASH))infoJoueur.innerHTML="Dash avec A"
-         if(equipper.given.includes(PLAYER_ATTACK))infoJoueur.innerHTML="Attaquez avec E"
-         if(equipper.given.includes(PLAYER_SHOOT))infoJoueur.innerHTML="Tirez avec E"
+         if(equipper.given.includes(PLAYER_JUMP))message.send("Saut avec Espace",6000,"unlock")
+         if(equipper.given.includes(PLAYER_DASH))message.send("Dash avec A",6000,"unlock")
+         if(equipper.given.includes(PLAYER_ATTACK))message.send("Attaquez avec E",6000,"unlock")
+         if(equipper.given.includes(PLAYER_SHOOT))message.send("Tirez avec E",6000,"unlock")
       })
 
       world.add([...OBJ_PHYSIC,BLOCK],

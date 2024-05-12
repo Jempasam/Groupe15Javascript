@@ -105,7 +105,7 @@ export class ObserverGroup{
 export function observers(object,key){
     let group=object["observers_"+key.name]
     if(!group){
-        group=new ObserverGroup(this)
+        group=new ObserverGroup(object)
         object["observers_"+key.name]=group
     }
     return group

@@ -1,6 +1,7 @@
 import { BoundingBox, Color3, MeshBuilder, TransformNode, Vector3 } from "../../../../../babylonjs/core/index.js";
 import { ModelKey } from "../world/ModelHolder.mjs";
 import { World } from "../world/World.mjs";
+import { SCENE } from "./MeshModel.mjs";
 
 export class HitboxModel{
 
@@ -10,7 +11,7 @@ export class HitboxModel{
      * @param {World} world 
      */
     constructor(world){
-        this.#hitbox=MeshBuilder.CreateBox("hitbox", {width: 1, height: 1, depth: 1}, world["scene"]);
+        this.#hitbox=MeshBuilder.CreateBox("hitbox", {width: 1, height: 1, depth: 1}, world.get(SCENE));
         this.#hitbox.isVisible=false
     }
 

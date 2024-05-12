@@ -1,3 +1,4 @@
+import { ObserverKey } from "../../../../../samlib/observers/ObserverGroup.mjs";
 import { GameObject } from "../world/GameObject.mjs";
 import { ObjectQuery, World } from "../world/World.mjs";
 
@@ -104,5 +105,54 @@ export function behaviourEach(ticker){
         for(const obj of objects) ticker(world,obj)
     }
     ret.finish=function(){}
+    return ret
+}
+
+/**
+ * Create a simple behaviour that register an observer on the given event
+ * @template T
+ * @param {ObserverKey<T>} event 
+ * @param {(GameObject,T)=>void} listener 
+ * @returns 
+ */
+export function behaviourObserve(event,listener){
+    const ret=new Behaviour()
+    ret.init=function(world,objects){
+        for(const obj of objects){
+            obj.observers(event).add(this.uid,listener)
+        }
+    }
+    ret.tick=function(){}
+    ret.finish=function(world,objects){
+        for(const obj of objects){
+            obj.observers(event).remove(this.uid)
+        }
+    }
+    return ret
+}
+
+/**
+ * @template T
+ * @typedef {[ObserverKey<T>,(GameObject,T)=>void]} ListenerAndKey
+ */
+
+/**
+ * Create a simple behaviour that register many observers on many events
+ * @param {...ListenerAndKey<*>} listeners
+ * @returns 
+ */
+export function behaviourObserveMany(...listeners){
+    const ret=new Behaviour()
+    ret.init=function(world,objects){
+        for(const obj of objects){
+            for(const [key,listener] of listeners)obj.observers(key).add(this.uid,listener)
+        }
+    }
+    ret.tick=function(){}
+    ret.finish=function(world,objects){
+        for(const obj of objects){
+            for(const key of listeners)obj.observers(key[0]).remove(this.uid)
+        }
+    }
     return ret
 }

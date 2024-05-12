@@ -1,3 +1,5 @@
+import { isKeyPressed } from "../controls/Keyboard.mjs";
+import { message } from "../script.js";
 import Entities from "./entities.js";
 import {Monster} from "./monsters.js";
 import {warpZone} from "./warpZones.js";
@@ -191,22 +193,7 @@ export class Player extends Entities {
     killPlayer(){
         this.pv = this.pvMax;
         this.resetPosition();
-        //message dans le div
-        document.getElementById("infoJoueur").innerHTML = "Vous êtes mort! Vous avez été renvoyé au début du niveau!";
-        //ajouter une bordure violette au div
-        document.getElementById("infoJoueur").style.border = "2px solid black";
-        //arrondir les coins du div
-        document.getElementById("infoJoueur").style.borderRadius = "10px";
-        //ajouter un fond blanc au div
-        document.getElementById("infoJoueur").style.backgroundColor = "white";
-        //afficher le div
-        document.getElementById("infoJoueur").style.display = "block";
-        //afficher le div pendant 3 secondes
-        setTimeout(function(){
-            document.getElementById("infoJoueur").style.display = "none";
-        }, 3000);
-        //cacher le div
-
+        message.send("Vous êtes mort! Vous avez été renvoyé au début du niveau!", 3000, "death");
     }
 
     //fonction pour réinitialiser la position du joueur
@@ -301,7 +288,7 @@ export class Player extends Entities {
         }
     }
 
-    dash(keyState){
+    dash(){
         if (this.unlockDash){
             if (this.canDash){
                 //reinitialiser la vitesse
@@ -309,16 +296,16 @@ export class Player extends Entities {
                 this.vectorSpeed.z = 0;
                 this.canDash = false;
                 //augmenter la vitesse en fonction de la direction du joueur
-                if (keyState['KeyW']) {
+                if (isKeyPressed('KeyW')) {
                     this.vectorSpeed.z-= this.playerSpeed*60;
                 }
-                if (keyState['KeyS']) {
+                if (isKeyPressed('KeyS')) {
                     this.vectorSpeed.z+= this.playerSpeed*60;
                 }
-                if (keyState['KeyA']) {
+                if (isKeyPressed('KeyA')) {
                     this.vectorSpeed.x+= this.playerSpeed*60;
                 }
-                if (keyState['KeyD']) {
+                if (isKeyPressed('KeyD')) {
                     this.vectorSpeed.x-= this.playerSpeed*60;
                 }
 
@@ -332,7 +319,7 @@ export class Player extends Entities {
 
 
     //bouge
-    move(keyState, listes){
+    move(listes){
         this.vectorSpeed.x*=0.9;
         this.vectorSpeed.y-=0.02;
         this.vectorSpeed.z*=0.9;
@@ -347,35 +334,35 @@ export class Player extends Entities {
         //this.attaquer(keyState, listes[0]);
         
         //avance dans la direction du mouvement
-        if (keyState['KeyW']) {
+        if(isKeyPressed('KeyW')) {
             this.vectorSpeed.z-= this.playerSpeed;
         }
-        if (keyState['KeyS']) {
+        if(isKeyPressed('KeyS')) {
             this.vectorSpeed.z+= this.playerSpeed;
         }
-        if (keyState['KeyA']) {
+        if(isKeyPressed('KeyA')) {
             this.vectorSpeed.x+= this.playerSpeed;
         }
-        if (keyState['KeyD']) {
+        if(isKeyPressed('KeyD')) {
             this.vectorSpeed.x-= this.playerSpeed;
         }
         //attaquer avec la touche K
-        if (keyState['KeyK']) {
+        if (isKeyPressed('KeyK')) {
             this.attaquer();
         }
         //sauter avec la touche Espace
-        if (keyState['Space'] && this.canJump) {
+        if (isKeyPressed('Space') && this.canJump) {
             if (this.maxJump > 0){
             this.vectorSpeed.y+= this.jumpPower;
             }
         }
         //bouclier avec la touche O
-        if (keyState['KeyO']) {
+        if (isKeyPressed('KeyO')) {
             this.bouclier();
         }
         //dash avec la touche Maj gauche
-        if (keyState['ShiftLeft']) {
-            this.dash(keyState);
+        if (isKeyPressed('ShiftLeft')) {
+            this.dash();
         }
 
     
@@ -386,28 +373,16 @@ export class Player extends Entities {
         this.y= this.mesh.position.y;
         this.z= this.mesh.position.z;
 
-        if(this.y < -1000){
+        console.log(this.y);
+        if(this.y < -300){
             this.resetPosition();
             this.pv -= 1;
             //repositionne tout les  monstres
             listes[0].forEach(monstre => {
                 monstre.resetPosition();
             });
-            //message dans le div
-            document.getElementById("infoJoueur").innerHTML = "Ne sautez pas dans le vide! Vous risqueriez de vous blesser très fort!";
-            //ajouter une bordure violette au div
-            document.getElementById("infoJoueur").style.border = "2px solid purple";
-            //arrondir les coins du div
-            document.getElementById("infoJoueur").style.borderRadius = "10px";
-            //ajouter un fond blanc au div
-            document.getElementById("infoJoueur").style.backgroundColor = "white";
-            //afficher le div
-            document.getElementById("infoJoueur").style.display = "block";
-            //afficher le div pendant 3 secondes
-            setTimeout(function(){
-                document.getElementById("infoJoueur").style.display = "none";
-            }, 3000);
-            //cacher le div
+            message.send("Ne sautez pas dans le vide! Vous risqueriez de vous blesser très fort!", 3000, "death");
+
 
         }
     }

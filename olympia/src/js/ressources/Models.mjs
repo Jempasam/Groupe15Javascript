@@ -42,6 +42,9 @@ export async function loadModels(scene){
         HOLE: await model(scene,"hole"),
         BOMB: await model(scene,"bomb"),
 
+        QUESTION_MARK: await model(scene,"questionmark"),
+        EXCLAMATION_MARK: await model(scene,"exclamationmark"),
+
         EXPLOSION: await model(scene,"explosion","particle"),
         SPHERE_EXPLOSION: await model(scene,"sphere_explosion","particle"),
         SPHERE_EXPLOSION2: await model(scene,"sphere_explosion2","particle"),

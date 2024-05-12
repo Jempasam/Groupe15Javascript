@@ -1,4 +1,4 @@
-import { AbstractMesh } from "../../../../../babylonjs/core/index.js";
+import { AbstractMesh, Scene } from "../../../../../babylonjs/core/index.js";
 import { ModelKey } from "../world/ModelHolder.mjs";
 
 export class MeshModel{
@@ -13,3 +13,6 @@ export class MeshModel{
 
 /** @type {ModelKey<MeshModel>} */
 export const MESH=new ModelKey("mesh")
+
+/** @type {ModelKey<Scene>} */
+export const SCENE=new ModelKey("scene")

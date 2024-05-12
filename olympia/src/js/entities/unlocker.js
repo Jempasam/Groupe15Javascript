@@ -1,3 +1,4 @@
+import { message } from "../script.js";
 import Entities from "./entities.js";
 
 let mesh;
@@ -73,46 +74,17 @@ export class Unlocker extends Entities {
     //afficher le message de déblocage
     displayMessage(nbPower){
         if(nbPower === 1){
-            document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué l'attaque! Appuyez sur 'K' pour attaquer devant vous!";
-            //ajouter une bordure rouge au div
-            document.getElementById("infoJoueur").style.border = "2px solid red";
-            //arrondir les coins du div
-            document.getElementById("infoJoueur").style.borderRadius = "10px";
+            message.send("Vous avez débloqué l'attaque! Appuyez sur 'K' pour attaquer devant vous!", 6000, "unlock");
         }
         if(nbPower === 2){
-            document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué le saut! Appuyez sur 'espace' pour sauter!";
-            //ajouter une bordure verte au div
-            document.getElementById("infoJoueur").style.border = "2px solid green";
-            //arrondir les coins du div
-            document.getElementById("infoJoueur").style.borderRadius = "10px";
+            message.send("Vous avez débloqué le saut! Appuyez sur 'espace' pour sauter!", 6000, "unlock");
         }
         if(nbPower === 3){
-            document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué le bouclier! Appuyez sur 'O' pour immobiliser les ennemis proches!";
-            //ajouter une bordure verte au div
-            document.getElementById("infoJoueur").style.border = "2px solid black";
-            //arrondir les coins du div
-            document.getElementById("infoJoueur").style.borderRadius = "10px";
+            message.send("Vous avez débloqué le bouclier! Appuyez sur 'O' pour immobiliser les ennemis proches!", 6000, "unlock");
         }
         if(nbPower === 4){
-            document.getElementById("infoJoueur").innerHTML = "Vous avez débloqué la charge! Appuyez sur 'Maj Gauche' pour charger dans une direction!";
-            //ajouter une bordure verte au div
-            document.getElementById("infoJoueur").style.border = "2px solid yellow";
-            //arrondir les coins du div
-            document.getElementById("infoJoueur").style.borderRadius = "10px";
+            message.send("Vous avez débloqué la charge! Appuyez sur 'Maj Gauche' pour charger dans une direction!", 6000, "unlock");
         }
-
-        //ajouter un fond blanc au div
-        document.getElementById("infoJoueur").style.backgroundColor = "white";
-        //afficher le div
-        document.getElementById("infoJoueur").style.display = "block";
-        //afficher le div pendant 3 secondes
-        setTimeout(function(){
-            document.getElementById("infoJoueur").style.display = "none";
-        }, 5000);
-        //cacher le div
-
-
-
     }
 
 }
