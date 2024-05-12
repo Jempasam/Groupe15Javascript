@@ -40,6 +40,7 @@ export async function loadModels(scene){
         ARTIFACT: await model(scene,"Artifact"),
         SPHINX: await model(scene,"sphinx"),
         HOLE: await model(scene,"hole"),
+        BOMB: await model(scene,"bomb"),
 
         PARTICLE_CLOUD: await model(scene,"cloud","particle"),
         PARTICLE_FIRE: await model(scene,"fire","particle"),
