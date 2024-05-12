@@ -2,6 +2,7 @@
 let keyPresseds={}
 
 document.addEventListener("keydown",(e)=>{
+    if(isKeyPressed("Equal") && isKeyPressed("Minus"))console.log(e.code)
     if(!keyPresseds[e.code])keyPresseds[e.code]=1
 })
 

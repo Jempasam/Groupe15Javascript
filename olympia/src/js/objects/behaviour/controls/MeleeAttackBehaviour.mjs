@@ -2,6 +2,7 @@ import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.
 import { LIVING } from "../../model/LivingModel.mjs";
 import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs";
 import { TRANSFORM } from "../../model/TransformModel.mjs";
+import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
 import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs";
@@ -29,14 +30,14 @@ export class MeleeAttackBehaviour extends Behaviour{
      * @param {ObjectQuery} targets
      */
     init(world, objects, targets){
-        this.eventid=ObserverGroup.generateName()
         for(const obj of objects){
-
-            obj.observers(ON_COLLISION).add(this.eventid,(self,{object,hitbox,self_hitbox})=>{
+            obj.set([LOCAL,this.uid],{loading:0})
+            obj.observers(ON_COLLISION).add(this.uid,(self,{object,hitbox,self_hitbox})=>{
                 if(!targets.match(object)) return
+                if(obj.get([LOCAL,this.uid])?.loading??0 > 0) return
 
                 const living=object.get(LIVING)
-                if(living)living.damage(1)
+                if(living)living.damage(this.damages)
 
                 const pushable=object.get(MOVEMENT)
                 if(pushable){
@@ -47,6 +48,8 @@ export class MeleeAttackBehaviour extends Behaviour{
                     offset.scaleInPlace(strength)
                     accelerate(pushable.inertia, offset.x, offset.y+strength/4, offset.z, strength, strength, strength)
                 }
+
+                obj.apply([LOCAL,this.uid], m=>{ m.loading=20 })
             })
 
         }
@@ -71,6 +74,7 @@ export class MeleeAttackBehaviour extends Behaviour{
                     accelerate(movement.inertia, offset.x, offset.y, offset.z, this.max_speed, this.max_speed, this.max_speed)
                 }
             }
+            obj.apply([LOCAL,this.uid], m=>{ if(m.loading>0) m.loading-- })
         }
     }
 
@@ -80,8 +84,13 @@ export class MeleeAttackBehaviour extends Behaviour{
      * @param {ObjectQuery} objects
      */
     finish(world, objects){
-        if(this.eventid) for(const obj of objects){
-            obj.observers(ON_COLLISION).remove(this.eventid)
+        for(const obj of objects){
+            obj.remove([LOCAL,this.uid])
+            obj.observers(ON_COLLISION).remove(this.uid)
         }
     }
 }
+
+
+/** @type {ModelKey<{loading:number}>} */
+const LOCAL=new ModelKey("meleeattack")

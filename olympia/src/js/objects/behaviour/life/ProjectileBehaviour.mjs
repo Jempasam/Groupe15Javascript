@@ -16,12 +16,14 @@ export class ProjectileBehaviour extends Behaviour{
      * @param {number} damage
      * @param {number} knockback
      * @param {number} lifetime
+     * @param {import("../../world/TaggedDict.mjs").Tag[]=} given
      */
-    constructor(damage, knockback, lifetime){
+    constructor(damage, knockback, lifetime, given=[]){
         super()
         this.damage=damage
         this.knockback=knockback
         this.lifetime=lifetime
+        this.given=given
     }
 
     /**
@@ -54,6 +56,7 @@ export class ProjectileBehaviour extends Behaviour{
                     it.dying=true
                     it.age=Math.max(it.age, this.lifetime-10)
                 })
+                object.addTag(...this.given)
             })
         }
     }

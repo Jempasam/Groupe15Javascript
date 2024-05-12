@@ -16,6 +16,7 @@ import { PathBehaviour } from "../objects/behaviour/movement/PathBehaviour.mjs";
 import { HITBOX } from "../objects/model/HitboxModel.mjs";
 import { forMap } from "../objects/world/WorldUtils.mjs";
 import { ModelKey } from "../objects/world/ModelHolder.mjs";
+import { PoisonBehaviour } from "../objects/behaviour/effect/PoisonBehaviour.mjs";
 import { MOVEMENT } from "../objects/model/MovementModel.mjs";
 import { PlayerJumpBehaviour } from "../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
 import { PlayerDashBehaviour } from "../objects/behaviour/controls/PlayerDashBehaviour.mjs";
@@ -27,7 +28,9 @@ import { PlayerShootBehaviour } from "../objects/behaviour/controls/PlayerShootB
 import { ProjectileBehaviour } from "../objects/behaviour/life/ProjectileBehaviour.mjs";
 import { EmitterBehaviour } from "../objects/behaviour/particle/EmitterBehaviour.mjs";
 import { EquipperBehaviour, ON_EQUIPPED } from "../objects/behaviour/slot/EquipperBehaviour.mjs";
-import { Behaviour } from "../objects/behaviour/Behaviour.mjs";
+import { Behaviour, behaviour, behaviourEach } from "../objects/behaviour/Behaviour.mjs";
+import { SummonerBehaviour } from "../objects/behaviour/SummonerBehaviour.mjs";
+import { isKeyPressed } from "../controls/Keyboard.mjs";
 
 
 export class SamLevel extends Level{
@@ -58,9 +61,9 @@ export class SamLevel extends Level{
 
 
       // Movement
-      const MOVEMENT= behav([new MovementBehaviour(0.98),1])
-      const NO_FRICTION_MOVEMENT= behav([new MovementBehaviour(1),1])
-      const HIGH_FRICTION_MOVEMENT=behav([new MovementBehaviour(0.9),1])
+      const MOVE= behav([new MovementBehaviour(0.98),1])
+      const NO_FRICTION_MOVE= behav([new MovementBehaviour(1),1])
+      const HIGH_FRICTION_MOVE=behav([new MovementBehaviour(0.9),1])
 
       // Physical
       const COLLISION=behav([new HitboxBehaviour(),2], new SimpleCollisionBehaviour())
@@ -74,6 +77,7 @@ export class SamLevel extends Level{
       const STONE=behav([new MeshBehaviour(models.STONE),2])
       const ARTIFACT=behav([new MeshBehaviour(models.ARTIFACT),2])
       const SPHINX=behav([new MeshBehaviour(models.SPHINX),2])
+      const HOLE=behav([new MeshBehaviour(models.HOLE),2])
       const PANDA=behav([new MeshBehaviour(models.PANDA),2])
       const PARTICLE_WIND=behav([new MeshBehaviour(models.PARTICLE_WIND),2])
       const PARTICLE_FIRE=behav([new MeshBehaviour(models.PARTICLE_FIRE),2])
@@ -89,31 +93,40 @@ export class SamLevel extends Level{
       const PARTICLE_STAY=behav(new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.1,1.05,1.1), 20))
       const PARTICLE_SPREAD=behav(new SimpleParticleBehaviour(Vector3.Zero(), Vector3.Zero(), new Vector3(1.1,1.05,1.1), 20))
 
-      const OBJ_WIND=[PARTICLE_WIND, PARTICLE_SPREAD, MOVEMENT]
-      const OBJ_SMOKE=[PARTICLE_SMOKE, PARTICLE_UP, MOVEMENT]
-      const OBJ_CLOUD=[PARTICLE_SMOKE, PARTICLE_STAY, MOVEMENT]
-      const OBJ_FIRE=[PARTICLE_FLAME, PARTICLE_FIRE_UP, MOVEMENT]
+      const OBJ_WIND=[PARTICLE_WIND, PARTICLE_SPREAD, MOVE]
+      const OBJ_SMOKE=[PARTICLE_SMOKE, PARTICLE_UP, MOVE]
+      const OBJ_CLOUD=[PARTICLE_SMOKE, PARTICLE_STAY, MOVE]
+      const OBJ_FIRE=[PARTICLE_FLAME, PARTICLE_FIRE_UP, MOVE]
 
       const PARTICLE_SMOKE_EMITTER=behav(new EmitterBehaviour(OBJ_CLOUD, new Vector3(0.5, 0.5, 0.5), 5))
       const PARTICLE_FIRE_EMITTER=behav(new EmitterBehaviour(OBJ_FIRE, new Vector3(1, 1, 1), 5))
 
+      // Effect
+      const IN_FIRE=behav(
+         new PoisonBehaviour(1,20,60),
+         new EmitterBehaviour(OBJ_FIRE, new Vector3(1, 1, 1), 5),
+      )
+
       // Living
       const ALIVE=behav(
          new ParticleLivingBehaviour(OBJ_SMOKE, new Vector3(0.4,0.4,0.4)),
-         [new LivingBehaviour(),2]
+         [new LivingBehaviour(),2],
+         behaviourEach((w,o)=>{
+            o.apply2(TRANSFORM,LIVING, (tf,living) => tf.position.y<-10 ? living.damage(1) : null )
+         })
       )
 
       // Teams
-      const ENNEMY=id()
+      const ENNEMY=id(), ENNEMY_CLOSE=id(), ENNEMY_CLOSE_FAST=id()
       const PLAYER=id()
 
       // Attack
       const MELEE_PROJECTILE=id()
       world.addBehaviour([MELEE_PROJECTILE, ENNEMY], new ProjectileBehaviour(1,0.2,10))
       const RANGED_PROJECTILE=id()
-      world.addBehaviour([RANGED_PROJECTILE, ENNEMY], new ProjectileBehaviour(2,0.3,30))
-      const OBJ_SLASH_ATTACK=[MOVEMENT, COLLISION, MELEE_PROJECTILE, PARTICLE_SLASH]
-      const OBJ_SHOOT_ATTACK=[MOVEMENT, COLLISION, RANGED_PROJECTILE, PARTICLE_FIRE, PARTICLE_SMOKE_EMITTER]
+      world.addBehaviour([RANGED_PROJECTILE, ENNEMY], new ProjectileBehaviour(2,0.3,30, [IN_FIRE]))
+      const OBJ_SLASH_ATTACK=[MOVE, COLLISION, MELEE_PROJECTILE, PARTICLE_SLASH]
+      const OBJ_SHOOT_ATTACK=[MOVE, COLLISION, RANGED_PROJECTILE, PARTICLE_FIRE, PARTICLE_SMOKE_EMITTER]
 
       // Player
       world.addBehaviour(PLAYER, new PlayerBehaviour(["KeyA","KeyW","KeyD","KeyS"],0.03,0.1))
@@ -143,16 +156,21 @@ export class SamLevel extends Level{
       world.addBehaviours([SHOOT_EQUIPPER], new EmitterBehaviour(OBJ_FIRE, new Vector3(0.8, 0.8, 0.8), 10))
 
       // Ennemy
-      world.addBehaviour([ENNEMY, PLAYER], new MeleeAttackBehaviour(0.02,0.04,8,3))
+      world.addBehaviour([ENNEMY_CLOSE, PLAYER], new MeleeAttackBehaviour(0.02,0.04,8,2))
+      world.addBehaviour([ENNEMY_CLOSE_FAST, PLAYER], new MeleeAttackBehaviour(0.005,0.2,20,1))
 
       // Platform
       const ELEVATOR=behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02))
       const MOVING=behav(new PathBehaviour([new Vector3(-7,0,0),new Vector3(7,0,0),new Vector3(7,5,0)], 0.1, 0.02, 0.04))
 
       // Objects
-      const OBJ_PHYSIC=[MOVEMENT, COLLISION, PUSHABLE, FALLING]
+      const OBJ_PHYSIC=[MOVE, COLLISION, PUSHABLE, FALLING]
       const OBJ_PLAYER=[...OBJ_PHYSIC, ALIVE, PLAYER]
       const OBJ_ENNEMY=[...OBJ_PHYSIC, ALIVE, ENNEMY]
+
+      // Invocateur
+      const INVOCATION_PANDA=id()
+      world.addBehaviour([INVOCATION_PANDA,PLAYER],new SummonerBehaviour([NO_FRICTION_MOVE, COLLISION, PUSHABLE, FALLING, ALIVE, PANDA, ENNEMY, ENNEMY_CLOSE_FAST], new Vector3(.5,.5,.5), 3, 100, 15, 20))
 
       function codeToNum(code){
          if('0'.charCodeAt(0)<=code && code<='9'.charCodeAt(0)) return code-'0'.charCodeAt(0)+1
@@ -170,14 +188,15 @@ export class SamLevel extends Level{
             ()=>{return {tags:[COLLISION,BLOCK], data:[]} },//B
             ()=>{return {tags:[COLLISION,BRIDGE], data:[]} },//C
             ()=>{return {tags:[COLLISION,STONE], data:[]} },//D
-            ()=>{return {tags:[COLLISION,MOVEMENT,ELEVATOR,BLOCK], data:[]} },//E
-            ()=>{return {tags:[COLLISION,MOVEMENT,MOVING,BLOCK], data:[]} },//F
+            ()=>{return {tags:[COLLISION,MOVE,ELEVATOR,BLOCK], data:[]} },//E
+            ()=>{return {tags:[COLLISION,MOVE,MOVING,BLOCK], data:[]} },//F
             ()=>{return {tags:[COLLISION,ARTIFACT,JUMP_EQUIPPER], data:[]} },//G
             ()=>{return {tags:[...OBJ_PHYSIC,BLOCK], data:[]} },//H
-            ()=>{return {tags:[...OBJ_ENNEMY, SPHINX], data:[new LivingModel(10)]} },//I
+            ()=>{return {tags:[...OBJ_ENNEMY, SPHINX, ENNEMY_CLOSE], data:[new LivingModel(10)]} },//I
             ()=>{return {tags:[COLLISION,ARTIFACT,ATTACK_EQUIPPER], data:[]} },//J
             ()=>{return {tags:[COLLISION,ARTIFACT,SHOOT_EQUIPPER], data:[]} },//K
             ()=>{return {tags:[COLLISION,ARTIFACT,DASH_EQUIPPER], data:[]} },//L
+            ()=>{return {tags:[COLLISION,HOLE,INVOCATION_PANDA], data:[]} },//M
          ]
          const bottom=codeToNum(letter.charCodeAt(1))
          const height=codeToNum(letter.charCodeAt(2))
@@ -188,12 +207,12 @@ export class SamLevel extends Level{
          )
       }
       forMap(`
-      1  ]d03b06-..-..-..-..   d09                     b08-..-..-..-..-..
-      2  ]   |             |b51a06b51a06b51a06b51a07b71|                |
-      3  ]d09|_____________|      d05                  |                |
-      4  ]   d06b41-..-..d03                           |                |
-      5  ]      b31-..-..         d0F-..-..            |                |
-      6  ]d07   b21-..-..d05      |       |            |________________|
+      1  ]d03b06-..-..-..-..   d09                     b08-..-..-..-..-..-..
+      2  ]   |             |b51a06b51a06b51a06b51a07b71|                   |
+      3  ]d09|_____________|      d05                  |                   |
+      4  ]   d06b41-..-..d03                           |                   |
+      5  ]      b31-..-..         d0F-..-..            |                   |
+      6  ]d07   b21-..-..d05      |       |            |___________________|
       7  ]      b11-..-..   d06   |_______|                  b06
       8  ]   b01-..-..-..-..                                 |..
       9  ]   a09   c10   a09                                 |..
@@ -207,11 +226,12 @@ export class SamLevel extends Level{
       17 ]                     bJ1-..                        c71
       18 ]                                                   c71
       19 ]                     eC1-..                        c71
-      20 ]                  b0D-..-..-..               b08-..-..-..-..
-      21 ]                  |          |               |             |
-      22 ]                  |          |bB1a0Bb91a09b71|             |
-      23 ]                  |          |bB1a0Bb91a09b71|             |
-      24 ]                  |__________|               |_____________|`,
+      20 ]                  b0D-..-..-..               b08-..-..-..-..-..-..
+      21 ]                  |          |               |                   |
+      22 ]                  |          |bB1a0Bb91a09b71|                   |
+      23 ]                  |          |bB1a0Bb91a09b71|                   |
+      24 ]                  |__________|               |                   |
+      25 ]                                             |___________________|`,
          [-4,-8], [1.5,1.5], objectSpawner, 3, true
       )
       forMap(`
@@ -236,7 +256,10 @@ export class SamLevel extends Level{
       19 ]                     
       20 ]   
       21 ]   
-      22 ]                     gE2                           j92`,
+      22 ]                     gE2                           j92
+      23 ]   
+      24 ]                                                            m90-..
+      25 ]                                                            |____|`,
          [-4,-8], [1.5,1.5], objectSpawner, 3, true
       )
 
@@ -247,7 +270,12 @@ export class SamLevel extends Level{
 
       this.player.observers(ON_DEATH).add("SamLevel",(obj,_)=>{
          this.player?.apply(LIVING, living=>living.life=3)
-         this.player?.apply(TRANSFORM, tf=>tf.position.y=-100)
+         this.player?.apply(TRANSFORM, tf=>{
+            tf.position.copyFrom(SamLevel.playerPos)
+         })
+         this.player?.apply(MOVEMENT, (movement)=>{
+            movement.inertia.set(0,0,0)
+         })
       })
 
       this.player.observers(ON_EQUIPPED).add("SamLevel",(obj,{equipper})=>{
@@ -265,6 +293,8 @@ export class SamLevel extends Level{
       options.camera.lockedTarget=this.player.get(HITBOX)?.hitbox
    }
 
+   camerapos=new Vector3(0,6,8)
+
    /**
     * @param {World} world 
     * @param {{camera:UniversalCamera}} options 
@@ -273,16 +303,11 @@ export class SamLevel extends Level{
       const pos=this?.player?.get(TRANSFORM)?.position
       if(pos){
          options.camera.position.copyFrom(pos)
-         options.camera.position
-         .addInPlaceFromFloats(0,6,8)
-
-         if(pos.y<-10){
-            pos.copyFrom(SamLevel.playerPos)
-            this?.player?.apply(MOVEMENT, (movement)=>{
-               movement.inertia.set(0,0,0)
-            })
-         }
+         options.camera.position.addInPlace(this.camerapos)
       }
+      if(isKeyPressed("Digit1"))this.camerapos=new Vector3(0,6,8)
+      if(isKeyPressed("Digit2"))this.camerapos=new Vector3(0,8,10)
+      if(isKeyPressed("Digit3"))this.camerapos=new Vector3(0,30,30)
    }
 
    /**
