@@ -117,7 +117,7 @@ export class SamLevel extends Level{
       )
 
       // Teams
-      const ENNEMY=id(), ENNEMY_CLOSE=id(), ENNEMY_CLOSE_FAST=id()
+      const ENNEMY=id()
       const PLAYER=id()
 
       // Attack
@@ -156,8 +156,9 @@ export class SamLevel extends Level{
       world.addBehaviours([SHOOT_EQUIPPER], new EmitterBehaviour(OBJ_FIRE, new Vector3(0.8, 0.8, 0.8), 10))
 
       // Ennemy
+      const ENNEMY_CLOSE=id(), ENNEMY_CLOSE_FAST=id()
       world.addBehaviour([ENNEMY_CLOSE, PLAYER], new MeleeAttackBehaviour(0.02,0.04,8,2))
-      world.addBehaviour([ENNEMY_CLOSE_FAST, PLAYER], new MeleeAttackBehaviour(0.005,0.2,20,1))
+      world.addBehaviour([ENNEMY_CLOSE_FAST, PLAYER], new MeleeAttackBehaviour(0.005,0.15,20,1))
 
       // Platform
       const ELEVATOR=behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02))
@@ -197,6 +198,7 @@ export class SamLevel extends Level{
             ()=>{return {tags:[COLLISION,ARTIFACT,SHOOT_EQUIPPER], data:[]} },//K
             ()=>{return {tags:[COLLISION,ARTIFACT,DASH_EQUIPPER], data:[]} },//L
             ()=>{return {tags:[COLLISION,HOLE,INVOCATION_PANDA], data:[]} },//M
+            ()=>{return {tags:[COLLISION,BLOCK,MOVE,PUSHABLE], data:[]} },//N
          ]
          const bottom=codeToNum(letter.charCodeAt(1))
          const height=codeToNum(letter.charCodeAt(2))
@@ -208,7 +210,7 @@ export class SamLevel extends Level{
       }
       forMap(`
       1  ]d03b06-..-..-..-..   d09                     b08-..-..-..-..-..-..
-      2  ]   |             |b51a06b51a06b51a06b51a07b71|                   |
+      2  ]   |             |b51a06b51a06n51a06b51a07b71|                   |
       3  ]d09|_____________|      d05                  |                   |
       4  ]   d06b41-..-..d03                           |                   |
       5  ]      b31-..-..         d0F-..-..            |                   |
@@ -257,9 +259,9 @@ export class SamLevel extends Level{
       20 ]   
       21 ]   
       22 ]                     gE2                           j92
-      23 ]   
-      24 ]                                                            m90-..
-      25 ]                                                            |____|`,
+      23 ]                                                            m90-..
+      24 ]                                                            |____|
+      25 ]                                                            `,
          [-4,-8], [1.5,1.5], objectSpawner, 3, true
       )
 

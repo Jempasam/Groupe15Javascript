@@ -66,11 +66,11 @@ export class SummonerBehaviour extends Behaviour{
                     if(summoner.objects.length<this.max_count){
                         const maxdim=Math.min(tf.scale.x,tf.scale.z)
                         const size=this.relative_size.scale(maxdim)
-                        const pos=tf.position.clone() .addInPlaceFromFloats(0,tf.scale.z/2+size.z,0)
+                        const pos=tf.position.clone() .addInPlaceFromFloats(0,(tf.scale.y+size.y)/2,0)
                         const obj=world.add(this.tags, new TransformModel({position:pos, scale:size, rotation:tf.rotation.clone()}))
                         summoner.objects.push(obj)
 
-                        obj.apply(MOVEMENT, mv=>mv.inertia.y+=0.1)
+                        obj.apply(MOVEMENT, mv=>mv.inertia.y+=0.2)
                     }
 
                     // Kill everybody if players is too far away
