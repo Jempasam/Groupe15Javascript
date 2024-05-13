@@ -70,15 +70,15 @@ export function fastRemove(array,index){
  * @param {any|any[]} value 
  */
 export function fastRemoveValue(array,value){
-    if(Array.isArray(value)){
-        for(let i=value.length-1; i>=0; i--){
-            if(value.includes(array[i]))fastRemove(array,i)
-        }
+    const index=array.indexOf(value)
+    if(index>=0)fastRemove(array,index)
+}
+
+export function fastRemoveValueAll(array,values){
+    for(let i=values.length-1; i>=0; i--){
+        fastRemoveValue(array,values[i])
     }
-    else{
-        const index=array.indexOf(value)
-        if(index>=0)fastRemove(array,index)
-    }
+
 }
 
 /**

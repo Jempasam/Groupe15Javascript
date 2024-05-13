@@ -1,7 +1,7 @@
 import { TaggedDict } from "./TaggedDict.mjs"
 import { GameObject } from "./GameObject.mjs"
 import { Behaviour } from "../behaviour/Behaviour.mjs"
-import { fastKeep, fastRemove, fastRemoveValue } from "../../../../../samlib/Array.mjs";
+import { fastKeep, fastRemove, fastRemoveValue, fastRemoveValueAll } from "../../../../../samlib/Array.mjs";
 import { ModelHolder } from "./ModelHolder.mjs";
 
 
@@ -10,7 +10,9 @@ import { ModelHolder } from "./ModelHolder.mjs";
 /**
  * Représente un monde qui contient des objets associés à des tags, et de comportements associés à des tags.
  */
-export class World extends ModelHolder{
+export class World{
+
+    model=new ModelHolder()
 
     obj_state_age=0
 
@@ -52,7 +54,7 @@ export class World extends ModelHolder{
      */
     addTags(object, tags){
         const added_tags=[...tags]
-        fastRemoveValue(added_tags,object.tags)
+        fastRemoveValueAll(added_tags,object.tags)
         this.objects.add(added_tags,object)
         this.forBehav(added_tags, behaviour=>{
             behaviour.behaviour.init(this,...this.#getParamsOf(behaviour,added_tags,[object]))
@@ -154,7 +156,7 @@ export class World extends ModelHolder{
             let behaviour, order
             if(behaviour_added instanceof Behaviour){
                 behaviour=behaviour_added
-                order=0
+                order=behaviour_added.order
             }
             else{
                 behaviour=behaviour_added[0]

@@ -1,4 +1,4 @@
-import { AbstractMesh, Color3, Color4, Mesh, Scene, SceneLoader } from "../../../../babylonjs/core/index.js"
+import { AbstractMesh, Color3, Color4, Mesh, MeshBuilder, Scene, SceneLoader, StandardMaterial } from "../../../../babylonjs/core/index.js"
 import "../../../../babylonjs/loaders/index.js"
 
 
@@ -27,12 +27,14 @@ export async function loadModels(scene){
 
     return {
         CUBE: function(scene){
-            const mesh = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
-            mesh.material = new BABYLON.StandardMaterial("box", scene);
-            mesh.material.diffuseColor = BABYLON.Color3.White();
+            const mesh = MeshBuilder.CreateBox("box", {size: 1}, scene);
+            mesh.material = new StandardMaterial("box", scene);
+            mesh.material.diffuseColor = Color3.White();
             return mesh
         },
         PANDA: await model(scene,"Panda"),
+        BIRD: await model(scene,"Bird"),
+
         BLOCK: await model(scene,"block"),
         PILLAR: await model(scene,"Pillar"),
         BRIDGE: await model(scene,"Bridge"),

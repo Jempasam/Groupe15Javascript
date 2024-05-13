@@ -79,6 +79,8 @@ export class Behaviour{
         return this.#unique_id
     }
 
+    get order(){ return 0 }
+
     get uid(){return this.uniqueId() }
 }
 

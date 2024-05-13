@@ -11,7 +11,7 @@ export class HitboxModel{
      * @param {World} world 
      */
     constructor(world){
-        this.#hitbox=MeshBuilder.CreateBox("hitbox", {width: 1, height: 1, depth: 1}, world.get(SCENE));
+        this.#hitbox=MeshBuilder.CreateBox("hitbox", {width: 1, height: 1, depth: 1}, world.model.get(SCENE));
         this.#hitbox.isVisible=false
     }
 

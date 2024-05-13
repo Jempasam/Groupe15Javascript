@@ -24,7 +24,7 @@ export class MeshBehaviour extends Behaviour{
      */
     init(world,objects){
         for(let obj of objects){
-            const mesh=this.factory(world.get(SCENE))
+            const mesh=this.factory(world.model.get(SCENE))
             mesh.rotationQuaternion=null
             obj.apply(TRANSFORM,transform=>{
                 mesh.position.copyFrom(transform.position)
@@ -46,7 +46,6 @@ export class MeshBehaviour extends Behaviour{
             if(!mesh)continue
 
             let transform=obj.get(TRANSFORM) ?? TransformModel.ZERO
-
             if(transform.position._isDirty)mesh.position.copyFrom(transform.position)
             if(transform.rotation._isDirty)mesh.rotation.copyFrom(transform.rotation)
             if(transform.scale._isDirty)mesh.scaling.copyFrom(transform.scale)
@@ -64,4 +63,6 @@ export class MeshBehaviour extends Behaviour{
             obj.remove(MESH)
         }
     }
+
+    get order() {return 2}
 }

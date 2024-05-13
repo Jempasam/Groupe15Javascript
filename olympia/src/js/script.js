@@ -58,7 +58,7 @@ async function createScene() {
     SceneOptimizer.OptimizeAsync(scene, new SceneOptimizerOptions(60))
     //scene.debugLayer.show();
     scene.clearColor = new BABYLON.Color3.Black();
-    world.set(SCENE,scene)
+    world.model.set(SCENE,scene)
     world.models=await loadModels(scene)
     const camY = 10;
     const camZ = -10;

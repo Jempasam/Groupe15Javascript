@@ -52,4 +52,6 @@ export class HitboxBehaviour extends Behaviour{
             obj.remove(HITBOX)
         }
     }
+
+    get order() {return 2}
 }

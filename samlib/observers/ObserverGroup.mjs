@@ -13,6 +13,11 @@ export class ObserverKey{
     }
 }
 
+/**
+ * @template O
+ * @template T
+ * @typedef {[ObserverKey<T>,(O,T)=>void]} ListenerAndKey
+ */
 
 /**
  * @template O The target object
