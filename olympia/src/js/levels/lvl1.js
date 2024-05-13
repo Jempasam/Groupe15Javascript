@@ -244,6 +244,7 @@ export class Lvl1 {
         const monster9 = new Monster("Monster9","Bird", 135, -4, 49, 1, 1, 1, player.playerSpeed*2, 2, this.scene);
         listes[0].push(monster9);
 
+        monster9.chercheJoueur = Monster.prototype.flyingChercheJoueur;
 
 
         for (let i = 0; i < 12; i++) // On boucle le nombre de marche
