@@ -8,7 +8,7 @@ import "../../../../babylonjs/loaders/index.js"
 async function model(scene,name,dir=""){
     if(dir.length>0)dir+="/"
     //const model=(await SceneLoader.ImportMeshAsync("", "../../olympia/assets/"+dir,  `${name}.glb`, scene)).meshes[0]
-    const assets=await SceneLoader.LoadAssetContainerAsync("../../olympia/assets/"+dir, `${name}.glb`, scene)
+    const assets=await SceneLoader.LoadAssetContainerAsync("../../../olympia/assets/"+dir, `${name}.glb`, scene)
     //model.position.x=99999
     return function(scene){
         const node=assets.instantiateModelsToScene(()=>name,false,{doNotInstantiate: false})
