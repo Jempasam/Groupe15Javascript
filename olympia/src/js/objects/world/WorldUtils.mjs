@@ -1,5 +1,7 @@
-import { GameObject } from "./GameObject.mjs"
-import { ModelKey } from "./ModelHolder.mjs"
+import { Vector3 } from "../../../../../babylonjs/core/index"
+import { TransformModel } from "../model/TransformModel.mjs"
+import { World } from "./World.mjs"
+
 
 /**
  * 
@@ -67,5 +69,77 @@ export function forMap(map, position, size, factory, wordLength=1, isSizeOfTile=
             let size=get_size(x,y)
             factory(letter, [position[0]+x*cellsize[0], position[1]+y*cellsize[1]], [cellsize[0]*size[0], cellsize[1]*size[1]])
         }
+    }
+}
+
+
+function codeToNum(code){
+    if('0'.charCodeAt(0)<=code && code<='9'.charCodeAt(0)) return code-'0'.charCodeAt(0)+1
+    else if('A'.charCodeAt(0)<=code && code<='Z'.charCodeAt(0))return code-'A'.charCodeAt(0)+11
+    else throw new Error("Invalid number value. Should match [0-9A-Z]")
+}
+
+/** @typedef {import("../world/TaggedDict.mjs").Tag} Tag */
+/** @typedef {import("./ModelHolder.mjs").ModelAndKey} ModelAndKey */
+
+/**
+ * @typedef {{
+ *  tags?: Tag[] | (()=>Tag[]),
+ *  models?: ()=>Array<ModelAndKey>,
+ *  size?: Vector3 | ((it:Vector3)=>Vector3),
+ *  position?: ((it:Vector3)=>Vector3),
+ *  rotation?: Vector3
+ * }} ObjectDefinition
+ */
+
+/**
+ * 
+ * @param {object} options
+ * @param {Vector3} options.tile_size
+ * @param {Vector3} options.position
+ * @param {Object.<string,ObjectDefinition>} options.objects
+ * @param {Array<string>|string} options.maps
+ * @param {World} options.world
+ * 
+ */
+export function createLevel(options){
+    if(!(options.world instanceof World))throw new Error("options.world should be an instance of World")
+    if(!(options.tile_size instanceof Vector3))throw new Error("options.tile_size should be an instance of Vector3")
+    if(!(options.position instanceof Vector3))throw new Error("options.position should be an instance of Vector3")
+    if(!options.objects)throw new Error("options.objects should be defined")
+    if(!Array.isArray(options.maps)) options.maps=[options.maps]
+    for(const map of options.maps){
+        forMap(map, [0,0], [1,1], (letter, pos, size)=>{
+            
+            // Object type
+            const object=options.objects[letter[0]]
+            if(!object)throw new Error(`Object ${letter} not found`)
+            
+            const tags= object.tags ? (Array.isArray(object.tags) ? object.tags : object.tags()) : []
+
+            const dim_transform = object.size ? ( object.size instanceof Vector3 ? it=>object.size : object.size) : it=>it
+
+            const pos_transform= object.position ? object.position : it=>it
+
+            const models= object.models?.() ?? []
+
+            const rotation= object.rotation ?? Vector3.Zero()
+
+            // Position and dimension
+            let foot_height=codeToNum(letter.charCodeAt(1))
+            let size_heigth=codeToNum(letter.charCodeAt(2))
+
+            let dimension=options.tile_size.multiplyByFloats(size[0], size_heigth, size[1])
+            dimension=dim_transform(dimension)
+
+            let coordinates=options.position.add(new Vector3(
+                pos[0]*options.tile_size.x+dimension.x/2,
+                options.tile_size.z*foot_height+dimension.y/2, 
+                pos[1]*options.tile_size.z+dimension.z/2
+            ))
+            coordinates=pos_transform(coordinates)
+            
+            options.world.add(tags, new TransformModel({rotation, position:coordinates, scale:dimension}), ...models)
+        }, 3, true)
     }
 }
