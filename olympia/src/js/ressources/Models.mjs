@@ -34,6 +34,7 @@ export async function loadModels(scene){
         },
         PANDA: await model(scene,"Panda"),
         BIRD: await model(scene,"Bird"),
+        BONNET: await model(scene,"bonnet"),
 
         BLOCK: await model(scene,"block"),
         PILLAR: await model(scene,"Pillar"),

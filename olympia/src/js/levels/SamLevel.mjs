@@ -101,6 +101,7 @@ export class SamLevel extends Level{
       const HOLE=behav(new MeshBehaviour(models.HOLE))
       const PANDA=behav(new MeshBehaviour(models.PANDA))
       const BIRD=behav(new MeshBehaviour(models.BIRD))
+      const BONNET=behav(new MeshBehaviour(models.BONNET))
       const QUESTION=behav(new MeshBehaviour(models.QUESTION_MARK))
       const EXCLAMATION=behav(new MeshBehaviour(models.EXCLAMATION_MARK))
       const PARTICLE_WIND=behav(new MeshBehaviour(models.PARTICLE_WIND))
@@ -314,7 +315,7 @@ export class SamLevel extends Level{
          [-4,-8], [1.5,1.5], objectSpawner, 3, true
       )
 
-      this.player=world.add([...OBJ_PLAYER, PANDA],
+      this.player=world.add([...OBJ_PLAYER, BONNET],
          new TransformModel({ position: SamLevel.playerPos.clone() }),
          new LivingModel(3)
       )
