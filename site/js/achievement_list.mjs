@@ -204,29 +204,7 @@ export const achievement_list = {
             }
         }
     },
-    "tictactoe":{
-        name:"Morpion",
-        achievements:{
-            "win":{
-                name: "Victoires",
-                desc: "Gagnez une partie",
-                img: "https://www.shutterstock.com/image-vector/golden-crown-gradient-mesh-vector-600nw-599734505.jpg",
-                max:1
-            },
-            "win5":{
-                name: "Victoires en série",
-                desc: "Gagnez 5 parties d'affilée",
-                img: "https://www.shutterstock.com/image-vector/golden-crown-gradient-mesh-vector-600nw-599734505.jpg",
-                max:1
-            },
-            "win10":{
-                name: "Victoires en série",
-                desc: "Gagnez 10 parties d'affilée",
-                img: "https://www.shutterstock.com/image-vector/golden-crown-gradient-mesh-vector-600nw-599734505.jpg",
-                max:1
-            },
-        }
-    },
+    
     "snake":{
         name:"Snake",
         achievements:{
