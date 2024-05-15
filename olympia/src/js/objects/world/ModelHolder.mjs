@@ -52,15 +52,6 @@ export class ModelKey{
  * @typedef {KeyedModel|ModelPair<*>} ModelAndKey
  */
 
-/**
- * @template T
- * @param {AnyModelKey<T>} model_key
- * @returns {string} 
- */
-function anyKeyToId(model_key){
-    if(Array.isArray(model_key))return model_key[1]+"_"+model_key[0].name
-    return "_"+model_key.name
-}
 
 /**
  * Represents a game object.
@@ -73,11 +64,41 @@ export class ModelHolder{
 
     /**
      * @template T
+     * @param {AnyModelKey<T>} model_key
+     * @returns {string} 
+     */
+    #anyKeyToId(model_key){
+        if(Array.isArray(model_key))return model_key[1]
+        return "_"+model_key.name
+    }
+
+    /**
+     * @template T
+     * @param {AnyModelKey<T>} model_key 
+     * @returns {any}
+     */
+    #anyKeyToHolder(model_key){
+        if(Array.isArray(model_key))return this["_sub_"+model_key[0].name] ??= {}
+        return this
+    }
+
+    /**
+     * @template T
      * @param {AnyModelKey<T>} key
      * @returns {T?}
      */
     get(key){
-        return this[anyKeyToId(key)] ?? null
+        return this.#anyKeyToHolder(key)[this.#anyKeyToId(key)] ?? null
+    }
+
+    /**
+     * @template T
+     * @param {AnyModelKey<T>} key
+     * @param {(T)=>void} callback
+     */
+    forAll(key,callback){
+        this.apply(key,callback)
+        for(const e of this["_sub_"+key[0].name])callback(e)
     }
 
     /**
@@ -195,7 +216,7 @@ export class ModelHolder{
      * @param {T?} value
      */
     set(key,value){
-        if(value)this[anyKeyToId(key)]=value
+        if(value)this.#anyKeyToHolder(key)[this.#anyKeyToId(key)]=value
         else this.remove(key)
     }
     
@@ -215,6 +236,6 @@ export class ModelHolder{
      * @param {AnyModelKey<*>} key
      */
     remove(key){
-        delete this[anyKeyToId(key)]
+        delete this.#anyKeyToHolder(key)[this.#anyKeyToId(key)]
     }
 }

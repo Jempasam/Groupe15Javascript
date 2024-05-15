@@ -34,7 +34,7 @@ export class PlayerDashBehaviour extends Behaviour{
      */
     init(world, objects){
         for(const obj of objects){
-            obj.getOrSet(DASH,()=>new DashModel())
+            obj.getOrSet([DASH,this.uid],()=>new DashModel())
         }
     }
 
@@ -46,7 +46,7 @@ export class PlayerDashBehaviour extends Behaviour{
     tick(world, objects){
         const particle=this.particle
         for(const obj of objects){
-            const dash=obj.get(DASH); if(!dash)continue
+            const dash=obj.get([DASH,this.uid]); if(!dash)continue
             const movement=obj.get(MOVEMENT); if(!movement)continue
             if(dash.load_cooldown<=0){
                 if(isKeyPressed(this.key) && dash.remaining_dash>0){
@@ -93,7 +93,7 @@ export class PlayerDashBehaviour extends Behaviour{
      */
     finish(world,objects){
         for(const obj of objects){
-            obj.remove(DASH)
+            obj.remove([DASH,this.uid])
         }
     }
 }

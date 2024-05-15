@@ -14,10 +14,12 @@ export class PushCollisionBehaviour extends Behaviour{
      * @override
      * @param {World} world
      * @param {ObjectQuery} objects
+     * @param {ObjectQuery?} collidables
      */
-    init(world,objects){
+    init(world,objects,collidables){
         for(let obj of objects){
             obj.observers(ON_COLLISION).add("PushCollisionBehaviour",(self,{self_hitbox,object,hitbox})=>{
+                if(collidables && !collidables.match(object))return
                 const movement=obj.get(MOVEMENT)
                 if(movement){
                     if(

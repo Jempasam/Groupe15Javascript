@@ -35,6 +35,7 @@ game.on_start_game=function(field){
             achievement_registry.edit("puissance4", "50row", v=>v+1)
             let team=field.get(aligneds[0][0],aligneds[0][1])?.team
             if(team=="green")achievement_registry.edit("puissance4", "green", v=>v+1)
+            game.giveMoney(10)
         }
         if(aligneds.length>=5){
             achievement_registry.edit("puissance4", "row5", v=>v+1)
@@ -45,6 +46,7 @@ game.on_start_game=function(field){
         let under=field.get(pos[0],pos[1]+1)
         if(under instanceof BubbleItem){
             achievement_registry.edit("puissance4", "coolbubble", v=>v+1)
+            game.giveMoney(10)
         }
     })
 
@@ -52,6 +54,7 @@ game.on_start_game=function(field){
         if(item instanceof BocalItem){
             achievement_registry.edit("puissance4", "10bocal", v=>v+1)
             achievement_registry.edit("puissance4", "100bocal", v=>v+1)
+            game.giveMoney(1)
         }
         if(item instanceof BrokablePlatformItem){
             achievement_registry.edit("puissance4", "miner", v=>v+1)
@@ -63,6 +66,7 @@ game.on_start_game=function(field){
             achievement_registry.edit("puissance4", "apple1", v=>v+1)
             achievement_registry.edit("puissance4", "apple50", v=>v+1)
             achievement_registry.edit("puissance4", "apple300", v=>v+1)
+            game.giveMoney(1)
         }
         if(eater instanceof SnakeItem){
             achievement_registry.edit("puissance4", "snake", v=>Math.max(v,eater.length))
@@ -73,6 +77,7 @@ game.on_start_game=function(field){
         if(item instanceof TNTItem){
             achievement_registry.edit("puissance4", "20boom", v=>v+1)
             achievement_registry.edit("puissance4", "200boom", v=>v+1)
+            game.giveMoney(1)
         }
         if(item instanceof MeteorItem){
             achievement_registry.edit("puissance4", "meteor", v=>v+1)
@@ -85,6 +90,7 @@ game.on_start_game=function(field){
     observers(field,on_crushed).add("achievements",(field,crusheds)=>{
         achievement_registry.edit("puissance4", "crush", v=>Math.max(v,crusheds.length))
         achievement_registry.edit("puissance4", "crush30", v=>Math.max(v,crusheds.length))
+        game.giveMoney(crusheds.length)
     })
 
     observers(field,on_grab).add("achievements",(field,{item,grabbed})=>{
@@ -111,6 +117,7 @@ game.on_start_game=function(field){
     observers(field,on_die).add("achievements",(field,{item})=>{
         if(item instanceof GoombaItem){
             achievement_registry.edit("puissance4", "goomba", v=>v+1)
+            game.giveMoney(1)
         }
     })
 
