@@ -2,6 +2,18 @@ import { Behaviour } from "../../objects/behaviour/Behaviour.mjs";
 import { BehaviourEntry, World } from "../../objects/world/World.mjs";
 
 
+/** @typedef {import("../../objects/world/TaggedDict.mjs").Tag} Tag*/
+
+
+/**
+ * @param {...(()=>Tag)} tags
+ * @returns {{is_tag_list:0, builder:()=>Tag[]}}
+ */
+export function tags(...tags){
+    return {is_tag_list:0, builder:()=>tags.map(a=>a())}
+}
+
+
 /**
  * Un pack de behaviours de base pour la gestion des collisions et de la physique
  */
@@ -22,28 +34,31 @@ export class ObjectPack{
     static id_counter=34543
     #id(){ return ""+(ObjectPack.id_counter++) }
 
+
     /** @typedef {Behaviour|[Behaviour,number]} BehaviourToAdd*/
     /** @typedef {BehaviourToAdd|(()=>BehaviourToAdd)} BehaviourParam*/
     /**
-     * @param {import("../../objects/world/TaggedDict.mjs").Tag[]|BehaviourParam} tags_or_behavour
+     * @param {{is_tag_list:0, builder:()=>Tag[]}|BehaviourParam} tags_or_behavour
      * @param {...(BehaviourParam)} behaviours
      * @returns {BehaviourElement}
      */
     behav(tags_or_behavour, ...behaviours){
         const marker={created:false}
-        let tags
+        let tagfactory
         let behaviour_list
-        if(tags_or_behavour instanceof Behaviour || (tags_or_behavour?.[0] instanceof Behaviour) || tags_or_behavour['call'] ){
-            behaviour_list=[tags_or_behavour,...behaviours]
-            tags=[this.#id()]
+        const id=this.#id()
+        if(tags_or_behavour['is_tag_list']===0){
+            behaviour_list=behaviours
+            // @ts-ignore
+            tagfactory=()=>[id, ...tags_or_behavour.builder()]
         }
         else{
-            behaviour_list=behaviours
-            tags=[this.#id(), ...tags_or_behavour]
+            behaviour_list=[tags_or_behavour,...behaviours]
+            tagfactory=()=>[id]
         }
         
         // @ts-ignore
-        return new BehaviourElement( ()=>this.world.addBehaviours(tags, ...behaviour_list.map(a=>a['call']?a():a)), tags[0] )
+        return new BehaviourElement( ()=>this.world.addBehaviours(tagfactory(), ...behaviour_list.map(a=>a['call']?a():a)), id )
     }
 
     /**
@@ -92,12 +107,12 @@ class BehaviourElement{
 
     /**
      * @param {()=>BehaviourEntry[]} factory
-     * @param {string} id 
+     * @param {string} id
      */
     constructor(factory,id){
         this.#factory=factory
-        this.#id=id
         this.#created=false
+        this.#id=id
     }
 
     #init(){
@@ -107,7 +122,7 @@ class BehaviourElement{
         }
     }
 
-    get entries(){
+    get entries(){  
         this.#init()
         return this.#entries
     }
@@ -115,6 +130,7 @@ class BehaviourElement{
     /** @type {string} */
     get id(){
         this.#init()
+        console.log(this.#id,this.#entries)
         return this.#id
     }
 

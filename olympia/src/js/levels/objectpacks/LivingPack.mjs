@@ -1,5 +1,5 @@
 import { Vector3 } from "../../../../../babylonjs/core/index.js";
-import { behaviourEach } from "../../objects/behaviour/Behaviour.mjs";
+import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
 import { LivingBehaviour } from "../../objects/behaviour/life/LivingBehaviour.mjs";
 import { ParticleLivingBehaviour } from "../../objects/behaviour/life/ParticleLivingBehaviour.mjs";
 import { LIVING } from "../../objects/model/LivingModel.mjs";
@@ -25,12 +25,12 @@ export class LivingPack extends ObjectPack{
     }
     // Living
     living=this.behav(new LivingBehaviour())
-    damage_smoke=this.behav(()=>new ParticleLivingBehaviour(this._particle.SMOKE(), new Vector3(0.4,0.4,0.4)))
-    depth_damage=this.behav(()=>behaviourEach((_,o)=>o.apply2(TRANSFORM, LIVING,(t,l)=>{
+    damage_blood=this.behav(()=>new ParticleLivingBehaviour(this._particle.BLOOD(), new Vector3(0.8,0.8,0.8)))
+    depth_damage=this.behav(()=>behaviourEach(o=>o.apply2(TRANSFORM, LIVING,(t,l)=>{
         if(t.position.y<-10)l.damage(1)
     })))
 
     // Compilations
-    LIVING= this.lazy(()=>[this.living.id, this.damage_smoke.id, this.depth_damage.id])
+    LIVING= this.lazy(()=>[this.living.id, this.damage_blood.id, this.depth_damage.id])
     LIVING_SILENT= this.lazy(()=>[this.living.id, this.depth_damage.id])
 }

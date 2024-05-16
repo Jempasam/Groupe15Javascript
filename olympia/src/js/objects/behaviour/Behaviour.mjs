@@ -85,8 +85,8 @@ export class Behaviour{
 }
 
 /**
- * Create a simple behavioru with the given ticker function
- * @param {(world:World, q1?:ObjectQuery, q2?:ObjectQuery, q3?:ObjectQuery)=>void} ticker 
+ * Create a simple behaviour with the given ticker function
+ * @param {Behaviour['init']} ticker 
  */
 export function behaviour(ticker){
     const ret=new Behaviour()
@@ -97,64 +97,14 @@ export function behaviour(ticker){
 }
 
 /**
- * Create a simple behavioru with the given ticker function called on each objects of the first query
- * @param {(world:World, obj: GameObject)=>void} ticker 
+ * Create a behaviour that will call the given initializer
+ * @param {Behaviour['init']} initializer 
  */
-export function behaviourEach(ticker){
+export function behaviourInit(initializer){
     const ret=new Behaviour()
-    ret.init=function(){}
-    ret.tick=function(world,objects){
-        for(const obj of objects) ticker(world,obj)
-    }
+    ret.init=initializer
+    ret.tick=function(){}
+    ret.doTick=false
     ret.finish=function(){}
-    return ret
-}
-
-/**
- * Create a simple behaviour that register an observer on the given event
- * @template T
- * @param {ObserverKey<T>} event 
- * @param {(GameObject,T)=>void} listener 
- * @returns 
- */
-export function behaviourObserve(event,listener){
-    const ret=new Behaviour()
-    ret.init=function(world,objects){
-        for(const obj of objects){
-            obj.observers(event).add(this.uid,listener)
-        }
-    }
-    ret.tick=function(){}
-    ret.finish=function(world,objects){
-        for(const obj of objects){
-            obj.observers(event).remove(this.uid)
-        }
-    }
-    return ret
-}
-
-/**
- * @template T
- * @typedef {[ObserverKey<T>,(GameObject,T)=>void]} ListenerAndKey
- */
-
-/**
- * Create a simple behaviour that register many observers on many events
- * @param {...ListenerAndKey<*>} listeners
- * @returns 
- */
-export function behaviourObserveMany(...listeners){
-    const ret=new Behaviour()
-    ret.init=function(world,objects){
-        for(const obj of objects){
-            for(const [key,listener] of listeners)obj.observers(key).add(this.uid,listener)
-        }
-    }
-    ret.tick=function(){}
-    ret.finish=function(world,objects){
-        for(const obj of objects){
-            for(const key of listeners)obj.observers(key[0]).remove(this.uid)
-        }
-    }
     return ret
 }

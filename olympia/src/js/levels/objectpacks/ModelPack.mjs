@@ -33,6 +33,9 @@ export class ModelPack extends ObjectPack{
     bridge= this.behav(()=>new MeshBehaviour(this.models.BRIDGE))
     stone= this.behav(()=>new MeshBehaviour(this.models.STONE))
     hole= this.behav(()=>new MeshBehaviour(this.models.HOLE))
+    lava= this.behav(()=>new MeshBehaviour(this.models.LAVA))
+    mud= this.behav(()=>new MeshBehaviour(this.models.MUD))
+    ice= this.behav(()=>new MeshBehaviour(this.models.ICE))
 
     question_mark= this.behav(()=>new MeshBehaviour(this.models.QUESTION_MARK))
     exclamation_mark= this.behav(()=>new MeshBehaviour(this.models.EXCLAMATION_MARK))
@@ -58,6 +61,7 @@ export class ModelPack extends ObjectPack{
     smoke= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_SMOKE))
     slash= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_SLASH))
     flame= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_FLAME))
+    blood= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_BLOOD))
 
     explosion= this.behav(()=>new MeshBehaviour(this.models.EXPLOSION))
     sphere_explosion= this.behav(()=>new MeshBehaviour(this.models.SPHERE_EXPLOSION))

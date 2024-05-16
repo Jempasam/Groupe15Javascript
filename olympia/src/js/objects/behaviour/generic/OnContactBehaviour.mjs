@@ -11,15 +11,12 @@ import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs";
 export const ContactTarget={
     EVERYONE:0,
     ONLY_ENNEMIES:1,
-    ONLY_ALLIES:2
+    ONLY_ALLIES:2,
+    NOT_ENNEMIES:3,
+    NOT_ALLIES:4,
 }
 
 export class OnContactBehaviour extends Behaviour{
-
-
-    static EVERYONE=0
-    static ONLY_ENNEMIES=1
-    static ONLY_ALLIES=2
 
     /**
      * @param {object} options
@@ -42,8 +39,24 @@ export class OnContactBehaviour extends Behaviour{
                 let data=obj.get([ON_CONTACT,this.uid]); if(!data)return
                 if(data.reload_time>0)return
                 if(filter && !filter.match(object))return
-                if(this.contact_target!=0 && (this.contact_target==ContactTarget.ONLY_ALLIES)!=do_team_with(obj, object))return
+
+                let do_contact=false
+                switch(this.contact_target){
+                    case ContactTarget.EVERYONE:
+                        do_contact=true; break
+                    case ContactTarget.ONLY_ENNEMIES:
+                        do_contact=!do_team_with(obj, object, true); break
+                    case ContactTarget.ONLY_ALLIES:
+                        do_contact=do_team_with(obj, object, false); break
+                    case ContactTarget.NOT_ENNEMIES:
+                        do_contact=do_team_with(obj, object, true); break
+                    case ContactTarget.NOT_ALLIES:
+                        do_contact=!do_team_with(obj, object, false); break
+                }
+
+                if(!do_contact)return
                 this.on_contact(obj, object, world, objects, filter, ...rest)
+                data.reload_time=this.reload_time
             })
         }
     }

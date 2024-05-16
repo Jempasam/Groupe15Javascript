@@ -12,13 +12,13 @@ import { generateParticle } from "./SimpleParticleBehaviour.mjs";
 export class EmitterBehaviour extends Behaviour{
 
     /**
-     * @param {import("../../world/TaggedDict.mjs").Tag[]} tags Les tags à donner aux particules.
+     * @param {import("../../world/World.mjs").ObjectDefinition} definition Une définition d'objet.
      * @param {Vector3} size La taille des particules.
      * @param {number=} time_spacing L'intervalle de temps entre chaque émission.
      */
-    constructor(tags,size,time_spacing=10){
+    constructor(definition,size,time_spacing=10){
         super()
-        this.tags=tags
+        this.definition=definition
         this.size=size
         this.time_spacing=time_spacing
     }
@@ -33,7 +33,7 @@ export class EmitterBehaviour extends Behaviour{
     tick(world,objects){
         for(const obj of objects){
             obj.apply(TRANSFORM, transform=>{
-                if(world.age%this.time_spacing==0)generateParticle(world,transform,this.tags,this.size.clone())
+                if(world.age%this.time_spacing==0)generateParticle(world,transform,this.definition,this.size.clone())
             })
         }
     }

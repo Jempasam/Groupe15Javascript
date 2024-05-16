@@ -7,6 +7,8 @@ import { ModelHolder } from "./ModelHolder.mjs";
 
 /** @typedef {import("./TaggedDict.mjs").Tag} Tag */
 
+/** @typedef {{tags:Tag[], models?:(()=>ModelAndKey[])}|Tag[]} ObjectDefinition*/
+
 /**
  * Représente un monde qui contient des objets associés à des tags, et de comportements associés à des tags.
  */
@@ -116,6 +118,17 @@ export class World{
      */
     add(tags, ...data){
         return this.addMany(1, tags, ...data)[0]
+    }
+
+    /**
+     * Ajoute un objet au monde à partir d'une définition
+     * @param {ObjectDefinition} definition
+     * @param {...ModelAndKey} data Les données de l'objet
+     * @returns {GameObject}
+     */
+    addDef(definition,...data){
+        if(Array.isArray(definition))return this.add(definition, ...data)
+        else return this.add(definition.tags??[], ...(definition.models?.()??[]), ...data)
     }
 
     /**
