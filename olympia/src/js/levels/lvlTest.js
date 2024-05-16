@@ -191,6 +191,9 @@ export class LvlTest {
     const lvlWarpBoss1 = new lvlWarp("lvlWarpBoss1",-12, 2, -25, 1, 1, 1, -2,this.scene);
     listes[5].push(lvlWarpBoss1);
 
+    const lvlWarp1_2 = new lvlWarp("lvlWarp1_2",-6, 2, -25, 1, 1, 1, 21,this.scene);
+    listes[5].push(lvlWarp1_2);
+
     //créer un canon
     const canon = new Canon("Canon1",-5, 2, -15, 1, 1, 1, new BABYLON.Vector3(1,0.3,0), this.scene);
     listes[9].push(canon);

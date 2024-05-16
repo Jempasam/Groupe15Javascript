@@ -1,5 +1,6 @@
 import { Player } from "./entities/player.js";
 import { SamLevel } from "./levels/SamLevel.mjs"
+import { Lvl1_2 } from "./levels/lvl1_2.mjs";
 import { LvlTest } from "./levels/lvlTest.js";
 import { LvlAccueil } from "./levels/lvlAccueil.js";
 import { Lvl1} from "./levels/lvl1.js";
@@ -204,6 +205,10 @@ function changeLevel(){
     //changer de niveau
     if(nbLevel == 260402){
         currentLevel = decor = new SamLevel();
+        decor.start(world, {camera: camera})
+    }
+    if(nbLevel == 21){
+        currentLevel = decor = new Lvl1_2();
         decor.start(world, {camera: camera})
     }
     if (nbLevel == -1){
