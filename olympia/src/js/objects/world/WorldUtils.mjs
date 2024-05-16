@@ -22,7 +22,15 @@ export function forMap(map, position, size, factory, wordLength=1, isSizeOfTile=
     let width=0
     let height=0
     let widtha=0
-    for(let i=0; i<map.length; i++){
+    big:for(let i=0; i<map.length; i++){
+        for(let y=0; y<wordLength; y++){
+            if(map[i+y]==']'){
+                column=[]
+                widtha=0
+                i+=y
+                continue big
+            }
+        }
         if(map[i]===']'){
             column=[]
             widtha=0
@@ -99,21 +107,25 @@ function codeToNum(code){
  * @param {Vector3} options.position
  * @param {Object.<string,ObjectDefinition>} options.objects
  * @param {Array<string>|string} options.maps
+ * @param {number=} options.name_length
  * @param {World} options.world
  * 
  */
 export function createLevel(options){
+    const name_length=options.name_length??1
+
     if(!(options.world instanceof World))throw new Error("options.world should be an instance of World")
     if(!(options.tile_size instanceof Vector3))throw new Error("options.tile_size should be an instance of Vector3")
     if(!(options.position instanceof Vector3))throw new Error("options.position should be an instance of Vector3")
     if(!options.objects)throw new Error("options.objects should be defined")
+    if(Object.keys(options.objects).findIndex(it=>it.length!=name_length)!=-1)throw new Error("At least one object have a name with a different length than options.name_length")
     if(!Array.isArray(options.maps)) options.maps=[options.maps]
     for(const map of options.maps){
         forMap(map, [0,0], [1,1], (letter, pos, size)=>{
             if(letter[0]===' ')return
 
             // Object type
-            const object=options.objects[letter[0]]
+            const object=options.objects[letter.substring(0,name_length)]
             if(!object)throw new Error(`Object ${letter} not found`)
             
             const tags= object.tags ? (Array.isArray(object.tags) ? object.tags : object.tags()) : []
@@ -127,8 +139,8 @@ export function createLevel(options){
             const rotation= object.rotation ?? Vector3.Zero()
 
             // Position and dimension
-            let foot_height=codeToNum(letter.charCodeAt(1))
-            let size_height=codeToNum(letter.charCodeAt(2))
+            let foot_height=codeToNum(letter.charCodeAt(name_length))
+            let size_height=codeToNum(letter.charCodeAt(name_length+1))
 
             let tile_dimension=options.tile_size.multiplyByFloats(size[0], size_height, size[1])
             let dimension=dim_transform(tile_dimension)
@@ -141,6 +153,6 @@ export function createLevel(options){
             coordinates=pos_transform(coordinates,tile_dimension)
             
             options.world.add(tags, new TransformModel({rotation, position:coordinates, scale:dimension}), ...models)
-        }, 3, true)
+        }, 2+name_length, true)
     }
 }
