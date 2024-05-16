@@ -15,7 +15,8 @@ import { TRANSFORM, TransformModel } from "../objects/model/TransformModel.mjs";
 import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
 import { message } from "../script.js";
-import { Level } from "./Level.mjs";
+import { Level, LevelContext } from "./Level.mjs";
+import { SamLevel } from "./SamLevel.mjs";
 import { EffectPack } from "./objectpacks/EffectPack.mjs";
 import { FightPack } from "./objectpacks/FightPack.mjs";
 import { IAPack } from "./objectpacks/IAPack.mjs";
@@ -32,10 +33,11 @@ export class Lvl1_2 extends Level{
    static playerPos=new Vector3(1.5, 3, 3)
 
    /**
+    * @param {LevelContext} context
     * @param {World} world 
     * @param {{camera:UniversalCamera}} options 
     */
-   start(world,options){
+   start(context, world,options){
 
       message.send("Bienvenue dans le niveau de Sam",6000,"info")
       message.send("PV: 3", MessageManager.FOREVER, "pv")
@@ -137,8 +139,21 @@ export class Lvl1_2 extends Level{
             z: { tags:soil.ICE() },
             y: { tags:soil.LAVA() },
             x: { tags:soil.MUD() },
+
+            P: {
+               tags:[...OBJ_PLAYER, living.respawn.id, model.bonnet.id],
+               models:()=>[new LivingModel(3), fight.good],
+               size: it=>it.scale(0.8)
+            },
          },
-         maps: [`
+         maps: [
+            `
+            1  ]   
+            2  ]   
+            3  ]      P71
+            `
+            ,
+            `
             1  ]b0H-..-..-..
             2  ]bB6-..-..-..
             3  ]|          |
@@ -194,11 +209,8 @@ export class Lvl1_2 extends Level{
          ]
       })
 
-      this.player=world.add([...OBJ_PLAYER, model.bonnet.id],
-         new TransformModel({ position: Lvl1_2.playerPos.clone() }),
-         new LivingModel(3),
-         fight.good
-      )
+      this.player=world.objects.get(player.player.id)?.[0]
+      if(this.player==null)window.alert("Player not found")
 
       this.player.observers(ON_DEATH).add("Lvl1_2",(obj,_)=>{
          this.player?.apply(LIVING, living=>living.life=3)
@@ -227,10 +239,11 @@ export class Lvl1_2 extends Level{
    camerapos=new Vector3(0,6,8)
 
    /**
+    * @param {LevelContext} context
     * @param {World} world 
     * @param {{camera:UniversalCamera}} options 
     */
-   tick(world,options){
+   tick(context,world,options){
       const pos=this?.player?.get(TRANSFORM)?.position
       if(pos){
          options.camera.position.copyFrom(pos)
@@ -239,6 +252,7 @@ export class Lvl1_2 extends Level{
       if(isKeyPressed("Digit1"))this.camerapos=new Vector3(0,6,8)
       if(isKeyPressed("Digit2"))this.camerapos=new Vector3(0,8,10)
       if(isKeyPressed("Digit3"))this.camerapos=new Vector3(0,30,30)
+      if(isKeyPressed("Digit9"))context.switchTo(new SamLevel())
    }
 
    /**

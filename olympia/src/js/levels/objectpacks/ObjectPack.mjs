@@ -26,6 +26,7 @@ export class ObjectPack{
         this.world=world
         for(let [key,value] of Object.entries(this)){
             if(value instanceof BehaviourElement){
+                console.log("Setting id for ",key)
                 value._setId(key.toLowerCase().replace(/[^a-z0-9_]/g,""))
             }
         }
@@ -50,15 +51,15 @@ export class ObjectPack{
         if(tags_or_behavour['is_tag_list']===0){
             behaviour_list=behaviours
             // @ts-ignore
-            tagfactory=()=>[id, ...tags_or_behavour.builder()]
+            tagfactory=()=>[...tags_or_behavour.builder()]
         }
         else{
             behaviour_list=[tags_or_behavour,...behaviours]
-            tagfactory=()=>[id]
+            tagfactory=()=>[]
         }
         
         // @ts-ignore
-        return new BehaviourElement( ()=>this.world.addBehaviours(tagfactory(), ...behaviour_list.map(a=>a['call']?a():a)), id )
+        return new BehaviourElement( (id)=>this.world.addBehaviours([id,...tagfactory()], ...behaviour_list.map(a=>a['call']?a():a)), id )
     }
 
     /**
@@ -100,7 +101,7 @@ class LazyInit extends Function{
 
 class BehaviourElement{
 
-    /** @type {()=>BehaviourEntry[]} */ #factory
+    /** @type {(id)=>BehaviourEntry[]} */ #factory
     /** @type {string} */ #id
     /** @type {BehaviourEntry[]} */ #entries
     /** @type {boolean} */ #created
@@ -118,7 +119,7 @@ class BehaviourElement{
     #init(){
         if(!this.#created){
             this.#created=true
-            this.#entries=this.#factory()
+            this.#entries=this.#factory(this.#id)
         }
     }
 
@@ -130,7 +131,6 @@ class BehaviourElement{
     /** @type {string} */
     get id(){
         this.#init()
-        console.log(this.#id,this.#entries)
         return this.#id
     }
 

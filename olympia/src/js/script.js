@@ -7,7 +7,7 @@ import { Lvl1} from "./levels/lvl1.js";
 import { LvlBoss1} from "./levels/lvlBoss1.js";
 import { World } from "./objects/world/World.mjs";
 import { loadModels } from "./ressources/Models.mjs";
-import { Level } from "./levels/Level.mjs";
+import { Level, LevelContext } from "./levels/Level.mjs";
 import { Engine, SSAO2RenderingPipeline, SceneOptimizer, SceneOptimizerOptions } from "../../../babylonjs/core/index.js";
 import { SCENE } from "./objects/model/MeshModel.mjs";
 import { adom, create } from "../../../samlib/DOM.mjs";
@@ -31,6 +31,7 @@ gameElement.appendChild(infoJoueur)
 let keyState = {};
 let scene;
 let world=new World()
+let levelContext
 let pause = false;
 
 let camera;
@@ -68,6 +69,8 @@ async function createScene() {
     camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, camY, camZ), scene);
     camera.setTarget(BABYLON.Vector3.Zero());
     camera.attachControl(canvas, true);
+
+    levelContext=new LevelContext(world,{camera})
 
     //const ssao = new SSAO2RenderingPipeline("ssaopipeline", scene, 2, [camera]);
 
@@ -196,20 +199,18 @@ function changeLevel(){
     });
     listeBombes = [];
 
-    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
-    
-    world.close()
     currentLevel=null
-    
+    listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
+        
     //supprimer le décor
     //changer de niveau
     if(nbLevel == 260402){
         currentLevel = decor = new SamLevel();
-        decor.start(world, {camera: camera})
+        levelContext.switchTo(decor)
     }
     if(nbLevel == 21){
         currentLevel = decor = new Lvl1_2();
-        decor.start(world, {camera: camera})
+        levelContext.switchTo(decor)
     }
     if (nbLevel == -1){
         decor = new LvlTest(player, listes, world);
@@ -247,7 +248,7 @@ async function main(){
         setInterval(function(){
             if (!pause){
                 world.tick()
-                if(decor instanceof Level) decor.tick(world, {camera: camera})
+                if(decor instanceof Level) levelContext.tick()
                 if(!currentLevel) movePlayer()
                 //faire chercher le joueur par les monstres
                 listeMonstres.forEach(monstre => {

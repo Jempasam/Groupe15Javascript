@@ -2,6 +2,7 @@ import { Vector3 } from "../../../../../babylonjs/core/index.js";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
 import { LivingBehaviour } from "../../objects/behaviour/life/LivingBehaviour.mjs";
 import { ParticleLivingBehaviour } from "../../objects/behaviour/life/ParticleLivingBehaviour.mjs";
+import { RespawnBehaviour } from "../../objects/behaviour/life/RespawnBehaviour.mjs";
 import { LIVING } from "../../objects/model/LivingModel.mjs";
 import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
 import { World } from "../../objects/world/World.mjs";
@@ -29,6 +30,7 @@ export class LivingPack extends ObjectPack{
     depth_damage=this.behav(()=>behaviourEach(o=>o.apply2(TRANSFORM, LIVING,(t,l)=>{
         if(t.position.y<-10)l.damage(1)
     })))
+    respawn=new RespawnBehaviour()
 
     // Compilations
     LIVING= this.lazy(()=>[this.living.id, this.damage_blood.id, this.depth_damage.id])
