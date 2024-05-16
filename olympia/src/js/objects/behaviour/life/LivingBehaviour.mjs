@@ -50,6 +50,8 @@ export class LivingBehaviour extends Behaviour{
             obj.remove(LIVING)
         }
     }
+
+    get order(){ return 2 }
 }
 
 /** @type {ObserverKey<number>} */

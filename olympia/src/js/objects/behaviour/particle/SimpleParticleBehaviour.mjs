@@ -66,15 +66,15 @@ export class SimpleParticleBehaviour extends Behaviour{
 /**
  * @param {World} world
  * @param {TransformModel} transform 
- * @param {import("../../world/TaggedDict.mjs").Tag[]} particle_tags
- * @param {Vector3} particle_size
+ * @param {import("../../world/World.mjs").ObjectDefinition} definition
+ * @param {Vector3} size
  */
-export function generateParticle(world, transform, particle_tags, particle_size){
+export function generateParticle(world, transform, definition, size){
     const position=transform.scale.clone()
     position.multiplyInPlace(Vector3.Random(0,1))
     position.subtractInPlace(transform.scale.scale(0.5))
     position.addInPlace(transform.position)
-    world.add(particle_tags, new TransformModel({position:position, scale:particle_size, rotation:new Vector3(0, Math.random()*Math.PI*2, 0)}))
+    world.addDef(definition, new TransformModel({position:position, scale:size, rotation:new Vector3(0, Math.random()*Math.PI*2, 0)}))
     /*let position=transform.scale.clone()
     position.multiplyInPlace(Vector3.Random(0,1))
     position.subtractInPlace(transform.scale.scale(0.5))

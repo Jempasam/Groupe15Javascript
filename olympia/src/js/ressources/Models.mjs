@@ -32,8 +32,10 @@ export async function loadModels(scene){
             mesh.material.diffuseColor = Color3.White();
             return mesh
         },
+
         PANDA: await model(scene,"Panda"),
         BIRD: await model(scene,"Bird"),
+        BONNET: await model(scene,"bonnet"),
 
         BLOCK: await model(scene,"block"),
         PILLAR: await model(scene,"Pillar"),
@@ -43,6 +45,10 @@ export async function loadModels(scene){
         SPHINX: await model(scene,"sphinx"),
         HOLE: await model(scene,"hole"),
         BOMB: await model(scene,"bomb"),
+
+        LAVA: await model(scene,"lava"),
+        MUD: await model(scene,"mud"),
+        ICE: await model(scene,"ice"),
 
         QUESTION_MARK: await model(scene,"questionmark"),
         EXCLAMATION_MARK: await model(scene,"exclamationmark"),
@@ -62,6 +68,7 @@ export async function loadModels(scene){
         PARTICLE_SMOKE: await model(scene,"smoke","particle"),
         PARTICLE_SLASH: await model(scene,"slash","particle"),
         PARTICLE_FLAME: await model(scene,"flame","particle"),
+        PARTICLE_BLOOD: await model(scene,"blood","particle"),
 
         _nothing: scene.createDefaultEnvironment({createSkybox:false,createGround:false,toneMappingEnabled:false})
     }

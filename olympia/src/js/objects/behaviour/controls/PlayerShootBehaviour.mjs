@@ -5,6 +5,7 @@ import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
 import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
+import { TEAM } from "../../model/TeamModel.mjs";
 
 /**
  * Fait tirer un objet lors de l'appui sur une touche
@@ -13,24 +14,27 @@ export class PlayerShootBehaviour extends Behaviour{
 
     /**
      * @param {string} key La touche à presser pour tirer
-     * @param {number} strength La force du tir
-     * @param {number} reloading_time Le temps de rechargement
-     * @param {import("../../world/TaggedDict.mjs").Tag[]} particle_tags Les tags à donner aux projectiles
-     * @param {Vector3} size La taille des projectiles
-     * @param {number=} shoot_count Le nombre de projectiles tirable à chaque rechargement
-     * @param {number=} cadency La cadence de tir
-     * @param {number=} knockback Le recul infligé au tireur
+     * @param {import("../../world/TaggedDict.mjs").Tag[]} tags Les tags à donner aux projectiles
+     * @param {object} param0
+     * @param {number=} param0.strength La force du tir
+     * @param {number=} param0.reloading_time Le temps de rechargement
+     * @param {Vector3=} param0.size La taille des projectiles
+     * @param {number=} param0.shoot_count Le nombre de projectiles tirable à chaque rechargement
+     * @param {number=} param0.cadency La cadence de tir
+     * @param {number=} param0.knockback Le recul infligé au tireur
+     * @param {boolean=} param0.doCopyTeam Si vrai, les projectiles tirés auront la même équipe que le tireur
      */
-    constructor(key, strength, reloading_time, particle_tags, size, shoot_count=1, cadency=20, knockback=1){
+    constructor(key, tags, {strength=0.1, reloading_time=40, size=Vector3.One(), shoot_count=1, cadency=20, knockback=1, doCopyTeam=true}={}){
         super()
         this.key=key
         this.strength=strength
         this.reloading_time=reloading_time
-        this.particle_tags=particle_tags
+        this.tags=tags
         this.size=size
         this.shoot_count=shoot_count
         this.cadency=cadency
         this.knockback=knockback
+        this.doCopyTeam=doCopyTeam
     }
 
     /**
@@ -71,11 +75,12 @@ export class PlayerShootBehaviour extends Behaviour{
                             (tf.scale.z/2+this.size.z/2)*direction.z,
                         )
 
-                        world.add(
-                            this.particle_tags,
+                        const proj=world.add(
+                            this.tags,
                             new TransformModel({position:bullet_location, scale:this.size.clone(), rotation:tf.rotation.clone()}),
                             [MOVEMENT,new MovementModel(inertia)],
                         )
+                        if(this.doCopyTeam)obj.apply(TEAM, team=>proj.set(TEAM,team))
                     })
                     shooting.cooldown=this.cadency
                     shooting.reloading=this.reloading_time

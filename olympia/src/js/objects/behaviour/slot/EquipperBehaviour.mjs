@@ -1,82 +1,37 @@
-import { Behaviour } from "../Behaviour.mjs"
-import { ObjectQuery, World } from "../../world/World.mjs"
-import { TRANSFORM } from "../../model/TransformModel.mjs"
-import { Vector3 } from "../../../../../../babylonjs/core/index.js"
-import { MOVEMENT } from "../../model/MovementModel.mjs"
-import { ModelKey } from "../../world/ModelHolder.mjs"
-import { ObserverGroup, ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs"
-import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs"
+import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs"
 import { equip } from "../../model/SlotModel.mjs"
+import { TRANSFORM } from "../../model/TransformModel.mjs"
 import { GameObject } from "../../world/GameObject.mjs"
+import { ModelKey } from "../../world/ModelHolder.mjs"
+import { ObjectQuery, World } from "../../world/World.mjs"
+import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs"
+import { CollectableBehaviour } from "../generic/CollectableBehaviour.mjs"
 
 
-export class EquipperBehaviour extends Behaviour{
+export class EquipperBehaviour extends CollectableBehaviour{
 
     /**
      * @param {import("../../world/TaggedDict.mjs").Tag[]} given Les tags donnés.
-     * @param {string?} slot Le slot où les objets sont donnés.
+     * @param {ConstructorParameters<typeof CollectableBehaviour>[0] & {slot?:string}=} options
      */
-    constructor(given,slot=null){
+    constructor(given, options={}){
         super()
         this.given=given
-        this.slot=slot
+        this.slot=options.slot ?? null
     }
 
-    /**
-     * @override
-     * @param {World} world
-     * @param {ObjectQuery} objects
-     * @param {ObjectQuery} targets
-     */
-    init(world, objects, targets){
-        for(const obj of objects){
-            obj.getOrSet(EQUIPPER,()=>({equippedTime:0}))
-            obj.observers(ON_COLLISION).add(this.uniqueId(),(_,{object})=>{
-                obj.apply(EQUIPPER, it=>{
-                    if(it.equippedTime>0 || !targets.match(object))return
-                    it.equippedTime=20
-                    equip(object,this.slot,this.given)
-                    obj.observers(ON_EQUIP).notify({equipped:object, equipper:this})
-                    object.observers(ON_EQUIPPED).notify({giver:obj, equipper:this})
-                })
-            })
-        }
+    /** @type {CollectableBehaviour['on_collection']} */
+    on_collection(collectable, collecter, world, ...queries){
+        equip(collecter,this.slot,this.given)
+        collectable.observers(ON_EQUIP).notify({equipped:collecter, equipper:this})
+        collecter.observers(ON_EQUIPPED).notify({giver:collectable, equipper:this})
+        return true
     }
 
-    /**
-     * @override
-     * @param {World} world
-     * @param {ObjectQuery} objects
-     */
-    tick(world, objects){
-        for(let obj of objects){
-            obj.apply(EQUIPPER, it=>{
-                if(it.equippedTime==1){
-                    obj.kill()
-                }
-                if(it.equippedTime>0){
-                    it.equippedTime--
-                    obj.apply(TRANSFORM, it=>it.scale.scaleInPlace(0.9))
-                }
-            })
-        }
-    }
-
-    /**
-     * @override
-     * @param {World} world
-     * @param {ObjectQuery} objects
-     */
-    finish(world, objects){
-        for(const obj of objects){
-            obj.remove(EQUIPPER)
-            obj.observers(ON_COLLISION).remove(this.uniqueId())
-        }
-    }
 }
 
 
-/** @type {ModelKey<{equippedTime:number}>} */
+/** @type {ModelKey<{equippedTime:number, remaining_use:number, reloading:number}>} */
 export const EQUIPPER=new ModelKey("equipper")
 
 /** @type {ObserverKey<{equipped:GameObject, equipper:EquipperBehaviour}>} */

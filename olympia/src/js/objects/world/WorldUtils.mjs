@@ -87,7 +87,7 @@ function codeToNum(code){
  *  tags?: Tag[] | (()=>Tag[]),
  *  models?: ()=>Array<ModelAndKey>,
  *  size?: Vector3 | ((it:Vector3)=>Vector3),
- *  position?: ((it:Vector3)=>Vector3),
+ *  position?: ((it:Vector3, tilesize:Vector3)=>Vector3),
  *  rotation?: Vector3
  * }} ObjectDefinition
  */
@@ -110,7 +110,8 @@ export function createLevel(options){
     if(!Array.isArray(options.maps)) options.maps=[options.maps]
     for(const map of options.maps){
         forMap(map, [0,0], [1,1], (letter, pos, size)=>{
-            
+            if(letter[0]===' ')return
+
             // Object type
             const object=options.objects[letter[0]]
             if(!object)throw new Error(`Object ${letter} not found`)
@@ -127,17 +128,17 @@ export function createLevel(options){
 
             // Position and dimension
             let foot_height=codeToNum(letter.charCodeAt(1))
-            let size_heigth=codeToNum(letter.charCodeAt(2))
+            let size_height=codeToNum(letter.charCodeAt(2))
 
-            let dimension=options.tile_size.multiplyByFloats(size[0], size_heigth, size[1])
-            dimension=dim_transform(dimension)
+            let tile_dimension=options.tile_size.multiplyByFloats(size[0], size_height, size[1])
+            let dimension=dim_transform(tile_dimension)
 
             let coordinates=options.position.add(new Vector3(
-                pos[0]*options.tile_size.x+dimension.x/2,
-                options.tile_size.z*foot_height+dimension.y/2, 
-                pos[1]*options.tile_size.z+dimension.z/2
+                pos[0]*options.tile_size.x+tile_dimension.x/2,
+                options.tile_size.y*foot_height+tile_dimension.y/2, 
+                pos[1]*options.tile_size.z+tile_dimension.z/2
             ))
-            coordinates=pos_transform(coordinates)
+            coordinates=pos_transform(coordinates,tile_dimension)
             
             options.world.add(tags, new TransformModel({rotation, position:coordinates, scale:dimension}), ...models)
         }, 3, true)
