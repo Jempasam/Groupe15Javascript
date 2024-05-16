@@ -40,7 +40,7 @@ import { behaviourCollectable } from "../objects/behaviour/collision/Collectable
 
 export class Lvl1_2 extends Level{
 
-   static playerPos=new Vector3(1.5, 2, 9.5)
+   static playerPos=new Vector3(1.5, 3, 3)
 
    /**
     * @param {World} world 
@@ -186,7 +186,8 @@ export class Lvl1_2 extends Level{
 
       // Platform
       const ELEVATOR=behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02))
-      const MOVING=behav(new PathBehaviour([new Vector3(-7,0,0),new Vector3(7,0,0),new Vector3(7,5,0)], 0.1, 0.02, 0.04))
+      const MOVING=behav(new PathBehaviour([new Vector3(3,0,0),new Vector3(0,0,0)], 0.1, 0.02, 0.04))
+      const MOVING2=behav(new PathBehaviour([new Vector3(-3,0,0),new Vector3(0,0,0)], 0.1, 0.02, 0.04))
 
       // Objects
       const OBJ_PHYSIC=[TFS, MOVE, COLLISION, PUSHABLE, FALLING]
@@ -233,7 +234,8 @@ export class Lvl1_2 extends Level{
             c: ()=>{return {tags:[...OBJ_STATIC,BRIDGE], data:[]} },
             d: ()=>{return {tags:[...OBJ_STATIC,STONE], data:[]} },
             e: ()=>{return {tags:[...OBJ_STATIC,MOVE,ELEVATOR,BLOCK], data:[]} },
-            f: ()=>{return {tags:[...OBJ_STATIC,MOVE,MOVING,BLOCK], data:[]} },
+            f: ()=>{return {tags:[...OBJ_STATIC,MOVE,MOVING,BRIDGE], data:[]} },
+            F: ()=>{return {tags:[...OBJ_STATIC,MOVE,MOVING2,BRIDGE], data:[]} },
             g: ()=>{return {tags:[...OBJ_STATIC,ARTIFACT,JUMP_EQUIPPER], data:[]} },
             h: ()=>{return {tags:[...OBJ_PHYSIC,BLOCK], data:[]} },
             i: ()=>{return {tags:[...OBJ_ENNEMY, SPHINX, ENNEMY_CLOSE], data:[new LivingModel(10)]} },
@@ -257,44 +259,19 @@ export class Lvl1_2 extends Level{
             new TransformModel({position:new Vector3(pos[0]+size[0]/2, bottom/2+height/4-1, pos[1]+size[1]/2), scale:new Vector3(size[0],height/2,size[1])})
          )
       }
-      /*forMap(`
-      1  ]d03b06-..-..-..-..   d09                     b08-..-..-..-..-..-..
-      2  ]   |             |b51a06b51a06b51a06b51a07b71|                   |
-      3  ]d09|_____________|      d05                  |                   |
-      4  ]   d06b41-..-..d03                           |                   |
-      5  ]      b31-..-..         d0F-..-..            |                   |
-      6  ]d07   b21-..-..d05      |       |            |___________________|
-      7  ]      b11-..-..   d06   |_______|                  b06
-      8  ]   b01-..-..-..-..                                 |..
-      9  ]   a09   c10   a09                                 |..
-      10 ]      e01c10               f01               b08-..-..-..-..
-      11 ]   a09   c10   a09                           |             |
-      12 ]   b01-..-..-..-..                           |             |
-      13 ]                     bP2-..                  |             |
-      14 ]                     |____|   bM1            |             |
-      15 ]                                             |_____________|
-      16 ]                                                   c71     
-      17 ]                     bJ1-..                        c71
-      18 ]                                                   c71
-      19 ]                     eC1-..                        c71
-      20 ]                  b0D-..-..-..               b08-..-..-..-..-..-..
-      21 ]                  |          |               |                   |
-      22 ]                  |          |bB1a0Bb91a09b71|                   |
-      23 ]                  |          |bB1a0Bb91a09b71|                   |
-      24 ]                  |__________|               |                   |
-      25 ]                                             |___________________|`,
-         [-4,-8], [1.5,1.5], objectSpawner, 3, true
-      )*/
       forMap(`
-      1  ]
-      2  ]
-      3  ]
-      4  ]
-      5  ]
-      6  ]
+      1  ]b0H-..-..-..
+      2  ]bB6-..-..-..
+      3  ]|          |
+      4  ]|__________|
+      5  ]b0H-..-..-..
+      6  ]      j61
       7  ]
-      8  ]   b01-..-..-..-..
-      9  ]   a09   c10   a09
+      8  ]
+      9  ]
+      10 ]
+      11 ]
+      12 ]
       13 ]
       14 ]
       15 ]
@@ -308,7 +285,35 @@ export class Lvl1_2 extends Level{
       23 ]
       24 ]
       25 ]`,
-         [-4,-5], [1.5,1.5], objectSpawner, 3, true
+         [-3,-2], [1.5,1.5], objectSpawner, 3, true
+      )
+      forMap(`
+      1  ]            d08d08d08d08
+      2  ]   c05-..-..-..-..-..d08
+      3  ]   |                |d08
+      4  ]   |                |d08
+      5  ]   |                |d08
+      6  ]   |                |d08
+      7  ]   |________________|d08
+      8  ]   c04-..-..-..-..-..
+      9  ]   c03-..-..-..-..-..
+      10 ]   c02-..-..-..-..-..-..-..-..-..                  c02-..-..
+      11 ]   |                            |                  |       |
+      12 ]   |                            |f11            F11|_______|
+      13 ]   |                            |
+      14 ]   |____________________________|
+      15 ]
+      16 ]
+      17 ]
+      18 ]
+      19 ]
+      20 ]
+      21 ]
+      22 ]
+      23 ]
+      24 ]
+      25 ]`,
+         [-3,-2], [1.5,1.5], objectSpawner, 3, true
       )
 
       this.player=world.add([...OBJ_PLAYER, PANDA],
