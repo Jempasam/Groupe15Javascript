@@ -51,7 +51,7 @@ let listeBombes = [];
 let listes;
 let decor;
 
-let nbLevel = 21;
+let nbLevel = -1;
 /** @type {Level?} */ let currentLevel=null
 
 
