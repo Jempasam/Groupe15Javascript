@@ -1,6 +1,7 @@
 import { Vector3 } from "../../../../../../babylonjs/core/index.js";
 import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { LIVING, LivingModel } from "../../model/LivingModel.mjs";
+import { MOVEMENT } from "../../model/MovementModel.mjs";
 import { TRANSFORM } from "../../model/TransformModel.mjs";
 import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
@@ -19,7 +20,7 @@ export class RespawnBehaviour extends Behaviour{
     init(world,objects){
         for(let obj of objects){
             obj.apply2(TRANSFORM,LIVING, (t,l)=>{
-                obj.set(RESPAWN_ANCHOR,[t.position.clone(),l.life])
+                obj.set(RESPAWN_ANCHOR,[t.position.clone(),l.life,obj.get(MOVEMENT)?.inertia])
             })
             console.log("init",obj.get(RESPAWN_ANCHOR))
             obj.observers(ON_DEATH).add(this.uid,(obj)=>{
@@ -31,6 +32,7 @@ export class RespawnBehaviour extends Behaviour{
                         t.position.copyFrom(anchor[0])
                         l.life=anchor[1]
                     })
+                    if(anchor[2]) obj.get(MOVEMENT)?.inertia?.copyFrom(anchor[2])
                 }
             })
         }
@@ -54,5 +56,5 @@ export class RespawnBehaviour extends Behaviour{
     get order(){ return 2 }
 }
 
-/** @type {ModelKey<[Vector3,number]>} */
+/** @type {ModelKey<[Vector3,number,Vector3?]>} */
 export const RESPAWN_ANCHOR=new ModelKey("respawn_anchor")

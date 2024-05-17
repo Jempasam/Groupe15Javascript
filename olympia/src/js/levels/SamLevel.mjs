@@ -3,33 +3,29 @@ import { UniversalCamera, Vector3 } from "../../../../babylonjs/core/index.js";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { MessageManager } from "../messages/MessageManager.mjs";
 import { Behaviour } from "../objects/behaviour/Behaviour.mjs";
-import { SummonerBehaviour } from "../objects/behaviour/SummonerBehaviour.mjs";
-import { MeleeAttackBehaviour } from "../objects/behaviour/controls/MeleeAttackBehaviour.mjs";
-import { PlayerShootBehaviour } from "../objects/behaviour/controls/PlayerShootBehaviour.mjs";
-import { behaviourCollectable } from "../objects/behaviour/generic/CollectableBehaviour.mjs";
 import { ON_DEATH, ON_LIVE_CHANGE } from "../objects/behaviour/life/LivingBehaviour.mjs";
 import { PathBehaviour } from "../objects/behaviour/movement/PathBehaviour.mjs";
-import { EmitterBehaviour } from "../objects/behaviour/particle/EmitterBehaviour.mjs";
-import { EquipperBehaviour, ON_EQUIPPED } from "../objects/behaviour/slot/EquipperBehaviour.mjs";
+import { ON_EQUIPPED } from "../objects/behaviour/slot/EquipperBehaviour.mjs";
 import { HITBOX } from "../objects/model/HitboxModel.mjs";
 import { LIVING, LivingModel } from "../objects/model/LivingModel.mjs";
 import { MOVEMENT } from "../objects/model/MovementModel.mjs";
-import { TRANSFORM, TransformModel } from "../objects/model/TransformModel.mjs";
+import { TRANSFORM } from "../objects/model/TransformModel.mjs";
 import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
 import { message } from "../script.js";
 import { Level, LevelContext } from "./Level.mjs";
+import { LiveEditor } from "./LiveEditor.mjs";
+import { Lvl1_2 } from "./Lvl1_2.mjs";
 import { EffectPack } from "./objectpacks/EffectPack.mjs";
 import { FightPack } from "./objectpacks/FightPack.mjs";
+import { IAPack } from "./objectpacks/IAPack.mjs";
 import { LivingPack } from "./objectpacks/LivingPack.mjs";
 import { ModelPack } from "./objectpacks/ModelPack.mjs";
+import { MonsterPack } from "./objectpacks/MonsterPack.mjs";
 import { ParticlePack } from "./objectpacks/ParticlePack.mjs";
 import { PhysicPack } from "./objectpacks/PhysicPack.mjs";
 import { PlayerPack } from "./objectpacks/PlayerPack.mjs";
 import { SoilPack } from "./objectpacks/SoilPack.mjs";
-import { IAPack } from "./objectpacks/IAPack.mjs";
-import { Lvl1_2 } from "./lvl1_2.mjs";
-import { MonsterPack } from "./objectpacks/MonsterPack.mjs";
 
 export class SamLevel extends Level{
 
@@ -128,7 +124,7 @@ export class SamLevel extends Level{
             8  ]   b01-..-..-..-..                                 |..            |       |
             9  ]   a09   c10   a09                                 |..            |_______|
             10 ]      e01c10               f01               b08-..-..-..-..            b06b60
-            11 ]E01a09   c10   a09                           |             |            b05b50
+            11 ]   a09   c10   a09                           |             |            b05b50
             12 ]b01-..-..-..-..-..-..                        |             |            b04b40
             13 ]|                   |bP2-..                  |             |            b03b30
             14 ]|                   ||____|   bM1            |             |            b02b20
@@ -211,6 +207,7 @@ export class SamLevel extends Level{
       if(isKeyPressed("Digit2"))this.camerapos=new Vector3(0,8,10)
       if(isKeyPressed("Digit3"))this.camerapos=new Vector3(0,30,30)
       if(isKeyPressed("Digit8"))context.switchTo(new Lvl1_2())
+      if(isKeyPressed("Digit7"))context.switchTo(new LiveEditor())
    }
 
    /**
@@ -218,6 +215,7 @@ export class SamLevel extends Level{
     * @param {{camera:Camera}} options 
     */
    stop(world,options){
+      message.clearAll()
    }
 
 }

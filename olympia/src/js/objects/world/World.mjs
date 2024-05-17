@@ -149,10 +149,14 @@ export class World{
     }
 
     close(){
-        while(this.objects_list.length>0) this.remove(this.objects_list[0])
+        this.clearObjects()
         while(this.behaviours_list.length>0) this.removeBehaviour(this.behaviours_list[0])
         this.age=0
         this.obj_state_age=0
+    }
+
+    clearObjects(){
+        while(this.objects_list.length>0) this.remove(this.objects_list[0])
     }
 
     /**
