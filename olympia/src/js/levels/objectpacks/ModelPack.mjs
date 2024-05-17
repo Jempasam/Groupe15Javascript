@@ -43,6 +43,9 @@ export class ModelPack extends ObjectPack{
     // Monsters
     panda= this.behav(()=>new MeshBehaviour(this.models.PANDA))
     bird= this.behav(()=>new MeshBehaviour(this.models.BIRD))
+    kangaroo= this.behav(()=>new MeshBehaviour(this.models.KANGAROO))
+    bad_kangaroo= this.behav(()=>new MeshBehaviour(this.models.BAD_KANGAROO))
+    demon= this.behav(()=>new MeshBehaviour(this.models.DEMON))
     bonnet= this.behav(()=>new MeshBehaviour(this.models.BONNET))
     sphinx= this.behav(()=>new MeshBehaviour(this.models.SPHINX))
 

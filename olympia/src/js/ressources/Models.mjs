@@ -33,16 +33,20 @@ export async function loadModels(scene){
             return mesh
         },
 
-        PANDA: await model(scene,"Panda"),
-        BIRD: await model(scene,"Bird"),
-        BONNET: await model(scene,"bonnet"),
+        PANDA: await model(scene,"panda","animal"),
+        KANGAROO: await model(scene,"kangaroo","animal"),
+        BAD_KANGAROO: await model(scene,"bad_kangaroo","animal"),
+        BIRD: await model(scene,"bird","animal"),
+        BONNET: await model(scene,"bonnet","animal"),
+        SPHINX: await model(scene,"sphinx","animal"),
+        DEMON: await model(scene,"demon","animal"),
+
 
         BLOCK: await model(scene,"block"),
         PILLAR: await model(scene,"Pillar"),
         BRIDGE: await model(scene,"Bridge"),
         STONE: await model(scene,"Stone"),
         ARTIFACT: await model(scene,"Artifact"),
-        SPHINX: await model(scene,"sphinx"),
         HOLE: await model(scene,"hole"),
         BOMB: await model(scene,"bomb"),
 

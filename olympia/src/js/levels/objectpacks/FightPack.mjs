@@ -64,13 +64,13 @@ export class FightPack extends ObjectPack{
         accelerate(mv.inertia, offset.x, offset.y, offset.z, force, force, force)
     }
     small_knockback= this.behav(tags(()=>this._living.living.id),
-        behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>this._knockback(o,t,0.1))
-    )
-    medium_knockback= this.behav(tags(()=>this._living.living.id),
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>this._knockback(o,t,0.2))
     )
-    large_knockback= this.behav(tags(()=>this._living.living.id),
+    medium_knockback= this.behav(tags(()=>this._living.living.id),
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>this._knockback(o,t,0.4))
+    )
+    large_knockback= this.behav(tags(()=>this._living.living.id),
+        behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>this._knockback(o,t,0.8))
     )
     
     // Contact effect

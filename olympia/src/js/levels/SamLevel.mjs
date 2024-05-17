@@ -29,6 +29,7 @@ import { PlayerPack } from "./objectpacks/PlayerPack.mjs";
 import { SoilPack } from "./objectpacks/SoilPack.mjs";
 import { IAPack } from "./objectpacks/IAPack.mjs";
 import { Lvl1_2 } from "./lvl1_2.mjs";
+import { MonsterPack } from "./objectpacks/MonsterPack.mjs";
 
 export class SamLevel extends Level{
 
@@ -79,25 +80,13 @@ export class SamLevel extends Level{
       const player=new PlayerPack(world,fight)
       const soil=new SoilPack(world,effect)
       const ia=new IAPack(world,living)
-
-      // Ennemy
-      //const ENNEMY_CLOSE=behav_multi([player.player.id], new MeleeAttackBehaviour(0.02,0.04,8, {damage:2}))
-      //const ENNEMY_CLOSE_FAST=behav_multi([player.player.id], new MeleeAttackBehaviour(0.005,0.15,20, {damage:1}))
-      const ENNEMY_CLOSE_FLYING=behav_multi([player.player.id], new MeleeAttackBehaviour(0.02,0.2,20, {damage:1, targeting_time:60, targets:[new Vector3(-3,10,-3),new Vector3(3,10,3),new Vector3(0,5,0),Vector3.Zero()]}))
-
+      const monster=new MonsterPack(world,fight,ia,player)
       // Platform
       const ELEVATOR=behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02))
       const MOVING=behav(new PathBehaviour([new Vector3(-7,0,0),new Vector3(7,0,0),new Vector3(7,5,0)], 0.1, 0.02, 0.04))
 
       // Objects
       const OBJ_PLAYER=[...physic.PHYSIC_FALLING(), ...player.LIVING_PLAYER(), player.move.id]
-
-      // Invocateur
-      const OBJ_PANDA=[...physic.PHYSIC_FALLING(), ...living.LIVING(), model.panda.id, ia.rotate_and_jump.id, fight.small_damage.id, fight.small_knockback.id]
-      const OBJ_SPHINX=[...physic.PHYSIC_FALLING(), ...living.LIVING(), model.sphinx.id, ia.follow_slow.id, fight.medium_damage.id, fight.large_knockback.id]
-      const OBJ_BIRD=[...physic.PHYSIC_SLIDE(), ...living.LIVING(), model.bird.id, ENNEMY_CLOSE_FLYING]
-      const INVOCATION_PANDA=behav_multi([player.player.id], new SummonerBehaviour({tags:OBJ_PANDA, models:()=>[fight.bad]}, new Vector3(.5,.5,.5), 3, 100, 15, 20))
-      const INVOCATION_BIRD=behav_multi([player.player.id], new SummonerBehaviour({tags:OBJ_BIRD, models:()=>[fight.bad]}, new Vector3(.5,.5,.5), 3, 100, 15, 20))
 
       // Hint
       const UNLOCK_HINT=behav_multi([player.player.id], behaviourCollectable({},(_,collecter)=>{
@@ -134,9 +123,9 @@ export class SamLevel extends Level{
             k: { tags:[...player.SHOOT_EQUIPPER(), model.artifact.id] },
             l: { tags:[...player.DASH_EQUIPPER(), model.artifact.id] },
 
-            i: { tags:[...OBJ_SPHINX], models:()=>[new LivingModel(10),fight.bad] },
-            m: { tags:[...physic.STATIC(), model.hole.id,INVOCATION_PANDA] },
-            r: { tags:[...physic.STATIC(), model.hole.id,INVOCATION_BIRD] },
+            i: { tags:[...monster.SPHINX()], models:()=>[new LivingModel(10),fight.bad] },
+            m: { tags:[...physic.STATIC(), model.hole.id, monster.panda_summoner.id] },
+            r: { tags:[...physic.STATIC(), model.hole.id, monster.kangaroo_summoner.id] },
 
             n: { tags:[...physic.PHYSIC(), model.block.id] },
             o: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, UNLOCK_HINT] },
@@ -193,8 +182,8 @@ export class SamLevel extends Level{
             11 ]   
             12 ]         P11
             13 ]                     kS2
-            14 ]               m20-..
-            15 ]               |____|                              i74-..
+            14 ]               r20   
+            15 ]                                                   i74-..
             16 ]                                                   |____|
             17 ]                              
             18 ]   

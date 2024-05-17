@@ -96,6 +96,9 @@ export class SummonerBehaviour extends Behaviour{
                             const d=offset.multiplyInPlace(new Vector3(1,0,1)).normalize().scaleInPlace(0.2)
                             accelerate(tmv.inertia, d.x,d.y,d.z, d.x,d.y,d.z)
                         }
+                        if(offset.length()>this.distance*1.5){
+                            obj.kill()
+                        }
                     })
                 }
             })

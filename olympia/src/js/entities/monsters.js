@@ -41,33 +41,11 @@ export class Monster extends Entities {
         let skinNom = this.skinNom;
         BABYLON.SceneLoader.ImportMesh("", "../../olympia/assets/", this.skinNom+".glb", scene, function (meshes) {
             let skin = meshes[0];
-            
             skin.isVisible = true;
-            //ajouter panda en enfant de monster
             mesh.addChild(skin);
-            //skin.scaling = new BABYLON.Vector3(xSize, ySize, zSize);
-            //placer le skin en fonction du modèle choisi
-            switch (skinNom){
-                case "Panda":
-                case "Bird":
-                    skin.scaling = new BABYLON.Vector3(xSize, ySize, zSize);
-                    skin.position = new BABYLON.Vector3(0, 0, 0);
-                    skin.rotation = new BABYLON.Vector3(0, 0, 0);
-                    break;
-                case "Kangaroo1":
-                    skin.scaling = new BABYLON.Vector3(0.2*xSize, 0.2*ySize, 0.2*zSize);
-                    skin.position = new BABYLON.Vector3(0,-0.5,0.5);
-                    skin.rotation = new BABYLON.Vector3(0, Math.PI, 0);
-                    break;
-                case "Kangaroo2":
-                    skin.position = new BABYLON.Vector3(0,-0.5,0.5);
-                    skin.rotation = new BABYLON.Vector3(0, 0, 0);
-                    break;
-                default:
-                    skin.position = new BABYLON.Vector3(0,0,0);
-                    skin.rotation = new BABYLON.Vector3(0, 0, 0);
-                    break;
-            }
+            skin.scaling = new BABYLON.Vector3(xSize, ySize, zSize);
+            skin.position = new BABYLON.Vector3(0, 0, 0);
+            skin.rotation = new BABYLON.Vector3(0, 0, 0);
         });
     }
 
