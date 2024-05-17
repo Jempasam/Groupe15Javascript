@@ -48,10 +48,10 @@ export class SoilPack extends ObjectPack{
 
 
     // Soil
-    GROUND= this.lazy(()=>[...this._physic.STATIC(), this._models.block.id])
-    LAVA= this.lazy(()=>[...this._physic.STATIC(), this.damaging.id, this._models.lava.id])
-    MUD= this.lazy(()=>[...this._physic.STATIC(), this.slowing.id, this._models.mud.id])
-    ICE= this.lazy(()=>[...this._physic.STATIC(), this.slidable.id, this._models.ice.id])
+    GROUND= this.lazy(()=>[this._models.block.id])
+    LAVA= this.lazy(()=>[this.damaging.id, this._models.lava.id])
+    MUD= this.lazy(()=>[this.slowing.id, this._models.mud.id])
+    ICE= this.lazy(()=>[this.slidable.id, this._models.ice.id])
 
 
     // Moving
