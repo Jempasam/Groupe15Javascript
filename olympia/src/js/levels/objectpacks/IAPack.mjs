@@ -33,13 +33,13 @@ export class IAPack extends ObjectPack{
     ]))
 
     rotate_and_jump=this.behav(tags(()=>this._living.living.id),new TargetChainBehaviour(15,[
-        [FOLLOW_RELATIVE(new Vector3(2,0,-4)), 0.01, 0.1, 20,  9],
+        [FOLLOW_RELATIVE(new Vector3(2,0,-3.5)), 0.01, 0.1, 20,  9],
         {random:[[STAY,0,0,22],[STAY,0,0,45],[STAY,0,0,61]]},
-        [FOLLOW_RELATIVE(new Vector3(-2,0,4)), 0.02, 0.3, 60],
+        [FOLLOW_RELATIVE(new Vector3(-2,0,3.5)), 0.02, 0.3, 60],
 
-        [FOLLOW_RELATIVE(new Vector3(-2,0,-4)), 0.01, 0.1, 20,  9],
+        [FOLLOW_RELATIVE(new Vector3(-2,0,-3.5)), 0.01, 0.1, 20,  9],
         {random:[[STAY,0,0,22],[STAY,0,0,45],[STAY,0,0,61]]},
-        [FOLLOW_RELATIVE(new Vector3(-2,0,4)), 0.02, 0.3, 60],
+        [FOLLOW_RELATIVE(new Vector3(-2,0,3.5)), 0.02, 0.3, 60],
     ]))
 
     fly_and_attack=this.behav(tags(()=>this._living.living.id),new TargetChainBehaviour(20,[

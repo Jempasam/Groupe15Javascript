@@ -22,6 +22,7 @@ import { FightPack } from "./objectpacks/FightPack.mjs";
 import { IAPack } from "./objectpacks/IAPack.mjs";
 import { LivingPack } from "./objectpacks/LivingPack.mjs";
 import { ModelPack } from "./objectpacks/ModelPack.mjs";
+import { MonsterPack } from "./objectpacks/MonsterPack.mjs";
 import { ParticlePack } from "./objectpacks/ParticlePack.mjs";
 import { PhysicPack } from "./objectpacks/PhysicPack.mjs";
 import { PlayerPack } from "./objectpacks/PlayerPack.mjs";
@@ -46,24 +47,12 @@ export class Lvl1_2 extends Level{
       /** @type {import("../ressources/Models.mjs").ModelLibrary} */
       const models=world["models"]
 
-      let id_counter=0
-      function id(){ return id_counter++ }
-
-      /**
-       * @param {import("../objects/world/TaggedDict.mjs").Tag[]} tags
-       * @param {...(Behaviour|[Behaviour,number])} behaviours
-       */
-      function behav_multi(tags, ...behaviours){
-         const ret=id()
-         world.addBehaviours([ret,...tags], ...behaviours)
-         return ret
-      }
-
+      let id_counter=3512
       /**
        * @param {...(Behaviour|[Behaviour,number])} behaviours
        */
       function behav(...behaviours){
-         const ret=id()
+         const ret=id_counter++
          world.addBehaviours(ret, ...behaviours)
          return ret
       }
@@ -77,37 +66,16 @@ export class Lvl1_2 extends Level{
       const player=new PlayerPack(world,fight)
       const soil=new SoilPack(world,effect)
       const ia=new IAPack(world,living)
+      const monster=new MonsterPack(world,fight,ia,player)
 
       // Platform
-      const ELEVATOR=behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02))
       const MOVING=behav(new PathBehaviour([new Vector3(3,0,0),new Vector3(0,0,0)], 0.1, 0.02, 0.04))
       const MOVING2=behav(new PathBehaviour([new Vector3(-3,0,0),new Vector3(0,0,0)], 0.1, 0.02, 0.04))
 
-      // Objects
-      const OBJ_PLAYER=[...physic.PHYSIC_FALLING(), ...player.LIVING_PLAYER(), player.move.id]
-
-      // Invocateur
-      const OBJ_PANDA=[...physic.PHYSIC_FALLING(), ...living.LIVING(), model.panda.id, ia.rotate_and_jump.id, fight.small_damage.id, fight.small_knockback.id]
-      const OBJ_SPHINX=[...physic.PHYSIC_FALLING(), ...living.LIVING(), model.sphinx.id, ia.follow_slow.id, fight.medium_damage.id, fight.large_knockback.id]
-      const OBJ_BIRD=[...physic.PHYSIC_SLIDE(), ...living.LIVING(), model.bird.id, ia.follow_fast.id, fight.small_damage.id, fight.small_knockback.id]
-      const INVOCATION_PANDA=behav_multi([player.player.id], new SummonerBehaviour({tags:OBJ_PANDA, models:()=>[fight.bad]}, new Vector3(.5,.5,.5), 3, 100, 15, 20))
-      const INVOCATION_BIRD=behav_multi([player.player.id], new SummonerBehaviour({tags:OBJ_BIRD, models:()=>[fight.bad]}, new Vector3(.5,.5,.5), 3, 100, 15, 20))
-
       // Hint
-      const UNLOCK_HINT=behav_multi([player.player.id], behaviourCollectable({},(_,collecter)=>{
-         message.send("Vous pouvez débloquer des améliorations grâce aux artefactes dorés!",6000,"hint")
-         return true
-      }))
-
-      const PUSH_HINT=behav_multi([player.player.id], behaviourCollectable({},(_,collecter)=>{
-         message.send("Ces caisses peuvent être déplacées, peut être qu'elles peuvent vous être utile.",6000,"hint")
-         return true
-      }))
-
-      const DAMAGE_HINT=behav_multi([player.player.id], behaviourCollectable({},(_,collecter)=>{
-         message.send("Attention aux dégats! Si vous fumez, il ne faut plus vous faire toucher. ",6000,"hint")
-         return true
-      }))
+      const unlock_hint=player.createHint(message,"Vous pouvez débloquer des améliorations grâce aux artefactes dorés!")
+      const push_hint=player.createHint(message,"Ces caisses peuvent être déplacées, peut être qu'elles peuvent vous être utile.")
+      const damage_hint=player.createHint(message,"Attention aux dégats! Si vous fumez, il ne faut plus vous faire toucher. ")
 
       createLevel({
          tile_size: new Vector3(1.5,0.5,1.5),
@@ -118,7 +86,7 @@ export class Lvl1_2 extends Level{
             b: { tags:[...physic.STATIC(), model.block.id] },
             c: { tags:[...physic.STATIC(), model.bridge.id] },
             d: { tags:[...physic.STATIC(), model.stone.id] },
-            e: { tags:[...physic.STATIC(), physic.move.id, ELEVATOR, model.block.id] },
+            e: { tags:[...physic.STATIC(), physic.move.id, soil.elevator4.id, model.block.id] },
             f: { tags:[...physic.STATIC(), physic.move.id, MOVING, model.block.id] },
             F: { tags:[...physic.STATIC(), physic.move.id, MOVING2, model.block.id] },
             h: { tags:[...physic.PHYSIC_FALLING(), model.block.id] },
@@ -128,20 +96,20 @@ export class Lvl1_2 extends Level{
             k: { tags:[...player.SHOOT_EQUIPPER(), model.artifact.id] },
             l: { tags:[...player.DASH_EQUIPPER(), model.artifact.id] },
 
-            i: { tags:[...OBJ_SPHINX], models:()=>[new LivingModel(10),fight.bad] },
-            m: { tags:[...physic.STATIC(), model.hole.id,INVOCATION_PANDA] },
-            r: { tags:[...physic.STATIC(), model.hole.id,INVOCATION_BIRD] },
+            i: { tags:[...monster.SPHINX()], models:()=>[new LivingModel(10),fight.bad] },
+            m: { tags:[...physic.STATIC(), model.hole.id, ...monster.panda_summoner.id] },
+            r: { tags:[...physic.STATIC(), model.hole.id, ...monster.bird_summoner.id] },
 
             n: { tags:[...physic.PHYSIC(), model.block.id] },
-            o: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, UNLOCK_HINT] },
-            p: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, DAMAGE_HINT] },
-            q: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, PUSH_HINT] },
+            o: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, unlock_hint.id] },
+            p: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, damage_hint.id] },
+            q: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, push_hint.id] },
             z: { tags:soil.ICE() },
             y: { tags:soil.LAVA() },
             x: { tags:soil.MUD() },
 
             P: {
-               tags:[...OBJ_PLAYER, living.respawn.id, model.bonnet.id],
+               tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
                models:()=>[new LivingModel(3), fight.good],
                size: it=>it.scale(0.8)
             },
@@ -213,10 +181,6 @@ export class Lvl1_2 extends Level{
       if(this.player==null)window.alert("Player not found")
 
       this.player.observers(ON_DEATH).add("Lvl1_2",(obj,_)=>{
-         this.player?.apply(LIVING, living=>living.life=3)
-         this.player?.apply(TRANSFORM, tf=>{
-            tf.position.copyFrom(Lvl1_2.playerPos)
-         })
          this.player?.apply(MOVEMENT, (movement)=>{
             movement.inertia.set(0,0,0)
          })

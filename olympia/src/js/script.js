@@ -1,6 +1,5 @@
 import { Player } from "./entities/player.js";
 import { SamLevel } from "./levels/SamLevel.mjs"
-import { Lvl1_2 } from "./levels/lvl1_2.mjs";
 import { LvlTest } from "./levels/lvlTest.js";
 import { LvlAccueil } from "./levels/lvlAccueil.js";
 import { Lvl1} from "./levels/lvl1.js";
@@ -12,6 +11,7 @@ import { Engine, SSAO2RenderingPipeline, SceneOptimizer, SceneOptimizerOptions }
 import { SCENE } from "./objects/model/MeshModel.mjs";
 import { adom, create } from "../../../samlib/DOM.mjs";
 import { MessageManager } from "./messages/MessageManager.mjs";
+import { Lvl1_2 } from "./levels/lvl1_2.mjs";
 
 /** Récupère et crée la fenêtre de jeu */
 const gameElement = document.getElementById("olympia");
@@ -51,7 +51,7 @@ let listeBombes = [];
 let listes;
 let decor;
 
-let nbLevel = 21;
+let nbLevel = -1;
 /** @type {Level?} */ let currentLevel=null
 
 
@@ -201,7 +201,7 @@ function changeLevel(){
 
     currentLevel=null
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
-        
+    world.close()
     //supprimer le décor
     //changer de niveau
     if(nbLevel == 260402){

@@ -30,7 +30,7 @@ export class LivingPack extends ObjectPack{
     depth_damage=this.behav(()=>behaviourEach(o=>o.apply2(TRANSFORM, LIVING,(t,l)=>{
         if(t.position.y<-10)l.damage(1)
     })))
-    respawn=new RespawnBehaviour()
+    respawn=this.behav(new RespawnBehaviour())
 
     // Compilations
     LIVING= this.lazy(()=>[this.living.id, this.damage_blood.id, this.depth_damage.id])

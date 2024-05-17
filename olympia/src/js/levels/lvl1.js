@@ -40,7 +40,7 @@ export class Lvl1 {
         const wallL1P4 = new Wall("WallL1P4", -6, 0, 0, 4, 20, 5,this.scene);
         listes[2].push(wallL1P4);
 
-        const unlocker = new Unlocker("Unlocker1",0, 0, 10, 1, 1, 1, 2, this.scene);
+        const unlocker = new Unlocker("Unlocker1",0, 0, 10, 1, 1, 1, 1, this.scene);
         listes[8].push(unlocker);
 
         const wallL1P5 = new Wall("WallL1P5", 5, 0, -5, 10, 1.5, 1,this.scene);

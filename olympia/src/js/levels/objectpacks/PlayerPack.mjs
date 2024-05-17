@@ -1,11 +1,13 @@
 import { Vector3 } from "../../../../../babylonjs/core/index.js";
+import { MessageManager } from "../../messages/MessageManager.mjs";
 import { PlayerBehaviour } from "../../objects/behaviour/controls/PlayerBehaviour.mjs";
 import { PlayerDashBehaviour } from "../../objects/behaviour/controls/PlayerDashBehaviour.mjs";
 import { PlayerJumpBehaviour } from "../../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
 import { PlayerShootBehaviour } from "../../objects/behaviour/controls/PlayerShootBehaviour.mjs";
+import { behaviourCollectable } from "../../objects/behaviour/generic/CollectableBehaviour.mjs";
 import { EmitterBehaviour } from "../../objects/behaviour/particle/EmitterBehaviour.mjs";
 import { EquipperBehaviour } from "../../objects/behaviour/slot/EquipperBehaviour.mjs";
-import { World } from "../../objects/world/World.mjs";
+import { BehaviourEntry, World } from "../../objects/world/World.mjs";
 import { FightPack } from "./FightPack.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
 
@@ -49,17 +51,36 @@ export class PlayerPack extends ObjectPack{
         ()=>new EmitterBehaviour(this._particle.FIRE(), new Vector3(1.2,1.2,1.2), 10),
     )
 
+
     // Equipper
     jump_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.jump.id],{slot:"jump"}))
     dash_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.dash.id],{slot:"dash"}))
     attack_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.attack.id],{slot:"attack"}))
     shoot_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.shoot.id],{slot:"attack"}))
 
+
     // Packs
     LIVING_PLAYER= this.lazy(()=>[...this._living.LIVING(), this.player.id])
+
+    CLASSIC_PLAYER= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this.LIVING_PLAYER(), this.move.id, this._living.respawn.id])
 
     JUMP_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.jump_equipper.id, this._particle.wind_emitter.id])
     DASH_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.dash_equipper.id, this._particle.cloud_emitter.id])
     ATTACK_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.attack_equipper.id, this._particle.slash_emitter.id])
     SHOOT_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.shoot_equipper.id, this._particle.fire_emitter.id])
+
+
+    // Functions
+
+    /**
+     * Crée un behaviour d'indice
+     * @param {MessageManager} message 
+     * @param {string} text 
+     */
+    createHint(message,text){
+        return this.behav(tags(()=>this.player.id),()=>behaviourCollectable({},(_,collecter)=>{
+            message.send("Vous pouvez débloquer des améliorations grâce aux artefactes dorés!",6000,"hint")
+            return true
+        }))
+    }
 }

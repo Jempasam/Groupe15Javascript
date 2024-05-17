@@ -49,24 +49,12 @@ export class SamLevel extends Level{
       /** @type {import("../ressources/Models.mjs").ModelLibrary} */
       const models=world["models"]
 
-      let id_counter=0
-      function id(){ return id_counter++ }
-
-      /**
-       * @param {import("../objects/world/TaggedDict.mjs").Tag[]} tags
-       * @param {...(Behaviour|[Behaviour,number])} behaviours
-       */
-      function behav_multi(tags, ...behaviours){
-         const ret=id()
-         world.addBehaviours([ret,...tags], ...behaviours)
-         return ret
-      }
-
+      let id_counter=7532
       /**
        * @param {...(Behaviour|[Behaviour,number])} behaviours
        */
       function behav(...behaviours){
-         const ret=id()
+         const ret=id_counter++
          world.addBehaviours(ret, ...behaviours)
          return ret
       }
@@ -81,29 +69,14 @@ export class SamLevel extends Level{
       const soil=new SoilPack(world,effect)
       const ia=new IAPack(world,living)
       const monster=new MonsterPack(world,fight,ia,player)
+
       // Platform
-      const ELEVATOR=behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02))
       const MOVING=behav(new PathBehaviour([new Vector3(-7,0,0),new Vector3(7,0,0),new Vector3(7,5,0)], 0.1, 0.02, 0.04))
 
-      // Objects
-      const OBJ_PLAYER=[...physic.PHYSIC_FALLING(), ...player.LIVING_PLAYER(), player.move.id]
-
       // Hint
-      const UNLOCK_HINT=behav_multi([player.player.id], behaviourCollectable({},(_,collecter)=>{
-         message.send("Vous pouvez débloquer des améliorations grâce aux artefactes dorés!",6000,"hint")
-         return true
-      }))
-
-      const PUSH_HINT=behav_multi([player.player.id], behaviourCollectable({},(_,collecter)=>{
-         message.send("Ces caisses peuvent être déplacées, peut être qu'elles peuvent vous être utile.",6000,"hint")
-         return true
-      }))
-
-      const DAMAGE_HINT=behav_multi([player.player.id], behaviourCollectable({},(_,collecter)=>{
-         message.send("Attention aux dégats! Si vous fumez, il ne faut plus vous faire toucher. ",6000,"hint")
-         return true
-      }))
-
+      const unlock_hint=player.createHint(message,"Vous pouvez débloquer des améliorations grâce aux artefactes dorés!")
+      const push_hint=player.createHint(message,"Ces caisses peuvent être déplacées, peut être qu'elles peuvent vous être utile.")
+      const damage_hint=player.createHint(message,"Attention aux dégats! Si vous fumez, il ne faut plus vous faire toucher. ")
    
       createLevel({
          tile_size: new Vector3(1.5,0.5,1.5),
@@ -112,9 +85,11 @@ export class SamLevel extends Level{
          objects: {
             a: { tags:[...physic.STATIC(), model.pillar.id] },
             b: { tags:[...physic.STATIC(), model.block.id] },
+            B: { tags:[...physic.STATIC(), model.building.id]},
             c: { tags:[...physic.STATIC(), model.bridge.id] },
             d: { tags:[...physic.STATIC(), model.stone.id] },
-            e: { tags:[...physic.STATIC(), physic.move.id, ELEVATOR, model.block.id] },
+            e: { tags:[...physic.STATIC(), physic.move.id, soil.elevator4.id, model.block.id] },
+            E: { tags:[...physic.STATIC(), physic.move.id, soil.rotate_side4.id, model.block.id] },
             f: { tags:[...physic.STATIC(), physic.move.id, MOVING, model.block.id] },
             h: { tags:[...physic.PHYSIC_FALLING(), model.block.id] },
 
@@ -128,32 +103,32 @@ export class SamLevel extends Level{
             r: { tags:[...physic.STATIC(), model.hole.id, monster.kangaroo_summoner.id] },
 
             n: { tags:[...physic.PHYSIC(), model.block.id] },
-            o: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, UNLOCK_HINT] },
-            p: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, DAMAGE_HINT] },
-            q: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, PUSH_HINT] },
+            o: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, unlock_hint.id] },
+            p: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, damage_hint.id] },
+            q: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, push_hint.id] },
             z: { tags:soil.ICE() },
             y: { tags:soil.LAVA() },
             x: { tags:soil.MUD() },
             
             P: {
-               tags:[...OBJ_PLAYER, living.respawn.id, model.bonnet.id],
+               tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
                models:()=>[new LivingModel(3), fight.good],
                size: it=>it.scale(0.8)
             },
          },
          maps:[
             `
-            1  ]d03b06-..-..-..-..   d09                     b08-..-..-..-..-..-..      b0FbF0
-            2  ]   |             |b51a06b51a06b51a06b51a07b71|                   |      b0EbE0
-            3  ]d09|_____________|      d05                  |                   |      b0DbD0
-            4  ]   d06b41-..-..d03                           |                   |      b0CbC0
-            5  ]      b31-..-..         d0K-..-..            |                   |      b0BbB0
-            6  ]d07   b21-..-..d05      |       |            |___________________|      b0AbA0
-            7  ]      b11-..-..   d06   |_______|                  b06                  b09b90
-            8  ]   b01-..-..-..-..                                 |..                  b08b80
-            9  ]   a09   c10   a09                                 |..                  b07b70
+            1  ]d03b06-..-..-..-..   d09                     b08-..-..-..-..-..-..B0D-..-..
+            2  ]   |             |b51a06b51a06b51a06b51a07b71|                   ||       |
+            3  ]d09|_____________|      d05                  |                   ||_______|
+            4  ]   d06b41-..-..d03                           |                   |B0F-..-..
+            5  ]      b31-..-..         d0K-..-..            |                   ||       |
+            6  ]d07   b21-..-..d05      |       |            |___________________||_______|
+            7  ]      b11-..-..   d06   |_______|                  b06            B0C-..-..
+            8  ]   b01-..-..-..-..                                 |..            |       |
+            9  ]   a09   c10   a09                                 |..            |_______|
             10 ]      e01c10               f01               b08-..-..-..-..            b06b60
-            11 ]   a09   c10   a09                           |             |            b05b50
+            11 ]E01a09   c10   a09                           |             |            b05b50
             12 ]b01-..-..-..-..-..-..                        |             |            b04b40
             13 ]|                   |bP2-..                  |             |            b03b30
             14 ]|                   ||____|   bM1            |             |            b02b20
@@ -200,10 +175,6 @@ export class SamLevel extends Level{
       if(this.player==null)window.alert("Player not found")
 
       this.player.observers(ON_DEATH).add("SamLevel",(obj,_)=>{
-         this.player?.apply(LIVING, living=>living.life=3)
-         this.player?.apply(TRANSFORM, tf=>{
-            tf.position.copyFrom(SamLevel.playerPos)
-         })
          this.player?.apply(MOVEMENT, (movement)=>{
             movement.inertia.set(0,0,0)
          })

@@ -21,9 +21,12 @@ export class RespawnBehaviour extends Behaviour{
             obj.apply2(TRANSFORM,LIVING, (t,l)=>{
                 obj.set(RESPAWN_ANCHOR,[t.position.clone(),l.life])
             })
+            console.log("init",obj.get(RESPAWN_ANCHOR))
             obj.observers(ON_DEATH).add(this.uid,(obj)=>{
                 const anchor=obj.get(RESPAWN_ANCHOR)
+                console.log("death",anchor)
                 if(anchor){
+                    console.log("respawn",anchor)
                     obj.apply2(TRANSFORM,LIVING, (t,l)=>{
                         t.position.copyFrom(anchor[0])
                         l.life=anchor[1]

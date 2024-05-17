@@ -33,6 +33,8 @@ export class ModelPack extends ObjectPack{
     bridge= this.behav(()=>new MeshBehaviour(this.models.BRIDGE))
     stone= this.behav(()=>new MeshBehaviour(this.models.STONE))
     hole= this.behav(()=>new MeshBehaviour(this.models.HOLE))
+    building= this.behav(()=>new MeshBehaviour(this.models.BUILDING))
+    
     lava= this.behav(()=>new MeshBehaviour(this.models.LAVA))
     mud= this.behav(()=>new MeshBehaviour(this.models.MUD))
     ice= this.behav(()=>new MeshBehaviour(this.models.ICE))

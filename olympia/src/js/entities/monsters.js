@@ -39,7 +39,7 @@ export class Monster extends Entities {
     setSkin(mesh, xSize, ySize, zSize, scene){
         //récupérer modèle panda
         let skinNom = this.skinNom;
-        BABYLON.SceneLoader.ImportMesh("", "../../olympia/assets/", this.skinNom+".glb", scene, function (meshes) {
+        BABYLON.SceneLoader.ImportMesh("", "../../olympia/assets/animal/", this.skinNom+".glb", scene, function (meshes) {
             let skin = meshes[0];
             skin.isVisible = true;
             mesh.addChild(skin);

@@ -16,6 +16,7 @@ import { behaviourOnContact } from "../../objects/behaviour/generic/OnContactBeh
 import { LIVING } from "../../objects/model/LivingModel.mjs";
 import { ModelPack } from "./ModelPack.mjs";
 import { EffectPack } from "./EffectPack.mjs";
+import { PathBehaviour } from "../../objects/behaviour/movement/PathBehaviour.mjs";
 
 
 /**
@@ -51,4 +52,19 @@ export class SoilPack extends ObjectPack{
     LAVA= this.lazy(()=>[...this._physic.STATIC(), this.damaging.id, this._models.lava.id])
     MUD= this.lazy(()=>[...this._physic.STATIC(), this.slowing.id, this._models.mud.id])
     ICE= this.lazy(()=>[...this._physic.STATIC(), this.slidable.id, this._models.ice.id])
+
+
+    // Moving
+    elevator4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02))
+    elevator8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02))
+    forward4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,0,-4)], 0.1, 0.01, 0.02))
+    forward8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,0,-8)], 0.1, 0.01, 0.02))
+    backward4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,0,4)], 0.1, 0.01, 0.02))
+    backward8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,0,8)], 0.1, 0.01, 0.02))
+    right4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(-4,0,0)], 0.1, 0.01, 0.02))
+    right8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(-8,0,0)], 0.1, 0.01, 0.02))
+    left4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(4,0,0)], 0.1, 0.01, 0.02))
+    left8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(8,0,0)], 0.1, 0.01, 0.02))
+    rotate_side4=this.behav(new PathBehaviour([new Vector3(2,0,0),new Vector3(2,4,0),new Vector3(-2,4,0),new Vector3(-2,0,0)], 0.1, 0.01, 0.02))
+    rotate_side8=this.behav(new PathBehaviour([new Vector3(4,0,0),new Vector3(4,8,0),new Vector3(-4,8,0),new Vector3(-4,0,0)], 0.1, 0.01, 0.02))
 }
