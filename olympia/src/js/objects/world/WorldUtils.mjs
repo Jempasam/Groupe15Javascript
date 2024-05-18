@@ -96,7 +96,7 @@ function codeToNum(code){
  *  models?: ()=>Array<ModelAndKey>,
  *  size?: Vector3 | ((it:Vector3)=>Vector3),
  *  position?: ((it:Vector3, tilesize:Vector3)=>Vector3),
- *  rotation?: Vector3
+ *  rotation?: ()=>Vector3
  * }} ObjectDefinition
  */
 
@@ -136,7 +136,7 @@ export function createLevel(options){
 
             const models= object.models?.() ?? []
 
-            const rotation= object.rotation ?? Vector3.Zero()
+            const rotation= object.rotation?.() ?? Vector3.Zero()
 
             // Position and dimension
             let foot_height=codeToNum(letter.charCodeAt(name_length))

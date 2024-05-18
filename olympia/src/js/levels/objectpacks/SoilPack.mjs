@@ -3,7 +3,7 @@ import { ConstantForceBehaviour } from "../../objects/behaviour/ConstantForceBeh
 import { PoisonBehaviour } from "../../objects/behaviour/effect/PoisonBehaviour.mjs";
 import { EmitterBehaviour } from "../../objects/behaviour/particle/EmitterBehaviour.mjs";
 import { World } from "../../objects/world/World.mjs";
-import { ObjectPack } from "./ObjectPack.mjs";
+import { ObjectPack, tags } from "./ObjectPack.mjs";
 import { ParticlePack } from "./ParticlePack.mjs";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
 import { MOVEMENT, accelerate } from "../../objects/model/MovementModel.mjs";
@@ -17,6 +17,7 @@ import { LIVING } from "../../objects/model/LivingModel.mjs";
 import { ModelPack } from "./ModelPack.mjs";
 import { EffectPack } from "./EffectPack.mjs";
 import { PathBehaviour } from "../../objects/behaviour/movement/PathBehaviour.mjs";
+import { LivingPack } from "./LivingPack.mjs";
 
 
 /**
@@ -27,12 +28,15 @@ export class SoilPack extends ObjectPack{
     /**
      * @param {World} world
      * @param {EffectPack} effect
+     * @param {LivingPack} living
      */
-    constructor(world,effect){
+    constructor(world,effect,living){
         super(world)
         this._effect=effect
         this._physic=effect._particle._physic
+        this._living=living
         this._models=effect._particle._models
+
     }
 
     // Accelerating
@@ -44,7 +48,10 @@ export class SoilPack extends ObjectPack{
 
     slowing= this.behav(behaviourObserve(ON_COLLISION,(_,{object})=>object.apply(MOVEMENT, m=>m.inertia.scaleInPlace(0.5))))
 
-    damaging= this.behav(behaviourOnContact({}, (_,o)=>o.apply(LIVING, l=>l.damage(1))))
+    damaging= this.behav( tags(()=>this._living.living.id), behaviourOnContact({},(_,o)=>o.apply(LIVING, l=>{
+        l.damage(1)
+        console.log("damage")
+    })))
 
 
     // Soil

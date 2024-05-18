@@ -65,6 +65,7 @@ export class LiveEditor extends Level{
             navigator.clipboard.writeText("`"+areas.map(it=>it.value).join("`,`\n")+"`")
          })
          paste.addEventListener("click",e=>{
+            error.innerHTML=""
             navigator.clipboard.readText().then(text=>{
                if(!text.startsWith("`") || !text.endsWith("`")){
                   error.innerHTML="Invalid format"
@@ -73,7 +74,7 @@ export class LiveEditor extends Level{
                text=text.substring(1,text.length-1)
                const parts=text.split("`,`\n")
                for(let i=0;i<parts.length&&i<areas.length;i++)areas[i].value=parts[i]
-               if(auto.checked)button.click()
+               button.click()
             })
          })
          button.addEventListener("click",e=>{
@@ -90,7 +91,6 @@ export class LiveEditor extends Level{
             }catch(e){
                error.innerHTML=e
             }
-            console.log("refresh\n",area.value)
          })
       }
       

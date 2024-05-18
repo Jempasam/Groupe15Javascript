@@ -17,6 +17,7 @@ import { IAPack } from "./IAPack.mjs";
 import { MonsterPack } from "./MonsterPack.mjs";
 import { LivingPack } from "./LivingPack.mjs";
 import { EffectPack } from "./EffectPack.mjs";
+import { createLevel } from "../../objects/world/WorldUtils.mjs";
 
 
 
@@ -37,10 +38,11 @@ export class BasicPack extends ObjectPack{
         let effect= this.effect= new EffectPack(world, particle)
         let fight= this.fight= new FightPack(world, living, effect)
         let player= this.player= new PlayerPack(world, fight)
-        let soil= this.soil= new SoilPack(world, effect)
+        let soil= this.soil= new SoilPack(world, effect,living)
         let ia= this.ia= new IAPack(world, living)
         let monster= this.monster= new MonsterPack(world, fight, ia, player)
 
+        /** @type {Object.<string,import("../../objects/world/WorldUtils.mjs").ObjectDefinition>} */
         this.objects={
             "##": { tags:[...physic.STATIC(), model.block.id] },
             "#I": { tags:[...physic.STATIC(), model.pillar.id] },
@@ -50,7 +52,7 @@ export class BasicPack extends ObjectPack{
 
             "#~": { tags:[...physic.STATIC(), ...soil.MUD()] },
             "#x": { tags:[...physic.STATIC(), ...soil.LAVA()] },
-            "#.": { tags:[...physic.STATIC(), ...soil.ICE()] },
+            "#i": { tags:[...physic.STATIC(), ...soil.ICE()] },
             "^4": { tags:[...physic.MOVING(), model.block.id, soil.elevator4.id] },
             "^8": { tags:[...physic.MOVING(), model.block.id, soil.elevator8.id] },
 

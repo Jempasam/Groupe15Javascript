@@ -64,7 +64,7 @@ export class Lvl1_2 extends Level{
       const effect=new EffectPack(world,particle)
       const fight=new FightPack(world,living,effect)
       const player=new PlayerPack(world,fight)
-      const soil=new SoilPack(world,effect)
+      const soil=new SoilPack(world,effect,living)
       const ia=new IAPack(world,living)
       const monster=new MonsterPack(world,fight,ia,player)
 
