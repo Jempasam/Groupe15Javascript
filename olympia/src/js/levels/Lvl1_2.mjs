@@ -69,8 +69,8 @@ export class Lvl1_2 extends Level{
       const monster=new MonsterPack(world,fight,ia,player)
 
       // Platform
-      const MOVING=behav(new PathBehaviour([new Vector3(3,0,0),new Vector3(0,0,0)], 0.1, 0.02, 0.04))
-      const MOVING2=behav(new PathBehaviour([new Vector3(-3,0,0),new Vector3(0,0,0)], 0.1, 0.02, 0.04))
+      const MOVING=behav(new PathBehaviour([new Vector3(-3,0,0),new Vector3(0,0,0)], 0.1, 0.02, 0.04))
+      const MOVING2=behav(new PathBehaviour([new Vector3(3,0,0),new Vector3(0,0,0)], 0.1, 0.02, 0.04))
 
       // Hint
       const unlock_hint=player.createHint(message,"Vous pouvez débloquer des améliorations grâce aux artefactes dorés!")

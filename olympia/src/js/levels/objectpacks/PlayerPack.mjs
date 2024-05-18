@@ -1,5 +1,6 @@
 import { Vector3 } from "../../../../../babylonjs/core/index.js";
 import { MessageManager } from "../../messages/MessageManager.mjs";
+import { MeshBehaviour } from "../../objects/behaviour/MeshBehaviour.mjs";
 import { PlayerBehaviour } from "../../objects/behaviour/controls/PlayerBehaviour.mjs";
 import { PlayerDashBehaviour } from "../../objects/behaviour/controls/PlayerDashBehaviour.mjs";
 import { PlayerJumpBehaviour } from "../../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
@@ -49,6 +50,7 @@ export class PlayerPack extends ObjectPack{
             strength:0.2, reloading_time: 40, size: new Vector3(1.5,0.8,1.5), shoot_count: 1, cadency: 20, knockback: 0.3
         }),
         ()=>new EmitterBehaviour(this._particle.FIRE(), new Vector3(1.2,1.2,1.2), 10),
+        ()=>this._models.flame.entries[0].behaviour
     )
 
 

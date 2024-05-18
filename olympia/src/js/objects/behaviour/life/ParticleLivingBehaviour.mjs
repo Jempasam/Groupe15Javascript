@@ -35,7 +35,7 @@ export class ParticleLivingBehaviour extends Behaviour{
             })
             obj.observers(ON_DEATH).add(this.eventid, (target)=>{
                 obj.apply(TRANSFORM, tf=>{
-                    for(let i=0; i<20; i++)generateParticle(world,tf,this.tags,this.size.clone())
+                    for(let i=0; i<15; i++)generateParticle(world,tf,this.tags,this.size.clone())
                 })
             })
         }
@@ -49,8 +49,8 @@ export class ParticleLivingBehaviour extends Behaviour{
     tick(world,objects){
         for(const obj of objects){
             obj.apply2(LIVING, TRANSFORM, (living,transform)=>{
-                if(living.life==1){
-                    if(world.age%10==0)generateParticle(world,transform,this.tags,this.size.clone())
+                if(living.life==1 && living.damaged){
+                    if(world.age%20==0)generateParticle(world,transform,this.tags,this.size.clone())
                 }
             })
         }

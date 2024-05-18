@@ -12,6 +12,8 @@ export class LivingModel{
 
     #life
 
+    #damaged=false
+
     armor=1.0
 
     get life(){ return this.#life }
@@ -25,7 +27,10 @@ export class LivingModel{
     /** @param {number} amount */
     damage(amount){
         this.life-=Math.round(amount*this.armor)
+        this.#damaged=true
     }
+
+    get damaged(){ return this.#damaged }
 
     get model_key(){ return LIVING }
 }

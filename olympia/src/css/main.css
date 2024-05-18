@@ -37,12 +37,13 @@
         flex-wrap: wrap;
         &>textarea{
             display: flex;
+            font-style: Arial, Helvetica, sans-serif;
+            font-size: 0.8em;
             border: none;
             margin: 1%;
             height: 100%;;
             font-weight: bold;
-            line-height: 2.155em;
-            font-size: 0.8em;
+            line-height: 2.2em;
             background: linear-gradient(
                 rgb(255,255,255,0.3) 0%,
                 rgb(255,255,255,0.3) 50%,
@@ -56,8 +57,12 @@
                 rgb(255,255,255,0.4) 50%,
                 rgb(255,255,255,0.4)
             );
+            overflow: hidden;
+            text-wrap: nowrap;
+            padding: 0;
             background-repeat: repeat;
-            background-size: 4.31em 4.31em;
+            background-position: 0 0;
+            background-size: 4.4em 4.4em;
         }
     }
     &>.olympia-messages{

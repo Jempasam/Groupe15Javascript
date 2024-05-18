@@ -31,7 +31,7 @@ export class MeshBehaviour extends Behaviour{
                 mesh.rotation.copyFrom(transform.rotation)
                 mesh.scaling.copyFrom(transform.scale)
             })
-            obj.set(MESH,new MeshModel(mesh))
+            obj.set([MESH,this.uid],new MeshModel(mesh))
         }
     }
 
@@ -42,7 +42,7 @@ export class MeshBehaviour extends Behaviour{
      */
     tick(world, objects){
         for(let obj of objects){
-            let mesh=obj.get(MESH)?.mesh
+            let mesh=obj.get([MESH,this.uid])?.mesh
             if(!mesh)continue
 
             let transform=obj.get(TRANSFORM) ?? TransformModel.ZERO
@@ -59,8 +59,8 @@ export class MeshBehaviour extends Behaviour{
      */
     finish(world,objects){
         for(let obj of objects){
-            obj.apply(MESH,mesh=>mesh.mesh.dispose())
-            obj.remove(MESH)
+            obj.apply([MESH,this.uid],mesh=>mesh.mesh.dispose())
+            obj.remove([MESH,this.uid])
         }
     }
 

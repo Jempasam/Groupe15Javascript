@@ -146,7 +146,7 @@ export function createLevel(options){
             let dimension=dim_transform(tile_dimension)
 
             let coordinates=options.position.add(new Vector3(
-                pos[0]*options.tile_size.x+tile_dimension.x/2,
+                -pos[0]*options.tile_size.x-tile_dimension.x/2,
                 options.tile_size.y*foot_height+tile_dimension.y/2, 
                 pos[1]*options.tile_size.z+tile_dimension.z/2
             ))

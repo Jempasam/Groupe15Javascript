@@ -43,9 +43,13 @@ export async function loadModels(scene){
 
 
         BLOCK: await model(scene,"block"),
+        BARRIL: await model(scene,"barril"),
+        TRAMPOLINE: await model(scene,"trampoline"),
         PILLAR: await model(scene,"Pillar"),
         BRIDGE: await model(scene,"Bridge"),
-        STONE: await model(scene,"Stone"),
+        STONE: await model(scene,"stone"),
+        ROCK: await model(scene,"rock"),
+        MAGMA: await model(scene,"magma"),
         ARTIFACT: await model(scene,"Artifact"),
         HOLE: await model(scene,"hole"),
         BOMB: await model(scene,"bomb"),

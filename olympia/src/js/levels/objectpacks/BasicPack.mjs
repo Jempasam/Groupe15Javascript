@@ -18,6 +18,7 @@ import { MonsterPack } from "./MonsterPack.mjs";
 import { LivingPack } from "./LivingPack.mjs";
 import { EffectPack } from "./EffectPack.mjs";
 import { createLevel } from "../../objects/world/WorldUtils.mjs";
+import { Team } from "../../objects/model/TeamModel.mjs";
 
 
 
@@ -49,14 +50,36 @@ export class BasicPack extends ObjectPack{
             "#b": { tags:[...physic.STATIC(), model.building.id] },
             "#n": { tags:[...physic.STATIC(), model.bridge.id] },
             "#^": { tags:[...physic.STATIC(), model.stone.id] },
+            "#m": { tags:[...physic.STATIC(), model.magma.id] },
+            "#r": { tags:[...physic.STATIC(), model.rock_floor.id] },
+            "#8": { tags:[...physic.STATIC(), model.barril.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad], size: it=>it },
 
             "#~": { tags:[...physic.STATIC(), ...soil.MUD()] },
             "#x": { tags:[...physic.STATIC(), ...soil.LAVA()] },
             "#i": { tags:[...physic.STATIC(), ...soil.ICE()] },
-            "^4": { tags:[...physic.MOVING(), model.block.id, soil.elevator4.id] },
-            "^8": { tags:[...physic.MOVING(), model.block.id, soil.elevator8.id] },
+            
+            "o2": { tags:[...physic.MOVING(), model.block.id, soil.elevator2.id] },
+            "o4": { tags:[...physic.MOVING(), model.block.id, soil.elevator4.id] },
+            "o8": { tags:[...physic.MOVING(), model.block.id, soil.elevator8.id] },
+            "^2": { tags:[...physic.MOVING(), model.block.id, soil.forward2.id] },
+            "^4": { tags:[...physic.MOVING(), model.block.id, soil.forward4.id] },
+            "^8": { tags:[...physic.MOVING(), model.block.id, soil.forward8.id] },
+            ">2": { tags:[...physic.MOVING(), model.block.id, soil.right2.id] },
+            ">4": { tags:[...physic.MOVING(), model.block.id, soil.right4.id] },
+            ">8": { tags:[...physic.MOVING(), model.block.id, soil.right8.id] },
+            "<2": { tags:[...physic.MOVING(), model.block.id, soil.left2.id] },
+            "<4": { tags:[...physic.MOVING(), model.block.id, soil.left4.id] },
+            "<8": { tags:[...physic.MOVING(), model.block.id, soil.left8.id] },
+            "v2": { tags:[...physic.MOVING(), model.block.id, soil.backward2.id] },
+            "v4": { tags:[...physic.MOVING(), model.block.id, soil.backward4.id] },
+            "v8": { tags:[...physic.MOVING(), model.block.id, soil.backward8.id] },
 
             "%#": { tags:[...physic.PHYSIC_FALLING(), model.block.id] },
+            "%8": {
+                tags:[...physic.PHYSIC_FALLING(), model.barril.id, ...living.DESTRUCTIBLE()],
+                models:()=>[fight.bad],
+                size: it=>it.multiplyInPlace(new Vector3(.8,1,.8))
+            },
 
             "0j": { tags:[...player.JUMP_EQUIPPER(), model.artifact.id] },
             "0a": { tags:[...player.ATTACK_EQUIPPER(), model.artifact.id] },

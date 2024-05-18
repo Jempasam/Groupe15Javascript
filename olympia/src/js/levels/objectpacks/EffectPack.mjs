@@ -24,6 +24,7 @@ export class EffectPack extends ObjectPack{
     constructor(world,particle){
         super(world)
         this._particle=particle
+        this._models=particle._models
     }
 
     // Effects
@@ -31,6 +32,7 @@ export class EffectPack extends ObjectPack{
         new PoisonBehaviour(1,20,60),
         ()=>new EmitterBehaviour(this._particle.FIRE(), new Vector3(1, 1, 1), 5),
         ()=>new EmitterBehaviour(this._particle.SMOKE(), new Vector3(1, 1, 1), 5),
+        ()=>this._models.fire.entries[0].behaviour
     )
 
     in_tornado= this.behav(
