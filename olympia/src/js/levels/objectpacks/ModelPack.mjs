@@ -34,6 +34,8 @@ export class ModelPack extends ObjectPack{
     stone= this.behav(()=>new MeshBehaviour(this.models.STONE))
     hole= this.behav(()=>new MeshBehaviour(this.models.HOLE))
     building= this.behav(()=>new MeshBehaviour(this.models.BUILDING))
+    stone_wall= this.behav(()=>new MeshBehaviour(this.models.STONE_WALL))
+    wood= this.behav(()=>new MeshBehaviour(this.models.WOOD))
     barril= this.behav(()=>new MeshBehaviour(this.models.BARRIL))
     trampoline= this.behav(()=>new MeshBehaviour(this.models.TRAMPOLINE))
     
@@ -71,6 +73,7 @@ export class ModelPack extends ObjectPack{
     slash= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_SLASH))
     flame= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_FLAME))
     blood= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_BLOOD))
+    wood_piece= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_WOOD))
 
     explosion= this.behav(()=>new MeshBehaviour(this.models.EXPLOSION))
     sphere_explosion= this.behav(()=>new MeshBehaviour(this.models.SPHERE_EXPLOSION))

@@ -28,7 +28,7 @@ export class LivingPack extends ObjectPack{
     living=this.behav(new LivingBehaviour())
     damage_blood=this.behav(()=>new ParticleLivingBehaviour(this._particle.BLOOD(), new Vector3(0.8,0.8,0.8)))
     damage_dust=this.behav(()=>new ParticleLivingBehaviour(this._particle.DUST(), new Vector3(0.8,0.8,0.8)))
-    damage_junk=this.behav(()=>new ParticleLivingBehaviour(this._particle.JUNK(), new Vector3(0.5,0.5,0.5)))
+    damage_junk=this.behav(()=>new ParticleLivingBehaviour(this._particle.WOOD_JUNK(), new Vector3(0.8,0.8,0.8)))
     depth_damage=this.behav(()=>behaviourEach(o=>o.apply2(TRANSFORM, LIVING,(t,l)=>{
         if(t.position.y<-10)l.damage(1)
     })))
@@ -36,6 +36,6 @@ export class LivingPack extends ObjectPack{
 
     // Compilations
     LIVING= this.lazy(()=>[this.living.id, this.damage_blood.id, this.depth_damage.id])
-    DESTRUCTIBLE= this.lazy(()=>[this.living.id, this.damage_dust.id, this.depth_damage.id])
+    DESTRUCTIBLE= this.lazy(()=>[this.living.id, this.damage_junk.id, this.depth_damage.id])
     LIVING_SILENT= this.lazy(()=>[this.living.id, this.depth_damage.id])
 }

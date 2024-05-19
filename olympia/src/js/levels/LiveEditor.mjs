@@ -55,9 +55,13 @@ export class LiveEditor extends Level{
          const auto=container.appendChild(create("input[type=checkbox].toremove"))
          const copy=container.appendChild(create("input[type=button][value=Copy].toremove"))
          const paste=container.appendChild(create("input[type=button][value=Paste].toremove"))
+         const dimension=container.appendChild(create("input.toremove"))
+         dimension.value="[1.5,0.5,1.5]"
          const error=container.appendChild(create("p.toremove"))
          const select=container.appendChild(create("select.toremove"))
-         for(const name in pack.objects)select.appendChild(dom/*html*/`<option value="${name}">${name}</option>`)
+         for(const [name,val] of Object.entries(pack.objects)){
+            select.appendChild(dom/*html*/`<option value="${name}">${name}</option>`)
+         }
          for(let a of areas)a.addEventListener("input",e=>{
             if(auto.checked)button.click()
          })
@@ -77,12 +81,28 @@ export class LiveEditor extends Level{
                button.click()
             })
          })
+         dimension.addEventListener("input",e=>{
+            if(auto.checked)button.click()
+         })
          button.addEventListener("click",e=>{
+            // Get dimension
+            
+            let array
+            try{ array=eval(dimension.value) }
+            catch(e){
+               error.innerHTML="Invalid dimension value"
+               return
+            }
+            if(!Array.isArray(array) || array.length!=3){
+               error.innerHTML="Invalid dimension value"
+               return
+            }
+            // Clear 
             world.clearObjects()
             error.innerHTML=""
             try{
                createLevel({
-                  tile_size: new Vector3(1.5,0.5,1.5),
+                  tile_size: Vector3.FromArray(array),
                   position: new Vector3(0,0,0),
                   name_length: 2,
                   world, objects: pack.objects,

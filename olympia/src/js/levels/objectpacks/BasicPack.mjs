@@ -52,7 +52,8 @@ export class BasicPack extends ObjectPack{
             "#^": { tags:[...physic.STATIC(), model.stone.id] },
             "#m": { tags:[...physic.STATIC(), model.magma.id] },
             "#r": { tags:[...physic.STATIC(), model.rock_floor.id] },
-            "#8": { tags:[...physic.STATIC(), model.barril.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad], size: it=>it },
+            "#8": { tags:[...physic.STATIC(), model.barril.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad] },
+            "#w": { tags:[...physic.STATIC(), model.wood.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad,new LivingModel(3)] },
 
             "#~": { tags:[...physic.STATIC(), ...soil.MUD()] },
             "#x": { tags:[...physic.STATIC(), ...soil.LAVA()] },

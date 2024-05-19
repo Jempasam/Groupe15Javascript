@@ -49,6 +49,8 @@ export async function loadModels(scene){
         BRIDGE: await model(scene,"Bridge"),
         STONE: await model(scene,"stone"),
         ROCK: await model(scene,"rock"),
+        STONE_WALL: await model(scene,"stonewall"),
+        WOOD: await model(scene,"wood"),
         MAGMA: await model(scene,"magma"),
         ARTIFACT: await model(scene,"Artifact"),
         HOLE: await model(scene,"hole"),
@@ -78,6 +80,7 @@ export async function loadModels(scene){
         PARTICLE_SLASH: await model(scene,"slash","particle"),
         PARTICLE_FLAME: await model(scene,"flame","particle"),
         PARTICLE_BLOOD: await model(scene,"blood","particle"),
+        PARTICLE_WOOD: await model(scene,"wood","particle"),
 
         _nothing: scene.createDefaultEnvironment({createSkybox:false,createGround:false,toneMappingEnabled:false})
     }

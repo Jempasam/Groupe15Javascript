@@ -11,6 +11,8 @@ import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehavio
 import { ON_COLLISION } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
 import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
+import { behaviourInit } from "../../objects/behaviour/Behaviour.mjs";
+import { MOVEMENT } from "../../objects/model/MovementModel.mjs";
 
 /**
  * Un pack de behaviours de base avec des comportements de particules
@@ -49,6 +51,17 @@ export class ParticlePack extends ObjectPack{
     vanish_after_four= this.behav(behaviourTimeout(80, o=>o.addTag(this.vanish.id) ))
     vanish_on_collision= this.behav(behaviourObserve(ON_COLLISION, o=>o.addTag(this.vanish.id) ))
 
+    // Size
+    random_size=this.behav(behaviourInit((w,os)=>{ for(let o of os) o.get(TRANSFORM)?.scale?.scaleInPlace(.2+Math.random()*.8)  }))
+    projection=this.behav(behaviourInit((w,os)=>{
+        for(let o of os)o.get(MOVEMENT)?.inertia?.addInPlaceFromFloats(
+            Math.random()*.2-.1,
+            Math.random()*.2,
+            Math.random()*.2-.1,
+        ) 
+    }))
+
+
     // Animation
     spread_animation=this.behav(behaviourEach(o=>o.apply(TRANSFORM, t=>t.scale.multiplyInPlace(new Vector3(1.01,0.97,1.01)) )))
 
@@ -72,6 +85,7 @@ export class ParticlePack extends ObjectPack{
     BLOOD= this.lazy(()=>[...this.PHYSIC_LIKE(), this._models.blood.id, this.spread_animation.id])
     SLASH= this.lazy(()=>[...this.STAY(), this._models.slash.id])
     JUNK= this.lazy(()=>[...this.PHYSIC_LIKE(), this._models.rock.id])
+    WOOD_JUNK= this.lazy(()=>[...this.PHYSIC_LIKE(), this._models.wood_piece.id, this.random_size.id, this.projection.id])
 
     // Emitters
     smoke_emitter= this.behav(()=>new EmitterBehaviour(this.CLOUD(), new Vector3(0.5, 0.5, 0.5), 5))
