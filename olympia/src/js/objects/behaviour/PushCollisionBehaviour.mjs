@@ -21,11 +21,11 @@ export class PushCollisionBehaviour extends Behaviour{
                 const movement=obj.get(MOVEMENT)
                 if(movement){
                     if(
-                        hitbox.position.y+hitbox.scaling.y/2 < self_hitbox.position.y+self_hitbox.scaling.y/4 &&
+                        self_hitbox.position.y > hitbox.position.y+hitbox.scaling.y/2 &&
                         hitbox.scaling.x+hitbox.scaling.z > (self_hitbox.scaling.x+self_hitbox.scaling.z)/3
                     ){
-                        const depth=hitbox.position.y+hitbox.scaling.y/2 - self_hitbox.position.y + self_hitbox.scaling.y/2
-                        if(depth>0)accelerateY(movement.inertia, depth/3, depth/3)
+                        const depth=(hitbox.position.y+hitbox.scaling.y/2) - (self_hitbox.position.y - self_hitbox.scaling.y/2)
+                        if(depth>0)accelerateY(movement.inertia, depth/3*2, depth/3)
 
                         // Friction
                         const under=object.get(MOVEMENT)

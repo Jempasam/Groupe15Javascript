@@ -27,6 +27,7 @@ export class LivingBehaviour extends Behaviour{
         for(let obj of objects){
             const living=obj.get(LIVING)
             if(living){
+                if(living.invulnerability>0)living.invulnerability--
                 if(living.life!=living._previous_life){
                     const offset=living.life-living._previous_life
                     living._previous_life=living.life

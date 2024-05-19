@@ -23,7 +23,7 @@ export class OnContactBehaviour extends Behaviour{
      * @param {number=} options.reload_time
      * @param {ContactTarget=} options.target
      */
-    constructor({reload_time=20, target=ContactTarget.EVERYONE}={}){
+    constructor({reload_time=5, target=ContactTarget.EVERYONE}={}){
         super()
         this.reload_time=reload_time
         this.contact_target=target
@@ -55,8 +55,7 @@ export class OnContactBehaviour extends Behaviour{
                 }
 
                 if(!do_contact)return
-                this.on_contact(obj, object, world, objects, filter, ...rest)
-                data.reload_time=this.reload_time
+                if(this.on_contact(obj, object, world, objects, filter, ...rest)??true) data.reload_time=this.reload_time
             })
         }
     }
@@ -66,6 +65,7 @@ export class OnContactBehaviour extends Behaviour{
      * @param {GameObject} target
      * @param {World} world
      * @param {...ObjectQuery} objects 
+     * @returns {boolean|void}
      */
     on_contact(self, target, world, ...objects){
         throw new Error("Undefined contact methodmethod")

@@ -30,7 +30,7 @@ export class LivingPack extends ObjectPack{
     damage_dust=this.behav(()=>new ParticleLivingBehaviour(this._particle.DUST(), new Vector3(0.8,0.8,0.8)))
     damage_junk=this.behav(()=>new ParticleLivingBehaviour(this._particle.WOOD_JUNK(), new Vector3(0.8,0.8,0.8)))
     depth_damage=this.behav(()=>behaviourEach(o=>o.apply2(TRANSFORM, LIVING,(t,l)=>{
-        if(t.position.y<-10)l.damage(1)
+        if(t.position.y<-10)l.damage(3)
     })))
     respawn=this.behav(new RespawnBehaviour())
 

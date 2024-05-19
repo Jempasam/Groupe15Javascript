@@ -90,7 +90,7 @@ export class ParticlePack extends ObjectPack{
     // Emitters
     smoke_emitter= this.behav(()=>new EmitterBehaviour(this.CLOUD(), new Vector3(0.5, 0.5, 0.5), 5))
     cloud_emitter= this.behav(()=>new EmitterBehaviour(this.CLOUD(), new Vector3(0.5, 0.5, 0.5), 5))
-    fire_emitter= this.behav(()=>new EmitterBehaviour(this.FIRE(), new Vector3(0.5, 0.5, 0.5), 5))
+    fire_emitter= this.behav(()=>new EmitterBehaviour(this.FIRE(), new Vector3(0.8, 0.8, 0.8), 5))
     slash_emitter= this.behav(()=>new EmitterBehaviour(this.SLASH(), new Vector3(0.5, 0.5, 0.5), 5))
     wind_emitter= this.behav(()=>new EmitterBehaviour(this.WIND(), new Vector3(0.5, 0.5, 0.5), 5))
 

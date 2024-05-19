@@ -151,7 +151,7 @@ export class SamLevel extends Level{
             9  ]                                                   
             10 ]                                                   h91
             11 ]   
-            12 ]         P12
+            12 ]         P22
             13 ]                     kS2
             14 ]               r20   
             15 ]                                                   i74-..

@@ -1,4 +1,5 @@
 import { Behaviour } from "../../objects/behaviour/Behaviour.mjs";
+import { TaggedDict } from "../../objects/world/TaggedDict.mjs";
 import { BehaviourEntry, World } from "../../objects/world/World.mjs";
 
 

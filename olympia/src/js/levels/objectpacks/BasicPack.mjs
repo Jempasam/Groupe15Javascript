@@ -52,6 +52,7 @@ export class BasicPack extends ObjectPack{
             "#^": { tags:[...physic.STATIC(), model.stone.id] },
             "#m": { tags:[...physic.STATIC(), model.magma.id] },
             "#r": { tags:[...physic.STATIC(), model.rock_floor.id] },
+            "#%": { tags:[...physic.STATIC(), model.stone_wall.id] },
             "#8": { tags:[...physic.STATIC(), model.barril.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad] },
             "#w": { tags:[...physic.STATIC(), model.wood.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad,new LivingModel(3)] },
 
@@ -95,7 +96,13 @@ export class BasicPack extends ObjectPack{
             "PP": {
                 tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
                 models:()=>[new LivingModel(3), fight.good],
-                size: it=>it.scale(0.8)
+                size: it=>it.multiplyByFloats(.7,1,.7)
+            },
+
+            "Pp": {
+                tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
+                models:()=>[new LivingModel(3), fight.good],
+                size: it=>it.multiplyByFloats(.5,1,.5)
             },
         }
     }

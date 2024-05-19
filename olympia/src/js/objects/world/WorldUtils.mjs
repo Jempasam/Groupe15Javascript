@@ -14,43 +14,47 @@ import { World } from "./World.mjs"
  */
 export function forMap(map, position, size, factory, wordLength=1, isSizeOfTile=false){
 
+    // Separate Lines
+    let lines=[]
+    let acc=""
+    for(let i=0; i<map.length; i++){
+        const char=map[i]
+        if(char==='\n'){
+            lines.push(acc)
+            acc=""
+        }
+        else if(char===']'){
+            acc=""
+        }
+        else{
+            acc+=char
+        }
+    }
+    lines.push(acc)
+
+    // Create Matrix
     /** @type {Array<Array<string?>>} */
     let table=[]
     let column=[]
-
-    // Get Width and Height
     let width=0
     let height=0
     let widtha=0
-    big:for(let i=0; i<map.length; i++){
-        for(let y=0; y<wordLength; y++){
-            if(map[i+y]==']'){
-                column=[]
-                widtha=0
-                i+=y
-                continue big
-            }
-        }
-        if(map[i]===']'){
-            column=[]
-            widtha=0
-        }
-        else if(map[i]==='\n'){
-            height++
-            width=Math.max(width, widtha)
-            widtha=0
-            table.push(column)
-            column=[]
-        }
-        else{
-            const letter=map.substring(i,i+wordLength)
-            i+=wordLength-1
+    big:for(let y=0; y<lines.length; y++){
+        let line=lines[y]
+        for(let x=0; x<line.length; x++){
+            if(line.length-x<wordLength)line+="   "
+            const letter=line.substring(x,x+wordLength)
+            x+=wordLength-1
             widtha++
             column.push(letter)
         }
+        height++
+        width=Math.max(width, widtha)
+        widtha=0
+        table.push(column)
+        column=[]
     }
-    table.push(column)
-    width=Math.max(width, widtha)
+    console.log(table)
 
     const get_size= (x,y)=>{
         let height=1, width=1

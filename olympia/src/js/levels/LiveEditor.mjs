@@ -30,7 +30,7 @@ import { SoilPack } from "./objectpacks/SoilPack.mjs";
 import { IAPack } from "./objectpacks/IAPack.mjs";
 import { MonsterPack } from "./objectpacks/MonsterPack.mjs";
 import { SamLevel } from "./SamLevel.mjs";
-import { create, dom } from "../../../../samlib/DOM.mjs";
+import { adom, create, dom } from "../../../../samlib/DOM.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
 
 export class LiveEditor extends Level{
@@ -51,56 +51,39 @@ export class LiveEditor extends Level{
          const areas=[]
          const area_container=container.appendChild(create("div.areacontainer.toremove"))
          for(let a=0;a<3;a++)areas.push(area_container.appendChild(create("textarea")))
-         const button=container.appendChild(create("input[type=button][value=Refresh].toremove"))
-         const auto=container.appendChild(create("input[type=checkbox].toremove"))
-         const copy=container.appendChild(create("input[type=button][value=Copy].toremove"))
-         const paste=container.appendChild(create("input[type=button][value=Paste].toremove"))
-         const dimension=container.appendChild(create("input.toremove"))
-         dimension.value="[1.5,0.5,1.5]"
+         const button=container.appendChild(adom/*html*/`<input class=toremove type=button value=Refresh />`)
+         const auto=container.appendChild(adom/*html*/`<input class=toremove type=checkbox />`)
+         const copy=container.appendChild(adom/*html*/`<input class=toremove type=button value=Copy />`)
+         const paste=container.appendChild(adom/*html*/`<input class=toremove type=button value=Paste />`)
+         const dimension=container.appendChild(adom/*html*/`<input class=toremove type=text value=[1.5,0.5,1.5] />`)
          const error=container.appendChild(create("p.toremove"))
+         
          const select=container.appendChild(create("select.toremove"))
          for(const [name,val] of Object.entries(pack.objects)){
-            select.appendChild(dom/*html*/`<option value="${name}">${name}</option>`)
+            select.appendChild(adom/*html*/`<option value="${name}">${name}</option>`)
          }
-         for(let a of areas)a.addEventListener("input",e=>{
-            if(auto.checked)button.click()
-         })
-         copy.addEventListener("click",e=>{
-            navigator.clipboard.writeText("`"+areas.map(it=>it.value).join("`,`\n")+"`")
-         })
-         paste.addEventListener("click",e=>{
+
+         function catch_error(callback){
             error.innerHTML=""
-            navigator.clipboard.readText().then(text=>{
-               if(!text.startsWith("`") || !text.endsWith("`")){
-                  error.innerHTML="Invalid format"
-                  return
-               }
-               text=text.substring(1,text.length-1)
-               const parts=text.split("`,`\n")
-               for(let i=0;i<parts.length&&i<areas.length;i++)areas[i].value=parts[i]
-               button.click()
-            })
-         })
-         dimension.addEventListener("input",e=>{
-            if(auto.checked)button.click()
-         })
-         button.addEventListener("click",e=>{
-            // Get dimension
-            
-            let array
-            try{ array=eval(dimension.value) }
-            catch(e){
-               error.innerHTML="Invalid dimension value"
-               return
-            }
-            if(!Array.isArray(array) || array.length!=3){
-               error.innerHTML="Invalid dimension value"
-               return
-            }
-            // Clear 
-            world.clearObjects()
-            error.innerHTML=""
-            try{
+            try{ callback() }
+            catch(e){ error.innerHTML=e }
+         }
+
+         function get_and_check(input, errorname, test){
+            let value
+            try{ value=eval(input.value) }
+            catch(e){ throw new Error(errorname+": "+e) }
+            if(!test(value)) throw new Error(errorname)
+            return value
+         }
+
+         function reload(){
+            catch_error(()=>{
+               // Get dimension
+               let array=get_and_check(dimension, "Invalid dimension value", it=>Array.isArray(it) && it.length==3)
+
+               // Clear 
+               world.clearObjects()
                createLevel({
                   tile_size: Vector3.FromArray(array),
                   position: new Vector3(0,0,0),
@@ -108,10 +91,32 @@ export class LiveEditor extends Level{
                   world, objects: pack.objects,
                   maps:areas.map(it=>it.value)
                })
-            }catch(e){
-               error.innerHTML=e
-            }
+            })
+         }
+         const auto_reload=()=>{ if(auto.checked)reload() }
+
+         for(let a of areas)a.addEventListener("input",auto_reload)
+
+         // Copy-Paste
+         copy.addEventListener("click",e=>{
+            navigator.clipboard.writeText("`"+areas.map(it=>it.value).join("`,`\n")+"`")
          })
+
+         paste.addEventListener("click",e=>{
+            catch_error(()=>{
+               navigator.clipboard.readText().then(text=>{
+                  if(!text.startsWith("`") || !text.endsWith("`")) throw new Error("Invalid format in clipboard")
+                  text=text.substring(1,text.length-1)
+                  const parts=text.split("`,`\n")
+                  for(let i=0;i<parts.length&&i<areas.length;i++)areas[i].value=parts[i]
+                  auto_reload()
+               })
+            })
+         })
+
+         dimension.addEventListener("input",auto_reload)
+
+         button.addEventListener("click",reload)
       }
       
 

@@ -48,7 +48,7 @@
             font-weight: bold;
             line-height: 2.17em;
             font-family: monospace !important;
-            background: linear-gradient(
+            background: local linear-gradient(
                 rgb(255,255,255,0.3) 0%,
                 rgb(255,255,255,0.3) 50%,
                 rgb(255,255,255,0.4) 50%,
@@ -61,11 +61,10 @@
                 rgb(255,255,255,0.4) 50%,
                 rgb(255,255,255,0.4)
             );
-            overflow: hidden;
+            overflow: scroll;
             text-wrap: nowrap;
             padding: 0;
             background-repeat: repeat;
-            background-position: 0 0;
             background-size: 4.38em 4.38em;
         }
     }
