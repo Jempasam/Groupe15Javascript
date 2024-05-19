@@ -99,17 +99,28 @@ export class LiveEditor extends Level{
 
          // Copy-Paste
          copy.addEventListener("click",e=>{
-            navigator.clipboard.writeText("`"+areas.map(it=>it.value).join("`,`\n")+"`")
+            navigator.clipboard
+            .writeText("`\n"+
+               areas.map(it=>/**@type {string}*/(it.value))
+               .map(area=>{
+                  let counter={value:1}
+                  return "1  ]"+area.replace(/\n/g,it=>{
+                     counter.value++
+                     return "\n"+new String(counter.value).padEnd(3," ")+"]"
+                  })
+               })
+               .join("\n`\n,\n`\n")
+            +"\n`")
          })
 
          paste.addEventListener("click",e=>{
             catch_error(()=>{
                navigator.clipboard.readText().then(text=>{
-                  if(!text.startsWith("`") || !text.endsWith("`")) throw new Error("Invalid format in clipboard")
-                  text=text.substring(1,text.length-1)
-                  const parts=text.split("`,`\n")
+                  if(!text.startsWith("`\n") || !text.endsWith("\n`")) throw new Error("Invalid format in clipboard")
+                  text=text.substring(2,text.length-2).replace(/^[^\n]*\]/g,"").replace(/\n[^\n]*\]/g,"\n")
+                  const parts=text.split("\n`\n,\n`\n")
                   for(let i=0;i<parts.length&&i<areas.length;i++)areas[i].value=parts[i]
-                  auto_reload()
+                  reload()
                })
             })
          })

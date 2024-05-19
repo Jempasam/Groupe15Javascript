@@ -108,7 +108,7 @@ function codeToNum(code){
  * 
  * @param {object} options
  * @param {Vector3} options.tile_size
- * @param {Vector3} options.position
+ * @param {Vector3=} options.position
  * @param {Object.<string,ObjectDefinition>} options.objects
  * @param {Array<string>|string} options.maps
  * @param {number=} options.name_length
@@ -117,10 +117,11 @@ function codeToNum(code){
  */
 export function createLevel(options){
     const name_length=options.name_length??1
+    const position=options.position??Vector3.Zero()
 
     if(!(options.world instanceof World))throw new Error("options.world should be an instance of World")
     if(!(options.tile_size instanceof Vector3))throw new Error("options.tile_size should be an instance of Vector3")
-    if(!(options.position instanceof Vector3))throw new Error("options.position should be an instance of Vector3")
+    if(!(position instanceof Vector3))throw new Error("options.position should be an instance of Vector3")
     if(!options.objects)throw new Error("options.objects should be defined")
     if(Object.keys(options.objects).findIndex(it=>it.length!=name_length)!=-1)throw new Error("At least one object have a name with a different length than options.name_length")
     if(!Array.isArray(options.maps)) options.maps=[options.maps]
@@ -149,7 +150,7 @@ export function createLevel(options){
             let tile_dimension=options.tile_size.multiplyByFloats(size[0], size_height, size[1])
             let dimension=dim_transform(tile_dimension)
 
-            let coordinates=options.position.add(new Vector3(
+            let coordinates=position.add(new Vector3(
                 -pos[0]*options.tile_size.x-tile_dimension.x/2,
                 options.tile_size.y*foot_height+tile_dimension.y/2, 
                 pos[1]*options.tile_size.z+tile_dimension.z/2

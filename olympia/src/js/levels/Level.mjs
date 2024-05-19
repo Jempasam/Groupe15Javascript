@@ -4,6 +4,8 @@ import { Camera } from "../../../../babylonjs/core/Cameras/camera.js"
 
 export class LevelContext{
 
+    /** @type {Level?} */#level=null
+
     /**
      * @param {World} world 
      * @param {{camera:Camera}} options
@@ -20,17 +22,21 @@ export class LevelContext{
      * @param {Level} level 
      */
     switchTo(level){
-        if(this.current_level!=null){
-            this.current_level.stop(this.world,this.options)
-        }
-        this.world.close()
-        this.current_level=level
-        this.current_level.start(this,this.world,this.options)
+        this.#level=level
     }
 
     tick(){
         if(this.current_level!=null){
             this.current_level.tick(this,this.world,this.options)
+        }
+        if(this.#level!=null){
+            if(this.current_level!=null){
+                this.current_level.stop(this.world,this.options)
+            }
+            this.world.close()
+            this.current_level=this.#level
+            this.current_level.start(this,this.world,this.options)
+            this.#level=null
         }
     }
 }

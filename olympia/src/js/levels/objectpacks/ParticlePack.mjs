@@ -88,7 +88,7 @@ export class ParticlePack extends ObjectPack{
     WOOD_JUNK= this.lazy(()=>[...this.PHYSIC_LIKE(), this._models.wood_piece.id, this.random_size.id, this.projection.id])
 
     // Emitters
-    smoke_emitter= this.behav(()=>new EmitterBehaviour(this.CLOUD(), new Vector3(0.5, 0.5, 0.5), 5))
+    smoke_emitter= this.behav(()=>new EmitterBehaviour(this.SMOKE(), new Vector3(0.5, 0.5, 0.5), 5))
     cloud_emitter= this.behav(()=>new EmitterBehaviour(this.CLOUD(), new Vector3(0.5, 0.5, 0.5), 5))
     fire_emitter= this.behav(()=>new EmitterBehaviour(this.FIRE(), new Vector3(0.8, 0.8, 0.8), 5))
     slash_emitter= this.behav(()=>new EmitterBehaviour(this.SLASH(), new Vector3(0.5, 0.5, 0.5), 5))

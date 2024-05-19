@@ -36,6 +36,7 @@ export class SoilPack extends ObjectPack{
         this._physic=effect._particle._physic
         this._living=living
         this._models=effect._particle._models
+        this._particle=effect._particle
 
     }
 
@@ -53,18 +54,24 @@ export class SoilPack extends ObjectPack{
         console.log("damage")
     })))
 
+    burning= this.behav(behaviourObserve(ON_COLLISION,(_,{object})=>{
+        if(object.tags.includes(this._living.living.id)) object.addTag(this._effect.in_fire.id)
+    }))
+
 
     // Soil
     GROUND= this.lazy(()=>[this._models.block.id])
     LAVA= this.lazy(()=>[this.damaging.id, this._models.lava.id])
     MUD= this.lazy(()=>[this.slowing.id, this._models.mud.id])
     ICE= this.lazy(()=>[this.slidable.id, this._models.ice.id])
+    FIRE= this.lazy(()=>[...this._physic.STATIC_GHOST(), this._models.flame.id, this.burning.id, this._particle.smoke_emitter.id])
 
 
     // Moving
-    elevator2=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,3,0)], 0.1, 0.01, 0.02))
-    elevator4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,6,0)], 0.1, 0.01, 0.02))
-    elevator8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,12,0)], 0.1, 0.01, 0.02))
+    elevator2=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,1,0)], 0.1, 0.01, 0.02))
+    elevator4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,2,0)], 0.1, 0.01, 0.02))
+    elevator8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02))
+    elevatorG=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,8,0)], 0.1, 0.01, 0.02))
     forward2=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,0,-3)], 0.1, 0.01, 0.02))
     forward4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,0,-6)], 0.1, 0.01, 0.02))
     forward8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,0,-12)], 0.1, 0.01, 0.02))

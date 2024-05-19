@@ -22,14 +22,16 @@ export class PlayerPack extends ObjectPack{
     /**
      * @param {World} world
      * @param {FightPack} fight
+     * @param {MessageManager=} messages
      */
-    constructor(world,fight){
+    constructor(world,fight,messages){
         super(world)
         this._fight=fight
         this._living=fight._living
         this._models=fight._models
         this._particle=this._living._particle
         this._physic=this._particle._physic
+        this._messages=messages
     }
 
     player=this.empty()
@@ -60,16 +62,25 @@ export class PlayerPack extends ObjectPack{
     attack_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.attack.id],{slot:"attack"}))
     shoot_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.shoot.id],{slot:"attack"}))
 
-
     // Packs
     LIVING_PLAYER= this.lazy(()=>[...this._living.LIVING(), this.player.id])
 
     CLASSIC_PLAYER= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this.LIVING_PLAYER(), this.move.id, this._living.respawn.id])
 
-    JUMP_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.jump_equipper.id, this._particle.wind_emitter.id])
-    DASH_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.dash_equipper.id, this._particle.cloud_emitter.id])
-    ATTACK_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.attack_equipper.id, this._particle.slash_emitter.id])
-    SHOOT_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.shoot_equipper.id, this._particle.fire_emitter.id])
+    #opt_hint(msg){
+        if(this._messages) return [
+            this.behav(tags(()=>this.player.id),()=>behaviourCollectable({},(_,collecter)=>{
+                this._messages?.send(msg,6000,"unlock")
+                return true
+            })).id
+        ]
+        else return []
+    }
+
+    JUMP_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.jump_equipper.id, this._particle.wind_emitter.id, ...this.#opt_hint("Sautez avec la touche Espace!")])
+    DASH_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.dash_equipper.id, this._particle.cloud_emitter.id, ...this.#opt_hint("Dashez avec la touche Shift!")])
+    ATTACK_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.attack_equipper.id, this._particle.slash_emitter.id, ...this.#opt_hint("Attaquez avec la touche E!")])
+    SHOOT_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.shoot_equipper.id, this._particle.fire_emitter.id, ...this.#opt_hint("Tirez avec la touche E!")])
 
 
     // Functions
@@ -77,11 +88,11 @@ export class PlayerPack extends ObjectPack{
     /**
      * Crée un behaviour d'indice
      * @param {MessageManager} message 
-     * @param {string} text 
+     * @param {string} text
      */
     createHint(message,text){
         return this.behav(tags(()=>this.player.id),()=>behaviourCollectable({},(_,collecter)=>{
-            message.send("Vous pouvez débloquer des améliorations grâce aux artefactes dorés!",6000,"hint")
+            message.send(text,6000,"hint")
             return true
         }))
     }

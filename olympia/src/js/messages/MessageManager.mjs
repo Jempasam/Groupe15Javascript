@@ -38,7 +38,7 @@ export class MessageManager{
         else{
             const element=document.createElement('div')
             this._container.appendChild(element)
-            entry={element:element,timeoutid:null}
+            entry={element,timeoutid:null}
             element.setAttribute("slot",slot.toString())
             this.#messages[slot]=entry
         }
@@ -62,9 +62,10 @@ export class MessageManager{
      */
     clear(slot){
         let entry=this.#messages[slot]
+        console.log(this.#messages)
         if(entry){
             if(entry.timeoutid !== null) clearTimeout(entry.timeoutid)
-            this._container.removeChild(entry.element)
+            try{ this._container.removeChild(entry.element) }catch(e){}
             delete this.#messages[slot]
         }
     }
@@ -73,9 +74,9 @@ export class MessageManager{
         for(let key in this.#messages){
             let entry=this.#messages[key]
             if(entry.timeoutid !== null) clearTimeout(entry.timeoutid)
-            this._container.removeChild(entry.element)
+            try{ this._container.removeChild(entry.element) }catch(e){}
         }
-        this.messages = []
+        this.messages = {}
     }
 
     static FOREVER=-1

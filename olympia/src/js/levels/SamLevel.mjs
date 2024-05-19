@@ -16,6 +16,8 @@ import { message } from "../script.js";
 import { Level, LevelContext } from "./Level.mjs";
 import { LiveEditor } from "./LiveEditor.mjs";
 import { Lvl1_2 } from "./Lvl1_2.mjs";
+import { Lvl1_3 } from "./Lvl1_3.mjs";
+import { Lvl1_4 } from "./Lvl1_4.mjs";
 import { EffectPack } from "./objectpacks/EffectPack.mjs";
 import { FightPack } from "./objectpacks/FightPack.mjs";
 import { IAPack } from "./objectpacks/IAPack.mjs";
@@ -61,7 +63,7 @@ export class SamLevel extends Level{
       const living=new LivingPack(world,particle)
       const effect=new EffectPack(world,particle)
       const fight=new FightPack(world,living,effect)
-      const player=new PlayerPack(world,fight)
+      const player=new PlayerPack(world,fight,message)
       const soil=new SoilPack(world,effect,living)
       const ia=new IAPack(world,living)
       const monster=new MonsterPack(world,fight,ia,player)
@@ -170,21 +172,8 @@ export class SamLevel extends Level{
       this.player=world.objects.get(player.player.id)?.[0]
       if(this.player==null)window.alert("Player not found")
 
-      this.player.observers(ON_DEATH).add("SamLevel",(obj,_)=>{
-         this.player?.apply(MOVEMENT, (movement)=>{
-            movement.inertia.set(0,0,0)
-         })
-      })
-
       this.player.observers(ON_LIVE_CHANGE).add("SamLevel",(obj,{})=>{
          message.send("PV: "+(obj.get(LIVING)?.life ?? 0), MessageManager.FOREVER, "pv")
-      })
-
-      this.player.observers(ON_EQUIPPED).add("SamLevel",(obj,{equipper})=>{
-         if(equipper.given.includes(player.jump.id))message.send("Saut avec Espace",6000,"unlock")
-         if(equipper.given.includes(player.dash.id))message.send("Dash avec Shift",6000,"unlock")
-         if(equipper.given.includes(player.attack.id))message.send("Attaquez avec E",6000,"unlock")
-         if(equipper.given.includes(player.shoot.id))message.send("Tirez avec E",6000,"unlock")
       })
 
       options.camera.lockedTarget=this.player.get(HITBOX)?.hitbox
@@ -207,6 +196,8 @@ export class SamLevel extends Level{
       if(isKeyPressed("Digit2"))this.camerapos=new Vector3(0,8,10)
       if(isKeyPressed("Digit3"))this.camerapos=new Vector3(0,30,30)
       if(isKeyPressed("Digit8"))context.switchTo(new Lvl1_2())
+      if(isKeyPressed("Digit6"))context.switchTo(new Lvl1_3())
+         if(isKeyPressed("Digit5"))context.switchTo(new Lvl1_4())
       if(isKeyPressed("Digit7"))context.switchTo(new LiveEditor())
    }
 

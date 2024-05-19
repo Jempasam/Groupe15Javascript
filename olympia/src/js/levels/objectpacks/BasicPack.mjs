@@ -19,6 +19,7 @@ import { LivingPack } from "./LivingPack.mjs";
 import { EffectPack } from "./EffectPack.mjs";
 import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { Team } from "../../objects/model/TeamModel.mjs";
+import { MessageManager } from "../../messages/MessageManager.mjs";
 
 
 
@@ -29,16 +30,18 @@ export class BasicPack extends ObjectPack{
 
     /**
      * @param {World} world
+     * @param {MessageManager=} messages
      */
-    constructor(world){
+    constructor(world,messages){
         super(world)
+
         let physic= this.physic= new PhysicPack(world)
         let model= this.model= new ModelPack(world)
         let particle= this.particle= new ParticlePack(world, physic, model)
         let living= this.living= new LivingPack(world, particle)
         let effect= this.effect= new EffectPack(world, particle)
         let fight= this.fight= new FightPack(world, living, effect)
-        let player= this.player= new PlayerPack(world, fight)
+        let player= this.player= new PlayerPack(world, fight, messages)
         let soil= this.soil= new SoilPack(world, effect,living)
         let ia= this.ia= new IAPack(world, living)
         let monster= this.monster= new MonsterPack(world, fight, ia, player)
@@ -56,6 +59,8 @@ export class BasicPack extends ObjectPack{
             "#8": { tags:[...physic.STATIC(), model.barril.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad] },
             "#w": { tags:[...physic.STATIC(), model.wood.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad,new LivingModel(3)] },
 
+            ":f": { tags:[...soil.FIRE()] },
+
             "#~": { tags:[...physic.STATIC(), ...soil.MUD()] },
             "#x": { tags:[...physic.STATIC(), ...soil.LAVA()] },
             "#i": { tags:[...physic.STATIC(), ...soil.ICE()] },
@@ -63,6 +68,7 @@ export class BasicPack extends ObjectPack{
             "o2": { tags:[...physic.MOVING(), model.block.id, soil.elevator2.id] },
             "o4": { tags:[...physic.MOVING(), model.block.id, soil.elevator4.id] },
             "o8": { tags:[...physic.MOVING(), model.block.id, soil.elevator8.id] },
+            "oG": { tags:[...physic.MOVING(), model.block.id, soil.elevatorG.id] },
             "^2": { tags:[...physic.MOVING(), model.block.id, soil.forward2.id] },
             "^4": { tags:[...physic.MOVING(), model.block.id, soil.forward4.id] },
             "^8": { tags:[...physic.MOVING(), model.block.id, soil.forward8.id] },
@@ -87,6 +93,8 @@ export class BasicPack extends ObjectPack{
             "0a": { tags:[...player.ATTACK_EQUIPPER(), model.artifact.id] },
             "0s": { tags:[...player.SHOOT_EQUIPPER(), model.artifact.id] },
             "0d": { tags:[...player.DASH_EQUIPPER(), model.artifact.id] },
+
+            "$h": { tags:[...physic.STATIC_GHOST(), model.heart.id, living.health_giver.id] },
 
             "+p": { tags:[...physic.STATIC(), model.hole.id, monster.panda_summoner.id] },
             "+k": { tags:[...physic.STATIC(), model.hole.id, monster.kangaroo_summoner.id] },
