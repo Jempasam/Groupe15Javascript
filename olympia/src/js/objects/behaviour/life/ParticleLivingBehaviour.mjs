@@ -30,12 +30,12 @@ export class ParticleLivingBehaviour extends Behaviour{
         for(const obj of objects){
             obj.observers(ON_LIVE_CHANGE).add(this.eventid, (target,change)=>{
                 if(change<0)obj.apply(TRANSFORM, tf=>{
-                    for(let i=0; i<8; i++)generateParticle(world,tf,this.tags,this.size.clone())
+                    for(let i=0; i<4; i++)generateParticle(world,tf,this.tags,this.size.clone())
                 })
             })
             obj.observers(ON_DEATH).add(this.eventid, (target)=>{
                 obj.apply(TRANSFORM, tf=>{
-                    for(let i=0; i<15; i++)generateParticle(world,tf,this.tags,this.size.clone())
+                    for(let i=0; i<8; i++)generateParticle(world,tf,this.tags,this.size.clone())
                 })
             })
         }

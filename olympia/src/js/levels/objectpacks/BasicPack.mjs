@@ -60,6 +60,7 @@ export class BasicPack extends ObjectPack{
             "#w": { tags:[...physic.STATIC(), model.wood.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad,new LivingModel(3)] },
 
             ":f": { tags:[...soil.FIRE()] },
+            ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},
 
             "#~": { tags:[...physic.STATIC(), ...soil.MUD()] },
             "#x": { tags:[...physic.STATIC(), ...soil.LAVA()] },
@@ -93,6 +94,7 @@ export class BasicPack extends ObjectPack{
             "0a": { tags:[...player.ATTACK_EQUIPPER(), model.artifact.id] },
             "0s": { tags:[...player.SHOOT_EQUIPPER(), model.artifact.id] },
             "0d": { tags:[...player.DASH_EQUIPPER(), model.artifact.id] },
+            "0b": { tags:[...player.BOMB_EQUIPPER(), model.artifact.id] },
 
             "$h": { tags:[...physic.STATIC_GHOST(), model.heart.id, living.health_giver.id] },
 

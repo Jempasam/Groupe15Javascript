@@ -49,10 +49,16 @@ export class PlayerPack extends ObjectPack{
 
     shoot=this.behav(
         ()=>new PlayerShootBehaviour("KeyE", this._fight.FIREBALL(), {
-            strength:0.2, reloading_time: 40, size: new Vector3(1.5,0.8,1.5), shoot_count: 1, cadency: 20, knockback: 0.3
+            strength:0.2, reloading_time: 40, size: new Vector3(1,0.6,1), shoot_count: 1, cadency: 20, knockback: 0.3
         }),
         ()=>new EmitterBehaviour(this._particle.FIRE(), new Vector3(1.2,1.2,1.2), 10),
         ()=>this._models.flame.entries[0].behaviour
+    )
+
+    bomb=this.behav(
+        ()=>new PlayerShootBehaviour("KeyE", this._fight.BOMB(), {
+            strength:0.1, reloading_time: 40, size: new Vector3(.8,.8,.8), shoot_count: 1, cadency: 20, knockback: 0.3
+        })
     )
 
 
@@ -61,6 +67,7 @@ export class PlayerPack extends ObjectPack{
     dash_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.dash.id],{slot:"dash"}))
     attack_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.attack.id],{slot:"attack"}))
     shoot_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.shoot.id],{slot:"attack"}))
+    bomb_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.bomb.id],{slot:"attack"}))
 
     // Packs
     LIVING_PLAYER= this.lazy(()=>[...this._living.LIVING(), this.player.id])
@@ -81,6 +88,7 @@ export class PlayerPack extends ObjectPack{
     DASH_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.dash_equipper.id, this._particle.cloud_emitter.id, ...this.#opt_hint("Dashez avec la touche Shift!")])
     ATTACK_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.attack_equipper.id, this._particle.slash_emitter.id, ...this.#opt_hint("Attaquez avec la touche E!")])
     SHOOT_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.shoot_equipper.id, this._particle.fire_emitter.id, ...this.#opt_hint("Tirez avec la touche E!")])
+    BOMB_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.bomb_equipper.id, this._models.bomb.id, ...this.#opt_hint("Lancez une bombe avec la touche E!")])
 
 
     // Functions

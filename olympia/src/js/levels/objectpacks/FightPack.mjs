@@ -11,9 +11,9 @@ import { ON_COLLISION } from "../../objects/behaviour/collision/SimpleCollisionB
 import { MOVEMENT, accelerate } from "../../objects/model/MovementModel.mjs";
 import { GameObject } from "../../objects/world/GameObject.mjs";
 import { DisappearBehaviour } from "../../objects/behaviour/DisappearBehaviour.mjs";
-import { Team } from "../../objects/model/TeamModel.mjs";
+import { TEAM, Team } from "../../objects/model/TeamModel.mjs";
 import { EffectPack } from "./EffectPack.mjs";
-import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
+import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mjs";
 import { Vector2 } from "../../../../../babylonjs/core/index.js";
 
 
@@ -76,10 +76,18 @@ export class FightPack extends ObjectPack{
     // Contact effect
     flaming=this.behav(behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>t.addTag(this._effect.in_fire.id)))
     slowing=this.behav(behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>t.addTag(this._effect.slowness.id)))
+    explode=this.behav(behaviourTimeout(40,(o,world)=>{
+        o.kill()
+        const boom=world.add(this.EXPLOSION())
+        o.apply(TRANSFORM, tf=>boom.setAuto(new TransformModel({copied:tf,scale:tf.scale.scale(3)})))
+        o.apply(TEAM,t=>boom.setAuto(t))
+    }))
 
     // Compilations
     SMALL_SLASH= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.small_damage.id, this.small_knockback.id, this._particle.vanish_after_half.id, this._models.slash.id])
     LARGE_SLASH= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.medium_damage.id, this.large_knockback.id, this._particle.vanish_after_one.id, this._models.slash.id])
     FIREBALL= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this.medium_damage.id, this.small_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id, this.flaming.id, this._models.fire.id])
+    EXPLOSION= this.lazy(()=>[...this._physic.STATIC_GHOST(), this._models.sphere_explosion.id, this.small_damage.id, this.medium_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id])
+    BOMB= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), this.explode.id, this._models.bomb.id])
 
 }
