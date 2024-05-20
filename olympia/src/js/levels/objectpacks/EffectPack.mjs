@@ -9,6 +9,10 @@ import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs
 import { MOVEMENT } from "../../objects/model/MovementModel.mjs";
 import { TemporaryBehaviour } from "../../objects/behaviour/generic/TemporaryBehaviour.mjs";
 import { JUMP } from "../../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
+import { behaviourInterval } from "../../objects/behaviour/generic/IntervalBehaviour.mjs";
+import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
+import { ON_COLLISION } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
+import { LIVING } from "../../objects/model/LivingModel.mjs";
 
 
 
@@ -30,6 +34,7 @@ export class EffectPack extends ObjectPack{
     // Effects
     in_fire= this.behav(
         new PoisonBehaviour(1,20,60),
+        new TemporaryBehaviour(60),
         ()=>new EmitterBehaviour(this._particle.FIRE(), new Vector3(1, 1, 1), 5),
         ()=>new EmitterBehaviour(this._particle.SMOKE(), new Vector3(1, 1, 1), 5),
         ()=>this._models.flame.entries[0].behaviour

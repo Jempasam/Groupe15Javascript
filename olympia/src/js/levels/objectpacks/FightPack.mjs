@@ -80,7 +80,7 @@ export class FightPack extends ObjectPack{
         o.kill()
         const boom=world.add(this.EXPLOSION())
         o.apply(TRANSFORM, tf=>boom.setAuto(new TransformModel({copied:tf,scale:tf.scale.scale(3)})))
-        o.apply(TEAM,t=>boom.setAuto(t))
+        o.apply(TEAM,t=>boom.setAuto(Team.HATEFUL))
     }))
 
     // Compilations

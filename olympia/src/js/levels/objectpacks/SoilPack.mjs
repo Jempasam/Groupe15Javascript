@@ -6,7 +6,7 @@ import { World } from "../../objects/world/World.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
 import { ParticlePack } from "./ParticlePack.mjs";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
-import { MOVEMENT, accelerate } from "../../objects/model/MovementModel.mjs";
+import { MOVEMENT, accelerate, accelerateY } from "../../objects/model/MovementModel.mjs";
 import { TemporaryBehaviour } from "../../objects/behaviour/generic/TemporaryBehaviour.mjs";
 import { JUMP } from "../../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
 import { FightPack } from "./FightPack.mjs";
@@ -58,13 +58,18 @@ export class SoilPack extends ObjectPack{
         if(object.tags.includes(this._living.living.id)) object.addTag(this._effect.in_fire.id)
     }))
 
+    jumping= this.behav(behaviourObserve(ON_COLLISION,(_,{object})=>{
+        object.apply(MOVEMENT, m=> accelerateY(m.inertia, 1, 0.5))
+    }))
+
 
     // Soil
     GROUND= this.lazy(()=>[this._models.block.id])
     LAVA= this.lazy(()=>[this.damaging.id, this._models.lava.id])
     MUD= this.lazy(()=>[this.slowing.id, this._models.mud.id])
     ICE= this.lazy(()=>[this.slidable.id, this._models.ice.id])
-    FIRE= this.lazy(()=>[...this._physic.STATIC_GHOST(), this._models.flame.id, this.burning.id, this._particle.smoke_emitter.id])
+    FIRE= this.lazy(()=>[this._models.flame.id, this.burning.id, this._particle.smoke_emitter.id])
+    TRAMPOLINE= this.lazy(()=>[this.jumping.id, this._models.trampoline.id])
 
 
     // Moving

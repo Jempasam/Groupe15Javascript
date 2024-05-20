@@ -52,6 +52,6 @@ export class IntervalBehaviour extends Behaviour{
  * @param {number} interval 
  * @param {Behaviour} decorated 
  */
-export function behaviourInteval(interval,decorated){
+export function behaviourInterval(interval,decorated){
     return new IntervalBehaviour(interval,decorated)
 }

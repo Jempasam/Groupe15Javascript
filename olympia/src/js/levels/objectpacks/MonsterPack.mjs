@@ -1,5 +1,6 @@
 import { Vector3 } from "../../../../../babylonjs/core/index.js";
 import { SummonerBehaviour } from "../../objects/behaviour/SummonerBehaviour.mjs";
+import { LivingModel } from "../../objects/model/LivingModel.mjs";
 import { World } from "../../objects/world/World.mjs";
 import { FightPack } from "./FightPack.mjs";
 import { IAPack } from "./IAPack.mjs";
@@ -45,5 +46,5 @@ export class MonsterPack extends ObjectPack{
     kangaroo_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour({tags:this.KANGAROO(), models:()=>[this._fight.bad]}, new Vector3(.5,.5,.5), 3, 100, 15, 20))
     bird_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour({tags:this.EAGLE(), models:()=>[this._fight.bad]}, new Vector3(.3,.3,.3), 3, 100, 15, 20))
     
-    sphinx_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour({tags:this.SPHINX(), models:()=>[this._fight.bad]}, new Vector3(1,1,1), 1, 100, 20, 60))
+    sphinx_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour({tags:this.SPHINX(), models:()=>[this._fight.bad, new LivingModel(10)]}, new Vector3(1,1,1), 1, 100, 20, 60))
 }

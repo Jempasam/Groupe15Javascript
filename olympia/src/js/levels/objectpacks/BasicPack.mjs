@@ -58,6 +58,7 @@ export class BasicPack extends ObjectPack{
             "#%": { tags:[...physic.STATIC(), model.stone_wall.id] },
             "#8": { tags:[...physic.STATIC(), model.barril.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad] },
             "#w": { tags:[...physic.STATIC(), model.wood.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad,new LivingModel(3)] },
+            "#M": { tags:[...physic.STATIC(), ...soil.TRAMPOLINE()] },
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},

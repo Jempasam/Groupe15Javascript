@@ -90,7 +90,6 @@ export class PlayerPack extends ObjectPack{
     SHOOT_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.shoot_equipper.id, this._particle.fire_emitter.id, ...this.#opt_hint("Tirez avec la touche E!")])
     BOMB_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.bomb_equipper.id, this._models.bomb.id, ...this.#opt_hint("Lancez une bombe avec la touche E!")])
 
-
     // Functions
 
     /**
