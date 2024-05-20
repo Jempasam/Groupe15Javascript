@@ -11,6 +11,7 @@ import { EquipperBehaviour } from "../../objects/behaviour/slot/EquipperBehaviou
 import { BehaviourEntry, World } from "../../objects/world/World.mjs";
 import { FightPack } from "./FightPack.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
+import { Level, LevelContext } from "../../levels/Level.mjs";
 
 
 
@@ -118,5 +119,14 @@ export class PlayerPack extends ObjectPack{
             message.send(text,6000,"hint")
             return true
         }))
+    }
+
+    /**
+     * 
+     * @param {LevelContext} context 
+     * @param {()=>Level} level_factory 
+     */
+    createLevelChange(context, level_factory){
+        return this.behav(tags(()=>this.player.id), ()=>behaviourCollectable({},()=>(context.switchTo(level_factory()),true)))
     }
 }

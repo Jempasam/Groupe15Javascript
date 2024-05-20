@@ -126,6 +126,17 @@ export class BasicPack extends ObjectPack{
                 models:()=>[new LivingModel(3), fight.good],
                 size: it=>it.multiplyByFloats(.5,1,.5)
             },
+
+            "()":{ tags: [...physic.STATIC(), model.vortex.id]},
+
+            "h1": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "h2": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "h3": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "h4": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "h5": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "h6": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "h7": { tags:[...physic.STATIC(), model.question_mark.id] },
+
         }
     }
 }

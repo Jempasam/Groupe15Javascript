@@ -11,6 +11,7 @@ import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
 import { message } from "../script.js";
 import { Level, LevelContext } from "./Level.mjs";
+import { Lvl1_2 } from "./Lvl1_2.mjs";
 import { SamLevel } from "./SamLevel.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
 
@@ -31,6 +32,8 @@ export class Lvl1_4 extends Level{
 
       const pack=new BasicPack(world,message)
       const player=pack.player
+
+      pack.objects["()"]={tags:[...pack.physic.STATIC_GHOST(), pack.model.vortex.id, pack.player.createLevelChange(context,()=>new Lvl1_2()).id]}
 
       createLevel({
          tile_size: new Vector3(1.5,0.5,1.5),
@@ -64,30 +67,10 @@ export class Lvl1_4 extends Level{
             ,
             `
             1  ]            PP210a21
-            2  ]
-            3  ]
-            4  ]
-            5  ]
-            6  ]
-            7  ]
-            8  ]
-            9  ]
-            10 ]
-            11 ]
-            12 ]
-            13 ]
-            14 ]
-            15 ]
-            16 ]
-            17 ]
-            18 ]
-            19 ]
-            20 ]
-            21 ]                                                        
             `
             ,
             `
-            1  ]#m04--------        #m04--------------------------------        #m04------------------------
+            1  ]#m04--------        #m04--------------------------------()22    #m04------------------------
             2  ]#m04#x00------------#x00------------#x00------------#x00------------#x00----------------#m04
             3  ]|   |               |               |               |               |                   |   
             4  ]|   |               |               |               |               |                   |   

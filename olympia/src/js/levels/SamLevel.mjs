@@ -62,18 +62,20 @@ export class SamLevel extends Level{
       const MOVING=behav(new PathBehaviour([new Vector3(-7,0,0),new Vector3(7,0,0),new Vector3(7,5,0)], 0.1, 0.02, 0.04))
 
       // Hint
-      base.objects["hu"]={tags:[
+      base.objects["h1"]={tags:[
          player.createHint(message,"Vous pouvez débloquer des améliorations grâce aux artefactes dorés!").id,
          base.model.question_mark.id, ...base.physic.STATIC_GHOST()
       ]}
-      base.objects["hp"]={tags:[
+      base.objects["h2"]={tags:[
          player.createHint(message,"Ces caisses peuvent être déplacées, peut être qu'elles peuvent vous être utile.").id,
          base.model.question_mark.id, ...base.physic.STATIC_GHOST()
       ]}
-      base.objects["hd"]={tags:[
+      base.objects["h3"]={tags:[
          player.createHint(message,"Attention aux dégats! Si vous fumez, il ne faut plus vous faire toucher.").id,
          base.model.question_mark.id, ...base.physic.STATIC_GHOST()
       ]}
+
+      base.objects["()"]={tags:[...base.physic.STATIC_GHOST(), base.model.vortex.id, base.player.createLevelChange(context,()=>new Lvl1_3()).id]}
    
       createLevel({
          tile_size: new Vector3(1.5,0.5,1.5),
@@ -87,7 +89,7 @@ export class SamLevel extends Level{
             2  ]    |                  |##51#I06##51#I06##51#I06##51#I07##71|                          ||          ||                  ||           |
             3  ]#^09|__________________|        #^05                        |                          ||__________||                  ||           |
             4  ]    #^06##41-...-...#^03                                    |                          |##08-...-...|                  ||___________|                               #r08-...-...
-            5  ]        ##31-...-...            #^0K-...-...                |                          ||          ||                  |#r08-...-...|                   #r08-...-...|
+            5  ]        ##31-...-...            #^0K-...-...                |                          ||          ||                  |#r08-...-...|                   #r08-...-...|           #r08------------
             6  ]#^07    ##21-...-...#^05        |          |                |__________________________||__________||                  |#x02-...-...|                               |___________
             7  ]        ##11-...-...    #^06    |__________|                        ##06                ##0H-...-...|                  ||           |
             8  ]    ##01-...-...-...-...                                            |..                 |          ||                  ||           |
@@ -115,11 +117,11 @@ export class SamLevel extends Level{
             2  ]            0d82                                                %#91%#91----                            #m91----
             3  ]                                                                    |______|%#91                        |______|
             4  ]                                                                                        #w97
-            5  ]            hu53                                                                hp93    |  |                                            #m91----+O81                    0p92
+            5  ]            h353                                                                h293    |  |                                            #m91----+O81                    0p92                ()92
             6  ]                                                                                        |__|                                            |______|
             7  ]                                                                                    
             8  ]                                                                                    
-            9  ]                                                                    hdA3                                            
+            9  ]                                                                    h2A3                                            
             10 ]
             11 ]                                                                            
             12 ]            PP22
