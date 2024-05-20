@@ -59,6 +59,8 @@ export class BasicPack extends ObjectPack{
             "#8": { tags:[...physic.STATIC(), model.barril.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad] },
             "#w": { tags:[...physic.STATIC(), model.wood.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad,new LivingModel(3)] },
             "#M": { tags:[...physic.STATIC(), ...soil.TRAMPOLINE()] },
+            "#c": { tags:[...physic.STATIC(), model.cactus.id, soil.damaging.id], size: it=>it.multiplyByFloats(.4,1,.4) },
+            "#C": { tags:[...physic.STATIC(), model.cactus2.id, soil.damaging.id], size: it=>it.multiplyByFloats(.4,1,.4) },
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},
@@ -83,6 +85,8 @@ export class BasicPack extends ObjectPack{
             "v2": { tags:[...physic.MOVING(), model.block.id, soil.backward2.id] },
             "v4": { tags:[...physic.MOVING(), model.block.id, soil.backward4.id] },
             "v8": { tags:[...physic.MOVING(), model.block.id, soil.backward8.id] },
+
+            "d#": { tags:[...physic.MOVING(), model.block.id, soil.slow_door4.id] },
 
             "%#": { tags:[...physic.PHYSIC_FALLING(), model.block.id] },
             "%8": {

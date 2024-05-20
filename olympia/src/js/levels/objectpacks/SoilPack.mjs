@@ -43,7 +43,6 @@ export class SoilPack extends ObjectPack{
     // Accelerating
     slidable= this.behav(behaviourObserve(ON_COLLISION,(_,{object})=>object.apply(MOVEMENT, m=>{
         const acc=m.inertia.normalize().scaleInPlace(0.2)
-        console.log("slide")
         accelerate(m.inertia, acc.x*0.001, acc.y*0.001, acc.z*0.001, Math.abs(acc.x), Math.abs(acc.y), Math.abs(acc.z))
     })))
 
@@ -51,7 +50,6 @@ export class SoilPack extends ObjectPack{
 
     damaging= this.behav( tags(()=>this._living.living.id), behaviourOnContact({},(_,o)=>o.apply(LIVING, l=>{
         l.damage(1)
-        console.log("damage")
     })))
 
     burning= this.behav(behaviourObserve(ON_COLLISION,(_,{object})=>{
@@ -91,4 +89,7 @@ export class SoilPack extends ObjectPack{
     left8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(12,0,0)], 0.1, 0.01, 0.02))
     rotate_side4=this.behav(new PathBehaviour([new Vector3(2,0,0),new Vector3(2,4,0),new Vector3(-2,4,0),new Vector3(-2,0,0)], 0.1, 0.01, 0.02))
     rotate_side8=this.behav(new PathBehaviour([new Vector3(4,0,0),new Vector3(4,8,0),new Vector3(-4,8,0),new Vector3(-4,0,0)], 0.1, 0.01, 0.02))
+    
+    // Slow Door
+    slow_door4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,3,0)], 0.1, 0.001, 0.0015))
 }

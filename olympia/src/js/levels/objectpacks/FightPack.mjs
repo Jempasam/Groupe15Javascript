@@ -42,13 +42,13 @@ export class FightPack extends ObjectPack{
     bad=new Team("bad")
 
     // Contact Damage
-    small_damage= this.behav(tags(()=>this._living.living.id),
+    small_damage= this.behav( tags(()=>this._living.living.id),
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>{ t.get(LIVING)?.damage(1) })
     )
-    medium_damage= this.behav(tags(()=>this._living.living.id),
+    medium_damage= this.behav( tags(()=>this._living.living.id),
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>{ t.get(LIVING)?.damage(2) })
     )
-    big_damage= this.behav(tags(()=>this._living.living.id),
+    big_damage= this.behav( tags(()=>this._living.living.id),
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>{ t.get(LIVING)?.damage(3) })
     )
     
@@ -63,13 +63,13 @@ export class FightPack extends ObjectPack{
         console.log(offset.asArray())
         accelerate(mv.inertia, offset.x, offset.y, offset.z, force, force, force)
     }
-    small_knockback= this.behav(
+    small_knockback= this.behav( tags(()=>this._living.hitable.id),
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>this._knockback(o,t,0.2))
     )
-    medium_knockback= this.behav(
+    medium_knockback= this.behav( tags(()=>this._living.hitable.id),
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>this._knockback(o,t,0.4))
     )
-    large_knockback= this.behav(
+    large_knockback= this.behav( tags(()=>this._living.hitable.id),
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>this._knockback(o,t,0.8))
     )
     

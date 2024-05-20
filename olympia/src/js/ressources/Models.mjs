@@ -55,6 +55,10 @@ export async function loadModels(scene){
         HOLE: await model(scene,"hole"),
         BUILDING: await model(scene,"building"),
         PANNIER: await model(scene,"pannier"),
+
+        CACTUS: await model(scene,"cactus","decoration"),
+        CACTUS2: await model(scene,"cactus2","decoration"),
+        CACTUS3: await model(scene,"cactus3","decoration"),
         
         ARTIFACT: await model(scene,"Artifact"),
         BOMB: await model(scene,"bomb"),

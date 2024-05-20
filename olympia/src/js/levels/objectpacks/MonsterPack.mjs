@@ -43,7 +43,7 @@ export class MonsterPack extends ObjectPack{
     // MOVEMENT
     RUNNING= this.lazy(()=>[...this._physic.PHYSIC_FALLING_SLIDE(), ...this._living.LIVING(), this._ia.follow_fast.id])
     WALKING= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this._living.LIVING(), this._ia.follow_slow.id])
-    MISSILLING= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this._ia.follow_fast.id])
+    MISSILLING= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this._living.hitable.id, this._ia.follow_fast.id])
     WOLF_LIKE= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this._living.LIVING(), this._ia.rotate_and_jump.id])
     EAGLE_LIKE= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), ...this._living.LIVING(), this._ia.fly_and_attack.id])
 

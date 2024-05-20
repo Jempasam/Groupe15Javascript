@@ -118,7 +118,7 @@ export class LiveEditor extends Level{
                navigator.clipboard.readText().then(text=>{
                   if(!text.startsWith("`\n") || !text.endsWith("\n`")) throw new Error("Invalid format in clipboard")
                   text=text.substring(2,text.length-2).replace(/^[^\n]*\]/g,"").replace(/\n[^\n]*\]/g,"\n")
-                  const parts=text.split("\n`\n,\n`\n")
+                  const parts=text.split(/\n`[\n \t]+,[\n \t]+`\n/g)
                   for(let i=0;i<parts.length&&i<areas.length;i++)areas[i].value=parts[i]
                   reload()
                })
