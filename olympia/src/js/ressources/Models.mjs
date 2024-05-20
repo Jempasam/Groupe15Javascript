@@ -54,6 +54,7 @@ export async function loadModels(scene){
         MAGMA: await model(scene,"magma"),
         HOLE: await model(scene,"hole"),
         BUILDING: await model(scene,"building"),
+        PANNIER: await model(scene,"pannier"),
         
         ARTIFACT: await model(scene,"Artifact"),
         BOMB: await model(scene,"bomb"),
@@ -81,6 +82,7 @@ export async function loadModels(scene){
         PARTICLE_VORTEX: await model(scene,"vortex","particle"),
         PARTICLE_SMOKE: await model(scene,"smoke","particle"),
         PARTICLE_SLASH: await model(scene,"slash","particle"),
+        PARTICLE_PINGPONG: await model(scene,"pingpong","particle"),
         PARTICLE_FLAME: await model(scene,"flame","particle"),
         PARTICLE_BLOOD: await model(scene,"blood","particle"),
         PARTICLE_WOOD: await model(scene,"wood","particle"),

@@ -63,13 +63,13 @@ export class FightPack extends ObjectPack{
         console.log(offset.asArray())
         accelerate(mv.inertia, offset.x, offset.y, offset.z, force, force, force)
     }
-    small_knockback= this.behav(tags(()=>this._living.living.id),
+    small_knockback= this.behav(
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>this._knockback(o,t,0.2))
     )
-    medium_knockback= this.behav(tags(()=>this._living.living.id),
+    medium_knockback= this.behav(
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>this._knockback(o,t,0.4))
     )
-    large_knockback= this.behav(tags(()=>this._living.living.id),
+    large_knockback= this.behav(
         behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>this._knockback(o,t,0.8))
     )
     
@@ -85,6 +85,7 @@ export class FightPack extends ObjectPack{
 
     // Compilations
     SMALL_SLASH= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.small_damage.id, this.small_knockback.id, this._particle.vanish_after_half.id, this._models.slash.id])
+    PINGPONG= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.large_knockback.id, this._particle.vanish_after_one.id, this._models.pingpong.id])
     LARGE_SLASH= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.medium_damage.id, this.large_knockback.id, this._particle.vanish_after_one.id, this._models.slash.id])
     FIREBALL= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this.medium_damage.id, this.small_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id, this.flaming.id, this._models.fire.id])
     EXPLOSION= this.lazy(()=>[...this._physic.STATIC_GHOST(), this._models.sphere_explosion.id, this.small_damage.id, this.medium_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id])

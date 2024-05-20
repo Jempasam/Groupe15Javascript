@@ -96,6 +96,7 @@ export class BasicPack extends ObjectPack{
             "0s": { tags:[...player.SHOOT_EQUIPPER(), model.artifact.id] },
             "0d": { tags:[...player.DASH_EQUIPPER(), model.artifact.id] },
             "0b": { tags:[...player.BOMB_EQUIPPER(), model.artifact.id] },
+            "0p": { tags:[...player.PINGPONG_EQUIPPER(), model.artifact.id] },
 
             "$h": { tags:[...physic.STATIC_GHOST(), model.heart.id, living.health_giver.id] },
 
@@ -103,8 +104,8 @@ export class BasicPack extends ObjectPack{
             "+k": { tags:[...physic.STATIC(), model.hole.id, monster.kangaroo_summoner.id] },
             "+b": { tags:[...physic.STATIC(), model.hole.id, monster.bird_summoner.id] },
             "+s": { tags:[...physic.STATIC(), model.hole.id, monster.sphinx_summoner.id] },
-            "+o": { tags:[...physic.STATIC(), model.hole.id, monster.basketball_summoner.id] },
-            "+O": { tags:[...physic.STATIC(), model.hole.id, monster.super_basketball_summoner.id] },
+            "+o": { tags:[...physic.STATIC(), model.pannier.id, model.smoke.id, monster.basketball_summoner.id] },
+            "+O": { tags:[...physic.STATIC(), model.pannier.id, model.flame.id, monster.super_basketball_summoner.id] },
 
             "PP": {
                 tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
