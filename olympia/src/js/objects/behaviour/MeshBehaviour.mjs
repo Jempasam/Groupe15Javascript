@@ -24,7 +24,7 @@ export class MeshBehaviour extends Behaviour{
      */
     init(world,objects){
         for(let obj of objects){
-            const mesh=this.factory(world.model.get(SCENE))
+            const mesh=this.create(world.model.get(SCENE))
             mesh.rotationQuaternion=null
             obj.apply(TRANSFORM,transform=>{
                 mesh.position.copyFrom(transform.position)
@@ -33,6 +33,35 @@ export class MeshBehaviour extends Behaviour{
             })
             obj.set([MESH,this.uid],new MeshModel(mesh))
         }
+    }
+
+    /** @type {AbstractMesh[]} */
+    pool=[]
+    last=0
+
+    /** 
+     * @param {AbstractMesh} mesh
+     */
+    free(mesh){
+        const index=this.pool.indexOf(mesh)
+        this.pool[index]=this.pool[this.last-1]
+        this.pool[this.last-1]=mesh
+        mesh.setEnabled(false)
+        this.last--
+    }
+
+    /** 
+     * @param {Scene} scene
+     * @returns {AbstractMesh}
+     * */
+    create(scene){
+        if(!this.pool[this.last]){
+            this.pool[this.last]=this.factory(scene)
+        }
+        const ret=this.pool[this.last]
+        ret.setEnabled(true)
+        this.last++
+        return ret
     }
 
     /**
@@ -59,7 +88,7 @@ export class MeshBehaviour extends Behaviour{
      */
     finish(world,objects){
         for(let obj of objects){
-            obj.apply([MESH,this.uid],mesh=>mesh.mesh.dispose())
+            obj.apply([MESH,this.uid],mesh=>this.free(mesh.mesh))
             obj.remove([MESH,this.uid])
         }
     }

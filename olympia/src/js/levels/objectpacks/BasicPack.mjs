@@ -20,6 +20,7 @@ import { EffectPack } from "./EffectPack.mjs";
 import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { Team } from "../../objects/model/TeamModel.mjs";
 import { MessageManager } from "../../messages/MessageManager.mjs";
+import { ElementPack } from "./ElementPack.mjs";
 
 
 
@@ -30,19 +31,19 @@ export class BasicPack extends ObjectPack{
 
     /**
      * @param {World} world
-     * @param {MessageManager=} messages
      */
-    constructor(world,messages){
+    constructor(world){
         super(world)
 
         let physic= this.physic= new PhysicPack(world)
         let model= this.model= new ModelPack(world)
         let particle= this.particle= new ParticlePack(world, physic, model)
         let living= this.living= new LivingPack(world, particle)
-        let effect= this.effect= new EffectPack(world, particle)
+        let effect= this.effect= new EffectPack(world, living)
         let fight= this.fight= new FightPack(world, living, effect)
-        let player= this.player= new PlayerPack(world, fight, messages)
         let soil= this.soil= new SoilPack(world, effect,living)
+        let element= this.element= new ElementPack(world, soil, fight)
+        let player= this.player= new PlayerPack(world, element)
         let ia= this.ia= new IAPack(world, living)
         let monster= this.monster= new MonsterPack(world, fight, ia, player,soil)
 
@@ -56,14 +57,15 @@ export class BasicPack extends ObjectPack{
             "#m": { tags:[...physic.STATIC(), model.magma.id] },
             "#r": { tags:[...physic.STATIC(), model.rock_floor.id] },
             "#%": { tags:[...physic.STATIC(), model.stone_wall.id] },
-            "#8": { tags:[...physic.STATIC(), model.barril.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad] },
-            "#w": { tags:[...physic.STATIC(), model.wood.id, ...living.DESTRUCTIBLE()], models:()=>[fight.bad,new LivingModel(3)] },
+            "#8": { tags:[...physic.STATIC(), ...living.DESTRUCTIBLE(), model.barril.id], models:()=>[fight.bad] },
+            "#w": { tags:[...physic.STATIC(), ...living.DESTRUCTIBLE(), model.wood.id], models:()=>[fight.bad,new LivingModel(3)] },
             "#M": { tags:[...physic.STATIC(), ...soil.TRAMPOLINE()] },
             "#c": { tags:[...physic.STATIC(), model.cactus.id, soil.damaging.id], size: it=>it.multiplyByFloats(.4,1,.4) },
             "#C": { tags:[...physic.STATIC(), model.cactus2.id, soil.damaging.id], size: it=>it.multiplyByFloats(.4,1,.4) },
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},
+            ":d": { tags:[...monster.DEMON()], models:()=>[fight.bad]},
 
             "#~": { tags:[...physic.STATIC(), ...soil.MUD()] },
             "#x": { tags:[...physic.STATIC(), ...soil.LAVA()] },
@@ -90,7 +92,7 @@ export class BasicPack extends ObjectPack{
 
             "%#": { tags:[...physic.PHYSIC_FALLING(), model.block.id] },
             "%8": {
-                tags:[...physic.PHYSIC_FALLING(), model.barril.id, ...living.DESTRUCTIBLE()],
+                tags:[...physic.PHYSIC_FALLING(), ...living.DESTRUCTIBLE(), model.barril.id],
                 models:()=>[fight.bad],
                 size: it=>it.multiplyInPlace(new Vector3(.8,1,.8))
             },
@@ -98,6 +100,8 @@ export class BasicPack extends ObjectPack{
             "&b": { tags:[...player.POTION_SLOW_FALLING()], size: it=>it.scale(.6) },
             "&t": { tags:[...player.POTION_TORNADO()], size: it=>it.scale(.6) },
             "&p": { tags:[...player.POTION_PROPULSED()], size: it=>it.scale(.6) },
+            "&s": { tags:[...player.POTION_SMALLING()], size: it=>it.scale(.6) },
+            "&g": { tags:[...player.POTION_GROWING()], size: it=>it.scale(.6) },
 
             "0j": { tags:[...player.JUMP_EQUIPPER(), model.artifact.id] },
             "0a": { tags:[...player.ATTACK_EQUIPPER(), model.artifact.id] },
@@ -114,28 +118,35 @@ export class BasicPack extends ObjectPack{
             "+s": { tags:[...physic.STATIC(), model.hole.id, monster.sphinx_summoner.id] },
             "+o": { tags:[...physic.STATIC(), model.pannier.id, model.smoke.id, monster.basketball_summoner.id] },
             "+O": { tags:[...physic.STATIC(), model.pannier.id, model.flame.id, monster.super_basketball_summoner.id] },
+            "+d": { tags:[...physic.STATIC(), model.hole.id, monster.demon_summoner.id]},
 
             "PP": {
-                tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
+                tags:[...player.CLASSIC_PLAYER(), model.bonnet.id, player.inventory.id],
                 models:()=>[new LivingModel(3), fight.good],
-                size: it=>it.multiplyByFloats(.7,1,.7)
+                size: it=>it.multiplyByFloats(.7,1.2,.7)
             },
 
             "Pp": {
                 tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
                 models:()=>[new LivingModel(3), fight.good],
-                size: it=>it.multiplyByFloats(.5,1,.5)
+                size: it=>it.multiplyByFloats(.5,.6,.5)
             },
 
             "()":{ tags: [...physic.STATIC(), model.vortex.id]},
 
-            "h1": { tags:[...physic.STATIC(), model.question_mark.id] },
-            "h2": { tags:[...physic.STATIC(), model.question_mark.id] },
-            "h3": { tags:[...physic.STATIC(), model.question_mark.id] },
-            "h4": { tags:[...physic.STATIC(), model.question_mark.id] },
-            "h5": { tags:[...physic.STATIC(), model.question_mark.id] },
-            "h6": { tags:[...physic.STATIC(), model.question_mark.id] },
-            "h7": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "?1": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "?2": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "?3": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "?4": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "?5": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "?6": { tags:[...physic.STATIC(), model.question_mark.id] },
+            "?7": { tags:[...physic.STATIC(), model.question_mark.id] },
+
+            "?0": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_upgrade.id] },
+            "?%": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_movable.id] },
+            "?x": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_damage.id] },
+
+            "<>": { tags:[...physic.MOVING_GHOST_FRICTION(), physic.pushable.id, player.camera_movement.id, player.camera.id], size:it=>it.scale(1.4)},
 
         }
     }

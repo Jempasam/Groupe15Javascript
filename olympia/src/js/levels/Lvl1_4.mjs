@@ -18,8 +18,6 @@ import { BasicPack } from "./objectpacks/BasicPack.mjs";
 
 export class Lvl1_4 extends Level{
 
-   static playerPos=new Vector3(1.5, 3, 3)
-
    /**
     * @param {LevelContext} context
     * @param {World} world 
@@ -66,7 +64,9 @@ export class Lvl1_4 extends Level{
             `
             ,
             `
-            1  ]            PP210a21
+            1  ]            PP200a21
+            2  ]            
+            3  ]            <>D0
             `
             ,
             `
@@ -123,14 +123,6 @@ export class Lvl1_4 extends Level{
     * @param {{camera:UniversalCamera}} options 
     */
    tick(context,world,options){
-      const pos=this?.player?.get(TRANSFORM)?.position
-      if(pos){
-         options.camera.position.copyFrom(pos)
-         options.camera.position.addInPlace(this.camerapos)
-      }
-      if(isKeyPressed("Digit1"))this.camerapos=new Vector3(0,6,8)
-      if(isKeyPressed("Digit2"))this.camerapos=new Vector3(0,8,10)
-      if(isKeyPressed("Digit3"))this.camerapos=new Vector3(0,30,30)
       if(isKeyPressed("Digit9"))context.switchTo(new SamLevel())
    }
 
@@ -139,7 +131,7 @@ export class Lvl1_4 extends Level{
     * @param {{camera:Camera}} options 
     */
    stop(world,options){
-      message.clear("pv")
+      message.clearAll()
    }
 
 }

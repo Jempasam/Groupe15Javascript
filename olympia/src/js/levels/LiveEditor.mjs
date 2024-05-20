@@ -33,6 +33,7 @@ import { SamLevel } from "./SamLevel.mjs";
 import { adom, create, dom } from "../../../../samlib/DOM.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
 import { TaggedDict } from "../objects/world/TaggedDict.mjs";
+import { ObjectPack } from "./objectpacks/ObjectPack.mjs";
 
 export class LiveEditor extends Level{
 
@@ -59,15 +60,21 @@ export class LiveEditor extends Level{
          const dimension=container.appendChild(adom/*html*/`<input class=toremove type=text value=[1.5,0.5,1.5] />`)
          const error=container.appendChild(create("p.toremove"))
          
-         const select=container.appendChild(create("select.toremove"))
+         const select=container.appendChild(create("div.library.toremove"))
          for(const [name,val] of Object.entries(pack.objects)){
             const taglist= (Array.isArray(val.tags) ? val.tags : val.tags?.())
-               ?.map(it=>pack.getName(it)??"") ?.filter(it=>it.length>0) ?? []
-            const small_name= taglist 
-               .flatMap(it=>it.split("_")) .map(it=>it[0].toUpperCase()+it.slice(1))  .map((it,i)=>(i<taglist.length-2?it.substring(0,2):it)) .join("") 
+               ?.map(it=> [ ObjectPack.getName(it)??"", ObjectPack.getColor(it)??"#FFFFFF" ])
+               ?.filter(it=>it.length>0) ?? []
+
+            const small_name= taglist
+               .flatMap(it=>it[0].split("_")) .map(it=>it[0].toUpperCase()+it.slice(1))  .map((it,i)=>(i<taglist.length-2?it.substring(0,2):it)) .join("") 
                .slice(-25).padEnd(25,".") 
-            const desc= taglist.join(" + ")
-            select.appendChild(adom/*html*/`<option value="${name}">${name} ${small_name} ${desc}</option>`)
+
+            const desc= taglist
+               .flatMap(it=>[adom`<span style="color:${it[1]}">${it[0]}</span>"`,adom`<span> </span>`])
+               
+            desc.pop()
+            select.appendChild(adom/*html*/`<div value="${name}">${name} ${small_name} ${desc}</div>`)
          }
 
          function catch_error(callback){
@@ -121,14 +128,15 @@ export class LiveEditor extends Level{
          })
 
          paste.addEventListener("click",e=>{
-            catch_error(()=>{
-               navigator.clipboard.readText().then(text=>{
-                  if(!text.startsWith("`\n") || !text.endsWith("\n`")) throw new Error("Invalid format in clipboard")
-                  text=text.substring(2,text.length-2).replace(/^[^\n]*\]/g,"").replace(/\n[^\n]*\]/g,"\n")
-                  const parts=text.split(/\n`[\n \t]+,[\n \t]+`\n/g)
-                  for(let i=0;i<parts.length&&i<areas.length;i++)areas[i].value=parts[i]
-                  reload()
-               })
+            navigator.clipboard.readText().then(text=>{
+                  catch_error(()=>{
+                     text=text.trim()
+                     if(!text.startsWith("`\n") || !text.endsWith("\n`")) throw new Error("Invalid format in clipboard")
+                     text=text.substring(2,text.length-2).replace(/^[^\n]*\]/g,"").replace(/\n[^\n]*\]/g,"\n")
+                     const parts=text.split(/\n`[\n \t]*,[\n \t]*`\n/g)
+                     for(let i=0;i<parts.length&&i<areas.length;i++)areas[i].value=parts[i]
+                     reload()
+                  })
             })
          })
 
@@ -150,6 +158,7 @@ export class LiveEditor extends Level{
     * @param {{camera:UniversalCamera}} options 
     */
    tick(context,world,options){
+      this.camerapos=options.camera.position
       if(isKeyPressed("ArrowUp")){
          if(isKeyPressed("ShiftRight"))this.camerapos.y+=0.2
          else this.camerapos.z-=0.2
@@ -160,7 +169,7 @@ export class LiveEditor extends Level{
       }
       if(isKeyPressed("ArrowLeft"))this.camerapos.x+=0.2
       if(isKeyPressed("ArrowRight"))this.camerapos.x-=0.2
-      options.camera.position.copyFrom(this.camerapos)
+      //options.camera.position.copyFrom(this.camerapos)
 
       if(isKeyPressed("Escape"))context.switchTo(new SamLevel())
    }

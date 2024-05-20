@@ -19,18 +19,21 @@ export class TransformModel{
             this._rotation=copied.rotation.clone()
             this._scale=copied.scale.clone()
         }
-        if(position instanceof Vector3)this._position=position
+        if(position instanceof Vector3)this._position=position.clone()
         else if(position!=null)this._position=position.position.clone()
         
-        if(rotation instanceof Vector3)this._rotation=rotation
+        if(rotation instanceof Vector3)this._rotation=rotation.clone()
         else if(rotation!=null)this._rotation=rotation.rotation.clone()
 
-        if(scale instanceof Vector3)this._scale=scale
+        if(scale instanceof Vector3)this._scale=scale.clone()
         else if(scale!=null)this._scale=scale.scale.clone()
 
         if(this._position==undefined)this._position=Vector3.Zero()
         if(this._rotation==undefined)this._rotation=Vector3.Zero()
         if(this._scale==undefined)this._scale=Vector3.One()
+        this._previous_position=this._position.clone()
+        this._previous_rotation=this._rotation.clone()
+        this._previous_scale=this._scale.clone()
     }
 
     /** @returns {Vector3} */ get position(){return this._position}

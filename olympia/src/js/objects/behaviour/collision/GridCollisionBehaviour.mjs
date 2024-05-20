@@ -11,6 +11,7 @@ import { ON_COLLISION } from "./SimpleCollisionBehaviour.mjs";
  * Une behaviour qui gère les collisions entre les objets du monde.
  * Il le fait de manière plus optimisé en rengeant les objets dans une grille avant de tester les collisions.
  * Sur les objets qui sont dans la même case.
+ * Le deuxième ObjectQuery définie un groupe d'objets qui ne sont pas testé entre eux.
  */
 export class GridCollisionBehaviour extends Behaviour{
 
@@ -38,7 +39,6 @@ export class GridCollisionBehaviour extends Behaviour{
                 }
             }
         }
-        console.log(this.grid)
     }
 
     init(){ }
@@ -47,8 +47,9 @@ export class GridCollisionBehaviour extends Behaviour{
      * @override
      * @param {World} world
      * @param {ObjectQuery} objects
+     * @param {ObjectQuery=} ignored
      */
-    tick(world, objects){
+    tick(world, objects, ignored){
         // Get the bounding box around all the objects
         let min=new Vector3(Number.POSITIVE_INFINITY,Number.POSITIVE_INFINITY,Number.POSITIVE_INFINITY)
         let max=new Vector3(Number.NEGATIVE_INFINITY,Number.NEGATIVE_INFINITY,Number.NEGATIVE_INFINITY)
@@ -102,6 +103,7 @@ export class GridCollisionBehaviour extends Behaviour{
                             let obj2=objects[j][0]
                             let hitbox2=obj2.get(HITBOX)?.hitbox
                             if(!hitbox2)continue
+                            if(ignored && ignored.match(obj1) && ignored.match(obj2))continue
                             if(hitbox1.intersectsMesh(hitbox2,true)){
                                 obj1.observers(ON_COLLISION).notify({self_hitbox:hitbox1, object:obj2, hitbox:hitbox2})
                                 obj2.observers(ON_COLLISION).notify({self_hitbox:hitbox2, object:obj1, hitbox:hitbox1})

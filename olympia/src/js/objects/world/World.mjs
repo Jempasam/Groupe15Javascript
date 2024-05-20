@@ -3,6 +3,7 @@ import { GameObject } from "./GameObject.mjs"
 import { Behaviour } from "../behaviour/Behaviour.mjs"
 import { fastKeep, fastRemove, fastRemoveValue, fastRemoveValueAll } from "../../../../../samlib/Array.mjs";
 import { ModelHolder } from "./ModelHolder.mjs";
+import { ObserverGroup, ObserverKey, observers } from "../../../../../samlib/observers/ObserverGroup.mjs";
 
 
 /** @typedef {import("./TaggedDict.mjs").Tag} Tag */
@@ -14,7 +15,13 @@ import { ModelHolder } from "./ModelHolder.mjs";
  */
 export class World{
 
+    persistent_model=new ModelHolder()
+
     model=new ModelHolder()
+    
+    constructor(){
+        this.model._parentModelHolder=this.persistent_model
+    }
 
     obj_state_age=0
 
@@ -153,6 +160,8 @@ export class World{
         while(this.behaviours_list.length>0) this.removeBehaviour(this.behaviours_list[0])
         this.age=0
         this.obj_state_age=0
+        this.model=new ModelHolder()
+        this.model._parentModelHolder=this.persistent_model
     }
 
     clearObjects(){
@@ -182,8 +191,8 @@ export class World{
             let entry=new BehaviourEntry(behaviour,order)
             if(behaviour.doTick)this.behaviours_list.push(entry)
             this.behaviours.add(tags, entry)
-            entry.behaviour.init(this,...this.#getParams(entry))
             entry.behaviour.open(this)
+            entry.behaviour.init(this,...this.#getParams(entry))
             ret.push(entry)
         }
         this.behaviours_list.sort((a,b)=>a.order-b.order)
@@ -284,6 +293,15 @@ export class World{
                 }
             }
         }
+    }
+
+    /**
+     * @template T
+     * @param {ObserverKey<T>} key
+     * @returns {ObserverGroup<World,T>}
+     */
+    observers(key){
+        return observers(this,key)
     }
 }
 

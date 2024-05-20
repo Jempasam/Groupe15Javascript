@@ -4,5 +4,7 @@
         "html",
         "raw",
         "dom"
-    ]
+    ],
+    "javascript.preferences.importModuleSpecifierEnding": "js",
+    "typescript.preferences.importModuleSpecifierEnding": "js"
 }

@@ -27,6 +27,8 @@ export class ModelPack extends ObjectPack{
         this._registerNames()
     }
 
+    modifyNames(str){return "["+str.toUpperCase()+"]"}
+
     // World
     cube= this.behav(()=>new MeshBehaviour(this.models.CUBE))
     pillar= this.behav(()=>new MeshBehaviour(this.models.PILLAR))
@@ -63,6 +65,7 @@ export class ModelPack extends ObjectPack{
     demon= this.behav(()=>new MeshBehaviour(this.models.DEMON))
     bonnet= this.behav(()=>new MeshBehaviour(this.models.BONNET))
     sphinx= this.behav(()=>new MeshBehaviour(this.models.SPHINX))
+    gorilla= this.behav(()=>new MeshBehaviour(this.models.GORILLA))
 
     // Objects
     artifact= this.behav(()=>new MeshBehaviour(this.models.ARTIFACT))

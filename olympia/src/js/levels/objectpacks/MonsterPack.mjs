@@ -1,8 +1,11 @@
 import { Vector3 } from "../../../../../babylonjs/core/index.js";
+import { behaviourInit } from "../../objects/behaviour/Behaviour.mjs";
 import { SummonerBehaviour } from "../../objects/behaviour/SummonerBehaviour.mjs";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
 import { behaviourInterval } from "../../objects/behaviour/generic/IntervalBehaviour.mjs";
+import { PhaseBehaviour } from "../../objects/behaviour/generic/PhaseBehaviour.mjs";
 import { LivingModel } from "../../objects/model/LivingModel.mjs";
+import { MESH } from "../../objects/model/MeshModel.mjs";
 import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mjs";
 import { World } from "../../objects/world/World.mjs";
 import { FightPack } from "./FightPack.mjs";
@@ -43,10 +46,18 @@ export class MonsterPack extends ObjectPack{
 
     // MOVEMENT
     RUNNING= this.lazy(()=>[...this._physic.PHYSIC_FALLING_SLIDE(), ...this._living.LIVING(), this._ia.follow_fast.id])
-    WALKING= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this._living.LIVING(), this._ia.follow_slow.id])
+    WALKING= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this._living.LIVING(), this._ia.follow_slow.id, this._ia.dodge_void.id])
+    WALKING_FAST= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this._living.LIVING(), this._ia.follow.id, this._ia.dodge_void.id])
     MISSILLING= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this._living.hitable.id, this._ia.follow_fast.id])
-    WOLF_LIKE= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this._living.LIVING(), this._ia.rotate_and_jump.id])
+    WOLF_LIKE= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this._living.LIVING(), this._ia.rotate_and_jump.id, this._ia.dodge_void.id])
     EAGLE_LIKE= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), ...this._living.LIVING(), this._ia.fly_and_attack.id])
+
+    // Phases
+    demon_phases=this.behav(()=>new PhaseBehaviour(
+        {tags:[...this.WALKING_FAST()], duration:100},
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.water_emitter.id], duration:100},
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.fire_emitter.id, this.basketball_summoner.id], duration:100, probability:.5}
+    ))
 
     // Monsters
     PANDA=this.lazy(()=>[...this.RUNNING(), this._models.panda.id, this._fight.small_damage.id, this._fight.small_knockback.id])
@@ -55,6 +66,7 @@ export class MonsterPack extends ObjectPack{
     BASKETBALL=this.lazy(()=>[...this.MISSILLING(), this._models.basketball.id, this._particle.smoke_emitter.id, this._fight.small_damage.id, this._fight.small_knockback.id, this._particle.vanish_after_eight.id])
     SUPER_BASKETBALL=this.lazy(()=>[...this.MISSILLING(), this._models.basketball.id, this._particle.fire_emitter.id, this.fire_summoner.id, this._fight.medium_damage.id, this._fight.medium_knockback.id, this._particle.vanish_after_sixteen.id])
 
+    DEMON=this.lazy(()=>[this.demon_phases.id, this._models.demon.id, this._fight.small_damage.id, this._fight.medium_knockback.id])
     SPHINX=this.lazy(()=>[...this.WALKING(), this._models.sphinx.id, this._fight.medium_damage.id, this._fight.large_knockback.id])
 
     // Invocations
@@ -63,6 +75,7 @@ export class MonsterPack extends ObjectPack{
     bird_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour({tags:this.EAGLE(), models:()=>[this._fight.bad]}, new Vector3(.3,.3,.3), 3, 100, 15, 30))
     basketball_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour({tags:this.BASKETBALL(), models:()=>[this._fight.bad]}, new Vector3(.3,.3,.3), 4, 30, 15, 30))
     super_basketball_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour({tags:this.SUPER_BASKETBALL(), models:()=>[this._fight.bad]}, new Vector3(.5,.5,.5), 1, 100, 20, 60))
-
+    
+    demon_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour({tags:this.DEMON(), models:()=>[this._fight.bad]}, new Vector3(.5,.75,.5), 1, 100, 20, 60))
     sphinx_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour({tags:this.SPHINX(), models:()=>[this._fight.bad, new LivingModel(10)]}, new Vector3(1,1,1), 1, 100, 20, 60))
 }

@@ -40,6 +40,7 @@ export async function loadModels(scene){
         BONNET: await model(scene,"bonnet","animal"),
         SPHINX: await model(scene,"sphinx","animal"),
         DEMON: await model(scene,"demon","animal"),
+        GORILLA: await model(scene,"gorilla","animal"),
 
 
         BLOCK: await model(scene,"block"),

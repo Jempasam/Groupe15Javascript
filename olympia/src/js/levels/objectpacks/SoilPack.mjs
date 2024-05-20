@@ -18,6 +18,7 @@ import { ModelPack } from "./ModelPack.mjs";
 import { EffectPack } from "./EffectPack.mjs";
 import { PathBehaviour } from "../../objects/behaviour/movement/PathBehaviour.mjs";
 import { LivingPack } from "./LivingPack.mjs";
+import { giveTag } from "../../objects/model/SlotModel.mjs";
 
 
 /**
@@ -52,10 +53,6 @@ export class SoilPack extends ObjectPack{
         l.damage(1)
     })))
 
-    burning= this.behav(behaviourObserve(ON_COLLISION,(_,{object})=>{
-        if(object.tags.includes(this._living.living.id)) object.addTag(this._effect.in_fire.id)
-    }))
-
     jumping= this.behav(behaviourObserve(ON_COLLISION,(_,{object})=>{
         object.apply(MOVEMENT, m=> accelerateY(m.inertia, 1, 0.5))
     }))
@@ -66,7 +63,7 @@ export class SoilPack extends ObjectPack{
     LAVA= this.lazy(()=>[this.damaging.id, this._models.lava.id])
     MUD= this.lazy(()=>[this.slowing.id, this._models.mud.id])
     ICE= this.lazy(()=>[this.slidable.id, this._models.ice.id])
-    FIRE= this.lazy(()=>[this._models.flame.id, this.burning.id, this._particle.smoke_emitter.id])
+    FIRE= this.lazy(()=>[this._models.flame.id, this._effect.give_burning.id, this._particle.smoke_emitter.id])
     TRAMPOLINE= this.lazy(()=>[this.jumping.id, this._models.trampoline.id])
 
 

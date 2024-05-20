@@ -54,7 +54,6 @@ export function forMap(map, position, size, factory, wordLength=1, isSizeOfTile=
         table.push(column)
         column=[]
     }
-    console.log(table)
 
     const get_size= (x,y)=>{
         let height=1, width=1

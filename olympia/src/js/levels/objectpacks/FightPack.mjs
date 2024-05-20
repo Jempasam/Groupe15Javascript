@@ -61,7 +61,6 @@ export class FightPack extends ObjectPack{
         const to=t.get(TRANSFORM) ; if(!to)return
         const mv=t.get(MOVEMENT) ; if(!mv)return
         const offset=to.position.subtract(from.position).multiplyByFloats(1,0,1).normalize().scaleInPlace(force)
-        console.log(offset.asArray())
         accelerate(mv.inertia, offset.x, offset.y, offset.z, force, force, force)
     }
     small_knockback= this.behav( tags(()=>this._living.hitable.id),
@@ -75,8 +74,8 @@ export class FightPack extends ObjectPack{
     )
     
     // Contact effect
-    flaming=this.behav(behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>t.addTag(this._effect.in_fire.id)))
-    slowing=this.behav(behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>t.addTag(this._effect.slowness.id)))
+    flaming=this.behav(behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>t.addTag(this._effect.timed_burning.id)))
+    slowing=this.behav(behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>t.addTag(this._effect.timed_slowed.id)))
     explode=this.behav(behaviourTimeout(40,(o,world)=>{
         o.kill()
         const boom=world.add(this.EXPLOSION())

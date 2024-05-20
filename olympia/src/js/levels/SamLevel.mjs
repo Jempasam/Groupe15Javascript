@@ -32,8 +32,6 @@ import { SoilPack } from "./objectpacks/SoilPack.mjs";
 
 export class SamLevel extends Level{
 
-   static playerPos=new Vector3(1.5, 2, 9.5)
-
    /**
     * @param {LevelContext} context
     * @param {World} world 
@@ -60,20 +58,6 @@ export class SamLevel extends Level{
 
       // Platform
       const MOVING=behav(new PathBehaviour([new Vector3(-7,0,0),new Vector3(7,0,0),new Vector3(7,5,0)], 0.1, 0.02, 0.04))
-
-      // Hint
-      base.objects["h1"]={tags:[
-         player.createHint(message,"Vous pouvez débloquer des améliorations grâce aux artefactes dorés!").id,
-         base.model.question_mark.id, ...base.physic.STATIC_GHOST()
-      ]}
-      base.objects["h2"]={tags:[
-         player.createHint(message,"Ces caisses peuvent être déplacées, peut être qu'elles peuvent vous être utile.").id,
-         base.model.question_mark.id, ...base.physic.STATIC_GHOST()
-      ]}
-      base.objects["h3"]={tags:[
-         player.createHint(message,"Attention aux dégats! Si vous fumez, il ne faut plus vous faire toucher.").id,
-         base.model.question_mark.id, ...base.physic.STATIC_GHOST()
-      ]}
 
       base.objects["()"]={tags:[...base.physic.STATIC_GHOST(), base.model.vortex.id, base.player.createLevelChange(context,()=>new Lvl1_3()).id]}
    
@@ -117,18 +101,18 @@ export class SamLevel extends Level{
             2  ]            0d82                                                %#91%#91----                            #m91----
             3  ]                                                                    |______|%#91                        |______|
             4  ]                                                                                        #w97
-            5  ]            h353                                                                h293    |  |                                            #m91----+O81                    0p92                ()92
+            5  ]            ?053                                                                ?%93    |  |                                            #m91----+O81                    0p92                ()92
             6  ]                                                                                        |__|                                            |______|
             7  ]                                                                                    
             8  ]                                                                                    
-            9  ]                                                                    h2A3                                            
+            9  ]                                                                    ?xA3                                            
             10 ]
             11 ]                                                                            
-            12 ]            PP22
+            12 ]            PP21
             13 ]                            0sT2
             14 ]                                                                        +s90----
             15 ]                                                                        |______|
-            16 ]                                                                            
+            16 ]            <>B0
             17 ]
             18 ]                    +k20
             19 ]                   
@@ -159,17 +143,9 @@ export class SamLevel extends Level{
     * @param {{camera:UniversalCamera}} options 
     */
    tick(context,world,options){
-      const pos=this?.player?.get(TRANSFORM)?.position
-      if(pos){
-         options.camera.position.copyFrom(pos)
-         options.camera.position.addInPlace(this.camerapos)
-      }
-      if(isKeyPressed("Digit1"))this.camerapos=new Vector3(0,6,8)
-      if(isKeyPressed("Digit2"))this.camerapos=new Vector3(0,8,10)
-      if(isKeyPressed("Digit3"))this.camerapos=new Vector3(0,30,30)
       if(isKeyPressed("Digit8"))context.switchTo(new Lvl1_2())
       if(isKeyPressed("Digit6"))context.switchTo(new Lvl1_3())
-         if(isKeyPressed("Digit5"))context.switchTo(new Lvl1_4())
+      if(isKeyPressed("Digit5"))context.switchTo(new Lvl1_4())
       if(isKeyPressed("Digit7"))context.switchTo(new LiveEditor())
    }
 

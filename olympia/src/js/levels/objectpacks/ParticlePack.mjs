@@ -98,6 +98,8 @@ export class ParticlePack extends ObjectPack{
     cloud_emitter= this.behav(()=>new EmitterBehaviour(this.CLOUD(), new Vector3(0.5, 0.5, 0.5), 5))
     fire_emitter= this.behav(()=>new EmitterBehaviour(this.FIRE(), new Vector3(0.8, 0.8, 0.8), 5))
     slash_emitter= this.behav(()=>new EmitterBehaviour(this.SLASH(), new Vector3(0.5, 0.5, 0.5), 5))
-    wind_emitter= this.behav(()=>new EmitterBehaviour(this.WIND(), new Vector3(0.5, 0.5, 0.5), 5))
+    wind_emitter= this.behav(()=>new EmitterBehaviour(this.WIND(), new Vector3(1,1,1), 5))
+    water_emitter= this.behav(()=>new EmitterBehaviour(this.WATER(), new Vector3(0.5, 0.5, 0.5), 15))
+    propulsion_emitter= this.behav(()=>new EmitterBehaviour(this.PROPULSION(), new Vector3(.4, .4, .4), 5))
 
 }

@@ -16,9 +16,18 @@ export class TransformBehaviour extends Behaviour{
     tick(world, objects){
         for(let obj of objects){
             obj.apply(TRANSFORM, tf=>{
-                tf.position._isDirty=false
-                tf.rotation._isDirty=false
-                tf.scale._isDirty=false
+                if(tf.position._isDirty){
+                    tf.position._isDirty=false
+                    tf._previous_position.copyFrom(tf.position)
+                }
+                if(tf.rotation._isDirty){
+                    tf.rotation._isDirty=false
+                    tf._previous_rotation.copyFrom(tf.rotation)
+                }
+                if(tf.scale._isDirty){
+                    tf.scale._isDirty=false
+                    tf._previous_scale.copyFrom(tf.scale)
+                }
             })
         }
     }

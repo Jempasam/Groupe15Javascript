@@ -15,7 +15,7 @@ import { ModelKey } from "../world/ModelHolder.mjs"
 export function giveTag(obj, ...tags){
     const slots=obj.getOrSet(SLOTS,()=>new SlotModel())
     for(const tag of tags){
-        let count=slots.counters[tag] || (obj.tags.includes(tag)?1:0)
+        let count=slots.counters[tag] ?? (obj.tags.includes(tag)?1:0)
         count++
         slots.counters[tag]=count
         obj.addTag(tag)
@@ -32,7 +32,8 @@ export function giveTag(obj, ...tags){
 export function removeTag(obj, ...tags){
     const slots=obj.getOrSet(SLOTS,()=>new SlotModel())
     for(const tag of tags){
-        let count=slots.counters[tag] || (obj.tags.includes(tag)?1:0)
+        let count=slots.counters[tag] ?? 0
+        if(count<=0)continue
         count--
         slots.counters[tag]=count
         if(count<=0){
@@ -55,7 +56,7 @@ export function giveEquip(obj, tags, slot=undefined){
         const slots=obj.getOrSet(SLOTS,()=>new SlotModel())
         const previous=slots.slots[slot]
         if(previous){
-            obj.removeTag(...previous)
+            removeTag(obj,...previous)
         }
         slots.slots[slot]=tags
         if(tags.length==0)delete slots.slots[slot]
@@ -75,7 +76,7 @@ export function removeEquip(obj, slot){
         const slots=obj.getOrSet(SLOTS,()=>new SlotModel())
         const previous=slots.slots[slot]
         if(previous){
-            obj.removeTag(...previous)
+            removeTag(obj,...previous)
             delete slots.slots[slot]
         }
     }

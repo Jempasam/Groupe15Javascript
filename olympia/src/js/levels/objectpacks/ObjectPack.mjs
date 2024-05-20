@@ -29,20 +29,28 @@ export class ObjectPack{
 
     /** @type {{[key:Tag]:string}} */
     static #tag_names={}
+    static #tag_colors={}
 
     _registerNames(){
         for(let [key,value] of Object.entries(this)){
+            if(value instanceof BehaviourElement){
+                //value._setId(key)
+            }
             if(typeof value=="object" && ["number","string"].includes(typeof value.id)){
-                ObjectPack.#tag_names[value.id]=key
+                ObjectPack.#tag_names[value.id]=this.modifyNames(key)
+                const c=()=>"123456789A"[Math.floor(Math.random()*10)]
+                ObjectPack.#tag_colors[value.id]="#"+c()+c()+c()+c()+c()+c()
             }
         }
     }
 
-    /**
-     * @param {Tag} tag
-     * @returns {string?}
-     */
-    getName(tag){ return ObjectPack.#tag_names[tag]??null}
+    modifyNames(str){return str}
+
+    /** @param {Tag} tag @returns {string?}*/
+    static getName(tag){ return ObjectPack.#tag_names[tag]??null}
+
+    /** @param {Tag} tag @returns {string?}*/
+    static getColor(tag){ return ObjectPack.#tag_colors[tag]??null}
 
     static id_counter=34543
     #id(){ return ""+(ObjectPack.id_counter++) }

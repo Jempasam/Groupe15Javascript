@@ -1,16 +1,17 @@
 
-
 export function html(strings, ...values) {
-    const escaped = values.map((value) => {
+    const mapper=(value) => {
         if(value instanceof Element)return value.outerHTML
         if(value===undefined || value===null)return ""
+        if(Array.isArray(value))return value.map(mapper).join("")
         return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
-    });
+    };
+    const escaped = values.map(mapper);
 
     return strings.reduce(
         (result, string, i) => `${result}${string}${escaped[i] || ""}`,

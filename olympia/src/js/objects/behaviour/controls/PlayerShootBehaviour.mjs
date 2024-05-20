@@ -6,6 +6,8 @@ import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
 import { TEAM } from "../../model/TeamModel.mjs";
+import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
+import { GameObject } from "../../world/GameObject.mjs";
 
 /**
  * Fait tirer un objet lors de l'appui sur une touche
@@ -13,7 +15,7 @@ import { TEAM } from "../../model/TeamModel.mjs";
 export class PlayerShootBehaviour extends Behaviour{
 
     /**
-     * @param {string} key La touche à presser pour tirer
+     * @param {string?} key La touche à presser pour tirer
      * @param {import("../../world/TaggedDict.mjs").Tag[]} tags Les tags à donner aux projectiles
      * @param {object} param0
      * @param {number=} param0.strength La force du tir
@@ -58,7 +60,7 @@ export class PlayerShootBehaviour extends Behaviour{
             const shooting=obj.get(SHOOTING); if(!shooting)continue
             const transform=obj.get(TRANSFORM) ?? new TransformModel({})
             if(shooting.cooldown<=0){
-                if(isKeyPressed(this.key) && shooting.munition>0){
+                if((this.key==null || isKeyPressed(this.key)) && shooting.munition>0){
                     obj.apply2(MOVEMENT, TRANSFORM, (move,tf)=>{
                         const direction=move.inertia.clone()
                         direction.y=0
@@ -74,13 +76,17 @@ export class PlayerShootBehaviour extends Behaviour{
                             0,
                             (tf.scale.z/2+this.size.z/2)*direction.z,
                         )
+                        
+                        const min_dimension=Math.min(transform.scale.x, transform.scale.y, transform.scale.z)
+                        const bullet_size=this.size.scale(min_dimension)
 
                         const proj=world.add(
                             this.tags,
-                            new TransformModel({position:bullet_location, scale:this.size.clone(), rotation:tf.rotation.clone()}),
+                            new TransformModel({position:bullet_location, scale:bullet_size, rotation:tf.rotation.clone()}),
                             [MOVEMENT,new MovementModel(inertia)],
                         )
                         if(this.doCopyTeam)obj.apply(TEAM, team=>proj.set(TEAM,team))
+                        obj.observers(ON_SHOOT).notify({shooter:obj, shooted:proj, model:shooting})
                     })
                     shooting.cooldown=this.cadency
                     shooting.reloading=this.reloading_time
@@ -106,6 +112,9 @@ export class PlayerShootBehaviour extends Behaviour{
     }
 }
 
-
-/** @type {ModelKey<{reloading:number, cooldown:number, munition:number}>} */
+/** @typedef {{reloading:number, cooldown:number, munition:number}} ShootModel */
+/** @type {ModelKey<ShootModel>} */
 export const SHOOTING=new ModelKey("shoot")
+
+/** @type {ObserverKey<{shooter:GameObject,shooted:GameObject,model:ShootModel}>} */
+export const ON_SHOOT=new ObserverKey("on_shoot")

@@ -86,13 +86,15 @@ export class Behaviour{
 
 /**
  * Create a simple behaviour with the given ticker function
- * @param {Behaviour['init']} ticker 
+ * @param {Behaviour['init']|{init?:Behaviour['init'], tick?:Behaviour['tick'], finish?:Behaviour['finish']}} ticker 
  */
 export function behaviour(ticker){
+    if(ticker instanceof Function)ticker={tick:ticker}
     const ret=new Behaviour()
-    ret.init=function(){}
-    ret.tick=ticker
-    ret.finish=function(){}
+    ret.init= ticker.init ?? function(){}
+    ret.tick= ticker.tick ?? function(){}
+    if(!ticker.tick)ret.doTick=false
+    ret.finish= ticker.finish ?? function(){}
     return ret
 }
 

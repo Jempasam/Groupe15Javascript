@@ -9,6 +9,7 @@ import { PushCollisionBehaviour } from "../../objects/behaviour/PushCollisionBeh
 import { Vector3 } from "../../../../../babylonjs/core/index.js";
 import { SimpleCollisionBehaviour } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
+import { PathBehaviour } from "../../objects/behaviour/PathBehaviour.mjs";
 
 
 /**
@@ -37,13 +38,15 @@ export class PhysicPack extends ObjectPack{
 
     // Collisions
     collision= this.behav(new HitboxBehaviour(), ()=>(this.options.simpleCollision ? new SimpleCollisionBehaviour() : new GridCollisionBehaviour(60,1,60)))
-    solid=this.empty()
+    solid=this.behav(new PathBehaviour(new Vector3(1,1,1)))
     pushable= this.behav(tags(()=>this.solid.id), new PushCollisionBehaviour())
     pushable_all= this.behav(new PushCollisionBehaviour())
 
     // Forces
     gravity= this.behav(new ConstantForceBehaviour(new Vector3(0,-0.015,0)))
     low_gravity= this.behav(new ConstantForceBehaviour(new Vector3(0,-0.005,0)))
+    anti_gravity= this.behav(new ConstantForceBehaviour(new Vector3(0,0.015,0)))
+    high_anti_gravity= this.behav(new ConstantForceBehaviour(new Vector3(0,0.03,0)))
 
     // Compilations
     PHYSIC= this.lazy(()=>[this.transform.id, this.move.id, this.collision.id, this.pushable.id, this.solid.id])
@@ -53,6 +56,7 @@ export class PhysicPack extends ObjectPack{
 
     MOVING= this.lazy(()=>[this.transform.id, this.no_friction_move.id, this.collision.id, this.solid.id])
     MOVING_GHOST= this.lazy(()=>[this.transform.id, this.no_friction_move.id, this.collision.id])
+    MOVING_GHOST_FRICTION= this.lazy(()=>[this.transform.id, this.high_friction_move.id, this.collision.id])
     MOVING_NOCOLLISION= this.lazy(()=>[this.transform.id, this.no_friction_move.id])
 
     STATIC= this.lazy(()=>[this.transform.id, this.collision.id, this.solid.id])

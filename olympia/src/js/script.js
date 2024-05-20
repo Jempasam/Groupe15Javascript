@@ -11,7 +11,10 @@ import { Engine, SSAO2RenderingPipeline, SceneOptimizer, SceneOptimizerOptions }
 import { SCENE } from "./objects/model/MeshModel.mjs";
 import { adom, create } from "../../../samlib/DOM.mjs";
 import { MessageManager } from "./messages/MessageManager.mjs";
-import { Lvl1_2 } from "./levels/lvl1_2.mjs";
+import { Lvl1_2 } from "./levels/Lvl1_2.mjs";
+import { MESSAGE } from "./objects/behaviour/interaction/HintBehaviour.mjs";
+import { CAMERA } from "./objects/behaviour/CameraBehaviour.mjs";
+import { DOCUMENT } from "./objects/behaviour/InventoryBehaviour.mjs";
 
 /** Récupère et crée la fenêtre de jeu */
 const gameElement = document.getElementById("olympia");
@@ -31,6 +34,7 @@ gameElement.appendChild(infoJoueur)
 let keyState = {};
 let scene;
 let world=new World()
+world.persistent_model.set(DOCUMENT,gameElement)
 let levelContext
 let pause = false;
 
@@ -51,7 +55,7 @@ let listeBombes = [];
 let listes;
 let decor;
 
-let nbLevel = -1;
+let nbLevel = 260402;
 /** @type {Level?} */ let currentLevel=null
 
 
@@ -60,7 +64,8 @@ async function createScene() {
     SceneOptimizer.OptimizeAsync(scene, new SceneOptimizerOptions(60))
     //scene.debugLayer.show();
     scene.clearColor = new BABYLON.Color3.Black();
-    world.model.set(SCENE,scene)
+    world.persistent_model.set(SCENE,scene)
+    world.persistent_model.set(MESSAGE,message)
     world.models=await loadModels(scene)
     const camY = 10;
     const camZ = -10;
@@ -69,6 +74,7 @@ async function createScene() {
     camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, camY, camZ), scene);
     camera.setTarget(BABYLON.Vector3.Zero());
     camera.attachControl(canvas, true);
+    world.persistent_model.set(CAMERA,camera)
 
     levelContext=new LevelContext(world,{camera})
 

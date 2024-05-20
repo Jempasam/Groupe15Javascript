@@ -3,7 +3,7 @@ import { ConstantForceBehaviour } from "../../objects/behaviour/ConstantForceBeh
 import { PoisonBehaviour } from "../../objects/behaviour/effect/PoisonBehaviour.mjs";
 import { EmitterBehaviour } from "../../objects/behaviour/particle/EmitterBehaviour.mjs";
 import { World } from "../../objects/world/World.mjs";
-import { ObjectPack } from "./ObjectPack.mjs";
+import { ObjectPack, tags } from "./ObjectPack.mjs";
 import { ParticlePack } from "./ParticlePack.mjs";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
 import { MOVEMENT } from "../../objects/model/MovementModel.mjs";
@@ -14,7 +14,11 @@ import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehavio
 import { ON_COLLISION } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { LIVING } from "../../objects/model/LivingModel.mjs";
 import { MeshBehaviour } from "../../objects/behaviour/MeshBehaviour.mjs";
-
+import { behaviour } from "../../objects/behaviour/Behaviour.mjs";
+import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
+import { TimedBehaviour } from "../../objects/behaviour/generic/TimedBehaviour.mjs";
+import { LivingPack } from "./LivingPack.mjs";
+import { giveTag } from "../../objects/model/SlotModel.mjs";
 
 
 /**
@@ -24,48 +28,56 @@ export class EffectPack extends ObjectPack{
 
     /**
      * @param {World} world
-     * @param {ParticlePack} particle
+     * @param {LivingPack} living
      */
-    constructor(world,particle){
+    constructor(world,living){
         super(world)
-        this._particle=particle
-        this._models=particle._models
+        this._living=living
+        this._particle=living._particle
+        this._physic=this._particle._physic
+        this._models=this._particle._models
         this._registerNames()
     }
 
-    // Effects
-    in_fire= this.behav(
-        new PoisonBehaviour(1,20,60),
-        new TemporaryBehaviour(60),
-        ()=>new EmitterBehaviour(this._particle.FIRE(), new Vector3(1, 1, 1), 5),
-        ()=>new EmitterBehaviour(this._particle.SMOKE(), new Vector3(1, 1, 1), 5),
-        ()=>this._models.flame.entries[0].behaviour
-    )
+    // Affiction
+    smaller= this.behav( behaviourEach({ init(t){t.get(TRANSFORM)?.scale?.scaleInPlace(0.5)}, finish(t){t.get(TRANSFORM)?.scale?.scaleInPlace(2)} }) )
+    bigger= this.behav( behaviourEach({ init(t){t.get(TRANSFORM)?.scale?.scaleInPlace(2)}, finish(t){t.get(TRANSFORM)?.scale?.scaleInPlace(0.5)} }) )
+    infinite_jump= this.behav( behaviourEach(o => o.forAll(JUMP, j => j.remaining_jump=Math.max(j.remaining_jump, 1))) )
+    slowed= this.behav( behaviourEach(o => o.get(MOVEMENT) ?.inertia .scaleInPlace(0.5) ) )
+    slow_falling= this.behav( behaviourEach(o => o.get(MOVEMENT) ?.inertia .maximizeInPlaceFromFloats(Number.NEGATIVE_INFINITY,-0.05,Number.NEGATIVE_INFINITY) ) )
+    fire_immune=this.empty()
+    burning_damage=this.behav( tags(()=>this.fire_immune.id), new PoisonBehaviour(1,20) )
 
-    in_tornado= this.behav(
-        new TemporaryBehaviour(40),
-        new ConstantForceBehaviour(new Vector3(0,0.03,0)),
-        ()=>new EmitterBehaviour(this._particle.WIND(), new Vector3(1, 1, 1), 5),
-    )
+    // Affictions Groups
+    SMALLER= this.lazy(()=>[this.smaller.id])
+    BIGGER= this.lazy(()=>[this.bigger.id])
+    INFINITE_JUMP= this.lazy(()=>[this.infinite_jump.id, this._particle.propulsion_emitter.id])
+    PROPULSED= this.lazy(()=>[this._physic.high_anti_gravity.id, this._particle.wind_emitter.id, this._models.wind.id])
+    SLOWED= this.lazy(()=>[this.slowed.id, this._particle.water_emitter.id])
+    SLOW_FALLING= this.lazy(()=>[this.slow_falling.id, this._models.balloon.id])
+    BURNING= this.lazy(()=>[this.burning_damage.id, this._particle.fire_emitter.id, this._particle.smoke_emitter.id, this._models.flame.id])
 
-    propulsed= this.behav(
-        new TemporaryBehaviour(100),
-        behaviourEach(o => o.forAll(JUMP, j => j.remaining_jump=Math.max(j.remaining_jump, 1))),
-        ()=>new EmitterBehaviour(this._particle.PROPULSION(), new Vector3(.4, .4, .4), 5),
-    )
+    // TEMPORARY
+    timed_smaller=this.behav(()=>new TimedBehaviour(200, this.SMALLER()))
+    timed_bigger=this.behav(()=>new TimedBehaviour(200, this.BIGGER()))
+    timed_infinite_jump=this.behav(()=>new TimedBehaviour(100, this.INFINITE_JUMP()))
+    timed_propulsed=this.behav(()=>new TimedBehaviour(40, this.PROPULSED()))
+    timed_slowed=this.behav(()=>new TimedBehaviour(100, this.SLOWED()))
+    timed_slow_falling=this.behav(()=>new TimedBehaviour(100, this.SLOW_FALLING()))
+    timed_burning=this.behav(()=>new TimedBehaviour(100, this.BURNING()))
 
-    slowness= this.behav(
-        new TemporaryBehaviour(100),
-        behaviourEach(o => o.get(MOVEMENT) ?.inertia .scaleInPlace(0.5) ),
-        ()=>new EmitterBehaviour(this._particle.WATER(), new Vector3(0.5, 0.5, 0.5), 15),
-    )
+    // Give on collision
+    /**
+     * @param {import("../../objects/world/TaggedDict.mjs").Tag[]} tags
+     */
+    behaviourCollide(...tags){
+        return behaviourObserve(ON_COLLISION,(_,{object})=>{
+            if(object.world.age%10==0 && object.tags.includes(this._living.living.id)) giveTag(object,...tags)
+        })
+    }
 
-    slow_falling= this.behav(
-        new TemporaryBehaviour(100),
-        behaviourEach(o => o.get(MOVEMENT) ?.inertia .maximizeInPlaceFromFloats(Number.NEGATIVE_INFINITY,-0.05,Number.NEGATIVE_INFINITY) ),
-        ()=>this._models.balloon.behaviour
-    )
-
-    // Emitters
-    
+    give_burning= this.behav(()=>this.behaviourCollide(this.timed_burning.id))
+    give_smaller= this.behav(()=>this.behaviourCollide(this.timed_smaller.id))
+    give_slowed= this.behav(()=>this.behaviourCollide(this.timed_slowed.id))
 }
+

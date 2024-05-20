@@ -3,6 +3,7 @@ import { FOLLOW, FOLLOW_RELATIVE, STAY, TargetChainBehaviour } from "../../objec
 import { World } from "../../objects/world/World.mjs";
 import { LivingPack } from "./LivingPack.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
+import { PathNoFallBehaviour } from "../../objects/behaviour/controls/PathNoFallBehaviour.mjs";
 
 
 
@@ -23,6 +24,10 @@ export class IAPack extends ObjectPack{
 
     follow_slow=this.behav(tags(()=>this._living.living.id),new TargetChainBehaviour(10,[
         [FOLLOW(), 0.01, 0.04, 5]
+    ]))
+
+    follow=this.behav(tags(()=>this._living.living.id),new TargetChainBehaviour(10,[
+        [FOLLOW(), 0.01, 0.1, 5]
     ]))
 
     follow_fast=this.behav(tags(()=>this._living.living.id),new TargetChainBehaviour(20,[
@@ -50,5 +55,7 @@ export class IAPack extends ObjectPack{
         {random:[ [FOLLOW_RELATIVE(new Vector3(2,3,-2)), 0.01, 0.1, 20,  1], [FOLLOW_RELATIVE(new Vector3(-2,3,-2)), 0.01, 0.1, 20,  2] ]},
         [FOLLOW(), 0.02, 0.3, 100],
     ]))
+
+    dodge_void=this.behav(()=>new PathNoFallBehaviour())
 
 }

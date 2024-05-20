@@ -62,7 +62,6 @@ export class MessageManager{
      */
     clear(slot){
         let entry=this.#messages[slot]
-        console.log(this.#messages)
         if(entry){
             if(entry.timeoutid !== null) clearTimeout(entry.timeoutid)
             try{ this._container.removeChild(entry.element) }catch(e){}

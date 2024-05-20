@@ -1,6 +1,8 @@
+import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { isKeyPressed } from "../../../controls/Keyboard.mjs";
 import { MOVEMENT, accelerateX, accelerateZ } from "../../model/MovementModel.mjs";
 import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
+import { GameObject } from "../../world/GameObject.mjs";
 import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
@@ -65,6 +67,7 @@ export class PlayerDashBehaviour extends Behaviour{
                     dash.particle_cooldown=Math.floor(20*this.strength)
                     dash.cooldown=this.cooldown
                     dash.remaining_dash--
+                    obj.observers(ON_DASH).notify({dasher:obj,model:dash})
                 }
             }
             else dash.load_cooldown--
@@ -107,3 +110,6 @@ export class DashModel{
 
 /** @type {ModelKey<DashModel>} */
 export const DASH=new ModelKey("dash")
+
+/** @type {ObserverKey<{dasher:GameObject,model:DashModel}>} */
+export const ON_DASH=new ObserverKey("on_dash")

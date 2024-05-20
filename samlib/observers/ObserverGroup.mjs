@@ -28,12 +28,21 @@ export class ObserverGroup{
 
     static main_handler="__MAIN_HANDLER__"
 
-    constructor(holder){
+    /**
+     * 
+     * @param {O} holder 
+     * @param {ObserverGroup<any,T>=} parent 
+     */
+    constructor(holder,parent){
+        this.#parent=parent
         this.#holder=holder
     }
 
     /** @type {O} */
     #holder
+
+    /** @type {ObserverGroup<any,T>=} */
+    #parent
 
     /** @type {Object.<string|number,(function(O,T):void)[]>} */
     #observers={}
@@ -94,6 +103,7 @@ export class ObserverGroup{
         for(let observer of Object.values(this.#observers)){
             observer(this.#holder,value)
         }
+        if(this.#parent)this.#parent.notify(value)
     }
 
     
@@ -105,12 +115,13 @@ export class ObserverGroup{
  * @template T
  * @param {O} object 
  * @param {ObserverKey<T>} key 
+ * @param {ObserverGroup<any,T>=} parent
  * @returns {ObserverGroup<O,T>}
  */
-export function observers(object,key){
+export function observers(object,key,parent){
     let group=object["observers_"+key.name]
     if(!group){
-        group=new ObserverGroup(object)
+        group=new ObserverGroup(object,parent)
         object["observers_"+key.name]=group
     }
     return group

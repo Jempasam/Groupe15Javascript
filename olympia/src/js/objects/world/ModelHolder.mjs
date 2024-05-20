@@ -62,6 +62,9 @@ export class ModelHolder{
     
     /* --- GETTERS --- */
 
+    /** @type {ModelHolder?} */
+    _parentModelHolder=null
+
     /**
      * @template T
      * @param {AnyModelKey<T>} model_key
@@ -91,6 +94,7 @@ export class ModelHolder{
         const main=this.get(key)
         if(main)callback(main)
         if(this["_sub_"+key.name])for(const sub of Object.values(this["_sub_"+key.name])) callback(sub)
+        if(this._parentModelHolder)this._parentModelHolder.forAll(key,callback)
     }
 
 
@@ -101,7 +105,7 @@ export class ModelHolder{
      * @returns {T?}
      */
     get(key){
-        return this.#anyKeyToThis(key)[this.#anyKeyToId(key)] ?? null
+        return this.#anyKeyToThis(key)[this.#anyKeyToId(key)] ?? this._parentModelHolder?.get(key) ?? null
     }
 
     /**

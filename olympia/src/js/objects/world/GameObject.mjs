@@ -44,11 +44,12 @@ export class GameObject extends ModelHolder{
      * @returns {ObserverGroup<GameObject,T>}
      */
     observers(key){
-        return observers(this,key)
+        return observers(this, key, this.world.observers(key))
     }
 
     /**
      * @param {...Tag} tags
+     * @deprecated Préférez la fonction {@link removeTag(GameObject,...Tag)} de {@link SlotModel} en général.
      */
     removeTag(...tags){
         if(this.world)this.world.removeTags(this,tags)
@@ -56,6 +57,7 @@ export class GameObject extends ModelHolder{
 
     /**
      * @param {...Tag} tags
+     * @deprecated Préférez la fonction {@link giveTag(GameObject,...Tag)} de {@link SlotModel} en général.
      */
     addTag(...tags){
         if(this.world)this.world.addTags(this,tags)

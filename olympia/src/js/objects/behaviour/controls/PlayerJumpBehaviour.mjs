@@ -1,7 +1,8 @@
-import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.mjs";
+import { ObserverGroup, ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { isKeyPressed } from "../../../controls/Keyboard.mjs";
 import { MOVEMENT, accelerateY } from "../../model/MovementModel.mjs";
 import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";
+import { GameObject } from "../../world/GameObject.mjs";
 import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
@@ -54,7 +55,6 @@ export class PlayerJumpBehaviour extends Behaviour{
             const jump=obj.get(JUMP); if(!jump)continue
             if(jump.cooldown<=0){
                 if(isKeyPressed(this.key) && jump.remaining_jump>0){
-                    console.log("jump")
                     obj.apply(MOVEMENT, move=>{
                         accelerateY(move.inertia, this.strength*2, this.strength)
                         const particle=this.particle
@@ -64,6 +64,7 @@ export class PlayerJumpBehaviour extends Behaviour{
                     })
                     jump.cooldown=14
                     jump.remaining_jump--
+                    obj.observers(ON_JUMP).notify({jumper:obj,model:jump})
                 }
             }
             else jump.cooldown--
@@ -90,3 +91,6 @@ export class JumpModel{
 
 /** @type {ModelKey<JumpModel>} */
 export const JUMP=new ModelKey("jump")
+
+/** @type {ObserverKey<{jumper:GameObject,model:JumpModel}>} */
+export const ON_JUMP=new ObserverKey("on_jump")

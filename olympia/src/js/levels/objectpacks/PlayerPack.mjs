@@ -1,19 +1,28 @@
-import { Vector3 } from "../../../../../babylonjs/core/index.js";
+import { Size, Vector2, Vector3 } from "../../../../../babylonjs/core/index.js";
 import { MessageManager } from "../../messages/MessageManager.mjs";
 import { MeshBehaviour } from "../../objects/behaviour/MeshBehaviour.mjs";
 import { PlayerBehaviour } from "../../objects/behaviour/controls/PlayerBehaviour.mjs";
 import { PlayerDashBehaviour } from "../../objects/behaviour/controls/PlayerDashBehaviour.mjs";
 import { PlayerJumpBehaviour } from "../../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
 import { PlayerShootBehaviour } from "../../objects/behaviour/controls/PlayerShootBehaviour.mjs";
-import { behaviourCollectable } from "../../objects/behaviour/generic/CollectableBehaviour.mjs";
+import { behaviourCollectable, behaviourInfiniteEquipper } from "../../objects/behaviour/generic/CollectableBehaviour.mjs";
 import { EmitterBehaviour } from "../../objects/behaviour/particle/EmitterBehaviour.mjs";
 import { EquipperBehaviour } from "../../objects/behaviour/slot/EquipperBehaviour.mjs";
 import { BehaviourEntry, World } from "../../objects/world/World.mjs";
 import { FightPack } from "./FightPack.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
 import { Level, LevelContext } from "../../levels/Level.mjs";
-
-
+import { HintBehaviour } from "../../objects/behaviour/interaction/HintBehaviour.mjs";
+import { CameraLikeBehaviour } from "../../objects/behaviour/controls/CameraLikeBehaviour.mjs";
+import { CameraBehaviour } from "../../objects/behaviour/CameraBehaviour.mjs";
+import { InventoryBehaviour } from "../../objects/behaviour/InventoryBehaviour.mjs";
+import { giveTag } from "../../objects/model/SlotModel.mjs";
+import { ElementPack } from "./ElementPack.mjs";
+import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
+import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mjs";
+import { PATH, PathModel } from "../../objects/model/PathModel.mjs";
+import { MOVEMENT, accelerate } from "../../objects/model/MovementModel.mjs";
+import { PathNoFallBehaviour } from "../../objects/behaviour/controls/PathNoFallBehaviour.mjs"
 
 /**
  * Un pack de behaviours de base de joueur et de ses pouvoirs
@@ -22,18 +31,17 @@ export class PlayerPack extends ObjectPack{
 
     /**
      * @param {World} world
-     * @param {FightPack} fight
-     * @param {MessageManager=} messages
+     * @param {ElementPack} element
      */
-    constructor(world,fight,messages){
+    constructor(world,element){
         super(world)
-        this._fight=fight
-        this._living=fight._living
-        this._models=fight._models
+        this._element=element
+        this._fight=element._fight
+        this._living=this._fight._living
+        this._models=this._fight._models
         this._particle=this._living._particle
         this._physic=this._particle._physic
-        this._messages=messages
-        this._effect=fight._effect
+        this._effect=this._fight._effect
         this._registerNames()
     }
 
@@ -70,57 +78,94 @@ export class PlayerPack extends ObjectPack{
 
 
     // Equipper
-    jump_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.jump.id],{slot:"jump"}))
-    dash_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.dash.id],{slot:"dash"}))
-    attack_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.attack.id],{slot:"attack"}))
-    shoot_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.shoot.id],{slot:"attack"}))
-    bomb_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.bomb.id],{slot:"attack"}))
-    pingpong_equipper=this.behav(tags(()=>this.player.id), ()=>new EquipperBehaviour([this.pingpong.id],{slot:"attack"}))
+    jump_equipper=this.behav( tags(()=>this.player.id),
+        ()=>new EquipperBehaviour([this.jump.id],{slot:"jump"}),
+        new HintBehaviour("Sautez avec la touche Espace!","unlock"),
+    )
+    dash_equipper=this.behav( tags(()=>this.player.id),
+        ()=>new EquipperBehaviour([this.dash.id],{slot:"dash"}),
+        new HintBehaviour("Dashez avec la touche Shift!","unlock"),
+    )
+    attack_equipper=this.behav( tags(()=>this.player.id),
+        ()=>new EquipperBehaviour([this.attack.id],{slot:"attack"}),
+        new HintBehaviour("Attaquez avec la touche E!","unlock"),
+    )
+    shoot_equipper=this.behav( tags(()=>this.player.id),
+        ()=>new EquipperBehaviour([this.shoot.id],{slot:"attack"}),
+        new HintBehaviour("Tirez avec la touche E!","unlock"),
+    )
+    bomb_equipper=this.behav( tags(()=>this.player.id),
+        ()=>new EquipperBehaviour([this.bomb.id],{slot:"attack"}),
+        new HintBehaviour("Lancez une bombe avec la touche E!","unlock"),
+    )
+    pingpong_equipper=this.behav( tags(()=>this.player.id),
+        ()=>new EquipperBehaviour([this.pingpong.id],{slot:"attack"}),
+        new HintBehaviour("Tapez avec la raquette avec la touche E!","unlock"),
+    )
 
     // Packs
     LIVING_PLAYER= this.lazy(()=>[...this._living.LIVING(), this.player.id])
 
     CLASSIC_PLAYER= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this.LIVING_PLAYER(), this.move.id, this._living.respawn.id])
 
-    #opt_hint(msg){
-        if(this._messages) return [
-            this.behav(tags(()=>this.player.id),()=>behaviourCollectable({},(_,collecter)=>{
-                this._messages?.send(msg,6000,"unlock")
-                return true
-            })).id
-        ]
-        else return []
-    }
-
-    JUMP_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.jump_equipper.id, this._particle.wind_emitter.id, ...this.#opt_hint("Sautez avec la touche Espace!")])
-    DASH_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.dash_equipper.id, this._particle.cloud_emitter.id, ...this.#opt_hint("Dashez avec la touche Shift!")])
-    ATTACK_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.attack_equipper.id, this._particle.slash_emitter.id, ...this.#opt_hint("Attaquez avec la touche E!")])
-    SHOOT_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.shoot_equipper.id, this._particle.fire_emitter.id, ...this.#opt_hint("Tirez avec la touche E!")])
-    BOMB_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.bomb_equipper.id, this._models.bomb.id, ...this.#opt_hint("Lancez une bombe avec la touche E!")])
-    PINGPONG_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.pingpong_equipper.id, this._models.pingpong.id, ...this.#opt_hint("Tapez avec la raquette avec la touche E!")])
+    JUMP_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.jump_equipper.id, this._particle.wind_emitter.id])
+    DASH_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.dash_equipper.id, this._particle.cloud_emitter.id])
+    ATTACK_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.attack_equipper.id, this._particle.slash_emitter.id])
+    SHOOT_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.shoot_equipper.id, this._particle.fire_emitter.id])
+    BOMB_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.bomb_equipper.id, this._models.bomb.id])
+    PINGPONG_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.pingpong_equipper.id, this._models.pingpong.id])
     
 
     // Potion
-    potion_slow_falling=this.behav( tags(()=>this.player.id), behaviourCollectable({use_count:Number.MAX_SAFE_INTEGER}, (_,o) => (o.addTag(this._effect.slow_falling.id),true) ))
-    potion_tornado=this.behav( tags(()=>this.player.id), behaviourCollectable({use_count:Number.MAX_SAFE_INTEGER}, (_,o) => (o.addTag(this._effect.in_tornado.id),true) ))
-    potion_propulsed=this.behav( tags(()=>this.player.id), behaviourCollectable({use_count:Number.MAX_SAFE_INTEGER}, (_,o) => (o.addTag(this._effect.propulsed.id),true) ))
+    potion_slow_falling= this.behav( tags(()=>this.player.id), ()=>behaviourInfiniteEquipper(this._effect.SLOW_FALLING()) )
+    potion_tornado= this.behav( tags(()=>this.player.id), ()=>behaviourInfiniteEquipper(this._effect.PROPULSED()) )
+    potion_propulsed= this.behav( tags(()=>this.player.id), ()=>behaviourInfiniteEquipper(this._effect.INFINITE_JUMP()) )
+    potion_smalling= this.behav( tags(()=>this.player.id), ()=>behaviourInfiniteEquipper(this._effect.SMALLER()) )
+    potion_growing= this.behav( tags(()=>this.player.id), ()=>behaviourInfiniteEquipper(this._effect.BIGGER()) )
 
     POTION_SLOW_FALLING= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.potion_slow_falling.id, this._models.potion.id, this._models.balloon.id])
     POTION_TORNADO= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.potion_tornado.id, this._models.potion.id, this._models.wind.id])
     POTION_PROPULSED= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.potion_propulsed.id, this._models.potion.id, this._particle.wind_emitter.id])
+    POTION_SMALLING= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.potion_smalling.id, this._models.potion.id, this._models.bonnet.id])
+    POTION_GROWING= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.potion_growing.id, this._models.potion.id, this._models.bonnet.id])
     
-    // Functions
-    /**
-     * Crée un behaviour d'indice
-     * @param {MessageManager} message 
-     * @param {string} text
-     */
-    createHint(message,text){
-        return this.behav(tags(()=>this.player.id),()=>behaviourCollectable({},(_,collecter)=>{
-            message.send(text,6000,"hint")
-            return true
-        }))
-    }
+    // Hints
+    hint_upgrade=this.behav( tags(()=>this.player.id),
+        new HintBehaviour("Vous pouvez débloquer des améliorations grâce aux artefactes dorés!","hint")
+    )
+
+    hint_movable=this.behav( tags(()=>this.player.id),
+        new HintBehaviour("Ces caisses peuvent être déplacées, peut être qu'elles peuvent vous être utile.","hint")
+    )
+
+    hint_damage=this.behav( tags(()=>this.player.id),
+        new HintBehaviour("Attention aux dégats! Si vous fumez, il ne faut plus vous faire toucher.","hint")
+    )
+
+    // Camera
+    camera_movement=this.behav( tags(()=>this.player.id), new CameraLikeBehaviour())
+    camera=this.behav( tags(()=>this.player.id), new CameraBehaviour())
+
+    inventory=this.behav(
+        ()=>new InventoryBehaviour({
+            "attack":{name:"Attaque", image:"🗡️", tags:[this.attack.id], slot:"attack"},
+            "shoot":{name:"Tir", image:"🔫", tags:[this.shoot.id], slot:"attack"},
+            "bomb":{name:"Bombe", image:"💣", tags:[this.bomb.id], slot:"attack"},
+            "pingpong":{name:"Raquette", image:"🏓", tags:[this.pingpong.id], slot:"attack"},
+
+            "potion_no":{name:"Rien", image:"🚫", tags:[], slot:"potion"},
+            "potion_slow_falling":{name:"Chûte lente", image:"🎈", tags:this._effect.SLOW_FALLING(), slot:"potion"},
+            "potion_tornado":{name:"Propulsion", image:"🌪️", tags:this._effect.PROPULSED(), slot:"potion"},
+            "potion_propulsed":{name:"Sauts infinis", image:"🧦", tags:this._effect.INFINITE_JUMP(), slot:"potion"},
+            "potion_smalling":{name:"Petit", image:"🐭", tags:this._effect.SMALLER(), slot:"potion"},
+            "potion_growing":{name:"Grand", image:"🐻‍❄️", tags:this._effect.BIGGER(), slot:"potion"},
+            "potion_burning":{name:"Burning", image:"🔥", tags:this._effect.BURNING(), slot:"potion"},
+
+            "element_fire":{name:"Feu", image:"🔥", tags:[this._element.element_flame.id], slot:"element"},
+            "element_water":{name:"Eau", image:"💧", tags:[this._element.element_water.id], slot:"element"},
+            "element_air":{name:"Air", image:"💨", tags:[this._element.element_air.id], slot:"element"},
+        })
+    )
 
     /**
      * 

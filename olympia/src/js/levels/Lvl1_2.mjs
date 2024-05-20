@@ -3,15 +3,11 @@ import { UniversalCamera, Vector3 } from "../../../../babylonjs/core/index.js";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { MessageManager } from "../messages/MessageManager.mjs";
 import { Behaviour } from "../objects/behaviour/Behaviour.mjs";
-import { SummonerBehaviour } from "../objects/behaviour/SummonerBehaviour.mjs";
-import { behaviourCollectable } from "../objects/behaviour/generic/CollectableBehaviour.mjs";
-import { ON_DEATH, ON_LIVE_CHANGE } from "../objects/behaviour/life/LivingBehaviour.mjs";
+import { ON_LIVE_CHANGE } from "../objects/behaviour/life/LivingBehaviour.mjs";
 import { PathBehaviour } from "../objects/behaviour/movement/PathBehaviour.mjs";
-import { ON_EQUIPPED } from "../objects/behaviour/slot/EquipperBehaviour.mjs";
 import { HITBOX } from "../objects/model/HitboxModel.mjs";
 import { LIVING, LivingModel } from "../objects/model/LivingModel.mjs";
-import { MOVEMENT } from "../objects/model/MovementModel.mjs";
-import { TRANSFORM, TransformModel } from "../objects/model/TransformModel.mjs";
+import { TRANSFORM } from "../objects/model/TransformModel.mjs";
 import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
 import { message } from "../script.js";
@@ -63,7 +59,7 @@ export class Lvl1_2 extends Level{
       const living=new LivingPack(world,particle)
       const effect=new EffectPack(world,particle)
       const fight=new FightPack(world,living,effect)
-      const player=new PlayerPack(world,fight,message)
+      const player=new PlayerPack(world,fight)
       const soil=new SoilPack(world,effect,living)
       const ia=new IAPack(world,living)
       const monster=new MonsterPack(world,fight,ia,player,soil)
@@ -73,9 +69,6 @@ export class Lvl1_2 extends Level{
       const MOVING2=behav(new PathBehaviour([new Vector3(3,0,0),new Vector3(0,0,0)], 0.1, 0.02, 0.04))
 
       // Hint
-      const unlock_hint=player.createHint(message,"Vous pouvez débloquer des améliorations grâce aux artefactes dorés!")
-      const push_hint=player.createHint(message,"Ces caisses peuvent être déplacées, peut être qu'elles peuvent vous être utile.")
-      const damage_hint=player.createHint(message,"Attention aux dégats! Si vous fumez, il ne faut plus vous faire toucher. ")
 
       createLevel({
          tile_size: new Vector3(1.5,0.5,1.5),
@@ -101,9 +94,9 @@ export class Lvl1_2 extends Level{
             r: { tags:[...physic.STATIC(), model.hole.id, ...monster.bird_summoner.id] },
 
             n: { tags:[...physic.PHYSIC(), model.block.id] },
-            o: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, unlock_hint.id] },
-            p: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, damage_hint.id] },
-            q: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, push_hint.id] },
+            o: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, player.hint_upgrade.id] },
+            p: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, player.hint_damage.id] },
+            q: { tags:[...physic.STATIC_GHOST(), model.question_mark.id, player.hint_movable.id] },
             z: { tags:soil.ICE() },
             y: { tags:soil.LAVA() },
             x: { tags:soil.MUD() },

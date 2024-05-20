@@ -46,7 +46,6 @@ export class TimedBehaviour extends Behaviour{
             obj.apply([TIMED,this.uid], temporary=>{
                 temporary.remaining_time--
                 if(temporary.remaining_time<0){
-                    removeTag(obj, ...this.tags)
                     removeTag(obj, ...objects.tags)
                     giveTag(obj, ...this.final_tags)
                 }
@@ -60,6 +59,7 @@ export class TimedBehaviour extends Behaviour{
      */
     finish(_,objects){
         for(const obj of objects){
+            removeTag(obj, ...this.tags)
             obj.remove([TIMED,this.uid])
         }
     }

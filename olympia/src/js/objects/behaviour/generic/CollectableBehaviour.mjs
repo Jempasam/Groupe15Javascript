@@ -1,4 +1,5 @@
 import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs"
+import { giveEquip } from "../../model/SlotModel.mjs"
 import { TRANSFORM } from "../../model/TransformModel.mjs"
 import { GameObject } from "../../world/GameObject.mjs"
 import { ModelKey } from "../../world/ModelHolder.mjs"
@@ -116,6 +117,14 @@ export function behaviourCollectable(options,collecter){
     let ret=new CollectableBehaviour(options)
     ret.on_collection=collecter
     return ret
+}
+
+/**
+ * @param {import("../../world/TaggedDict.mjs").Tag[]} tags
+ * @param {string=} slot
+ */
+export function behaviourInfiniteEquipper(tags,slot){
+    return behaviourCollectable({use_count:Infinity},(_,o)=>(giveEquip(o,tags,slot),true))
 }
 
 /** @type {ModelKey<{equippedTime:number, remaining_use:number, reloading:number}>} */
