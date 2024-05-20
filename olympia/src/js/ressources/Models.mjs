@@ -52,10 +52,12 @@ export async function loadModels(scene){
         STONE_WALL: await model(scene,"stonewall"),
         WOOD: await model(scene,"wood"),
         MAGMA: await model(scene,"magma"),
-        ARTIFACT: await model(scene,"Artifact"),
         HOLE: await model(scene,"hole"),
-        BOMB: await model(scene,"bomb"),
         BUILDING: await model(scene,"building"),
+        
+        ARTIFACT: await model(scene,"Artifact"),
+        BOMB: await model(scene,"bomb"),
+        BASKETBALL: await model(scene,"basketball"),
 
         LAVA: await model(scene,"lava"),
         MUD: await model(scene,"mud"),

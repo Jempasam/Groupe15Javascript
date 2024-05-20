@@ -61,6 +61,7 @@ export class ModelPack extends ObjectPack{
     // Objects
     artifact= this.behav(()=>new MeshBehaviour(this.models.ARTIFACT))
     bomb= this.behav(()=>new MeshBehaviour(this.models.BOMB))
+    basketball= this.behav(()=>new MeshBehaviour(this.models.BASKETBALL))
 
     // Particles
     cloud= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_CLOUD))

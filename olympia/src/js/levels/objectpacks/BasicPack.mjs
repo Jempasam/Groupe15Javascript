@@ -44,7 +44,7 @@ export class BasicPack extends ObjectPack{
         let player= this.player= new PlayerPack(world, fight, messages)
         let soil= this.soil= new SoilPack(world, effect,living)
         let ia= this.ia= new IAPack(world, living)
-        let monster= this.monster= new MonsterPack(world, fight, ia, player)
+        let monster= this.monster= new MonsterPack(world, fight, ia, player,soil)
 
         /** @type {Object.<string,import("../../objects/world/WorldUtils.mjs").ObjectDefinition>} */
         this.objects={
@@ -103,6 +103,8 @@ export class BasicPack extends ObjectPack{
             "+k": { tags:[...physic.STATIC(), model.hole.id, monster.kangaroo_summoner.id] },
             "+b": { tags:[...physic.STATIC(), model.hole.id, monster.bird_summoner.id] },
             "+s": { tags:[...physic.STATIC(), model.hole.id, monster.sphinx_summoner.id] },
+            "+o": { tags:[...physic.STATIC(), model.hole.id, monster.basketball_summoner.id] },
+            "+O": { tags:[...physic.STATIC(), model.hole.id, monster.super_basketball_summoner.id] },
 
             "PP": {
                 tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],

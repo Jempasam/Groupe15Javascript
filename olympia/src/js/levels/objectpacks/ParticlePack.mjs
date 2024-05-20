@@ -44,11 +44,16 @@ export class ParticlePack extends ObjectPack{
     vanish_while_one= this.behav(new DisappearBehaviour({disappearing_time:20}))
     vanish_while_two= this.behav(new DisappearBehaviour({disappearing_time:40}))
     vanish_while_four= this.behav(new DisappearBehaviour({disappearing_time:80}))
+    vanish_while_eight= this.behav(new DisappearBehaviour({disappearing_time:160}))
+    vanish_while_sixteen= this.behav(new DisappearBehaviour({disappearing_time:320}))
 
     vanish_after_half= this.behav(behaviourTimeout(10, o=>o.addTag(this.vanish.id) ))
     vanish_after_one= this.behav(behaviourTimeout(20, o=>o.addTag(this.vanish.id) ))
     vanish_after_two= this.behav(behaviourTimeout(40, o=>o.addTag(this.vanish.id) ))
     vanish_after_four= this.behav(behaviourTimeout(80, o=>o.addTag(this.vanish.id) ))
+    vanish_after_eight= this.behav(behaviourTimeout(160, o=>o.addTag(this.vanish.id) ))
+    vanish_after_sixteen= this.behav(behaviourTimeout(320, o=>o.addTag(this.vanish.id) ))
+
     vanish_on_collision= this.behav(behaviourObserve(ON_COLLISION, o=>o.addTag(this.vanish.id) ))
 
     // Size
