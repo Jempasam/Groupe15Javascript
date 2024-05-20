@@ -52,6 +52,7 @@ export class ModelPack extends ObjectPack{
     question_mark= this.behav(()=>new MeshBehaviour(this.models.QUESTION_MARK))
     exclamation_mark= this.behav(()=>new MeshBehaviour(this.models.EXCLAMATION_MARK))
     heart= this.behav(()=>new MeshBehaviour(this.models.HEART))
+    potion= this.behav(()=>new MeshBehaviour(this.models.POTION))
 
     // Monsters
     panda= this.behav(()=>new MeshBehaviour(this.models.PANDA))
@@ -66,6 +67,9 @@ export class ModelPack extends ObjectPack{
     artifact= this.behav(()=>new MeshBehaviour(this.models.ARTIFACT))
     bomb= this.behav(()=>new MeshBehaviour(this.models.BOMB))
     basketball= this.behav(()=>new MeshBehaviour(this.models.BASKETBALL))
+
+    // Details
+    balloon= this.behav(()=>new MeshBehaviour(this.models.BALLOON))
 
     // Particles
     cloud= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_CLOUD))

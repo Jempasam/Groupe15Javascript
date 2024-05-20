@@ -129,6 +129,10 @@ class BehaviourElement{
         return this.#entries
     }
 
+    get behaviour(){
+        return this.entries[0].behaviour
+    }
+
     /** @type {string} */
     get id(){
         this.#init()

@@ -59,6 +59,8 @@ export async function loadModels(scene){
         CACTUS: await model(scene,"cactus","decoration"),
         CACTUS2: await model(scene,"cactus2","decoration"),
         CACTUS3: await model(scene,"cactus3","decoration"),
+
+        BALLOON: await model(scene,"balloon","detail"),
         
         ARTIFACT: await model(scene,"Artifact"),
         BOMB: await model(scene,"bomb"),
@@ -71,6 +73,7 @@ export async function loadModels(scene){
         QUESTION_MARK: await model(scene,"questionmark"),
         EXCLAMATION_MARK: await model(scene,"exclamationmark"),
         HEART: await model(scene,"heart"),
+        POTION: await model(scene,"potion"),
 
         EXPLOSION: await model(scene,"explosion","particle"),
         SPHERE_EXPLOSION: await model(scene,"sphere_explosion","particle"),

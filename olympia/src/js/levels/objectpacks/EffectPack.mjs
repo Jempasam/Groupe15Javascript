@@ -13,6 +13,7 @@ import { behaviourInterval } from "../../objects/behaviour/generic/IntervalBehav
 import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
 import { ON_COLLISION } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { LIVING } from "../../objects/model/LivingModel.mjs";
+import { MeshBehaviour } from "../../objects/behaviour/MeshBehaviour.mjs";
 
 
 
@@ -42,26 +43,26 @@ export class EffectPack extends ObjectPack{
 
     in_tornado= this.behav(
         new TemporaryBehaviour(40),
-        new ConstantForceBehaviour(new Vector3(0,0.3,0)),
+        new ConstantForceBehaviour(new Vector3(0,0.03,0)),
         ()=>new EmitterBehaviour(this._particle.WIND(), new Vector3(1, 1, 1), 5),
     )
 
     propulsed= this.behav(
-        new TemporaryBehaviour(60),
+        new TemporaryBehaviour(100),
         behaviourEach(o => o.forAll(JUMP, j => j.remaining_jump=Math.max(j.remaining_jump, 1))),
-        ()=>new EmitterBehaviour(this._particle.PROPULSION(), new Vector3(.4, .4, .4), 15),
+        ()=>new EmitterBehaviour(this._particle.PROPULSION(), new Vector3(.4, .4, .4), 5),
     )
 
     slowness= this.behav(
-        new TemporaryBehaviour(80),
+        new TemporaryBehaviour(100),
         behaviourEach(o => o.get(MOVEMENT) ?.inertia .scaleInPlace(0.5) ),
         ()=>new EmitterBehaviour(this._particle.WATER(), new Vector3(0.5, 0.5, 0.5), 15),
     )
 
     slow_falling= this.behav(
-        new TemporaryBehaviour(60),
+        new TemporaryBehaviour(100),
         behaviourEach(o => o.get(MOVEMENT) ?.inertia .maximizeInPlaceFromFloats(Number.NEGATIVE_INFINITY,-0.05,Number.NEGATIVE_INFINITY) ),
-        ()=>new EmitterBehaviour(this._particle.PROPULSION(), new Vector3(.8, .8, .8), 5),
+        ()=>this._models.balloon.behaviour
     )
 
     // Emitters

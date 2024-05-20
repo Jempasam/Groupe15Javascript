@@ -32,6 +32,7 @@ export class PlayerPack extends ObjectPack{
         this._particle=this._living._particle
         this._physic=this._particle._physic
         this._messages=messages
+        this._effect=fight._effect
     }
 
     player=this.empty()
@@ -95,8 +96,18 @@ export class PlayerPack extends ObjectPack{
     SHOOT_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.shoot_equipper.id, this._particle.fire_emitter.id, ...this.#opt_hint("Tirez avec la touche E!")])
     BOMB_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.bomb_equipper.id, this._models.bomb.id, ...this.#opt_hint("Lancez une bombe avec la touche E!")])
     PINGPONG_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.pingpong_equipper.id, this._models.pingpong.id, ...this.#opt_hint("Tapez avec la raquette avec la touche E!")])
-    // Functions
+    
 
+    // Potion
+    potion_slow_falling=this.behav( tags(()=>this.player.id), behaviourCollectable({use_count:Number.MAX_SAFE_INTEGER}, (_,o) => (o.addTag(this._effect.slow_falling.id),true) ))
+    potion_tornado=this.behav( tags(()=>this.player.id), behaviourCollectable({use_count:Number.MAX_SAFE_INTEGER}, (_,o) => (o.addTag(this._effect.in_tornado.id),true) ))
+    potion_propulsed=this.behav( tags(()=>this.player.id), behaviourCollectable({use_count:Number.MAX_SAFE_INTEGER}, (_,o) => (o.addTag(this._effect.propulsed.id),true) ))
+
+    POTION_SLOW_FALLING= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.potion_slow_falling.id, this._models.potion.id, this._models.balloon.id])
+    POTION_TORNADO= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.potion_tornado.id, this._models.potion.id, this._models.wind.id])
+    POTION_PROPULSED= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.potion_propulsed.id, this._models.potion.id, this._particle.wind_emitter.id])
+    
+    // Functions
     /**
      * Crée un behaviour d'indice
      * @param {MessageManager} message 

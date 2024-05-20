@@ -95,6 +95,10 @@ export class BasicPack extends ObjectPack{
                 size: it=>it.multiplyInPlace(new Vector3(.8,1,.8))
             },
 
+            "&b": { tags:[...player.POTION_SLOW_FALLING()], size: it=>it.scale(.6) },
+            "&t": { tags:[...player.POTION_TORNADO()], size: it=>it.scale(.6) },
+            "&p": { tags:[...player.POTION_PROPULSED()], size: it=>it.scale(.6) },
+
             "0j": { tags:[...player.JUMP_EQUIPPER(), model.artifact.id] },
             "0a": { tags:[...player.ATTACK_EQUIPPER(), model.artifact.id] },
             "0s": { tags:[...player.SHOOT_EQUIPPER(), model.artifact.id] },
