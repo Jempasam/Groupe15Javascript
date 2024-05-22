@@ -18,6 +18,7 @@ export class IAPack extends ObjectPack{
     constructor(world,living){
         super(world)
         this._living=living
+        this._registerNames()
     }
 
     follow_slow=this.behav(tags(()=>this._living.living.id),new TargetChainBehaviour(10,[

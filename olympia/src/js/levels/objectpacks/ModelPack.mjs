@@ -24,6 +24,7 @@ export class ModelPack extends ObjectPack{
         super(world)
         /** @type {import("../../ressources/Models.mjs").ModelLibrary} */
         this.models=world["models"]
+        this._registerNames()
     }
 
     // World

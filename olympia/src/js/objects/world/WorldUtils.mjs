@@ -96,7 +96,7 @@ function codeToNum(code){
 
 /**
  * @typedef {{
- *  tags?: Tag[] | (()=>Tag[]),
+ *  tags?: Array<Tag> | (()=>Array<Tag>),
  *  models?: ()=>Array<ModelAndKey>,
  *  size?: Vector3 | ((it:Vector3)=>Vector3),
  *  position?: ((it:Vector3, tilesize:Vector3)=>Vector3),

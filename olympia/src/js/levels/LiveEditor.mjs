@@ -32,6 +32,7 @@ import { MonsterPack } from "./objectpacks/MonsterPack.mjs";
 import { SamLevel } from "./SamLevel.mjs";
 import { adom, create, dom } from "../../../../samlib/DOM.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
+import { TaggedDict } from "../objects/world/TaggedDict.mjs";
 
 export class LiveEditor extends Level{
 
@@ -60,7 +61,13 @@ export class LiveEditor extends Level{
          
          const select=container.appendChild(create("select.toremove"))
          for(const [name,val] of Object.entries(pack.objects)){
-            select.appendChild(adom/*html*/`<option value="${name}">${name}</option>`)
+            const taglist= (Array.isArray(val.tags) ? val.tags : val.tags?.())
+               ?.map(it=>pack.getName(it)??"") ?.filter(it=>it.length>0) ?? []
+            const small_name= taglist 
+               .flatMap(it=>it.split("_")) .map(it=>it[0].toUpperCase()+it.slice(1))  .map((it,i)=>(i<taglist.length-2?it.substring(0,2):it)) .join("") 
+               .slice(-25).padEnd(25,".") 
+            const desc= taglist.join(" + ")
+            select.appendChild(adom/*html*/`<option value="${name}">${name} ${small_name} ${desc}</option>`)
          }
 
          function catch_error(callback){

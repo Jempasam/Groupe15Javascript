@@ -37,7 +37,7 @@ export class SoilPack extends ObjectPack{
         this._living=living
         this._models=effect._particle._models
         this._particle=effect._particle
-
+        this._registerNames()
     }
 
     // Accelerating

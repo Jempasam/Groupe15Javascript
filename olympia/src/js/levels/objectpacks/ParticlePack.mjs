@@ -28,6 +28,7 @@ export class ParticlePack extends ObjectPack{
         super(world)
         this._physic=physic
         this._models=models
+        this._registerNames()
     }
 
     // Particle Movements

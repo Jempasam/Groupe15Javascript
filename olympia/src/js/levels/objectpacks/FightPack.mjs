@@ -35,6 +35,7 @@ export class FightPack extends ObjectPack{
         this._models=living._particle._models
         this._particle=living._particle
         this._effect=effect
+        this._registerNames()
     }
 
     // Teams

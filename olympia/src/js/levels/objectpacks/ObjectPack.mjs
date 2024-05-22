@@ -25,13 +25,24 @@ export class ObjectPack{
      */
     constructor(world){
         this.world=world
+    }
+
+    /** @type {{[key:Tag]:string}} */
+    static #tag_names={}
+
+    _registerNames(){
         for(let [key,value] of Object.entries(this)){
-            if(value instanceof BehaviourElement){
-                console.log("Setting id for ",key)
-                value._setId(key.toLowerCase().replace(/[^a-z0-9_]/g,""))
+            if(typeof value=="object" && ["number","string"].includes(typeof value.id)){
+                ObjectPack.#tag_names[value.id]=key
             }
         }
     }
+
+    /**
+     * @param {Tag} tag
+     * @returns {string?}
+     */
+    getName(tag){ return ObjectPack.#tag_names[tag]??null}
 
     static id_counter=34543
     #id(){ return ""+(ObjectPack.id_counter++) }

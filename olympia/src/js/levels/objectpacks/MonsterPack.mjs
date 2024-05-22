@@ -33,6 +33,7 @@ export class MonsterPack extends ObjectPack{
         this._particle=fight._living._particle
         this._player=player
         this._soil=soil
+        this._registerNames()
     }
 
     // Effects

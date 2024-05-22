@@ -24,6 +24,7 @@ export class PhysicPack extends ObjectPack{
     constructor(world,options={}){
         super(world)
         this.options=options
+        this._registerNames()
     }
 
     // Movements

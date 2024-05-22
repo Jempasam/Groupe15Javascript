@@ -34,6 +34,7 @@ export class PlayerPack extends ObjectPack{
         this._physic=this._particle._physic
         this._messages=messages
         this._effect=fight._effect
+        this._registerNames()
     }
 
     player=this.empty()

@@ -30,6 +30,7 @@ export class EffectPack extends ObjectPack{
         super(world)
         this._particle=particle
         this._models=particle._models
+        this._registerNames()
     }
 
     // Effects

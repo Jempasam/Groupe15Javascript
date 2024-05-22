@@ -24,6 +24,7 @@ export class LivingPack extends ObjectPack{
     constructor(world,particle){
         super(world)
         this._particle=particle
+        this._registerNames()
     }
 
     // Living
