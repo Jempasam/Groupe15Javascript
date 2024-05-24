@@ -6,5 +6,9 @@
         "module": "ES2020",
         "strictNullChecks": true,
         "exactOptionalPropertyTypes": false
-    }
+    },
+    "exclude": [
+        "olympia/src/js/babylons.max.js",
+        "entity-component"
+    ]
 }

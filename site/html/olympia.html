@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Ultrafun</title>
-    <script src="https://cdn.babylonjs.com/babylon.max.js"></script>
+    <!--<script src="https://cdn.babylonjs.com/babylon.max.js"></script>-->
+    <script src="../../olympia/src/js/babylon.max.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <script type="module" src="../../olympia/src/js/script.js"></script>
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../../olympia/src/css/main.css">
     <script type="module" src="../js/account.js"></script>
 </head>
 <body>
@@ -29,14 +32,7 @@
         </ul>
     </nav>
     <main>
-        <canvas class="game" id="renderCanvas" width="800" height="500">
-        </canvas>
-        <!-- affichage des pv du joueur -->
-        <div id="pv" style="position: absolute; top: 25%; left: 32%; transform: translate(-50%, -50%); background-color: white; padding: 5px; border-radius: 5px; border-color: black;"></div>
-        <!-- affichage des pv alternatifs-->
-        <!-- <div id="pv" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>-->
-        <!--créer un div vide au milieu du canva "renderCanvas" pour afficher les informations du joueur-->
-        <div id="infoJoueur" style="position: absolute; top: 75%; left: 50%; transform: translate(-50%, -50%);"></div>
+        <div class="game" id="olympia"></div>
     </main>
     <footer>
         Par Les meilleurs

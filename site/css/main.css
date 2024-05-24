@@ -310,6 +310,7 @@ footer{
                 >img{
                     align-self: center;
                     height: 100%;
+                    image-rendering: pixelated;
                     aspect-ratio: 1;
                 }
                 >p{

@@ -8,6 +8,7 @@ import { FruitItem } from "./FruitItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 import { Controler } from "./controler/Controlers.mjs";
+import { on_die, on_eat } from "./events.js";
 
 export class SnakeItem extends Item{
     
@@ -30,6 +31,9 @@ export class SnakeItem extends Item{
         this.can_move=true
     }
 
+    /**
+     * @type {Item['getDisplay']}
+     */
     getDisplay(...args){
         return adom/*html*/`
             <div class="snake ${Class.direction(this.dx,this.dy)} ${this.controler.team}">
@@ -62,6 +66,7 @@ export class SnakeItem extends Item{
                 if(under!=null){
                     this.length++
                     Sounds.CROCK.play()
+                    observers(field,on_eat).notify({eater:this, eaten:under, pos:[x+dx,y+dy]})
                 }
 
                 field.swap(x,y, x+dx,y+dy)
@@ -71,7 +76,7 @@ export class SnakeItem extends Item{
             else{
                 field.set(x,y,this.base)
                 if(under)under.onTrigger(field, under, x+dx, y+dy)
-                observers(field,"on_die").notify(this,x,y)
+                observers(field,on_die).notify({item:this, pos:[x,y]})
             }
         }
         else field.schedule(x,y,root)

@@ -1,13 +1,42 @@
 import { Player } from "./entities/player.js";
+import { SamLevel } from "./levels/SamLevel.mjs"
 import { LvlTest } from "./levels/lvlTest.js";
 import { LvlAccueil } from "./levels/lvlAccueil.js";
 import { Lvl1} from "./levels/lvl1.js";
 import { LvlBoss1} from "./levels/lvlBoss1.js";
+import { World } from "./objects/world/World.mjs";
+import { loadModels } from "./ressources/Models.mjs";
+import { Level, LevelContext } from "./levels/Level.mjs";
+import { Engine, SSAO2RenderingPipeline, SceneOptimizer, SceneOptimizerOptions } from "../../../babylonjs/core/index.js";
+import { SCENE } from "./objects/model/MeshModel.mjs";
+import { adom, create } from "../../../samlib/DOM.mjs";
+import { MessageManager } from "./messages/MessageManager.mjs";
+import { Lvl1_2 } from "./levels/Lvl1_2.mjs";
+import { MESSAGE } from "./objects/behaviour/interaction/HintBehaviour.mjs";
+import { CAMERA } from "./objects/behaviour/CameraBehaviour.mjs";
+import { DOCUMENT } from "./objects/behaviour/InventoryBehaviour.mjs";
 
-const canvas = document.getElementById("renderCanvas");
-const engine = new BABYLON.Engine(canvas, true);
+/** Récupère et crée la fenêtre de jeu */
+const gameElement = document.getElementById("olympia");
+if(!gameElement){
+    window.alert("Impossible de trouver l'élément pour y insérer le jeu!")
+    throw new Error("Impossible de trouver l'élément pour y insérer le jeu!")
+}
+gameElement.innerHTML=""
+const canvas=adom/*html*/`<canvas width=800 height=500></canvas>`
+const infoJoueur=create("div.olympia-messages")
+export const message= new MessageManager(infoJoueur)
+gameElement.appendChild(canvas)
+gameElement.appendChild(infoJoueur)
+
+/** @type {Engine} */ const engine = new BABYLON.Engine(canvas, true);
+
 let keyState = {};
 let scene;
+let world=new World()
+world.persistent_model.set(DOCUMENT,gameElement)
+let levelContext
+let pause = false;
 
 let camera;
 let player;
@@ -25,62 +54,51 @@ let Boss = [];
 let listeBombes = [];
 let listes;
 let decor;
-let nbLevel = -1;
+
+let nbLevel = 260402;
+/** @type {Level?} */ let currentLevel=null
 
 
-var createScene = function() {
+async function createScene() {
     scene = new BABYLON.Scene(engine);
-    scene.clearColor = new BABYLON.Color3.Black;
+    SceneOptimizer.OptimizeAsync(scene, new SceneOptimizerOptions(60))
+    //scene.debugLayer.show();
+    scene.clearColor = new BABYLON.Color3.Black();
+    world.persistent_model.set(SCENE,scene)
+    world.persistent_model.set(MESSAGE,message)
+    world.models=await loadModels(scene)
     const camY = 10;
     const camZ = -10;
 
-    //créer une camera qui regarde en 0,0,0
+    // Créer une camera qui regarde en 0,0,0
     camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, camY, camZ), scene);
     camera.setTarget(BABYLON.Vector3.Zero());
     camera.attachControl(canvas, true);
+    world.persistent_model.set(CAMERA,camera)
 
-    //créer une lumière
+    levelContext=new LevelContext(world,{camera})
+
+    //const ssao = new SSAO2RenderingPipeline("ssaopipeline", scene, 2, [camera]);
+
+
+    // Créer une lumière
     const light1 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 5,6));
 
-    //créer un joueur
-    player = new Player("Player",0, 0, 0, 1, 1, 1, 0.008, 0.2, scene);
-    //player = scene.player;
+    // Créer un joueur
+    player = new Player("Player",0, 0, 0, 1, 1, 1, 0.03, 0.4, scene);
+    // player = scene.player;
     camera.lockedTarget = player.mesh;
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
-    //appeler le niveau
+    // Appeler le niveau
     changeLevel();
     
-
-    definitEcouteurs();
-
     return scene;
-}
-let sceneToRender = createScene();
-
-function definitEcouteurs() { 
-    // Ecouteur sur le clavier pour bouger le monstre
-    window.addEventListener('keydown', function(evt) {
-        keyState[evt.code] = true;
-    }, true);
-    window.addEventListener('keyup', function(evt) {
-        delete keyState[evt.code];
-    }, true);
-    window.addEventListener('keydown', function(evt) {
-        if (evt.code != 'F12') {
-            evt.preventDefault();
-        }
-    });
-    //detecter un clic gauche
-    window.addEventListener("click", function(evt){
-        player.attaquer();
-    });
-    
 }
 
 //déplacer le joueur
 function movePlayer(){
     //let listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
-    player.move(keyState, listes);
+    player.move(listes);
     detectLvlWarp();
     
     //si on est dans le niveau d'accueil, la camera suit le joueur en z
@@ -187,11 +205,21 @@ function changeLevel(){
     });
     listeBombes = [];
 
+    currentLevel=null
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
+    world.close()
     //supprimer le décor
     //changer de niveau
+    if(nbLevel == 260402){
+        currentLevel = decor = new SamLevel();
+        levelContext.switchTo(decor)
+    }
+    if(nbLevel == 21){
+        currentLevel = decor = new Lvl1_2();
+        levelContext.switchTo(decor)
+    }
     if (nbLevel == -1){
-        decor = new LvlTest(player, listes);
+        decor = new LvlTest(player, listes, world);
     }
     if (nbLevel == 0){
         
@@ -207,48 +235,70 @@ function changeLevel(){
     }
 }
 
-
-//boucle de rendu
-engine.runRenderLoop(function () {
-    sceneToRender.render();
-    movePlayer();
-    //faire chercher le joueur par les monstres
-    listeMonstres.forEach(monstre => {
-        monstre.chercheJoueur(player, listeMonstres, listeGrounds);
-        //si le monstre touche un sol, arrete de tomber
-        /*monstre.mesh.onCollideObservable.add((collidedMesh)=>{
-            let touche = collidedMesh;
-            monstre.auSol(touche);
-        })*/
-    });
-    //detecter si on tape un breakableWall
-    listeBreakableWalls.forEach(breakableWall => {
-        breakableWall.detectAttack(listeBreakableWalls);
-    }
-    );
-    //detecter si on tape un canon
-    listeCanons.forEach(canon => {
-        canon.detectAttack();
-    }
-    );
-    listeMoveGrounds.forEach(moveGround => {
-        moveGround.move();
-    });
-    Boss.forEach(boss => {
-        boss.act(listes, player);
-        if (!boss.enVie){
-            boss.postDeath(listes);
-            boss = null;
-            //enlever le boss de la liste
-            let index = Boss.indexOf(boss);
-            Boss.splice(index, 1);
+async function main(){
+    let sceneToRender = await createScene();
+    //si le jeu n'est pas en pause, faire avancer le jeu
+    //si on appuie sur la touche P, mettre le jeu en pause en arrétant la boucle de rendu
+    window.addEventListener('keydown', function(evt) {
+        if (evt.code == "KeyP"){
+            console.log("pause");
+            pause = !pause;
+            if (pause){
+                message.send("PAUSE", MessageManager.FOREVER, "pause");
+            }
+            else{
+                message.clear("pause");
+            }
         }
     });
-    listeBombes.forEach(bombe => {
-        bombe.detectTarget(player, listeBombes);
-    });
-    //afficher les pv actuels du joueur
-    document.getElementById("pv").innerHTML = "PV: " + player.pv;
+        setInterval(function(){
+            if (!pause){
+                world.tick()
+                if(decor instanceof Level) levelContext.tick()
+                if(!currentLevel) movePlayer()
+                //faire chercher le joueur par les monstres
+                listeMonstres.forEach(monstre => {
+                    monstre.chercheJoueur(player, listeMonstres, listeGrounds);
+                    //si le monstre touche un sol, arrete de tomber
+                    /*monstre.mesh.onCollideObservable.add((collidedMesh)=>{
+                        let touche = collidedMesh;
+                        monstre.auSol(touche);
+                    })*/
+                });
+                //detecter si on tape un breakableWall
+                listeBreakableWalls.forEach(breakableWall => {
+                    breakableWall.detectAttack(listeBreakableWalls);
+                }
+                );
+                //detecter si on tape un canon
+                listeCanons.forEach(canon => {
+                    canon.detectAttack();
+                }
+                );
+                listeMoveGrounds.forEach(moveGround => {
+                    moveGround.move();
+                });
+                Boss.forEach(boss => {
+                    boss.act(listes, player);
+                    if (!boss.enVie){
+                        boss.postDeath(listes);
+                        boss = null;
+                        //enlever le boss de la liste
+                        let index = Boss.indexOf(boss);
+                        Boss.splice(index, 1);
+                    }
+                });
+                listeBombes.forEach(bombe => {
+                    bombe.detectTarget(player, listeBombes);
+                });
+            }
+        }, 30);
 
-
-});
+        //boucle de rendu
+        engine.runRenderLoop(function () {
+            sceneToRender.render();
+            if(currentLevel===null)message.send("PV: " + player.pv, MessageManager.FOREVER, "pv");
+        });
+    
+}
+main()

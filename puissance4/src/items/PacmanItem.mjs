@@ -1,4 +1,5 @@
 import { adom } from "../../../samlib/DOM.mjs";
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
@@ -7,6 +8,7 @@ import { FruitItem } from "./FruitItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
 import { MovingItem } from "./MovingItem.mjs";
 import { Controler } from "./controler/Controlers.mjs";
+import { on_eat } from "./events.js";
 
 export class PacmanItem extends Item{
     
@@ -65,6 +67,7 @@ export class PacmanItem extends Item{
                 if(under?.isComestible){
                     field.set(x+dx,y+dy,null)
                     Sounds.CROCK.play()
+                    observers(field,on_eat).notify({eater:this, eaten:under, pos:[x+dx,y+dy]})
                 }
                 field.swap(x,y, x+dx,y+dy)
             }

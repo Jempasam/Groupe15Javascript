@@ -3,6 +3,8 @@ import { CoinItem } from "./CoinItem.mjs";
 import { eatKeyPress, isKeyPressed } from "../controls/Keyboard.mjs"
 import { adom, dom } from "../../../samlib/DOM.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
+import { on_summon } from "./events.js";
 
 export class PlayerItem extends Item{
     
@@ -50,10 +52,12 @@ export class PlayerItem extends Item{
         else{
             if(isKeyPressed(this.spawnKey) && field.get(x,y+1)===null){
                 this.time=40
-                field.set(x,y+1,this.next)
+                const next=this.next
+                field.set(x,y+1,next)
                 this.next=this.factory(this.team)
                 Sounds.POP.play()
                 field.updateElement(x,y)
+                observers(field,on_summon) .notify({pos:[x,y], item:this, summoned:next, summoned_pos:[x,y+1]})
             }
         }
         field.schedule(x,y,root)

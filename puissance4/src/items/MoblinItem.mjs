@@ -4,6 +4,7 @@ import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
+import { on_attack, on_die } from "./events.js";
 
 export class MoblinItem extends Item{
     /**
@@ -19,6 +20,9 @@ export class MoblinItem extends Item{
         this.duration=0
     }
 
+    /**
+     * @type {Item['getDisplay']}
+     */
     getDisplay(...args){
         return adom/*html*/`
             <div class="moblin ${Class.direction(this.dx,this.dy)}">
@@ -33,7 +37,7 @@ export class MoblinItem extends Item{
 
     onTrigger(field,root,x,y){
         field.set(x,y,this.base)
-        observers(field,"on_die").notify(this,x,y)
+        observers(field,on_die).notify({item:this, pos:[x,y]})
     }
 
     onTick(field,root,x,y){
@@ -51,6 +55,7 @@ export class MoblinItem extends Item{
                     if(facing!==undefined){
                         Sounds.ITCHIK.play()
                         facing.onTrigger(field,root,x+this.dx,y+this.dy)
+                        observers(field,on_attack).notify({pos:[x,y], attacker:this, attacked:facing, attacked_pos:[x+this.dx,y+this.dy]})
                     }
                     this.dx=-this.dx
                     this.dy=-this.dy

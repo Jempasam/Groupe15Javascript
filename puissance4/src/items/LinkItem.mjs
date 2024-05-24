@@ -5,6 +5,7 @@ import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { Class, Methods } from "./ItemUtils.mjs";
 import { Controler } from "./controler/Controlers.mjs";
+import { on_attack, on_die } from "./events.js";
 
 export class LinkItem extends Item{
     /**
@@ -23,6 +24,9 @@ export class LinkItem extends Item{
         this.dy=1
     }
 
+    /**
+     * @type {Item['getDisplay']}
+     */
     getDisplay(...args){
         return adom/*html*/`
             <div class="link ${this.attack_time>0?"_attack":""} ${Class.direction(this.dx,this.dy)} ${this.controler.team}">
@@ -37,7 +41,8 @@ export class LinkItem extends Item{
 
     onTrigger(field,root,x,y){
         field.set(x,y,this.base)
-        observers(field,"on_die").notify(this,x,y)
+        observers(field,on_die).notify({item:this, pos:[x,y]})
+
     }
 
     onTick(field,root,x,y){
@@ -87,8 +92,9 @@ export class LinkItem extends Item{
             facing.onTrigger(field,root,x+dx,y+dy)
             this.attack_time=10
             this.dx=dx
-        this.dy=dy
+            this.dy=dy
             field.updateElement(x,y)
+            observers(field,on_attack).notify({pos:[x,y], attacker:this, attacked:facing, attacked_pos:[x+dx,y+dy]})
         }
         return true
     }

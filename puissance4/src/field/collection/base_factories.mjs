@@ -41,6 +41,18 @@ export function NEW_METEOR_FACTORY(){
 }
 
 /**
+ * Un constructeur d'usines à pièce qui tombent, dont 1 pièce sur 3 est glissante.
+ */
+export function NEW_SLIPPY_FACTORY(){
+    let data={i:0}
+    return function(team){
+        let i = data.i = data.i + 1
+        if(i%2==1)return new SlippyItem(new CoinItem(team), 0, 1)
+        else return new MovingItem(new CoinItem(team), 0, 1)
+    }
+}
+
+/**
  * Un constructeur d'usines à pièce qui tombent, mais 1 fois sur trois elle crée une bulle tombante
  */
 export function NEW_BUBBLE_FACTORY(){

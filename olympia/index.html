@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.babylonjs.com/babylon.max.js"></script>
+    <script src="src/js/babylon.max.js" defer=true></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js" defer=true></script>
     <script type="module" src="src/js/script.js"></script>
-    
+    <link rel="stylesheet" href="../olympia/src/css/main.css"/>
     <title>Sketch Olympia</title>
+    <style>
+        html,body,#olympia {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            touch-action: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Test de mise en place d'une scene 3D sur une page web</h1>
-    <!-- canva au milieu de l'écran-->
-    <canvas id="renderCanvas" width="800" height="500" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></canvas>
-    <!-- affichage des pv du joueur -->
-    <div id="pv" style="position: absolute; top: 25%; left: 32%; transform: translate(-50%, -50%); background-color: white; padding: 5px; border-radius: 5px; border-color: black;"></div>
-    <!-- affichage des pv alternatifs-->
-    <!-- <div id="pv" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>-->
-    <!--créer un div vide au milieu du canva "renderCanvas" pour afficher les informations du joueur-->
-    <div id="infoJoueur" style="position: absolute; top: 75%; left: 50%; transform: translate(-50%, -50%);"></div>
+    <div id="olympia">
+    </div>
 </body>
 </html>
 

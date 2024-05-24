@@ -2,6 +2,8 @@ import { Item } from "../field/Item.mjs";
 import { CoinItem } from "./CoinItem.mjs";
 import { eatKeyPress, isKeyPressed } from "../controls/Keyboard.mjs"
 import { adom, dom } from "../../../samlib/DOM.mjs";
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
+import { on_summon } from "./events.js";
 
 export class SpawnerItem extends Item{
     
@@ -34,9 +36,11 @@ export class SpawnerItem extends Item{
                 let sy=Math.floor(Math.random()*field.height)
                 let target=field.get(sx,sy)
                 if(target==null){
-                    field.set(sx,sy,this.next)
+                    const next=this.next
+                    field.set(sx,sy,next)
                     this.next=this.factory()
                     field.updateElement(x,y)
+                    observers(field, on_summon) .notify({pos:[x,y], item:this, summoned:next, summoned_pos:[sx,sy]})
                     break;
                 }
             }

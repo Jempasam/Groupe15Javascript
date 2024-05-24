@@ -1,0 +1,11 @@
+
+#editor{
+    min-width: 10em;
+    min-height: 10em;
+    border: black 1px solid;
+
+    &>*{
+        margin: 1em;
+        border: black 1px solid;
+    }
+}

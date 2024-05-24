@@ -1,18 +1,90 @@
 
+let id_counter=0
+
 /**
+ * @template T Event object
+ */
+export class ObserverKey{
+    /** @type {string} */
+    name
+    constructor(name="unamed"){
+        this.name=name+"_"+id_counter
+        id_counter++
+    }
+}
+
+/**
+ * @template O
+ * @template T
+ * @typedef {[ObserverKey<T>,(O,T)=>void]} ListenerAndKey
+ */
+
+/**
+ * @template O The target object
+ * @template T The event object
  * A group of observers
  */
 export class ObserverGroup{
-    /** @type {Object.<string|number,(function(...any):void)[]>} */
+
+    static main_handler="__MAIN_HANDLER__"
+
+    /**
+     * 
+     * @param {O} holder 
+     * @param {ObserverGroup<any,T>=} parent 
+     */
+    constructor(holder,parent){
+        this.#parent=parent
+        this.#holder=holder
+    }
+
+    /** @type {O} */
+    #holder
+
+    /** @type {ObserverGroup<any,T>=} */
+    #parent
+
+    /** @type {Object.<string|number,(function(O,T):void)[]>} */
     #observers={}
 
     /**
      * Register an observer
+     * @param {string|number} prefix
+     * @returns {string}
+     */
+    static generateName(prefix=""){
+        const rand=crypto.getRandomValues(new Uint8Array(2))
+        return prefix+"auto_"+performance.now()+"_"+rand[0]+"_"+rand[1]
+    }
+
+    /**
+     * Register an observer
      * @param {string|number} name
-     * @param {function(...any):void} observer
+     * @param {function(O,T):void} observer
      */
     add(name,observer){
         this.#observers[name]=observer
+    }
+
+    /**
+     * Register an observer with an automaticcaly generated name
+     * @param {function(O,T):void} observer
+     * @param {string=} prefix A prefix for the auto-generated name
+     * @returns {string} The name of the observer
+     */
+    addAuto(observer,prefix=""){
+        const name=ObserverGroup.generateName(prefix)
+        this.#observers[name]=observer
+        return name
+    }
+
+    /**
+     * Register the main observer
+     * @param {(function(O,T):void)?} observer
+     */
+    set(observer){
+        if(observer)this.add(ObserverGroup.main_handler,observer)
+        else this.remove(ObserverGroup.main_handler)
     }
 
     /**
@@ -25,12 +97,13 @@ export class ObserverGroup{
 
     /**
      * Notify all observers
-     * @param {any} value
+     * @param {T} value
      */
-    notify(...value){
+    notify(value){
         for(let observer of Object.values(this.#observers)){
-            observer(...value)
+            observer(this.#holder,value)
         }
+        if(this.#parent)this.#parent.notify(value)
     }
 
     
@@ -38,15 +111,18 @@ export class ObserverGroup{
 
 /**
  * Get an observer group from an object, or create it if it doesn't exist
- * @param {any} object 
- * @param {string} name 
- * @returns {ObserverGroup}
+ * @template O
+ * @template T
+ * @param {O} object 
+ * @param {ObserverKey<T>} key 
+ * @param {ObserverGroup<any,T>=} parent
+ * @returns {ObserverGroup<O,T>}
  */
-export function observers(object,name){
-    let group=object["observers_"+name]
+export function observers(object,key,parent){
+    let group=object["observers_"+key.name]
     if(!group){
-        group=new ObserverGroup()
-        object["observers_"+name]=group
+        group=new ObserverGroup(object,parent)
+        object["observers_"+key.name]=group
     }
     return group
 }

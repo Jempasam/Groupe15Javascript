@@ -5,6 +5,11 @@ import { playToDeath } from './Menu.js';
 
 import { ACCOUNT_STORAGE, OBJECT_DATA } from '../../samlib/Storage.mjs';
 
+//Ajout des succès 
+
+import { achievement_registry } from '../../site/js/achievement_list.mjs';
+
+
 let inputStates = {};
 let vitesse = 5;
 let vitesseP = 0;
@@ -147,6 +152,7 @@ function definirEcouteurs() {
             img.src = asset("serpentManchot.png");
             animationSkin.src = asset("serpentManchot.png");
             easterEggLien.href = "https://fr.wikipedia.org/wiki/Manchot_empereur";
+
         } 
         else 
         {
@@ -511,6 +517,55 @@ function gameOver()
     {
         score = serpent.segments.length / 4;
     }
+
+    // LES SUCCES
+
+
+    achievement_registry.edit("snake","game1", v => 1);
+
+    if (score == 0)
+    {
+        achievement_registry.edit("snake","win0", v => 1);
+    }
+
+    if (score >= 1)
+        {
+            achievement_registry.edit("snake","win1", v => 1);
+        }
+
+    if (score >= 10)
+    {
+        achievement_registry.edit("snake","win10", v => 1);
+    }
+
+    if (score >= 20)
+    {
+        achievement_registry.edit("snake","win20", v => 1);
+    }
+
+    if (score >= 50)
+    {
+        achievement_registry.edit("snake","win50", v => 1);
+    }
+
+    if (score >= 100)
+    {
+        achievement_registry.edit("snake","win100", v => 1);
+    }
+
+    if (mangerInversion && score >= 10)
+    {
+        achievement_registry.edit("snake","noisrevnI", v => 1);
+    }
+
+    if (mangerVitesse && mangerInversion && miamFast && dureeBloquer == 500 && score >= 5)
+    {
+        achievement_registry.edit("snake","Fiesta", v => 1);
+    }
+
+    // FIN DES SUCCES
+
+
     
         // Code à exécuter en cas de collision avec la queue
         //console.log("Game Over - Le serpent a touché sa propre queue! Nombre de Game Over = ", debugGameOver);
@@ -562,6 +617,9 @@ function gameOver()
         {
             ModeSerpentLentImage.style.display = "none";
         }
+
+        achievement_registry.edit("snake","game1", v => 1);
+
 
         
     

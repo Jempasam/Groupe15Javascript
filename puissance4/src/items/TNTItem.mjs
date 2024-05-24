@@ -1,5 +1,7 @@
+import { observers } from "../../../samlib/observers/ObserverGroup.mjs";
 import { Item } from "../field/Item.mjs";
 import { Sounds } from "../sounds/SoundBank.mjs";
+import { on_destroy, on_explode } from "./events.js";
 
 export class TNTItem extends Item{
     
@@ -20,9 +22,11 @@ export class TNTItem extends Item{
                     let target=field.get(x+px,y+py)
                     if(target){
                         field.set(x+px,y+py,null)
+                        observers(field,on_destroy).notify({pos:[x,y], item:this, destroyed:target, destroyed_pos:[x+px,y+py]})
                     }
                 }
             }
+            observers(field, on_explode).notify({pos:[x,y], item:this})
             Sounds.BOMB.play()
         }
         else field.schedule(x,y,root)
