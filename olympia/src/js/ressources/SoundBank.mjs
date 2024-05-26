@@ -3,6 +3,7 @@ function createSound(url, volume=0.1){
     const ret=new Audio(import.meta.resolve("./../../../sounds/"+url))
     ret.volume=Math.min(1,volume)
     ret.play()
+    ret.pause()
     return ret
 }
 
