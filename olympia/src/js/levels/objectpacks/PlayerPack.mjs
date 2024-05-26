@@ -55,7 +55,7 @@ export class PlayerPack extends ObjectPack{
 
     dash=this.behav(()=>new PlayerDashBehaviour("ShiftLeft", 0.4, 40, 1, this._particle.CLOUD()))
 
-    jump=this.behav(()=>new PlayerJumpBehaviour("Space", 0.3, 1, this._particle.WIND()))
+    jump=this.behav(tags(()=>this._physic.solid.id), ()=>new PlayerJumpBehaviour("Space", 0.3, 1, this._particle.WIND()))
 
     attack=this.behav(()=>new ShootBehaviour("KeyE", 
         { tags:this._fight.SMALL_SLASH(), size:new Vector3(1,0.5,1) }, 
@@ -147,6 +147,10 @@ export class PlayerPack extends ObjectPack{
 
     hint_damage=this.behav( tags(()=>this.player.id),
         new HintBehaviour("Attention aux dégats! Si vous fumez, il ne faut plus vous faire toucher.","hint")
+    )
+
+    hint_jump=this.behav( tags(()=>this.player.id),
+        new HintBehaviour("Les sphère de saut vous redonne un saut lorsque vous les touchez comme si vous touchiez le sol!","hint")
     )
 
     // Camera

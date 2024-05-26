@@ -79,6 +79,7 @@ export async function loadModels(scene){
         EXCLAMATION_MARK: await model(scene,"exclamationmark"),
         HEART: await model(scene,"heart"),
         POTION: await model(scene,"potion"),
+        SPHERE: await model(scene,"sphere"),
 
         EXPLOSION: await model(scene,"explosion","particle"),
         SPHERE_EXPLOSION: await model(scene,"sphere_explosion","particle"),

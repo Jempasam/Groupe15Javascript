@@ -48,8 +48,7 @@ export class LiveEditor extends Level{
     */
    start(context,world,options){
 
-      const pack_backend=new BasicPack(world)
-      const pack=Object.setPrototypeOf({},pack_backend)
+      const pack=new BasicPack(world,{editor_mode:true})
 
       const container=document.querySelector("#olympia")
       if(container){
@@ -133,6 +132,7 @@ export class LiveEditor extends Level{
          localStorage.getItem("editormap") && load(localStorage.getItem("editormap"))
 
          const auto=container.appendChild(adom/*html*/`<input class=toremove type=checkbox />`)
+         // @ts-ignore
          const auto_reload=()=>{ if(auto.checked)reload() }
          dimension.addEventListener("input",auto_reload)
          for(let a of areas)a.addEventListener("input",auto_reload)
@@ -161,9 +161,12 @@ export class LiveEditor extends Level{
                const taglist= (Array.isArray(val.tags) ? val.tags : val.tags?.())
                   ?.map(it=> [ ObjectPack.getName(it)??"", ObjectPack.getColor(it)??"#FFFFFF" ])
                   ?.filter(it=>it.length>0) ?? []
-   
+               console.log(taglist)
+               
                const small_name= taglist
-                  .flatMap(it=>it[0].split("_")) .map(it=>it[0].toUpperCase()+it.slice(1))  .map((it,i)=>(i<taglist.length-2?it.substring(0,2):it)) .join("") 
+                  .flatMap(it=>it[0].split("_"))
+                  .map(it=>it.toUpperCase()+it.slice(1)) 
+                  .map((it,i)=>(i<taglist.length-2?it.substring(0,2):it)) .join("") 
                   .slice(-25).padEnd(25,".") 
    
                const desc= taglist

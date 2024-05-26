@@ -59,6 +59,7 @@ export class ModelPack extends ObjectPack{
     exclamation_mark= this.behav(()=>new MeshBehaviour(this.models.EXCLAMATION_MARK))
     heart= this.behav(()=>new MeshBehaviour(this.models.HEART))
     potion= this.behav(()=>new MeshBehaviour(this.models.POTION))
+    sphere= this.behav(()=>new MeshBehaviour(this.models.SPHERE))
 
     // Monsters
     panda= this.behav(()=>new MeshBehaviour(this.models.PANDA))

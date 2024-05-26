@@ -32,13 +32,14 @@ export class PlayerJumpBehaviour extends Behaviour{
      * @override
      * @param {World} world
      * @param {ObjectQuery} objects
+     * @param {ObjectQuery} solids
      */
-    init(world, objects){
+    init(world, objects, solids){
         this.eventid=ObserverGroup.generateName()
         for(const obj of objects){
             obj.getOrSet(JUMP,()=>new JumpModel())
             obj.observers(ON_COLLISION).add(this.eventid, (self,{hitbox,object,self_hitbox})=>{
-                if(self_hitbox.position.y-self_hitbox.scaling.y/3 > hitbox.position.y+hitbox.scaling.y/2){
+                if(solids.match(object) && self_hitbox.position.y-self_hitbox.scaling.y/3 > hitbox.position.y+hitbox.scaling.y/2){
                     obj.apply(JUMP, jump=>jump.remaining_jump=this.jump_count)
                 }
             })

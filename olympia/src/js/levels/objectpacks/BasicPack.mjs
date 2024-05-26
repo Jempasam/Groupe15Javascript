@@ -29,6 +29,7 @@ import { Sounds } from "../../ressources/SoundBank.mjs";
 import { BurningCity } from "../lava/BurningCity.mjs";
 import { LavaHole } from "../lava/LavaHole.mjs";
 import { BirdOfFire } from "../lava/BirdOfFire.mjs";
+import { PlayerBonusPack } from "./PlayerBonusPack.mjs";
 
 
 
@@ -41,6 +42,7 @@ export class BasicPack extends ObjectPack{
      * @param {World} world
      * @param {object} options
      * @param {()=>Level=} options.next_levels
+     * @param {boolean=} options.editor_mode
      */
     constructor(world,options={}){
         super(world)
@@ -57,6 +59,7 @@ export class BasicPack extends ObjectPack{
         let ia= this.ia= new IAPack(world, living)
         let monster= this.monster= new MonsterPack(world, fight, ia, player,soil)
         let sound= this.sound= new SoundPack(world,player)
+        let bonus= this.bonus= new PlayerBonusPack(world,player)
 
         this.NEXT_LEVEL= options.next_levels==null ? [] : [player.createLevelChange(options.next_levels).id]
         if(options.next_levels!=null)world.model.set(NEXT_LEVEL,options.next_levels)
@@ -132,6 +135,8 @@ export class BasicPack extends ObjectPack{
             "0b": { tags:[...player.BOMB_EQUIPPER(), model.artifact.id] },
             "0p": { tags:[...player.PINGPONG_EQUIPPER(), model.artifact.id] },
 
+            "*j": { tags:[...bonus.JUMP_GIVER(), model.sphere.id], size:it=>it.scale(.5) },
+
             "$h": { tags:[...physic.STATIC_GHOST(), model.heart.id, living.health_giver.id] },
 
             "+p": { tags:[...physic.STATIC(), model.hole.id, monster.panda_summoner.id], models:()=>[fight.bad] },
@@ -150,7 +155,7 @@ export class BasicPack extends ObjectPack{
             },
 
             "PP": {
-                tags:[...player.CLASSIC_PLAYER(), model.bonnet.id, living.reload_on_death.id],
+                tags:[...player.CLASSIC_PLAYER(), model.bonnet.id, ...(options.editor_mode ? [] : [living.reload_on_death.id])],
                 models:()=>[new LivingModel(3), fight.good, [NAME,"Frigeosaure"]],
                 size: it=>it.multiplyByFloats(.7,1.2,.7)
             },
@@ -178,6 +183,7 @@ export class BasicPack extends ObjectPack{
             "?0": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_upgrade.id] },
             "?%": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_movable.id] },
             "?x": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_damage.id] },
+            "?j": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_jump.id] },
 
             "<>": { tags:[...physic.MOVING_GHOST_FRICTION(), physic.pushable.id, player.camera_movement.id, player.camera.id], size:it=>it.scale(1.4)},
 

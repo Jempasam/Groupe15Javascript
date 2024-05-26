@@ -19,6 +19,7 @@ import { TimedBehaviour } from "../../objects/behaviour/generic/TimedBehaviour.m
 import { LivingPack } from "./LivingPack.mjs";
 import { giveTag } from "../../objects/model/SlotModel.mjs";
 import { PlayerPack } from "./PlayerPack.mjs";
+import { behaviourCollectable } from "../../objects/behaviour/generic/CollectableBehaviour.mjs";
 
 
 /**
@@ -33,9 +34,17 @@ export class PlayerBonusPack extends ObjectPack{
     constructor(world,player){
         super(world)
         this._player=player
+        this._physic=player._physic
+        this._registerNames()
     }
 
-    // Affiction
-    //jump_giver= this.behav(tags)
+    // Bonus
+    jump_giver= this.behav(tags(()=>this._player.player.id), behaviourCollectable({use_count:Infinity, reload_time:200},(_,obj)=>{
+        obj.forAll(JUMP,j=>j.remaining_jump=Math.max(1,j.remaining_jump))
+        return true
+    }))
+
+    // Compilations
+    JUMP_GIVER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.jump_giver.id])
 }
 
