@@ -2,7 +2,7 @@ import { Size, Vector2, Vector3 } from "../../../../../babylonjs/core/index.js";
 import { MessageManager } from "../../messages/MessageManager.mjs";
 import { MeshBehaviour } from "../../objects/behaviour/MeshBehaviour.mjs";
 import { PlayerBehaviour } from "../../objects/behaviour/controls/PlayerBehaviour.mjs";
-import { PlayerDashBehaviour } from "../../objects/behaviour/controls/PlayerDashBehaviour.mjs";
+import { ON_DASH, PlayerDashBehaviour } from "../../objects/behaviour/controls/PlayerDashBehaviour.mjs";
 import { PlayerJumpBehaviour } from "../../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
 import { ShootBehaviour } from "../../objects/behaviour/invocation/ShootBehaviour.mjs";
 import { behaviourCollectable, behaviourInfiniteEquipper } from "../../objects/behaviour/generic/CollectableBehaviour.mjs";
@@ -11,7 +11,7 @@ import { EquipperBehaviour } from "../../objects/behaviour/slot/EquipperBehaviou
 import { BehaviourEntry, World } from "../../objects/world/World.mjs";
 import { FightPack } from "./FightPack.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
-import { Level, LevelContext } from "../../levels/Level.mjs";
+import { LEVEL_CONTEXT, Level, LevelContext } from "../../levels/Level.mjs";
 import { HintBehaviour } from "../../objects/behaviour/interaction/HintBehaviour.mjs";
 import { CameraLikeBehaviour } from "../../objects/behaviour/controls/CameraLikeBehaviour.mjs";
 import { CameraBehaviour } from "../../objects/behaviour/CameraBehaviour.mjs";
@@ -23,6 +23,9 @@ import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mj
 import { PATH, PathModel } from "../../objects/model/PathModel.mjs";
 import { MOVEMENT, accelerate } from "../../objects/model/MovementModel.mjs";
 import { PathNoFallBehaviour } from "../../objects/behaviour/controls/PathNoFallBehaviour.mjs"
+import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
+import { ON_DEATH } from "../../objects/behaviour/life/LivingBehaviour.mjs";
+import { ModelKey } from "../../objects/world/ModelHolder.mjs";
 
 /**
  * Un pack de behaviours de base de joueur et de ses pouvoirs
@@ -150,33 +153,23 @@ export class PlayerPack extends ObjectPack{
     camera_movement=this.behav( tags(()=>this.player.id), new CameraLikeBehaviour())
     camera=this.behav( tags(()=>this.player.id), new CameraBehaviour())
 
-    /*inventory=this.behav(
-        ()=>new InventoryBehaviour({
-            "attack":{name:"Attaque", image:"🗡️", tags:[this.attack.id], slot:"attack"},
-            "shoot":{name:"Tir", image:"🔫", tags:[this.shoot.id], slot:"attack"},
-            "bomb":{name:"Bombe", image:"💣", tags:[this.bomb.id], slot:"attack"},
-            "pingpong":{name:"Raquette", image:"🏓", tags:[this.pingpong.id], slot:"attack"},
-
-            "potion_no":{name:"Rien", image:"🚫", tags:[], slot:"potion"},
-            "potion_slow_falling":{name:"Chûte lente", image:"🎈", tags:this._effect.SLOW_FALLING(), slot:"potion"},
-            "potion_tornado":{name:"Propulsion", image:"🌪️", tags:this._effect.PROPULSED(), slot:"potion"},
-            "potion_propulsed":{name:"Sauts infinis", image:"🧦", tags:[...this._effect.INFINITE_JUMP(),this.jump.id], slot:"potion"},
-            "potion_smalling":{name:"Petit", image:"🐭", tags:this._effect.SMALLER(), slot:"potion"},
-            "potion_growing":{name:"Grand", image:"🐻‍❄️", tags:this._effect.BIGGER(), slot:"potion"},
-            "potion_burning":{name:"Burning", image:"🔥", tags:this._effect.BURNING(), slot:"potion"},
-
-            "element_fire":{name:"Feu", image:"🔥", tags:[this._element.element_flame.id], slot:"element"},
-            "element_water":{name:"Eau", image:"💧", tags:[this._element.element_water.id], slot:"element"},
-            "element_air":{name:"Air", image:"💨", tags:[this._element.element_air.id], slot:"element"},
-        })
-    )*/
+    /**
+     * 
+     * @param {()=>Level} level_factory 
+     */
+    createLevelChange(level_factory){
+        return this.behav(tags(()=>this.player.id), ()=>behaviourCollectable({},(o)=>{
+            o.world.model.apply(LEVEL_CONTEXT, (context)=> context.switchTo(level_factory()) )
+            return true
+        }))
+    }
 
     /**
      * 
      * @param {LevelContext} context 
      * @param {()=>Level} level_factory 
      */
-    createLevelChange(context, level_factory){
-        return this.behav(tags(()=>this.player.id), ()=>behaviourCollectable({},()=>(context.switchTo(level_factory()),true)))
+    createDeathReload(context, level_factory){
+        return this.behav(()=>behaviourObserve(ON_DEATH,()=>(context.switchTo(level_factory()),true)))
     }
 }

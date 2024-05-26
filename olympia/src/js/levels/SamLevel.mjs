@@ -16,8 +16,7 @@ import { message } from "../script.js";
 import { Level, LevelContext } from "./Level.mjs";
 import { LiveEditor } from "./LiveEditor.mjs";
 import { Lvl1_2 } from "./Lvl1_2.mjs";
-import { Lvl1_3 } from "./Lvl1_3.mjs";
-import { Lvl1_4 } from "./Lvl1_4.mjs";
+import { VolcanoField } from "./lava/VolcanoField.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
 import { EffectPack } from "./objectpacks/EffectPack.mjs";
 import { FightPack } from "./objectpacks/FightPack.mjs";
@@ -53,7 +52,7 @@ export class SamLevel extends Level{
          return ret
       }
       
-      const base=new BasicPack(world, { next_levels:[context, ()=>new Lvl1_3()] })
+      const base=new BasicPack(world, { next_levels: ()=>new VolcanoField() })
       const player=base.player
  
       createLevel({
@@ -92,7 +91,7 @@ export class SamLevel extends Level{
             `
             ,
             `
-            1  ]                                                                    %#91                                            +o81                        #m90
+            1  ]    @I82@_82@b82                                                    %#91                                            +o81                        #m90
             2  ]            0d82                                                %#91%#91----                            #m91----
             3  ]                                                                    |______|%#91                        |______|
             4  ]                                                                                        #w97
@@ -103,7 +102,7 @@ export class SamLevel extends Level{
             9  ]                                                                    ?xA3                                            
             10 ]
             11 ]                                                                            
-            12 ]            PP21
+            12 ]            PC21
             13 ]                            0sT2
             14 ]                                                                        +s90----
             15 ]                                                                        |______|
@@ -137,8 +136,6 @@ export class SamLevel extends Level{
     */
    tick(context,world,options){
       if(isKeyPressed("Digit8"))context.switchTo(new Lvl1_2())
-      if(isKeyPressed("Digit6"))context.switchTo(new Lvl1_3())
-      if(isKeyPressed("Digit5"))context.switchTo(new Lvl1_4())
       if(isKeyPressed("Digit7"))context.switchTo(new LiveEditor())
    }
 

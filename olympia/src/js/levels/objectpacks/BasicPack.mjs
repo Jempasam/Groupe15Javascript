@@ -21,11 +21,14 @@ import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { Team } from "../../objects/model/TeamModel.mjs";
 import { MessageManager } from "../../messages/MessageManager.mjs";
 import { ElementPack } from "./ElementPack.mjs";
-import { Level, LevelContext } from "../Level.mjs";
+import { Level, LevelContext, NEXT_LEVEL } from "../Level.mjs";
 import { NAME } from "../../objects/behaviour/life/LifeBarBehaviour.mjs";
 import { SoundPack } from "./SoundPack.mjs";
 import { SOUND } from "../../objects/behaviour/MusicBehaviour.mjs";
 import { Sounds } from "../../ressources/SoundBank.mjs";
+import { BurningCity } from "../lava/BurningCity.mjs";
+import { LavaHole } from "../lava/LavaHole.mjs";
+import { BirdOfFire } from "../lava/BirdOfFire.mjs";
 
 
 
@@ -37,7 +40,7 @@ export class BasicPack extends ObjectPack{
     /**
      * @param {World} world
      * @param {object} options
-     * @param {[LevelContext,()=>Level]=} options.next_levels
+     * @param {()=>Level=} options.next_levels
      */
     constructor(world,options={}){
         super(world)
@@ -55,8 +58,8 @@ export class BasicPack extends ObjectPack{
         let monster= this.monster= new MonsterPack(world, fight, ia, player,soil)
         let sound= this.sound= new SoundPack(world,player)
 
-        this.NEXT_LEVEL= options.next_levels==null ? [] : [player.createLevelChange(options.next_levels[0],options.next_levels[1]).id]
-
+        this.NEXT_LEVEL= options.next_levels==null ? [] : [player.createLevelChange(options.next_levels).id]
+        if(options.next_levels!=null)world.model.set(NEXT_LEVEL,options.next_levels)
         /** @type {Object.<string,import("../../objects/world/WorldUtils.mjs").ObjectDefinition>} */
         this.objects={
             "##": { tags:[...physic.STATIC(), model.block.id] },
@@ -140,8 +143,14 @@ export class BasicPack extends ObjectPack{
             "+d": { tags:[...physic.STATIC(), model.hole.id, monster.demon_summoner.id], models:()=>[fight.bad]},
             "+B": { tags:[...physic.STATIC(), model.hole.id, monster.firebird_summoner.id], models:()=>[fight.bad]},
 
-            "PP": {
+            "PC": {
                 tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
+                models:()=>[new LivingModel(3), fight.good, [NAME,"Frigeosaure"]],
+                size: it=>it.multiplyByFloats(.7,1.2,.7)
+            },
+
+            "PP": {
+                tags:[...player.CLASSIC_PLAYER(), model.bonnet.id, living.reload_on_death.id],
                 models:()=>[new LivingModel(3), fight.good, [NAME,"Frigeosaure"]],
                 size: it=>it.multiplyByFloats(.7,1.2,.7)
             },
@@ -154,6 +163,9 @@ export class BasicPack extends ObjectPack{
 
             "()":{ tags: [...physic.STATIC(), model.portal.id, ...this.NEXT_LEVEL], size:it=>it.multiplyByFloats(1,1,.2) },
             ")(":{ tags: [...physic.STATIC(), model.portal.id, ...this.NEXT_LEVEL], size:it=>it.multiplyByFloats(1,1,.2), rotation: ()=>new Vector3(0,Math.PI/2,0) },
+            "@I": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BurningCity()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@_": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LavaHole()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@b": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BirdOfFire()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
             "?1": { tags:[...physic.STATIC(), model.question_mark.id] },
             "?2": { tags:[...physic.STATIC(), model.question_mark.id] },
@@ -169,7 +181,8 @@ export class BasicPack extends ObjectPack{
 
             "<>": { tags:[...physic.MOVING_GHOST_FRICTION(), physic.pushable.id, player.camera_movement.id, player.camera.id], size:it=>it.scale(1.4)},
 
-            "Ma": { tags:[sound.music.id], models:()=>[[SOUND, Sounds.ASH_PLANKS]] }
+            "Ma": { tags:[sound.music.id], models:()=>[[SOUND, Sounds.ASH_PLANKS]] },
+
         }
     }
 }

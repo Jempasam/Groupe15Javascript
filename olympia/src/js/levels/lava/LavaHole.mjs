@@ -11,9 +11,9 @@ import { World } from "../../objects/world/World.mjs";
 import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { message } from "../../script.js";
 import { Level, LevelContext } from "../Level.mjs";
-import { Lvl1_4 } from "../Lvl1_4.mjs";
 import { SamLevel } from "../SamLevel.mjs";
 import { BasicPack } from "../objectpacks/BasicPack.mjs";
+import { BirdOfFire } from "./BirdOfFire.mjs";
 
 export class LavaHole extends Level{
 
@@ -27,7 +27,7 @@ export class LavaHole extends Level{
       message.send("Il fait chaud ici...",6000,"info")
       message.send("PV: 3", MessageManager.FOREVER, "pv")
 
-      const pack=new BasicPack(world, { next_levels:[context, ()=>new LavaHole()] })
+      const pack=new BasicPack(world, { next_levels:()=>new BirdOfFire() })
       const player=pack.player
 
       createLevel({

@@ -14,7 +14,6 @@ import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehavio
 import { ON_COLLISION } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { LIVING } from "../../objects/model/LivingModel.mjs";
 import { MeshBehaviour } from "../../objects/behaviour/MeshBehaviour.mjs";
-import { behaviour } from "../../objects/behaviour/Behaviour.mjs";
 import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
 import { TimedBehaviour } from "../../objects/behaviour/generic/TimedBehaviour.mjs";
 import { LivingPack } from "./LivingPack.mjs";

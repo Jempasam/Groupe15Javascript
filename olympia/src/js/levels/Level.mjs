@@ -1,6 +1,16 @@
 import { World } from "../objects/world/World.mjs";
 import { Camera } from "../../../../babylonjs/core/Cameras/camera.js"
+import { ModelKey } from "../objects/world/ModelHolder.mjs";
 
+
+/** @type {ModelKey<LevelContext>} */
+export const LEVEL_CONTEXT=new ModelKey("level_context")
+
+/** @type {ModelKey<()=>Level>} */
+export const NEXT_LEVEL=new ModelKey("level")
+
+/** @type {ModelKey<()=>Level>} */
+export const CURRENT_LEVEL=new ModelKey("current_level")
 
 export class LevelContext{
 
@@ -34,6 +44,9 @@ export class LevelContext{
                 this.current_level.stop(this.world,this.options)
             }
             this.world.close()
+            this.world.model.set(LEVEL_CONTEXT,this)
+            const level=this.#level
+            this.world.model.set(CURRENT_LEVEL,()=>level)
             this.current_level=this.#level
             this.current_level.start(this,this.world,this.options)
             this.#level=null

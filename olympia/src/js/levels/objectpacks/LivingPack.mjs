@@ -1,6 +1,6 @@
 import { Vector3 } from "../../../../../babylonjs/core/index.js";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
-import { LivingBehaviour } from "../../objects/behaviour/life/LivingBehaviour.mjs";
+import { LivingBehaviour, ON_DEATH } from "../../objects/behaviour/life/LivingBehaviour.mjs";
 import { ParticleLivingBehaviour } from "../../objects/behaviour/life/ParticleLivingBehaviour.mjs";
 import { RespawnBehaviour } from "../../objects/behaviour/life/RespawnBehaviour.mjs";
 import { LIVING } from "../../objects/model/LivingModel.mjs";
@@ -10,6 +10,8 @@ import { ObjectPack, tags } from "./ObjectPack.mjs";
 import { ParticlePack } from "./ParticlePack.mjs";
 import { behaviourCollectable } from "../../objects/behaviour/generic/CollectableBehaviour.mjs";
 import { LifeBarBehaviour } from "../../objects/behaviour/life/LifeBarBehaviour.mjs";
+import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
+import { CURRENT_LEVEL, LEVEL_CONTEXT, NEXT_LEVEL } from "../Level.mjs";
 
 
 
@@ -38,6 +40,11 @@ export class LivingPack extends ObjectPack{
         if(t.position.y<-10)l.damage(3)
     })))
     respawn=this.behav(new RespawnBehaviour())
+    reload_on_death=this.behav(behaviourObserve(ON_DEATH,(obj)=>{
+        obj.world.model.apply2(LEVEL_CONTEXT, CURRENT_LEVEL, (context,cur)=>{
+            context.switchTo(cur())
+        })
+    }))
     lifebar=this.behav(new LifeBarBehaviour())
 
     // Items

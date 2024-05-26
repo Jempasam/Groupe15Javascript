@@ -11,7 +11,6 @@ import { World } from "../../objects/world/World.mjs";
 import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { message } from "../../script.js";
 import { Level, LevelContext } from "../Level.mjs";
-import { Lvl1_4 } from "../Lvl1_4.mjs";
 import { SamLevel } from "../SamLevel.mjs";
 import { BasicPack } from "../objectpacks/BasicPack.mjs";
 
@@ -27,7 +26,7 @@ export class BurningCity extends Level{
 
       message.send("Il fait chaud ici...",6000,"info")
 
-      const pack=new BasicPack(world, { next_levels:[context, ()=>new Lvl1_4()] })
+      const pack=new BasicPack(world, { next_levels:()=>new BurningCity() })
       const player=pack.player
 
       createLevel({
