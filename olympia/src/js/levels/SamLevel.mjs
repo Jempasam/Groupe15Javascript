@@ -122,6 +122,7 @@ export class SamLevel extends Level{
       })
       this.player=world.objects.get(player.player.id)?.[0]
       if(this.player==null)window.alert("Player not found")
+         console.log(this.player.tags)
 
       this.player.observers(ON_LIVE_CHANGE).add("SamLevel",(obj,{})=>{
          message.send("PV: "+(obj.get(LIVING)?.life ?? 0), MessageManager.FOREVER, "pv")

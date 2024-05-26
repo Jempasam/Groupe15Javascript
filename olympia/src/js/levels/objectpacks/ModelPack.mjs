@@ -47,6 +47,7 @@ export class ModelPack extends ObjectPack{
     cactus3= this.behav(()=>new MeshBehaviour(this.models.CACTUS3))
     portal= this.behav(()=>new MeshBehaviour(this.models.PORTAL))
     pannier_basket= this.behav(()=>new MeshBehaviour(this.models.PANNIER_BASKET))
+    volcano= this.behav(()=>new MeshBehaviour(this.models.VOLCANO))
     
     magma= this.behav(()=>new MeshBehaviour(this.models.MAGMA))
     rock_floor= this.behav(()=>new MeshBehaviour(this.models.ROCK))

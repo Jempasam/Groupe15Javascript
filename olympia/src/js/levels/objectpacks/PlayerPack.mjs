@@ -150,7 +150,7 @@ export class PlayerPack extends ObjectPack{
     camera_movement=this.behav( tags(()=>this.player.id), new CameraLikeBehaviour())
     camera=this.behav( tags(()=>this.player.id), new CameraBehaviour())
 
-    inventory=this.behav(
+    /*inventory=this.behav(
         ()=>new InventoryBehaviour({
             "attack":{name:"Attaque", image:"🗡️", tags:[this.attack.id], slot:"attack"},
             "shoot":{name:"Tir", image:"🔫", tags:[this.shoot.id], slot:"attack"},
@@ -169,7 +169,7 @@ export class PlayerPack extends ObjectPack{
             "element_water":{name:"Eau", image:"💧", tags:[this._element.element_water.id], slot:"element"},
             "element_air":{name:"Air", image:"💨", tags:[this._element.element_air.id], slot:"element"},
         })
-    )
+    )*/
 
     /**
      * 

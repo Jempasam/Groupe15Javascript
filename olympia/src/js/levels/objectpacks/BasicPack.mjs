@@ -74,6 +74,7 @@ export class BasicPack extends ObjectPack{
             "#C": { tags:[...physic.STATIC(), model.cactus2.id, soil.damaging.id], size: it=>it.multiplyByFloats(.4,1,.4) },
             "#p": { tags:[...physic.STATIC(), model.pannier_basket.id], size: it=>it.multiplyByFloats(.1,1,.1), rotation:()=>[0,-Math.PI/2,0]},
             "#q": { tags:[...physic.STATIC(), model.pannier_basket.id], size: it=>it.multiplyByFloats(.1,1,.1), rotation:()=>[0,Math.PI/2,0]},
+            "#v": { tags:[...physic.STATIC(), model.volcano.id]},
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},
@@ -100,6 +101,11 @@ export class BasicPack extends ObjectPack{
             "v2": { tags:[...physic.MOVING(), model.block.id, soil.backward2.id] },
             "v4": { tags:[...physic.MOVING(), model.block.id, soil.backward4.id] },
             "v8": { tags:[...physic.MOVING(), model.block.id, soil.backward8.id] },
+
+            "^x": {tags:[...physic.MOVING(), ...soil.LAVA(), soil.forward2.id]},
+            "vx": {tags:[...physic.MOVING(), ...soil.LAVA(), soil.backward2.id]},
+            "<x": {tags:[...physic.MOVING(), ...soil.LAVA(), soil.left2.id]},
+            ">x": {tags:[...physic.MOVING(), ...soil.LAVA(), soil.right2.id]},
 
             "d#": { tags:[...physic.MOVING(), model.block.id, soil.slow_door4.id] },
 
@@ -135,7 +141,7 @@ export class BasicPack extends ObjectPack{
             "+B": { tags:[...physic.STATIC(), model.hole.id, monster.firebird_summoner.id], models:()=>[fight.bad]},
 
             "PP": {
-                tags:[...player.CLASSIC_PLAYER(), model.bonnet.id, player.inventory.id],
+                tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
                 models:()=>[new LivingModel(3), fight.good, [NAME,"Frigeosaure"]],
                 size: it=>it.multiplyByFloats(.7,1.2,.7)
             },
