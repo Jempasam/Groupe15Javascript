@@ -35,6 +35,7 @@ import { BasicPack } from "./objectpacks/BasicPack.mjs";
 import { TaggedDict } from "../objects/world/TaggedDict.mjs";
 import { ObjectPack } from "./objectpacks/ObjectPack.mjs";
 import TemplateList from "../../../../samlib/gui/TemplateList.mjs";
+import "../../../../samlib/gui/SamTextArea.mjs";
 
 export class LiveEditor extends Level{
 
@@ -74,7 +75,7 @@ export class LiveEditor extends Level{
          // Writing area
          const areas=[]
          const area_container=container.appendChild(create("div.areacontainer.toremove"))
-         for(let a=0;a<3;a++)areas.push(area_container.appendChild(create("textarea")))
+         for(let a=0;a<3;a++)areas.push(area_container.appendChild(document.createElement("textarea",{is:"sam-textarea"})))
          const dimension=container.appendChild(adom/*html*/`<input class=toremove type=text value=[1.5,0.5,1.5] />`)
 
          const refresh=container.appendChild(adom/*html*/`<input class=toremove type=button value=Refresh />`)
