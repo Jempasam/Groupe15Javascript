@@ -1,7 +1,7 @@
 import { Behaviour } from "./Behaviour.mjs"
 import { ON_JUMP } from "./controls/PlayerJumpBehaviour.mjs"
 import { ON_DASH } from "./controls/PlayerDashBehaviour.mjs"
-import { ON_SHOOT } from "./controls/PlayerShootBehaviour.mjs"
+import { ON_SHOOT } from "./invocation/ShootBehaviour.mjs"
 import { giveTag, removeTag } from "../model/SlotModel.mjs"
 import { TRANSFORM, TransformModel } from "../model/TransformModel.mjs"
 import { GameObject } from "../world/GameObject.mjs"
@@ -61,6 +61,8 @@ export class ElementBehaviour extends Behaviour{
         }
     }
 
+    doTick=false
+
     /**
      * @param {GameObject} obj 
      */
@@ -71,10 +73,6 @@ export class ElementBehaviour extends Behaviour{
             obj.apply(TRANSFORM, t=>tf.copyFrom(t))
         }
     }
-
-    /** @override @type {Behaviour['tick']} */
-    tick(){ }
-    doTick=false
 
     /** @override @type {Behaviour['finish']} */
     finish(_,objects){

@@ -25,12 +25,6 @@ export class PlayerBehaviour extends Behaviour{
         this.max_speed=max_speed
     }
 
-    /**
-     * @override
-     * @param {World} world
-     * @param {ObjectQuery} objects
-     */
-    init(world, objects){ }
 
     /**
      * @override
@@ -57,5 +51,5 @@ export class PlayerBehaviour extends Behaviour{
 
     }
 
-    finish(){ }
+
 }

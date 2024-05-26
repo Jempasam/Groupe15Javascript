@@ -3,9 +3,9 @@ import { UniversalCamera, Vector3 } from "../../../../babylonjs/core/index.js";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { MessageManager } from "../messages/MessageManager.mjs";
 import { Behaviour } from "../objects/behaviour/Behaviour.mjs";
-import { SummonerBehaviour } from "../objects/behaviour/SummonerBehaviour.mjs";
+import { SummonerBehaviour } from "../objects/behaviour/invocation/SummonerBehaviour.mjs";
 import { MeleeAttackBehaviour } from "../objects/behaviour/controls/MeleeAttackBehaviour.mjs";
-import { PlayerShootBehaviour } from "../objects/behaviour/controls/PlayerShootBehaviour.mjs";
+import { ShootBehaviour } from "../objects/behaviour/invocation/ShootBehaviour.mjs";
 import { behaviourCollectable } from "../objects/behaviour/generic/CollectableBehaviour.mjs";
 import { ON_DEATH, ON_LIVE_CHANGE } from "../objects/behaviour/life/LivingBehaviour.mjs";
 import { PathBehaviour } from "../objects/behaviour/movement/PathBehaviour.mjs";
@@ -34,6 +34,7 @@ import { adom, create, dom } from "../../../../samlib/DOM.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
 import { TaggedDict } from "../objects/world/TaggedDict.mjs";
 import { ObjectPack } from "./objectpacks/ObjectPack.mjs";
+import TemplateList from "../../../../samlib/gui/TemplateList.mjs";
 
 export class LiveEditor extends Level{
 
@@ -46,37 +47,15 @@ export class LiveEditor extends Level{
     */
    start(context,world,options){
 
-      const pack=new BasicPack(world)
+      const pack_backend=new BasicPack(world)
+      const pack=Object.setPrototypeOf({},pack_backend)
 
       const container=document.querySelector("#olympia")
       if(container){
-         const areas=[]
-         const area_container=container.appendChild(create("div.areacontainer.toremove"))
-         for(let a=0;a<3;a++)areas.push(area_container.appendChild(create("textarea")))
-         const button=container.appendChild(adom/*html*/`<input class=toremove type=button value=Refresh />`)
-         const auto=container.appendChild(adom/*html*/`<input class=toremove type=checkbox />`)
-         const copy=container.appendChild(adom/*html*/`<input class=toremove type=button value=Copy />`)
-         const paste=container.appendChild(adom/*html*/`<input class=toremove type=button value=Paste />`)
-         const dimension=container.appendChild(adom/*html*/`<input class=toremove type=text value=[1.5,0.5,1.5] />`)
+
+
+         // Error handling
          const error=container.appendChild(create("p.toremove"))
-         
-         const select=container.appendChild(create("div.library.toremove"))
-         for(const [name,val] of Object.entries(pack.objects)){
-            const taglist= (Array.isArray(val.tags) ? val.tags : val.tags?.())
-               ?.map(it=> [ ObjectPack.getName(it)??"", ObjectPack.getColor(it)??"#FFFFFF" ])
-               ?.filter(it=>it.length>0) ?? []
-
-            const small_name= taglist
-               .flatMap(it=>it[0].split("_")) .map(it=>it[0].toUpperCase()+it.slice(1))  .map((it,i)=>(i<taglist.length-2?it.substring(0,2):it)) .join("") 
-               .slice(-25).padEnd(25,".") 
-
-            const desc= taglist
-               .flatMap(it=>[adom`<span style="color:${it[1]}">${it[0]}</span>"`,adom`<span> </span>`])
-               
-            desc.pop()
-            select.appendChild(adom/*html*/`<div value="${name}">${name} ${small_name} ${desc}</div>`)
-         }
-
          function catch_error(callback){
             error.innerHTML=""
             try{ callback() }
@@ -91,6 +70,46 @@ export class LiveEditor extends Level{
             return value
          }
 
+
+         // Writing area
+         const areas=[]
+         const area_container=container.appendChild(create("div.areacontainer.toremove"))
+         for(let a=0;a<3;a++)areas.push(area_container.appendChild(create("textarea")))
+         const dimension=container.appendChild(adom/*html*/`<input class=toremove type=text value=[1.5,0.5,1.5] />`)
+
+         const refresh=container.appendChild(adom/*html*/`<input class=toremove type=button value=Refresh />`)
+         refresh.addEventListener("click",reload)
+
+         const clear=container.appendChild(adom/*html*/`<input class=toremove type=button value=Clear />`)
+         clear.addEventListener("click",()=>{areas.forEach(it=>it.value="");reload()})
+
+         // Save and load
+         function save(){
+            return "`\n"+
+               areas.map(it=>/**@type {string}*/(it.value))
+               .map(area=>{
+                  let counter={value:1}
+                  return "1  ]"+area.replace(/\n/g,it=>{
+                     counter.value++
+                     return "\n"+new String(counter.value).padEnd(3," ")+"]"
+                  })
+               })
+               .join("\n`\n,\n`\n")
+               +"\n`"
+         }
+
+         function load(text){
+            catch_error(()=>{
+               text=text.trim()
+               if(!text.startsWith("`\n") || !text.endsWith("\n`")) throw new Error("Invalid format in clipboard")
+               text=text.substring(2,text.length-2).replace(/^[^\n]*\]/g,"").replace(/\n[^\n]*\]/g,"\n")
+               const parts=text.split(/\n`[\n \t]*,[\n \t]*`\n/g)
+               for(let i=0;i<parts.length&&i<areas.length;i++)areas[i].value=parts[i]
+               reload()
+            })
+         }
+
+         // Reload
          function reload(){
             catch_error(()=>{
                // Get dimension
@@ -105,44 +124,76 @@ export class LiveEditor extends Level{
                   world, objects: pack.objects,
                   maps:areas.map(it=>it.value)
                })
+
+               localStorage.setItem("editormap",save())
             })
          }
-         const auto_reload=()=>{ if(auto.checked)reload() }
 
+         localStorage.getItem("editormap") && load(localStorage.getItem("editormap"))
+
+         const auto=container.appendChild(adom/*html*/`<input class=toremove type=checkbox />`)
+         const auto_reload=()=>{ if(auto.checked)reload() }
+         dimension.addEventListener("input",auto_reload)
          for(let a of areas)a.addEventListener("input",auto_reload)
 
-         // Copy-Paste
+         
+         // Copy Paste
+         const copy=container.appendChild(adom/*html*/`<input class=toremove type=button value=Copy />`)
+         const paste=container.appendChild(adom/*html*/`<input class=toremove type=button value=Paste />`)
+
          copy.addEventListener("click",e=>{
             navigator.clipboard
-            .writeText("`\n"+
-               areas.map(it=>/**@type {string}*/(it.value))
-               .map(area=>{
-                  let counter={value:1}
-                  return "1  ]"+area.replace(/\n/g,it=>{
-                     counter.value++
-                     return "\n"+new String(counter.value).padEnd(3," ")+"]"
-                  })
-               })
-               .join("\n`\n,\n`\n")
-            +"\n`")
+            .writeText(save())
          })
 
          paste.addEventListener("click",e=>{
-            navigator.clipboard.readText().then(text=>{
-                  catch_error(()=>{
-                     text=text.trim()
-                     if(!text.startsWith("`\n") || !text.endsWith("\n`")) throw new Error("Invalid format in clipboard")
-                     text=text.substring(2,text.length-2).replace(/^[^\n]*\]/g,"").replace(/\n[^\n]*\]/g,"\n")
-                     const parts=text.split(/\n`[\n \t]*,[\n \t]*`\n/g)
-                     for(let i=0;i<parts.length&&i<areas.length;i++)areas[i].value=parts[i]
-                     reload()
-                  })
-            })
+            navigator.clipboard.readText().then(text=>load(text))
          })
+         
 
-         dimension.addEventListener("input",auto_reload)
+         // Library
+         const libraries=container.appendChild(create("div.library.toremove"))
 
-         button.addEventListener("click",reload)
+         function refresh_libraries(){
+            libraries.innerHTML=""
+            for(const [name,val] of Object.entries(pack.objects)){
+               const taglist= (Array.isArray(val.tags) ? val.tags : val.tags?.())
+                  ?.map(it=> [ ObjectPack.getName(it)??"", ObjectPack.getColor(it)??"#FFFFFF" ])
+                  ?.filter(it=>it.length>0) ?? []
+   
+               const small_name= taglist
+                  .flatMap(it=>it[0].split("_")) .map(it=>it[0].toUpperCase()+it.slice(1))  .map((it,i)=>(i<taglist.length-2?it.substring(0,2):it)) .join("") 
+                  .slice(-25).padEnd(25,".") 
+   
+               const desc= taglist
+                  .flatMap(it=>[adom`<span style="color:${it[1]}">${it[0]}</span>"`,adom`<span> </span>`])
+                  
+               desc.pop()
+               libraries.appendChild(adom/*html*/`<div value="${name}">${name} ${small_name} ${desc}</div>`)
+            }
+         }
+
+         refresh_libraries()
+
+
+         // Custom items
+         /*const editor=container.appendChild(create("div.item_editor"))
+         const item_dict={}
+         for(const tag of ObjectPack.tags()){
+            const name=ObjectPack.getName(tag)
+            item_dict[name]=tag
+         }
+
+         const editor=container.appendChild(new TemplateList())
+         editor.appendChild(adom`
+         <div class="template itemgroup">
+            <input class=itemname type=text value="##" minlength=2 maxlength=2/>
+            <input class=itemdef type=text value="transform, collision, [PANDA]"/>
+         </div>
+         `)*/
+         
+
+         
       }
       
 

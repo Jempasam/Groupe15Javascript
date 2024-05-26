@@ -60,7 +60,7 @@ export class SimpleParticleBehaviour extends Behaviour{
         }
     }
 
-    finish(){ }
+
 }
 
 /**

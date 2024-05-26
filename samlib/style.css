@@ -501,3 +501,88 @@ sam-onglets{
         }
     }
 }
+
+sam-assembler{
+    display: flex;
+    flex-direction: row;
+    padding: .5em;
+    background-color: white;
+    border-radius: .5em;
+    border: black 1px solid;
+    &>.choice{
+        display: flex;
+        flex-direction: row;
+        border: black 1px solid;
+        &>span{
+            margin: .5em;
+        }
+        &>button{
+            border-radius: 0;
+            cursor: pointer;
+        }
+        &:not(:last-child){
+            margin-right: .5em;
+        }
+    }
+    &>select{
+        border-radius: 0;
+        border: solid black 1px;
+    }
+}
+
+sam-template-list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .5em;
+    background-color: white;
+    border: black 1px solid;
+
+    &>.template{
+        display: none;
+    }
+    &>.template_copy{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: start;
+        width: 100%;
+        border-bottom: black 1px solid;
+        &>button{
+            border-radius: 0;
+            background-color: red;
+            border: red solid 1px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            &:hover{
+                background-color: white;
+                color: red;
+            }
+            aspect-ratio: 1;
+        }
+    }
+    &>.buttons{
+        display: flex;
+        &>button{
+            &.add{ --button-color: green; }
+            &.clear{ --button-color: red; }
+            border-radius: 0;
+            border: none;
+            background-color: var(--button-color);
+            border: var(--button-color) solid 1px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0.4em;
+            margin: 0.2em;
+            &:hover{
+                background-color: white;
+                color: var(--button-color);
+            }
+            &:not(:last-child){
+                margin-right: 2em;
+            }
+        }
+    }
+}

@@ -24,11 +24,9 @@ export class PathNoFallBehaviour extends Behaviour{
         super()
         this.acceleration=options.acceleration ?? 0.05
         this.max_speed=options.max_speed ?? 0.3
-        this.distance_to_border=options.distance_to_border ?? 0.8
+        this.distance_to_border=options.distance_to_border ?? 0.2
         this.indicator=options.indicator
     }
-
-    init(world, objects){ }
 
     /**
      * @override
@@ -47,8 +45,9 @@ export class PathNoFallBehaviour extends Behaviour{
             let mv=obj.get(MOVEMENT); if(!mv)continue
 
             // Get directions vectors
-            mv.inertia .normalizeToRef(forward) .scaleInPlace(this.distance_to_border)
-            right .set(-forward.z,forward.y,forward.x) .scaleInPlace(this.distance_to_border)
+            const base_distance=Math.sqrt((tf.scale.x/2)**2+(tf.scale.z/2)**2)
+            mv.inertia .normalizeToRef(forward) .scaleInPlace(base_distance+this.distance_to_border)
+            right .set(-forward.z,forward.y,forward.x) .scaleInPlace(base_distance+this.distance_to_border)
             
             // Test points
             const isInVoid = (direction)=>{
@@ -98,5 +97,5 @@ export class PathNoFallBehaviour extends Behaviour{
 
     }
 
-    finish(){ }
+
 }

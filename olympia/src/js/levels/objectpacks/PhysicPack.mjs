@@ -1,4 +1,4 @@
-import { Behaviour } from "../../objects/behaviour/Behaviour.mjs";
+import { Behaviour, behaviour } from "../../objects/behaviour/Behaviour.mjs";
 import { MovementBehaviour } from "../../objects/behaviour/MovementBehaviour.mjs";
 import { World } from "../../objects/world/World.mjs";
 import { TransformBehaviour } from "../../objects/behaviour/TransformBehaviour.mjs";
@@ -10,6 +10,8 @@ import { Vector3 } from "../../../../../babylonjs/core/index.js";
 import { SimpleCollisionBehaviour } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
 import { PathBehaviour } from "../../objects/behaviour/PathBehaviour.mjs";
+import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
+import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
 
 
 /**
@@ -48,11 +50,16 @@ export class PhysicPack extends ObjectPack{
     anti_gravity= this.behav(new ConstantForceBehaviour(new Vector3(0,0.015,0)))
     high_anti_gravity= this.behav(new ConstantForceBehaviour(new Vector3(0,0.03,0)))
 
+    // Out of world
+    out_of_world_suppression= this.behav(behaviourEach(o=>o.apply(TRANSFORM, tf=>{if(tf.position.y<-100)o.kill()})))
+
     // Compilations
+    _FALLING= this.lazy(()=>[this.gravity.id, this.out_of_world_suppression.id])
+
     PHYSIC= this.lazy(()=>[this.transform.id, this.move.id, this.collision.id, this.pushable.id, this.solid.id])
     PHYSIC_SLIDE= this.lazy(()=>[this.transform.id, this.no_friction_move.id, this.collision.id, this.pushable.id, this.solid.id])
-    PHYSIC_FALLING= this.lazy(()=>[...this.PHYSIC(), this.gravity.id])
-    PHYSIC_FALLING_SLIDE= this.lazy(()=>[...this.PHYSIC_SLIDE(), this.gravity.id])
+    PHYSIC_FALLING= this.lazy(()=>[...this.PHYSIC(), ...this._FALLING()])
+    PHYSIC_FALLING_SLIDE= this.lazy(()=>[...this.PHYSIC_SLIDE(), ...this._FALLING()])
 
     MOVING= this.lazy(()=>[this.transform.id, this.no_friction_move.id, this.collision.id, this.solid.id])
     MOVING_GHOST= this.lazy(()=>[this.transform.id, this.no_friction_move.id, this.collision.id])

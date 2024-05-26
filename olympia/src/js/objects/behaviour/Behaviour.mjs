@@ -23,7 +23,6 @@ export class Behaviour{
      * @param {...ObjectQuery} objects
      */
     init(world, ...objects){
-        throw new Error("Undefined method")
     }
 
     /**
@@ -32,7 +31,6 @@ export class Behaviour{
      * @param {...ObjectQuery} objects 
      */
     tick(world, ...objects){
-        throw new Error("Undefined method")
     }
 
     /**
@@ -47,7 +45,6 @@ export class Behaviour{
      * @param {...ObjectQuery} objects
      */
     finish(world, ...objects){
-        throw new Error("Undefined method")
     }
 
 

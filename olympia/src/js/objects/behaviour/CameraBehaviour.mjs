@@ -13,8 +13,6 @@ export class CameraBehaviour extends Behaviour{
         super()
     }
 
-    init(){ }
-
     /**
      * @override
      * @type {Behaviour['tick']}
@@ -33,5 +31,4 @@ export class CameraBehaviour extends Behaviour{
         }
     }
 
-    finish(){ }
 }

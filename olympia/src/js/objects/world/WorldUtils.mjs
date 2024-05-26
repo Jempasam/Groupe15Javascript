@@ -1,4 +1,5 @@
 import { Vector3 } from "../../../../../babylonjs/core/index.js"
+import { fromVectorLike } from "../../typeutils/VectorLike.mjs"
 import { TransformModel } from "../model/TransformModel.mjs"
 import { World } from "./World.mjs"
 
@@ -94,12 +95,13 @@ function codeToNum(code){
 /** @typedef {import("./ModelHolder.mjs").ModelAndKey} ModelAndKey */
 
 /**
+ * @typedef {import("../../typeutils/VectorLike.mjs").VectorLike} VectorLike
  * @typedef {{
  *  tags?: Array<Tag> | (()=>Array<Tag>),
  *  models?: ()=>Array<ModelAndKey>,
- *  size?: Vector3 | ((it:Vector3)=>Vector3),
- *  position?: ((it:Vector3, tilesize:Vector3)=>Vector3),
- *  rotation?: ()=>Vector3
+ *  size?: VectorLike | ((it:Vector3)=>VectorLike),
+ *  position?: ((it:Vector3, tilesize:Vector3)=>VectorLike),
+ *  rotation?: ()=>VectorLike
  * }} ObjectDefinition
  */
 
@@ -116,7 +118,7 @@ function codeToNum(code){
  */
 export function createLevel(options){
     const name_length=options.name_length??1
-    const position=options.position??Vector3.Zero()
+    const position=options.position ?? Vector3.Zero()
 
     if(!(options.world instanceof World))throw new Error("options.world should be an instance of World")
     if(!(options.tile_size instanceof Vector3))throw new Error("options.tile_size should be an instance of Vector3")
@@ -134,27 +136,27 @@ export function createLevel(options){
             
             const tags= object.tags ? (Array.isArray(object.tags) ? object.tags : object.tags()) : []
 
-            const dim_transform = object.size ? ( object.size instanceof Vector3 ? it=>object.size : object.size) : it=>it
+            const dim_transform = object.size ? ( (object.size instanceof Vector3 || Array.isArray(object.size)) ? it=>object.size : object.size) : it=>it
 
             const pos_transform= object.position ? object.position : it=>it
 
             const models= object.models?.() ?? []
 
-            const rotation= object.rotation?.() ?? Vector3.Zero()
+            const rotation= fromVectorLike(object.rotation?.()) ?? Vector3.Zero()
 
             // Position and dimension
             let foot_height=codeToNum(letter.charCodeAt(name_length))
             let size_height=codeToNum(letter.charCodeAt(name_length+1))
 
             let tile_dimension=options.tile_size.multiplyByFloats(size[0], size_height, size[1])
-            let dimension=dim_transform(tile_dimension)
+            let dimension=fromVectorLike(dim_transform(tile_dimension))
 
             let coordinates=position.add(new Vector3(
                 -pos[0]*options.tile_size.x-tile_dimension.x/2,
                 options.tile_size.y*foot_height+tile_dimension.y/2, 
                 pos[1]*options.tile_size.z+tile_dimension.z/2
             ))
-            coordinates=pos_transform(coordinates,tile_dimension)
+            coordinates=fromVectorLike(pos_transform(coordinates,tile_dimension))
             
             options.world.add(tags, new TransformModel({rotation, position:coordinates, scale:dimension}), ...models)
         }, 2+name_length, true)

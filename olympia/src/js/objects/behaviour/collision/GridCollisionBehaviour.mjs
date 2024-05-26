@@ -41,8 +41,6 @@ export class GridCollisionBehaviour extends Behaviour{
         }
     }
 
-    init(){ }
-
     /**
      * @override
      * @param {World} world
@@ -115,5 +113,5 @@ export class GridCollisionBehaviour extends Behaviour{
         }
     }
 
-    finish(){ }
+
 }

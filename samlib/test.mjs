@@ -1,39 +1,17 @@
+import { adom } from "./DOM.mjs"
+import Assembler from "./gui/Assembler.mjs"
+import TemplateList from "./gui/TemplateList.mjs"
 import { merge } from "./inheritance/merge.mjs"
 
 
-class Animal{
-    get(){
-        console.log("Fur")
-    }
-    waf(){
-        console.log("Waf")
-    }
-}
 
-class Eatable{
-    get(){
-        console.log("Food")
-    }
-    eatable(){
-        console.log("I'm eatable")
-    }
-}
-
-class Pork{
-    jam(){
-        console.log("I'm pork")
-    }
-}
-function Date(){
-
-}
-Date.prototype={
-    get(){
-        console.log("Date")
-    }
-}
-
-console.log(Animal)
-console.log(Eatable)
-console.log(Pork)
-console.log(merge(Date,Eatable,Pork))
+document.querySelector("body")?.appendChild(adom/*html*/`
+<sam-template-list>
+    <div class="template">
+        <h1>Template</h1>
+        <p>Salut les bougs</p>
+        <input type="text" value="Hello World">
+        <input type="text" value="Hello World">
+    </div>
+</sam-template-list>
+`)

@@ -12,6 +12,7 @@ import { SCENE } from "../model/MeshModel.mjs"
 export class PathBehaviour extends Behaviour{
 
     out_access_duration=0
+    resize_timer=0
 
     /**
      * @param {Vector3} path_step
@@ -47,6 +48,8 @@ export class PathBehaviour extends Behaviour{
         const path=world.model.get(PATH)
         if(!path)this.createGrid(world,objects)
         else{
+
+            // Up size
             path.out_access=0
             this.fillTheGrid(world,objects)
             if(path.out_access>0){
@@ -58,6 +61,16 @@ export class PathBehaviour extends Behaviour{
                 }
             }
             else this.out_access_duration=0
+
+            // Down size
+            this.resize_timer++
+            if(this.resize_timer>600){
+                this.resize_timer=0
+                if(path.min_access.subtract(path.minimum).length() + path.max_access.subtract(path.maximum).length() > 10){
+                    this.createGrid(world,objects)
+                }
+            }
+
         }
     }
 
@@ -74,7 +87,6 @@ export class PathBehaviour extends Behaviour{
      * @param {ObjectQuery} objects
      */
     createGrid(world,objects){
-        console.log("create grid")
         // Get min and mex
         const minimum=new Vector3(Infinity,Infinity,Infinity)
         const maximum=new Vector3(-Infinity,-Infinity,-Infinity)
@@ -93,7 +105,6 @@ export class PathBehaviour extends Behaviour{
         const dx=Math.ceil((maximum.x-minimum.x)/this.path_step.x)
         const dy=Math.ceil((maximum.y-minimum.y)/this.path_step.y)
         const dz=Math.ceil((maximum.z-minimum.z)/this.path_step.z)
-        console.log("size",dx,dy,dz)
         const arrayx=new Array()
         for(let xx=0; xx<dx; xx++){
             const arrayy=new Array()
@@ -118,6 +129,7 @@ export class PathBehaviour extends Behaviour{
         path.content.forEach(e=>e.forEach(e=>e.fill(PathModel.EMPTY)))
         for(const obj of objects){
             obj.apply(TRANSFORM,t=>{
+                const old=path.out_access
                 const min=t.position.subtract(t.scale.scale(0.5))
                 const max=t.position.add(t.scale.scale(0.5))
                 path.setBetween(min,max,PathModel.SOLID)

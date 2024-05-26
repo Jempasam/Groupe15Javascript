@@ -60,7 +60,7 @@ export function adom(strings, ...values) {
  * Create an element using a selector like description
  * @param {string} element
  * @param {(string|HTMLCollection|Element)=} content
- * @returns {Element}
+ * @returns {HTMLElement}
  */
 export function create(element,content,content2){
     // Treat overloads

@@ -9,6 +9,8 @@ export class PathModel{
     /** @type {1|2|3} */ static MIXED=3
 
     out_access=0
+    min_access=new Vector3(Infinity,Infinity,Infinity)
+    max_access=new Vector3(-Infinity,-Infinity,-Infinity)
     
     /**
      * @param {Vector3} minimum
@@ -39,6 +41,8 @@ export class PathModel{
             inside=false
             this.out_access++
         }
+        this.min_access.minimizeInPlace(position)
+        this.max_access.maximizeInPlace(position)
         target[0]=Math.floor((position.x-this.minimum.x)/this.size.x*(this.content.length-0.0001))
         target[1]=Math.floor((position.y-this.minimum.y)/this.size.y*(this.content[0].length-0.0001))
         target[2]=Math.floor((position.z-this.minimum.z)/this.size.z*(this.content[0][0].length-0.0001))

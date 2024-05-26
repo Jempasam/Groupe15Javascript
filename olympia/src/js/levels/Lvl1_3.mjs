@@ -28,10 +28,8 @@ export class Lvl1_3 extends Level{
       message.send("Il fait chaud ici...",6000,"info")
       message.send("PV: 3", MessageManager.FOREVER, "pv")
 
-      const pack=new BasicPack(world,message)
+      const pack=new BasicPack(world, { next_levels:[context, ()=>new Lvl1_4()] })
       const player=pack.player
-
-      pack.objects["()"]={tags:[...pack.physic.STATIC_GHOST(), pack.model.vortex.id, pack.player.createLevelChange(context,()=>new Lvl1_4()).id]}
 
       createLevel({
          tile_size: new Vector3(1.5,0.5,1.5),
@@ -109,8 +107,6 @@ export class Lvl1_3 extends Level{
       this.player.observers(ON_LIVE_CHANGE).add("Lvl1_2",(obj,{})=>{
          message.send("PV: "+(obj.get(LIVING)?.life ?? 0), MessageManager.FOREVER, "pv")
       })
-
-      options.camera.lockedTarget=this.player.get(HITBOX)?.hitbox
    }
 
    camerapos=new Vector3(0,6,8)

@@ -23,8 +23,6 @@ export class EmitterBehaviour extends Behaviour{
         this.time_spacing=time_spacing
     }
     
-    init(){}
-
     /**
      * @override
      * @param {World} world
@@ -38,5 +36,4 @@ export class EmitterBehaviour extends Behaviour{
         }
     }
 
-    finish(){}
 }

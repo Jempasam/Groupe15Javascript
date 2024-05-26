@@ -34,7 +34,7 @@ export class ObjectPack{
     _registerNames(){
         for(let [key,value] of Object.entries(this)){
             if(value instanceof BehaviourElement){
-                //value._setId(key)
+                value._setId(key)
             }
             if(typeof value=="object" && ["number","string"].includes(typeof value.id)){
                 ObjectPack.#tag_names[value.id]=this.modifyNames(key)
@@ -51,6 +51,8 @@ export class ObjectPack{
 
     /** @param {Tag} tag @returns {string?}*/
     static getColor(tag){ return ObjectPack.#tag_colors[tag]??null}
+
+    static tags(){return Object.keys(ObjectPack.#tag_names)}
 
     static id_counter=34543
     #id(){ return ""+(ObjectPack.id_counter++) }
@@ -90,6 +92,15 @@ export class ObjectPack{
     lazy(factory){
         const ret=new LazyInit(factory)
         return ()=>ret.get()
+    }
+
+    /**
+     * @template T
+     * @param {()=>import("../../objects/world/World.mjs").ObjectDefinition} factory
+     * @returns {()=>import("../../objects/world/World.mjs").ObjectDefinition}
+     */
+    lazyDef(factory){
+        return this.lazy(factory)
     }
 
     empty(){
@@ -159,6 +170,6 @@ class BehaviourElement{
     }
 
     _setId(id){
-        this.#id=id+this.#id
+        if(!this.#created)this.#id=id+this.#id
     }
 }

@@ -41,6 +41,7 @@ export async function loadModels(scene){
         SPHINX: await model(scene,"sphinx","animal"),
         DEMON: await model(scene,"demon","animal"),
         GORILLA: await model(scene,"gorilla","animal"),
+        AIGLE_FEU_MOCHE: await model(scene,"aigle_feu_moche","animal"),
 
 
         BLOCK: await model(scene,"block"),
@@ -56,6 +57,8 @@ export async function loadModels(scene){
         HOLE: await model(scene,"hole"),
         BUILDING: await model(scene,"building"),
         PANNIER: await model(scene,"pannier"),
+        PORTAL: await model(scene,"portal"),
+        PANNIER_BASKET: await model(scene,"pannier_basket"),
 
         CACTUS: await model(scene,"cactus","decoration"),
         CACTUS2: await model(scene,"cactus2","decoration"),

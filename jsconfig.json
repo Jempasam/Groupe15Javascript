@@ -8,7 +8,7 @@
         "exactOptionalPropertyTypes": false
     },
     "exclude": [
-        "olympia/src/js/babylons.max.js",
+        "olympia/src/js/babylon.max.js",
         "entity-component"
     ]
 }

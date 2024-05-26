@@ -6,8 +6,6 @@ import { Behaviour } from "./Behaviour.mjs";
 
 export class TransformBehaviour extends Behaviour{
 
-    init(){ }
-
     /**
      * @override
      * @param {World} world
@@ -31,8 +29,6 @@ export class TransformBehaviour extends Behaviour{
             })
         }
     }
-
-    finish(){ }
 
     get order() {return 100}
 }

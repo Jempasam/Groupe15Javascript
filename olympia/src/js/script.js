@@ -87,7 +87,6 @@ async function createScene() {
     // Créer un joueur
     player = new Player("Player",0, 0, 0, 1, 1, 1, 0.03, 0.4, scene);
     // player = scene.player;
-    camera.lockedTarget = player.mesh;
     listes = [listeMonstres, listeGrounds, listeWalls, listeKillZones, listeWarpZones, listeLvlWarps, listeBreakableWalls, listeMoveGrounds, listeUnlocker, listeCanons, Boss, listeBombes];
     // Appeler le niveau
     changeLevel();

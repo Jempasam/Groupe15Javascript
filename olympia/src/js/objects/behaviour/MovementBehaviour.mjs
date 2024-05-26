@@ -58,5 +58,5 @@ export class MovementBehaviour extends Behaviour{
 
     get order() { return 1 }
 
-    finish(){ }
+
 }

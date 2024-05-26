@@ -45,6 +45,8 @@ export class ModelPack extends ObjectPack{
     cactus= this.behav(()=>new MeshBehaviour(this.models.CACTUS))
     cactus2= this.behav(()=>new MeshBehaviour(this.models.CACTUS2))
     cactus3= this.behav(()=>new MeshBehaviour(this.models.CACTUS3))
+    portal= this.behav(()=>new MeshBehaviour(this.models.PORTAL))
+    pannier_basket= this.behav(()=>new MeshBehaviour(this.models.PANNIER_BASKET))
     
     magma= this.behav(()=>new MeshBehaviour(this.models.MAGMA))
     rock_floor= this.behav(()=>new MeshBehaviour(this.models.ROCK))
@@ -66,6 +68,7 @@ export class ModelPack extends ObjectPack{
     bonnet= this.behav(()=>new MeshBehaviour(this.models.BONNET))
     sphinx= this.behav(()=>new MeshBehaviour(this.models.SPHINX))
     gorilla= this.behav(()=>new MeshBehaviour(this.models.GORILLA))
+    aigle_feu_moche= this.behav(()=>new MeshBehaviour(this.models.AIGLE_FEU_MOCHE))
 
     // Objects
     artifact= this.behav(()=>new MeshBehaviour(this.models.ARTIFACT))

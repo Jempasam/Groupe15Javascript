@@ -16,8 +16,6 @@ export class ConstantForceBehaviour extends Behaviour{
         this.force=force
     }
 
-    init(){ }
-
     /**
      * @override
      * @param {World} world
@@ -31,6 +29,4 @@ export class ConstantForceBehaviour extends Behaviour{
             movement.inertia.addInPlace(this.force)
         }
     }
-
-    finish(){ }
 }

@@ -21,6 +21,11 @@ import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { Team } from "../../objects/model/TeamModel.mjs";
 import { MessageManager } from "../../messages/MessageManager.mjs";
 import { ElementPack } from "./ElementPack.mjs";
+import { Level, LevelContext } from "../Level.mjs";
+import { NAME } from "../../objects/behaviour/life/LifeBarBehaviour.mjs";
+import { SoundPack } from "./SoundPack.mjs";
+import { SOUND } from "../../objects/behaviour/MusicBehaviour.mjs";
+import { Sounds } from "../../ressources/SoundBank.mjs";
 
 
 
@@ -31,8 +36,10 @@ export class BasicPack extends ObjectPack{
 
     /**
      * @param {World} world
+     * @param {object} options
+     * @param {[LevelContext,()=>Level]=} options.next_levels
      */
-    constructor(world){
+    constructor(world,options={}){
         super(world)
 
         let physic= this.physic= new PhysicPack(world)
@@ -46,6 +53,9 @@ export class BasicPack extends ObjectPack{
         let player= this.player= new PlayerPack(world, element)
         let ia= this.ia= new IAPack(world, living)
         let monster= this.monster= new MonsterPack(world, fight, ia, player,soil)
+        let sound= this.sound= new SoundPack(world,player)
+
+        this.NEXT_LEVEL= options.next_levels==null ? [] : [player.createLevelChange(options.next_levels[0],options.next_levels[1]).id]
 
         /** @type {Object.<string,import("../../objects/world/WorldUtils.mjs").ObjectDefinition>} */
         this.objects={
@@ -62,10 +72,13 @@ export class BasicPack extends ObjectPack{
             "#M": { tags:[...physic.STATIC(), ...soil.TRAMPOLINE()] },
             "#c": { tags:[...physic.STATIC(), model.cactus.id, soil.damaging.id], size: it=>it.multiplyByFloats(.4,1,.4) },
             "#C": { tags:[...physic.STATIC(), model.cactus2.id, soil.damaging.id], size: it=>it.multiplyByFloats(.4,1,.4) },
+            "#p": { tags:[...physic.STATIC(), model.pannier_basket.id], size: it=>it.multiplyByFloats(.1,1,.1), rotation:()=>[0,-Math.PI/2,0]},
+            "#q": { tags:[...physic.STATIC(), model.pannier_basket.id], size: it=>it.multiplyByFloats(.1,1,.1), rotation:()=>[0,Math.PI/2,0]},
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},
             ":d": { tags:[...monster.DEMON()], models:()=>[fight.bad]},
+            ":m": { tags:[...monster.FIREBIRD()], models:()=>[fight.bad, new LivingModel(20), [NAME,"Firebird"]]},
 
             "#~": { tags:[...physic.STATIC(), ...soil.MUD()] },
             "#x": { tags:[...physic.STATIC(), ...soil.LAVA()] },
@@ -112,27 +125,29 @@ export class BasicPack extends ObjectPack{
 
             "$h": { tags:[...physic.STATIC_GHOST(), model.heart.id, living.health_giver.id] },
 
-            "+p": { tags:[...physic.STATIC(), model.hole.id, monster.panda_summoner.id] },
-            "+k": { tags:[...physic.STATIC(), model.hole.id, monster.kangaroo_summoner.id] },
-            "+b": { tags:[...physic.STATIC(), model.hole.id, monster.bird_summoner.id] },
-            "+s": { tags:[...physic.STATIC(), model.hole.id, monster.sphinx_summoner.id] },
-            "+o": { tags:[...physic.STATIC(), model.pannier.id, model.smoke.id, monster.basketball_summoner.id] },
-            "+O": { tags:[...physic.STATIC(), model.pannier.id, model.flame.id, monster.super_basketball_summoner.id] },
-            "+d": { tags:[...physic.STATIC(), model.hole.id, monster.demon_summoner.id]},
+            "+p": { tags:[...physic.STATIC(), model.hole.id, monster.panda_summoner.id], models:()=>[fight.bad] },
+            "+k": { tags:[...physic.STATIC(), model.hole.id, monster.kangaroo_summoner.id], models:()=>[fight.bad] },
+            "+b": { tags:[...physic.STATIC(), model.hole.id, monster.bird_summoner.id], models:()=>[fight.bad] },
+            "+s": { tags:[...physic.STATIC(), model.hole.id, monster.sphinx_summoner.id], models:()=>[fight.bad] },
+            "+o": { tags:[...physic.STATIC(), model.pannier.id, model.smoke.id, monster.basketball_summoner.id], models:()=>[fight.bad] },
+            "+O": { tags:[...physic.STATIC(), model.pannier.id, model.flame.id, monster.super_basketball_summoner.id], models:()=>[fight.bad] },
+            "+d": { tags:[...physic.STATIC(), model.hole.id, monster.demon_summoner.id], models:()=>[fight.bad]},
+            "+B": { tags:[...physic.STATIC(), model.hole.id, monster.firebird_summoner.id], models:()=>[fight.bad]},
 
             "PP": {
                 tags:[...player.CLASSIC_PLAYER(), model.bonnet.id, player.inventory.id],
-                models:()=>[new LivingModel(3), fight.good],
+                models:()=>[new LivingModel(3), fight.good, [NAME,"Frigeosaure"]],
                 size: it=>it.multiplyByFloats(.7,1.2,.7)
             },
 
             "Pp": {
                 tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
-                models:()=>[new LivingModel(3), fight.good],
+                models:()=>[new LivingModel(3), fight.good, [NAME,"Petit Frigeosaure"]],
                 size: it=>it.multiplyByFloats(.5,.6,.5)
             },
 
-            "()":{ tags: [...physic.STATIC(), model.vortex.id]},
+            "()":{ tags: [...physic.STATIC(), model.portal.id, ...this.NEXT_LEVEL], size:it=>it.multiplyByFloats(1,1,.2) },
+            ")(":{ tags: [...physic.STATIC(), model.portal.id, ...this.NEXT_LEVEL], size:it=>it.multiplyByFloats(1,1,.2), rotation: ()=>new Vector3(0,Math.PI/2,0) },
 
             "?1": { tags:[...physic.STATIC(), model.question_mark.id] },
             "?2": { tags:[...physic.STATIC(), model.question_mark.id] },
@@ -148,6 +163,7 @@ export class BasicPack extends ObjectPack{
 
             "<>": { tags:[...physic.MOVING_GHOST_FRICTION(), physic.pushable.id, player.camera_movement.id, player.camera.id], size:it=>it.scale(1.4)},
 
+            "Ma": { tags:[sound.music.id], models:()=>[[SOUND, Sounds.ASH_PLANKS]] }
         }
     }
 }

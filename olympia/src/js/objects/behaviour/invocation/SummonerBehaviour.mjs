@@ -1,11 +1,12 @@
-import { Vector3 } from "../../../../../babylonjs/core/index.js"
-import { fastRemove } from "../../../../../samlib/Array.mjs"
-import { MOVEMENT, accelerate } from "../model/MovementModel.mjs"
-import { TRANSFORM, TransformModel } from "../model/TransformModel.mjs"
-import { GameObject } from "../world/GameObject.mjs"
-import { ModelKey } from "../world/ModelHolder.mjs"
-import { ObjectQuery, World } from "../world/World.mjs"
-import { Behaviour } from "./Behaviour.mjs"
+import { Vector3 } from "../../../../../../babylonjs/core/index.js"
+import { fastRemove } from "../../../../../../samlib/Array.mjs"
+import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs"
+import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs"
+import { GameObject } from "../../world/GameObject.mjs"
+import { ModelKey } from "../../world/ModelHolder.mjs"
+import { ObjectQuery, World } from "../../world/World.mjs"
+import { Behaviour } from "../Behaviour.mjs"
+import { invocate } from "./invocations.mjs"
 
 
 /**
@@ -18,21 +19,21 @@ export class SummonerBehaviour extends Behaviour{
 
     /**
      * 
-     * @param {import("../world/World.mjs").ObjectDefinition} definition La définition de l'objet
-     * @param {Vector3=} relative_size La taille des objets invoqués relativement la la plus petite dimension horizontale de l'invoqueur
+     * @param {import("./invocations.mjs").Invocation} invocation La définition de l'objet
      * @param {number=} max_count Le nombre maximum d'objets invoqués 
      * @param {number=} interval L'intervalle entre chaque invocation
      * @param {number=} distance La distance maximale entre l'invoqueur et les objets invoqués, si les objets vont trop loins, ils sont attirés vers l'invocateur
      * @param {number=} dispawn_distance La distance maximale entre l'invoqueur et les objets du second tag avant que les objets invoqués soient détruits
+     * @param {number=} max_invocation Le nombre d'objet à invoquer avant que l'invocateur disparaisse
      */
-    constructor(definition, relative_size=Vector3.One(), max_count=1, interval=40, distance=6, dispawn_distance=10){
+    constructor(invocation, max_count=1, interval=40, distance=6, dispawn_distance=10, max_invocation=Infinity){
         super()
-        this.definition=definition
-        this.relative_size=relative_size
+        this.invocation=invocation
         this.max_count=max_count
         this.interval=interval
         this.distance=distance
         this.dispawn_distance=dispawn_distance
+        this.max_invocation=max_invocation
 
     }
 
@@ -41,7 +42,7 @@ export class SummonerBehaviour extends Behaviour{
      * @param {ObjectQuery} objects
      */
     init(_,objects){
-        for(const obj of objects) obj.getOrSet([LOCAL,this.uid],()=>({loading:0,objects:[]}))
+        for(const obj of objects) obj.getOrSet([LOCAL,this.uid],()=>({loading:0,objects:[],invocated:0}))
     }
 
     /**
@@ -54,6 +55,14 @@ export class SummonerBehaviour extends Behaviour{
         for(let obj of objects){
             obj.apply2([LOCAL,this.uid],TRANSFORM, (summoner,tf)=>{
                 summoner.loading++
+                if(summoner.invocated>this.max_invocation && summoner.objects.length<=0){
+                    summoner.invocated=-20
+                }
+                else if(summoner.invocated<0){
+                    tf.scale.scaleInPlace(0.9)
+                    if(summoner.invocated==-1)obj.kill()
+                    else summoner.invocated++
+                }
                 if(summoner.loading>this.interval){
                     summoner.loading=0
                     
@@ -63,14 +72,14 @@ export class SummonerBehaviour extends Behaviour{
                     }
 
                     // Summon
-                    if(summoner.objects.length<this.max_count){
-                        const maxdim=Math.min(tf.scale.x,tf.scale.z)
-                        const size=this.relative_size.scale(maxdim)
-                        const pos=tf.position.clone() .addInPlaceFromFloats(0,(tf.scale.y+size.y)/2,0)
-                        const obj=world.addDef(this.definition, new TransformModel({position:pos, scale:size, rotation:tf.rotation.clone()}))
-                        summoner.objects.push(obj)
-
+                    if(summoner.invocated<this.max_invocation && summoner.objects.length<this.max_count){
+                        const invoked=invocate(world, obj, this.invocation)
+                        invoked.apply(TRANSFORM, tfnew=>{
+                            tfnew.position.copyFrom(tf.position.clone().addInPlaceFromFloats(0,(tf.scale.y+tfnew.scale.y)/2,0))
+                        })
                         obj.apply(MOVEMENT, mv=>mv.inertia.y+=0.2)
+                        summoner.objects.push(invoked)
+                        summoner.invocated++
                     }
 
                     // Kill everybody if players is too far away
@@ -94,7 +103,7 @@ export class SummonerBehaviour extends Behaviour{
                         const offset=tf.position.subtract(ttf.position)
                         if(offset.length()>this.distance){
                             const d=offset.multiplyInPlace(new Vector3(1,0,1)).normalize().scaleInPlace(0.2)
-                            accelerate(tmv.inertia, d.x,d.y,d.z, d.x,d.y,d.z)
+                            accelerate(tmv.inertia, d.x,d.y,d.z, Math.abs(d.x), Math.abs(d.y), Math.abs(d.z))
                         }
                         if(offset.length()>this.distance*1.5){
                             obj.kill()
@@ -114,5 +123,5 @@ export class SummonerBehaviour extends Behaviour{
     }
 }
 
-/** @type {ModelKey<{loading:number, objects:GameObject[]}>} */
+/** @type {ModelKey<{loading:number, objects:GameObject[], invocated:number}>} */
 const LOCAL=new ModelKey("local")

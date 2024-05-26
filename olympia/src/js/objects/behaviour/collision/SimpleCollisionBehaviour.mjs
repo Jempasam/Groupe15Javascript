@@ -10,8 +10,6 @@ export const ON_COLLISION=new ObserverKey("onCollision")
 
 export class SimpleCollisionBehaviour extends Behaviour{
 
-    init(){ }
-
     /**
      * @override
      * @param {World} world
@@ -35,5 +33,5 @@ export class SimpleCollisionBehaviour extends Behaviour{
         }
     }
 
-    finish(){ }
+
 }

@@ -53,14 +53,9 @@ export class SamLevel extends Level{
          return ret
       }
       
-      const base=new BasicPack(world,message)
+      const base=new BasicPack(world, { next_levels:[context, ()=>new Lvl1_3()] })
       const player=base.player
-
-      // Platform
-      const MOVING=behav(new PathBehaviour([new Vector3(-7,0,0),new Vector3(7,0,0),new Vector3(7,5,0)], 0.1, 0.02, 0.04))
-
-      base.objects["()"]={tags:[...base.physic.STATIC_GHOST(), base.model.vortex.id, base.player.createLevelChange(context,()=>new Lvl1_3()).id]}
-   
+ 
       createLevel({
          tile_size: new Vector3(1.5,0.5,1.5),
          position: new Vector3(-4,0,-8),
@@ -132,10 +127,7 @@ export class SamLevel extends Level{
          message.send("PV: "+(obj.get(LIVING)?.life ?? 0), MessageManager.FOREVER, "pv")
       })
 
-      options.camera.lockedTarget=this.player.get(HITBOX)?.hitbox
    }
-
-   camerapos=new Vector3(0,6,8)
 
    /**
     * @param {LevelContext} context

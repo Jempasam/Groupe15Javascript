@@ -9,6 +9,7 @@ import { World } from "../../objects/world/World.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
 import { ParticlePack } from "./ParticlePack.mjs";
 import { behaviourCollectable } from "../../objects/behaviour/generic/CollectableBehaviour.mjs";
+import { LifeBarBehaviour } from "../../objects/behaviour/life/LifeBarBehaviour.mjs";
 
 
 
@@ -37,6 +38,7 @@ export class LivingPack extends ObjectPack{
         if(t.position.y<-10)l.damage(3)
     })))
     respawn=this.behav(new RespawnBehaviour())
+    lifebar=this.behav(new LifeBarBehaviour())
 
     // Items
     health_giver=this.behav(tags(()=>this.living.id), behaviourCollectable({use_count:Number.MAX_SAFE_INTEGER, reload_time:200},(_,obj)=>{

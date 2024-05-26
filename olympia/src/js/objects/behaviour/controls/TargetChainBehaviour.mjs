@@ -37,7 +37,7 @@ export function FOLLOW_RELATIVE(offset){
         forward.y=0
         forward.normalize()
         const right=new Vector3(-forward.z,0,forward.x)
-        const pos=forward.scaleInPlace(offset.z).addInPlace(right.scaleInPlace(offset.x)).addInPlace(Vector3.Up().scaleInPlace(offset.y))
+        const pos=forward.scaleInPlace(offset.z) .addInPlace(right.scaleInPlace(offset.x)) .addInPlace(Vector3.Up().scaleInPlace(offset.y))
         return ennemy.position.add(pos)
     }
 }
@@ -103,11 +103,13 @@ export class TargetChainBehaviour extends Behaviour{
     /**
      * @param {number} follow_distance
      * @param {(TaskEntry|{random:TaskEntry[]})[]} tasks
+     * @param {Vector3=} random_offset
      */
-    constructor(follow_distance, tasks){
+    constructor(follow_distance, tasks, random_offset){
         super()
         this.follow_distance=follow_distance
         this.tasks=tasks
+        this.random_offset=Vector3.Zero()
     }
 
     /**
@@ -163,10 +165,13 @@ export class TargetChainBehaviour extends Behaviour{
                         break
                     }
                 }
-                if(!found)found=objpos
                 
                 // Get the position
-                local.target_pos=local.target_task[0](objpos,found) ?? found.position
+                if(!found)local.target_pos=objpos.position
+                else{
+                    local.target_pos=local.target_task[0](objpos,found) ?? found.position
+                    local.target_pos.addInPlace(Vector3.Random(-1,1).multiply(this.random_offset))
+                }
             }
             
             // Move toward the target

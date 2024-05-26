@@ -62,9 +62,8 @@ export class PushCollisionBehaviour extends Behaviour{
         }
     }
 
-    tick(){}
     doTick=false
-
+    
     /**
      * @override
      * @param {World} world

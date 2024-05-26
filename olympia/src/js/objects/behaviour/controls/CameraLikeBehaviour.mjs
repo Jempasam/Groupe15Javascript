@@ -6,11 +6,7 @@ import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs";
 import { GameObject } from "../../world/GameObject.mjs";
 
 export class CameraLikeBehaviour extends Behaviour{
-
-    /** @type {Behaviour['init']} */
-    init(world,objects,targets){
-    }
-
+    
     /** @type {Behaviour['init']} */
     tick(world,objects, targets){
 

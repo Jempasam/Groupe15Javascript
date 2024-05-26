@@ -8,35 +8,32 @@ import { Behaviour } from "../Behaviour.mjs";
 import { TEAM } from "../../model/TeamModel.mjs";
 import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { GameObject } from "../../world/GameObject.mjs";
+import { invocate } from "./invocations.mjs";
 
 /**
  * Fait tirer un objet lors de l'appui sur une touche
  */
-export class PlayerShootBehaviour extends Behaviour{
+export class ShootBehaviour extends Behaviour{
 
     /**
      * @param {string?} key La touche à presser pour tirer
-     * @param {import("../../world/TaggedDict.mjs").Tag[]} tags Les tags à donner aux projectiles
+     * @param {import("./invocations.mjs").Invocation} invocation Le projectile invoqué
      * @param {object} param0
      * @param {number=} param0.strength La force du tir
      * @param {number=} param0.reloading_time Le temps de rechargement
-     * @param {Vector3=} param0.size La taille des projectiles
      * @param {number=} param0.shoot_count Le nombre de projectiles tirable à chaque rechargement
      * @param {number=} param0.cadency La cadence de tir
      * @param {number=} param0.knockback Le recul infligé au tireur
-     * @param {boolean=} param0.doCopyTeam Si vrai, les projectiles tirés auront la même équipe que le tireur
      */
-    constructor(key, tags, {strength=0.1, reloading_time=40, size=Vector3.One(), shoot_count=1, cadency=20, knockback=1, doCopyTeam=true}={}){
+    constructor(key, invocation, {strength=0.1, reloading_time=40, shoot_count=1, cadency=20, knockback=1}={}){
         super()
         this.key=key
         this.strength=strength
         this.reloading_time=reloading_time
-        this.tags=tags
-        this.size=size
+        this.invocation=invocation
         this.shoot_count=shoot_count
         this.cadency=cadency
         this.knockback=knockback
-        this.doCopyTeam=doCopyTeam
     }
 
     /**
@@ -58,7 +55,6 @@ export class PlayerShootBehaviour extends Behaviour{
     tick(world, objects){
         for(const obj of objects){
             const shooting=obj.get(SHOOTING); if(!shooting)continue
-            const transform=obj.get(TRANSFORM) ?? new TransformModel({})
             if(shooting.cooldown<=0){
                 if((this.key==null || isKeyPressed(this.key)) && shooting.munition>0){
                     obj.apply2(MOVEMENT, TRANSFORM, (move,tf)=>{
@@ -71,22 +67,18 @@ export class PlayerShootBehaviour extends Behaviour{
                         accelerateX(move.inertia, knockback.x*2, Math.abs(knockback.x))
                         accelerateZ(move.inertia, knockback.z*2, Math.abs(knockback.z))
                         
-                        const bullet_location=transform.position.clone().addInPlaceFromFloats(
-                            (tf.scale.x/2+this.size.x/2)*direction.x,
-                            0,
-                            (tf.scale.z/2+this.size.z/2)*direction.z,
+                        const projectile=invocate(world, obj, this.invocation,
+                            new MovementModel(inertia),
                         )
+                        projectile.apply(TRANSFORM, tfproj=>{
+                            tfproj.position.copyFrom(tf.position.clone().addInPlaceFromFloats(
+                                (tf.scale.x/2+tfproj.scale.x/2)*direction.x,
+                                0,
+                                (tf.scale.z/2+tfproj.scale.z/2)*direction.z,
+                            ))
+                        })
                         
-                        const min_dimension=Math.min(transform.scale.x, transform.scale.y, transform.scale.z)
-                        const bullet_size=this.size.scale(min_dimension)
-
-                        const proj=world.add(
-                            this.tags,
-                            new TransformModel({position:bullet_location, scale:bullet_size, rotation:tf.rotation.clone()}),
-                            [MOVEMENT,new MovementModel(inertia)],
-                        )
-                        if(this.doCopyTeam)obj.apply(TEAM, team=>proj.set(TEAM,team))
-                        obj.observers(ON_SHOOT).notify({shooter:obj, shooted:proj, model:shooting})
+                        obj.observers(ON_SHOOT).notify({shooter:obj, shooted:projectile, model:shooting})
                     })
                     shooting.cooldown=this.cadency
                     shooting.reloading=this.reloading_time

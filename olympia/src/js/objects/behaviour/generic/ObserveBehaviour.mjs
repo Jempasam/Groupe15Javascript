@@ -13,7 +13,6 @@ export class ObserveBehaviour extends Behaviour{
     /** @type {ListenerAndKey<*>[]} */
     listeners=[]
 
-    tick(world, ...objects){ }
     doTick=false
 
     init(world, objects){

@@ -20,8 +20,6 @@ export class PoisonBehaviour extends Behaviour{
         this.interval=interval
     }
 
-    init(_,objects){ }
-
     /**
      * @override
      * @param {World} world
@@ -36,5 +34,4 @@ export class PoisonBehaviour extends Behaviour{
         }
     }
 
-    finish(_,objects){ }
 }

@@ -2,6 +2,7 @@ import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mj
 import { LIVING, LivingModel } from "../../model/LivingModel.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
+import { NAME } from "./LifeBarBehaviour.mjs";
 
 
 export class LivingBehaviour extends Behaviour{
@@ -48,7 +49,7 @@ export class LivingBehaviour extends Behaviour{
      */
     finish(world,objects){
         for(let obj of objects){
-            obj.remove(LIVING)
+            //obj.remove(LIVING)
         }
     }
 

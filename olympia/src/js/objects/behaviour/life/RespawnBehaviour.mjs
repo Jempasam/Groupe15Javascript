@@ -35,7 +35,6 @@ export class RespawnBehaviour extends Behaviour{
         }
     }
 
-    tick(world, objects){}
     doTick=false
 
     /**
