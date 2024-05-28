@@ -81,6 +81,8 @@ export class BasicPack extends ObjectPack{
             "#p": { tags:[...physic.STATIC(), model.pannier_basket.id], size: it=>it.multiplyByFloats(.1,1,.1), rotation:()=>[0,-Math.PI/2,0]},
             "#q": { tags:[...physic.STATIC(), model.pannier_basket.id], size: it=>it.multiplyByFloats(.1,1,.1), rotation:()=>[0,Math.PI/2,0]},
             "#v": { tags:[...physic.STATIC(), model.volcano.id]},
+            "#-": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.1,1,1), rotation:()=>[0,Math.PI/2,0]},
+            "#|": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.1,1,1), rotation:()=>[0,0,0]},
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},
