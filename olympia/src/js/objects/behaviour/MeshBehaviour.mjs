@@ -93,5 +93,5 @@ export class MeshBehaviour extends Behaviour{
         }
     }
 
-    get order() {return 2}
+    get order() {return 3}
 }

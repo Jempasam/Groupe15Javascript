@@ -75,11 +75,6 @@ export function generateParticle(world, transform, definition, size){
     position.subtractInPlace(transform.scale.scale(0.5))
     position.addInPlace(transform.position)
     world.addDef(definition, new TransformModel({position:position, scale:size, rotation:new Vector3(0, Math.random()*Math.PI*2, 0)}))
-    /*let position=transform.scale.clone()
-    position.multiplyInPlace(Vector3.Random(0,1))
-    position.subtractInPlace(transform.scale.scale(0.5))
-    position.addInPlace(transform.position)
-    world.add(particle_tags, new TransformModel({scale:particle_size, position}))*/
 }
 
 

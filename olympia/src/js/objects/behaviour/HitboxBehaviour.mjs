@@ -17,9 +17,9 @@ export class HitboxBehaviour extends Behaviour{
             obj.getOrSet(HITBOX,()=>{
                 const ret=new HitboxModel(world)
                 const transform=obj.get(TRANSFORM); if(!transform)return ret
-                ret.hitbox.position=transform.position
-                ret.hitbox.rotation=transform.rotation
-                ret.hitbox.scaling=transform.scale
+                ret.hitbox.position.copyFrom(transform.position)
+                ret.hitbox.rotation.copyFrom(transform.rotation)
+                ret.hitbox.scaling.copyFrom(transform.scale)
                 return ret
             })
         }
@@ -35,9 +35,9 @@ export class HitboxBehaviour extends Behaviour{
             let hitbox=obj.get(HITBOX)?.hitbox
             if(!hitbox)continue
             let transform=obj.get(TRANSFORM) ?? TransformModel.ZERO
-            if(transform.position._isDirty) hitbox.position=transform.position
-            if(transform.rotation._isDirty) hitbox.rotation=transform.rotation
-            if(transform.scale._isDirty) hitbox.scaling=transform.scale
+            if(transform.position._isDirty) hitbox.position.copyFrom(transform.position)
+            if(transform.rotation._isDirty) hitbox.rotation.copyFrom(transform.rotation)
+            if(transform.scale._isDirty) hitbox.scaling.copyFrom(transform.scale)
         }
     }
 
@@ -53,5 +53,5 @@ export class HitboxBehaviour extends Behaviour{
         }
     }
 
-    get order() {return 2}
+    get order() {return 3}
 }
