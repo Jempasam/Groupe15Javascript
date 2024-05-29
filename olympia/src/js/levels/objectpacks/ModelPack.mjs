@@ -37,6 +37,7 @@ export class ModelPack extends ObjectPack{
     stone= this.behav(()=>new MeshBehaviour(this.models.STONE))
     hole= this.behav(()=>new MeshBehaviour(this.models.HOLE))
     building= this.behav(()=>new MeshBehaviour(this.models.BUILDING))
+    building2= this.behav(()=>new MeshBehaviour(this.models.BUILDING2))
     stone_wall= this.behav(()=>new MeshBehaviour(this.models.STONE_WALL))
     wood= this.behav(()=>new MeshBehaviour(this.models.WOOD))
     barril= this.behav(()=>new MeshBehaviour(this.models.BARRIL))
@@ -49,6 +50,16 @@ export class ModelPack extends ObjectPack{
     pannier_basket= this.behav(()=>new MeshBehaviour(this.models.PANNIER_BASKET))
     volcano= this.behav(()=>new MeshBehaviour(this.models.VOLCANO))
     barrier= this.behav(()=>new MeshBehaviour(this.models.BARRIER))
+    pipe= this.behav(()=>new MeshBehaviour(this.models.PIPE))
+    sewer= this.behav(()=>new MeshBehaviour(this.models.SEWER))
+    car= this.behav(()=>new MeshBehaviour(this.models.CAR))
+
+    big_cloud= this.behav(()=>new MeshBehaviour(this.models.CLOUD))
+
+    // Environments
+    sky= this.behav(()=>new MeshBehaviour(this.models.ENV_SKY))
+    sand= this.behav(()=>new MeshBehaviour(this.models.ENV_SAND))
+    hell= this.behav(()=>new MeshBehaviour(this.models.ENV_HELL))
     
     magma= this.behav(()=>new MeshBehaviour(this.models.MAGMA))
     rock_floor= this.behav(()=>new MeshBehaviour(this.models.ROCK))
@@ -61,6 +72,7 @@ export class ModelPack extends ObjectPack{
     heart= this.behav(()=>new MeshBehaviour(this.models.HEART))
     potion= this.behav(()=>new MeshBehaviour(this.models.POTION))
     sphere= this.behav(()=>new MeshBehaviour(this.models.SPHERE))
+    checkpoint= this.behav(()=>new MeshBehaviour(this.models.CHECKPOINT))
 
     // Monsters
     panda= this.behav(()=>new MeshBehaviour(this.models.PANDA))
@@ -95,6 +107,7 @@ export class ModelPack extends ObjectPack{
     blood= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_BLOOD))
     wood_piece= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_WOOD))
     pingpong= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_PINGPONG))
+    darkness= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_DARKNESS))
 
     explosion= this.behav(()=>new MeshBehaviour(this.models.EXPLOSION))
     sphere_explosion= this.behav(()=>new MeshBehaviour(this.models.SPHERE_EXPLOSION))

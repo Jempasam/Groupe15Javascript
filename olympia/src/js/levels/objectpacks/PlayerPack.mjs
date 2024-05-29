@@ -53,7 +53,7 @@ export class PlayerPack extends ObjectPack{
     // Controls
     move=this.behav(new PlayerBehaviour(["KeyA","KeyW","KeyD","KeyS"],0.03,0.1))
 
-    dash=this.behav(()=>new PlayerDashBehaviour("ShiftLeft", 0.4, 40, 1, this._particle.CLOUD()))
+    dash=this.behav(()=>new PlayerDashBehaviour("ShiftLeft", 0.4, 40, 1, this._particle.BIG_SMOKE()))
 
     jump=this.behav(tags(()=>this._physic.solid.id), ()=>new PlayerJumpBehaviour("Space", 0.3, 1, this._particle.WIND()))
 

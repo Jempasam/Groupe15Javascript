@@ -4,6 +4,7 @@ import { HemisphericLight } from "../../../babylonjs/core/Lights/hemisphericLigh
 import { Color3 } from "../../../babylonjs/core/Maths/math.color.js";
 import { Vector3 } from "../../../babylonjs/core/Maths/math.vector.js";
 import { SceneOptimizer, SceneOptimizerOptions } from "../../../babylonjs/core/Misc/sceneOptimizer.js";
+import { MeshBuilder } from "../../../babylonjs/core/index.js";
 import { Scene } from "../../../babylonjs/core/scene.js";
 import { adom, create } from "../../../samlib/DOM.mjs";
 import { Level, LevelContext } from "./levels/Level.mjs";

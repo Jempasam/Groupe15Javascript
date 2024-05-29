@@ -1,33 +1,12 @@
-import { Camera } from "../../../../babylonjs/core/Cameras/camera.js";
-import { UniversalCamera, Vector3 } from "../../../../babylonjs/core/index.js";
+import { UniversalCamera } from "../../../../babylonjs/core/index.js";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
-import { MessageManager } from "../messages/MessageManager.mjs";
-import { Behaviour } from "../objects/behaviour/Behaviour.mjs";
-import { ON_DEATH, ON_LIVE_CHANGE } from "../objects/behaviour/life/LivingBehaviour.mjs";
-import { PathBehaviour } from "../objects/behaviour/movement/PathBehaviour.mjs";
-import { ON_EQUIPPED } from "../objects/behaviour/slot/EquipperBehaviour.mjs";
-import { HITBOX } from "../objects/model/HitboxModel.mjs";
-import { LIVING, LivingModel } from "../objects/model/LivingModel.mjs";
-import { MOVEMENT } from "../objects/model/MovementModel.mjs";
-import { TRANSFORM } from "../objects/model/TransformModel.mjs";
 import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
 import { message } from "../script.js";
 import { Level, LevelContext } from "./Level.mjs";
-import { LiveEditor } from "./LiveEditor.mjs";
-import { Lvl1_2 } from "./Lvl1_2.mjs";
+import { LIVE_EDITOR_SETTINGS, LiveEditor } from "./LiveEditor.mjs";
 import { VolcanoField } from "./lava/VolcanoField.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
-import { EffectPack } from "./objectpacks/EffectPack.mjs";
-import { FightPack } from "./objectpacks/FightPack.mjs";
-import { IAPack } from "./objectpacks/IAPack.mjs";
-import { LivingPack } from "./objectpacks/LivingPack.mjs";
-import { ModelPack } from "./objectpacks/ModelPack.mjs";
-import { MonsterPack } from "./objectpacks/MonsterPack.mjs";
-import { ParticlePack } from "./objectpacks/ParticlePack.mjs";
-import { PhysicPack } from "./objectpacks/PhysicPack.mjs";
-import { PlayerPack } from "./objectpacks/PlayerPack.mjs";
-import { SoilPack } from "./objectpacks/SoilPack.mjs";
 
 export class HubLevel extends Level{
 
@@ -41,13 +20,10 @@ export class HubLevel extends Level{
       
       const base=new BasicPack(world, { next_levels: ()=>new VolcanoField() })
       const player=base.player
- 
       createLevel({
-         tile_size: new Vector3(1.5,0.5,1.5),
-         position: new Vector3(-4,0,-8),
+         ...LIVE_EDITOR_SETTINGS,
          world,
          objects: base.objects,
-         name_length: 2,
          maps:[
             `
             1  ]#^03##06-...-...-...-...    #^09                            ##08-...-...-...-...-...-...##0H-...-...#m08-...-...-...-...#x02--------#m08-...-...-...-...

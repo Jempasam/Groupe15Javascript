@@ -1,41 +1,20 @@
 import { Camera } from "../../../../babylonjs/core/Cameras/camera.js";
 import { UniversalCamera, Vector3 } from "../../../../babylonjs/core/index.js";
+import { adom, create } from "../../../../samlib/DOM.mjs";
+import "../../../../samlib/gui/SamTextArea.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
-import { MessageManager } from "../messages/MessageManager.mjs";
-import { Behaviour } from "../objects/behaviour/Behaviour.mjs";
-import { SummonerBehaviour } from "../objects/behaviour/invocation/SummonerBehaviour.mjs";
-import { MeleeAttackBehaviour } from "../objects/behaviour/controls/MeleeAttackBehaviour.mjs";
-import { ShootBehaviour } from "../objects/behaviour/invocation/ShootBehaviour.mjs";
-import { behaviourCollectable } from "../objects/behaviour/generic/CollectableBehaviour.mjs";
-import { ON_DEATH, ON_LIVE_CHANGE } from "../objects/behaviour/life/LivingBehaviour.mjs";
-import { PathBehaviour } from "../objects/behaviour/movement/PathBehaviour.mjs";
-import { EmitterBehaviour } from "../objects/behaviour/particle/EmitterBehaviour.mjs";
-import { EquipperBehaviour, ON_EQUIPPED } from "../objects/behaviour/slot/EquipperBehaviour.mjs";
-import { HITBOX } from "../objects/model/HitboxModel.mjs";
-import { LIVING, LivingModel } from "../objects/model/LivingModel.mjs";
-import { MOVEMENT } from "../objects/model/MovementModel.mjs";
-import { TRANSFORM, TransformModel } from "../objects/model/TransformModel.mjs";
 import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
-import { message } from "../script.js";
 import { Level, LevelContext } from "./Level.mjs";
-import { EffectPack } from "./objectpacks/EffectPack.mjs";
-import { FightPack } from "./objectpacks/FightPack.mjs";
-import { LivingPack } from "./objectpacks/LivingPack.mjs";
-import { ModelPack } from "./objectpacks/ModelPack.mjs";
-import { ParticlePack } from "./objectpacks/ParticlePack.mjs";
-import { PhysicPack } from "./objectpacks/PhysicPack.mjs";
-import { PlayerPack } from "./objectpacks/PlayerPack.mjs";
-import { SoilPack } from "./objectpacks/SoilPack.mjs";
-import { IAPack } from "./objectpacks/IAPack.mjs";
-import { MonsterPack } from "./objectpacks/MonsterPack.mjs";
 import { SamLevel } from "./SamLevel.mjs";
-import { adom, create, dom } from "../../../../samlib/DOM.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
-import { TaggedDict } from "../objects/world/TaggedDict.mjs";
 import { ObjectPack } from "./objectpacks/ObjectPack.mjs";
-import TemplateList from "../../../../samlib/gui/TemplateList.mjs";
-import "../../../../samlib/gui/SamTextArea.mjs";
+
+export const LIVE_EDITOR_SETTINGS={
+   tile_size: [new Vector3(1.5,0.5,1.5), new Vector3(1.5,0.5,1.5), new Vector3(1.5,0.5,1.5), new Vector3(6,2,6)],
+   position: [Vector3.Zero(), Vector3.Zero(), Vector3.Zero(), new Vector3(12,-12,-12)],
+   name_length: 2,
+}
 
 export class LiveEditor extends Level{
 
@@ -74,8 +53,8 @@ export class LiveEditor extends Level{
          // Writing area
          const areas=[]
          const area_container=container.appendChild(create("div.areacontainer.toremove"))
-         for(let a=0;a<3;a++)areas.push(area_container.appendChild(document.createElement("textarea",{is:"sam-textarea"})))
-         const dimension=container.appendChild(adom/*html*/`<input class=toremove type=text value=[1.5,0.5,1.5] />`)
+         for(let a=0;a<4;a++)areas.push(area_container.appendChild(document.createElement("textarea",{is:"sam-textarea"})))
+         //const dimension=container.appendChild(adom/*html*/`<input class=toremove type=text value=[1.5,0.5,1.5] />`)
 
          const refresh=container.appendChild(adom/*html*/`<input class=toremove type=button value=Refresh />`)
          refresh.addEventListener("click",reload)
@@ -113,14 +92,13 @@ export class LiveEditor extends Level{
          function reload(){
             catch_error(()=>{
                // Get dimension
-               let array=get_and_check(dimension, "Invalid dimension value", it=>Array.isArray(it) && it.length==3)
+               //let array=get_and_check(dimension, "Invalid dimension value", it=>Array.isArray(it) && it.length==3)
 
                // Clear 
                world.clearObjects()
+               //const size=Vector3.FromArray(array)
                createLevel({
-                  tile_size: Vector3.FromArray(array),
-                  position: new Vector3(0,0,0),
-                  name_length: 2,
+                  ...LIVE_EDITOR_SETTINGS,
                   world, objects: pack.objects,
                   maps:areas.map(it=>it.value)
                })
@@ -134,7 +112,7 @@ export class LiveEditor extends Level{
          const auto=container.appendChild(adom/*html*/`<input class=toremove type=checkbox />`)
          // @ts-ignore
          const auto_reload=()=>{ if(auto.checked)reload() }
-         dimension.addEventListener("input",auto_reload)
+         //dimension.addEventListener("input",auto_reload)
          for(let a of areas)a.addEventListener("input",auto_reload)
 
          

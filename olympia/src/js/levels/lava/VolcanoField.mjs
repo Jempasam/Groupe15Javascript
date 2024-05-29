@@ -11,6 +11,7 @@ import { World } from "../../objects/world/World.mjs";
 import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { message } from "../../script.js";
 import { Level, LevelContext } from "../Level.mjs";
+import { LIVE_EDITOR_SETTINGS } from "../LiveEditor.mjs";
 import { SamLevel } from "../SamLevel.mjs";
 import { BasicPack } from "../objectpacks/BasicPack.mjs";
 import { LavaHole } from "./LavaHole.mjs";
@@ -29,12 +30,11 @@ export class VolcanoField extends Level{
 
       const pack=new BasicPack(world, { next_levels:()=>new LavaHole() })
       const player=pack.player
-
+      
       createLevel({
-         tile_size: new Vector3(1.5,0.5,1.5),
+         ...LIVE_EDITOR_SETTINGS,
          world,
          objects: pack.objects,
-         name_length: 2,
          maps: [
             `
             1  ]

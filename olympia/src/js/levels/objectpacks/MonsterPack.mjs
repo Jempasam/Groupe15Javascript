@@ -51,7 +51,7 @@ export class MonsterPack extends ObjectPack{
     barril_summoner=this.behav(behaviourInterval(15,behaviourEach( (o,w) =>{
         const tf= o.get(TRANSFORM); if(!tf)return
         const under= tf.position.add(new Vector3(0,-tf.scale.y-0.2,0))
-        w.add([...this._physic.PHYSIC_FALLING(), ...this._living.DESTRUCTIBLE(), this._models.barril.id], new TransformModel({copied:tf,position:under}), Team.HATEFUL)
+        w.add([...this._physic.PHYSIC_FALLING(), ...this._living.WOOD_DESTRUCTIBLE(), this._models.barril.id], new TransformModel({copied:tf,position:under}), Team.HATEFUL)
     })))
 
     lava_summoner=this.behav(behaviourInterval(40,behaviourEach( (o,w) =>{

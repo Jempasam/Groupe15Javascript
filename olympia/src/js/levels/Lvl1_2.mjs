@@ -12,6 +12,7 @@ import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
 import { message } from "../script.js";
 import { Level, LevelContext } from "./Level.mjs";
+import { LIVE_EDITOR_SETTINGS } from "./LiveEditor.mjs";
 import { SamLevel } from "./SamLevel.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
 import { EffectPack } from "./objectpacks/EffectPack.mjs";
@@ -41,13 +42,10 @@ export class Lvl1_2 extends Level{
       message.send("PV: 3", MessageManager.FOREVER, "pv")
 
       const pack=new BasicPack(world)
-
       createLevel({
-         tile_size: new Vector3(1.5,0.5,1.5),
-         position: new Vector3(-4,0,-8),
+         ...LIVE_EDITOR_SETTINGS,
          world,
          objects: pack.objects,
-         name_length: 2,
          maps: [
 `
 1  ]

@@ -1,17 +1,10 @@
 import { Camera } from "../../../../../babylonjs/core/Cameras/camera.js";
-import { UniversalCamera, Vector3 } from "../../../../../babylonjs/core/index.js";
-import { isKeyPressed } from "../../controls/Keyboard.mjs";
-import { MessageManager } from "../../messages/MessageManager.mjs";
-import { ON_LIVE_CHANGE } from "../../objects/behaviour/life/LivingBehaviour.mjs";
-import { ON_EQUIPPED } from "../../objects/behaviour/slot/EquipperBehaviour.mjs";
-import { HITBOX } from "../../objects/model/HitboxModel.mjs";
-import { LIVING } from "../../objects/model/LivingModel.mjs";
-import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
+import { UniversalCamera } from "../../../../../babylonjs/core/index.js";
 import { World } from "../../objects/world/World.mjs";
 import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { message } from "../../script.js";
 import { Level, LevelContext } from "../Level.mjs";
-import { SamLevel } from "../SamLevel.mjs";
+import { LIVE_EDITOR_SETTINGS } from "../LiveEditor.mjs";
 import { BasicPack } from "../objectpacks/BasicPack.mjs";
 import { LavaHole } from "./LavaHole.mjs";
 
@@ -29,12 +22,10 @@ export class BirdOfFire extends Level{
 
       const pack=new BasicPack(world, { next_levels:()=>new LavaHole() })
       const player=pack.player
-
       createLevel({
-         tile_size: new Vector3(1.5,0.5,1.5),
+         ...LIVE_EDITOR_SETTINGS,
          world,
          objects: pack.objects,
-         name_length: 2,
          maps: [
             `
             1  ]#m1D----------------#m1A#r06#m1A#m1D----------------

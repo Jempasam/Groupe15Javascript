@@ -108,8 +108,8 @@ function codeToNum(code){
 /**
  * 
  * @param {object} options
- * @param {Vector3} options.tile_size
- * @param {Vector3=} options.position
+ * @param {Vector3|Vector3[]} options.tile_size
+ * @param {(Vector3|Vector3[])=} options.position
  * @param {Object.<string,ObjectDefinition>} options.objects
  * @param {Array<string>|string} options.maps
  * @param {number=} options.name_length
@@ -117,16 +117,35 @@ function codeToNum(code){
  * 
  */
 export function createLevel(options){
+    // Name parameter
     const name_length=options.name_length??1
-    const position=options.position ?? Vector3.Zero()
+
+    // Position parameter
+    const positions=(()=>{
+        if(options.position===undefined)return [Vector3.Zero()]
+        else if(Array.isArray(options.position))return options.position
+        else if(options.position instanceof Vector3) return [options.position]
+        else throw new Error("options.position should be an instance of Vector3, a list of Vector3 or undefined")
+    })()
+    
+
+    // Tile size
+    const tile_sizes= (()=>{
+        if(Array.isArray(options.tile_size)) return options.tile_size
+        else if(options.tile_size instanceof Vector3) return [options.tile_size]
+        else throw new Error("options.tile_size should be an instance of Vector3 or a list of Vector3")
+    })()
+
 
     if(!(options.world instanceof World))throw new Error("options.world should be an instance of World")
-    if(!(options.tile_size instanceof Vector3))throw new Error("options.tile_size should be an instance of Vector3")
-    if(!(position instanceof Vector3))throw new Error("options.position should be an instance of Vector3")
     if(!options.objects)throw new Error("options.objects should be defined")
     if(Object.keys(options.objects).findIndex(it=>it.length!=name_length)!=-1)throw new Error("At least one object have a name with a different length than options.name_length")
     if(!Array.isArray(options.maps)) options.maps=[options.maps]
+
+    let counter=0
     for(const map of options.maps){
+        const tile_size=tile_sizes[counter%tile_sizes.length]
+        const level_position=positions[counter%positions.length]
         forMap(map, [0,0], [1,1], (letter, pos, size)=>{
             if(letter[0]===' ')return
 
@@ -148,17 +167,18 @@ export function createLevel(options){
             let foot_height=codeToNum(letter.charCodeAt(name_length))
             let size_height=codeToNum(letter.charCodeAt(name_length+1))
 
-            let tile_dimension=options.tile_size.multiplyByFloats(size[0], size_height, size[1])
+            let tile_dimension=tile_size.multiplyByFloats(size[0], size_height, size[1])
             let dimension=fromVectorLike(dim_transform(tile_dimension))
 
-            let coordinates=position.add(new Vector3(
-                -pos[0]*options.tile_size.x-tile_dimension.x/2,
-                options.tile_size.y*foot_height+tile_dimension.y/2, 
-                pos[1]*options.tile_size.z+tile_dimension.z/2
+            let coordinates=level_position.add(new Vector3(
+                -pos[0]*tile_size.x-tile_dimension.x/2,
+                tile_size.y*foot_height+tile_dimension.y/2, 
+                pos[1]*tile_size.z+tile_dimension.z/2
             ))
             coordinates=fromVectorLike(pos_transform(coordinates,tile_dimension))
             
             options.world.add(tags, new TransformModel({rotation, position:coordinates, scale:dimension}), ...models)
         }, 2+name_length, true)
+        counter++
     }
 }

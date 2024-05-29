@@ -56,11 +56,20 @@ export async function loadModels(scene){
         MAGMA: await model(scene,"magma"),
         HOLE: await model(scene,"hole"),
         BUILDING: await model(scene,"building"),
+        BUILDING2: await model(scene,"building2"),
         PANNIER: await model(scene,"pannier"),
         PORTAL: await model(scene,"portal"),
         PANNIER_BASKET: await model(scene,"pannier_basket"),
         VOLCANO: await model(scene,"volcano"),
         BARRIER: await model(scene,"barrier"),
+        SEWER: await model(scene,"sewer"),
+        PIPE: await model(scene,"pipe"),
+        CAR: await model(scene,"car"),
+
+        CLOUD: await model(scene,"cloud"),
+        ENV_SKY: await model(scene,"sky","environment"),
+        ENV_SAND: await model(scene,"sandsky","environment"),
+        ENV_HELL: await model(scene,"hellsky","environment"),
 
         CACTUS: await model(scene,"cactus","decoration"),
         CACTUS2: await model(scene,"cactus2","decoration"),
@@ -81,6 +90,7 @@ export async function loadModels(scene){
         HEART: await model(scene,"heart"),
         POTION: await model(scene,"potion"),
         SPHERE: await model(scene,"sphere"),
+        CHECKPOINT: await model(scene,"checkpoint"),
 
         EXPLOSION: await model(scene,"explosion","particle"),
         SPHERE_EXPLOSION: await model(scene,"sphere_explosion","particle"),
@@ -100,6 +110,7 @@ export async function loadModels(scene){
         PARTICLE_FLAME: await model(scene,"flame","particle"),
         PARTICLE_BLOOD: await model(scene,"blood","particle"),
         PARTICLE_WOOD: await model(scene,"wood","particle"),
+        PARTICLE_DARKNESS: await model(scene,"darkness","particle"),
 
         _nothing: scene.createDefaultEnvironment({createSkybox:false,createGround:false,toneMappingEnabled:false})
     }

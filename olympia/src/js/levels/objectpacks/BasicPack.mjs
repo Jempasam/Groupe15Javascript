@@ -68,13 +68,14 @@ export class BasicPack extends ObjectPack{
             "##": { tags:[...physic.STATIC(), model.block.id] },
             "#I": { tags:[...physic.STATIC(), model.pillar.id] },
             "#b": { tags:[...physic.STATIC(), model.building.id] },
+            "#B": { tags:[...physic.STATIC(), model.building2.id] },
             "#n": { tags:[...physic.STATIC(), model.bridge.id] },
             "#^": { tags:[...physic.STATIC(), model.stone.id] },
             "#m": { tags:[...physic.STATIC(), model.magma.id] },
             "#r": { tags:[...physic.STATIC(), model.rock_floor.id] },
             "#%": { tags:[...physic.STATIC(), model.stone_wall.id] },
-            "#8": { tags:[...physic.STATIC(), ...living.DESTRUCTIBLE(), model.barril.id], models:()=>[fight.bad] },
-            "#w": { tags:[...physic.STATIC(), ...living.DESTRUCTIBLE(), model.wood.id], models:()=>[fight.bad,new LivingModel(3)] },
+            "#8": { tags:[...physic.STATIC(), ...living.WOOD_DESTRUCTIBLE(), model.barril.id], models:()=>[fight.bad] },
+            "#w": { tags:[...physic.STATIC(), ...living.WOOD_DESTRUCTIBLE(), model.wood.id], models:()=>[fight.bad,new LivingModel(3)] },
             "#M": { tags:[...physic.STATIC(), ...soil.TRAMPOLINE()] },
             "#c": { tags:[...physic.STATIC(), model.cactus.id, soil.damaging.id], size: it=>it.multiplyByFloats(.4,1,.4) },
             "#C": { tags:[...physic.STATIC(), model.cactus2.id, soil.damaging.id], size: it=>it.multiplyByFloats(.4,1,.4) },
@@ -119,9 +120,14 @@ export class BasicPack extends ObjectPack{
 
             "%#": { tags:[...physic.PHYSIC_FALLING(), model.block.id] },
             "%8": {
-                tags:[...physic.PHYSIC_FALLING(), ...living.DESTRUCTIBLE(), model.barril.id],
+                tags:[...physic.PHYSIC_FALLING(), ...living.WOOD_DESTRUCTIBLE(), model.barril.id],
                 models:()=>[fight.bad],
                 size: it=>it.multiplyInPlace(new Vector3(.8,1,.8))
+            },
+            "%o": {
+                tags:[...physic.PHYSIC_FALLING(), ...living.MACHINE_DESTRUCTIBLE(), model.car.id],
+                models:()=>[fight.bad, new LivingModel(3)],
+                size: it=>it.multiplyInPlace(new Vector3(1,1,1))
             },
 
             "&b": { tags:[...player.POTION_SLOW_FALLING()], size: it=>it.scale(.6) },
@@ -140,6 +146,7 @@ export class BasicPack extends ObjectPack{
             "*j": { tags:[...bonus.JUMP_GIVER(), model.sphere.id], size:it=>it.scale(.5) },
 
             "$h": { tags:[...physic.STATIC_GHOST(), model.heart.id, living.health_giver.id] },
+            "$P": { tags:[...physic.STATIC_GHOST(), model.checkpoint.id, living.checkpoint.id], size: it=>it.multiplyByFloats(.05,1,.05) },
 
             "+p": { tags:[...physic.STATIC(), model.hole.id, monster.panda_summoner.id], models:()=>[fight.bad] },
             "+k": { tags:[...physic.STATIC(), model.hole.id, monster.kangaroo_summoner.id], models:()=>[fight.bad] },
@@ -186,6 +193,12 @@ export class BasicPack extends ObjectPack{
             "?%": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_movable.id] },
             "?x": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_damage.id] },
             "?j": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_jump.id] },
+
+            ":c": { tags:[...physic.STATIC_NOCOLLISION(), model.big_cloud.id] },
+
+            "'a": { tags:[...physic.STATIC_NOCOLLISION(), model.sky.id] },
+            "'f": { tags:[...physic.STATIC_NOCOLLISION(), model.hell.id] },
+            "'s": { tags:[...physic.STATIC_NOCOLLISION(), model.sand.id] },
 
             "<>": { tags:[...physic.MOVING_GHOST_FRICTION(), physic.pushable.id, player.camera_movement.id, player.camera.id], size:it=>it.scale(1.4)},
 

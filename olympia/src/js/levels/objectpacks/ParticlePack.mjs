@@ -74,6 +74,7 @@ export class ParticlePack extends ObjectPack{
 
     // Bases
     UP_GROW= this.lazy(()=>[...this._physic.MOVING_NOCOLLISION(), this.up_grow.id])
+    UP_GROW_PHYSIC= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.up_grow.id, this._physic.pushable.id])
     UP_VANISH= this.lazy(()=>[...this._physic.MOVING_NOCOLLISION(), this.up_vanish.id])
     STAY= this.lazy(()=>[...this._physic.MOVING_NOCOLLISION(), this.stay.id])
     SPREAD= this.lazy(()=>[...this._physic.MOVING_NOCOLLISION(), this.spread.id])
@@ -84,7 +85,8 @@ export class ParticlePack extends ObjectPack{
     // Particles
     FIRE= this.lazy(()=>[...this.UP_VANISH(), this._models.flame.id])
     SMOKE= this.lazy(()=>[...this.UP_GROW(), this._models.smoke.id])
-    CLOUD= this.lazy(()=>[...this.STAY(), this._models.smoke.id])
+    CLOUD= this.lazy(()=>[...this.UP_GROW_PHYSIC(), this._models.cloud.id])
+    BIG_SMOKE= this.lazy(()=>[...this.STAY(), this._models.smoke.id])
     WIND= this.lazy(()=>[...this.SPREAD(), this._models.wind.id])
     PROPULSION= this.lazy(()=>[...this.DOWN_GROW(), this._models.smoke.id])
     WATER= this.lazy(()=>[...this.DOWN_VANISH(), this._models.water.id])
@@ -96,7 +98,7 @@ export class ParticlePack extends ObjectPack{
 
     // Emitters
     smoke_emitter= this.behav(()=>new EmitterBehaviour(this.SMOKE(), new Vector3(0.5, 0.5, 0.5), 5))
-    cloud_emitter= this.behav(()=>new EmitterBehaviour(this.CLOUD(), new Vector3(0.5, 0.5, 0.5), 5))
+    cloud_emitter= this.behav(()=>new EmitterBehaviour(this.BIG_SMOKE(), new Vector3(0.5, 0.5, 0.5), 5))
     fire_emitter= this.behav(()=>new EmitterBehaviour(this.FIRE(), new Vector3(0.8, 0.8, 0.8), 5))
     slash_emitter= this.behav(()=>new EmitterBehaviour(this.SLASH(), new Vector3(0.5, 0.5, 0.5), 5))
     wind_emitter= this.behav(()=>new EmitterBehaviour(this.WIND(), new Vector3(1,1,1), 5))
