@@ -51,6 +51,7 @@ export class LiveEditor extends Level{
 
 
          // Writing area
+         /** @type {Element[]} */
          const areas=[]
          const area_container=container.appendChild(create("div.areacontainer.toremove"))
          for(let a=0;a<4;a++)areas.push(area_container.appendChild(document.createElement("textarea",{is:"sam-textarea"})))
@@ -61,6 +62,18 @@ export class LiveEditor extends Level{
 
          const clear=container.appendChild(adom/*html*/`<input class=toremove type=button value=Clear />`)
          clear.addEventListener("click",()=>{areas.forEach(it=>it.value="");reload()})
+
+         // Scroll
+         /** @param {Element} area */
+         function onScroll(area){
+            const scrollTop=area.scrollTop
+            const scrollLeft=area.scrollLeft
+            for(const other of areas){
+               other.scrollTop=scrollTop
+               other.scrollLeft=scrollLeft
+            }
+         }
+         for(const area of areas)area.addEventListener("scroll",()=>onScroll(area))
 
          // Save and load
          function save(){
