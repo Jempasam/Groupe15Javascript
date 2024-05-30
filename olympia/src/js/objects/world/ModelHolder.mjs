@@ -109,94 +109,102 @@ export class ModelHolder{
     }
 
     /**
-     * @template T
+     * @template T,R
      * @param {AnyModelKey<T>} key
-     * @param {(value:T)=>void} callback
+     * @param {(value:T)=>R} callback
+     * @returns {R?}
      */
     apply(key,callback){
         let value=this.get(key)
-        if(value!==null)callback(value)
+        if(value!==null)return callback(value)
+            return null
     }
 
     /**
-     * @template A,B
+     * @template A,B,R
      * @param {AnyModelKey<A>} keyA @param {AnyModelKey<B>} keyB
-     * @param {(valA:A, valB:B)=>void} callback
+     * @param {(valA:A, valB:B)=>R} callback
+     * @returns {R?}
      */
     apply2(keyA,keyB,callback){
-        let valA=this.get(keyA); if(valA==null)return
-        let valB=this.get(keyB); if(valB==null)return
-        callback(valA,valB)
+        let valA=this.get(keyA); if(valA==null)return null
+        let valB=this.get(keyB); if(valB==null)return null
+        return callback(valA,valB)
     }
 
     /**
-     * @template A,B,C
+     * @template A,B,C,R
      * @param {AnyModelKey<A>} keyA @param {AnyModelKey<B>} keyB @param {AnyModelKey<C>} keyC
-     * @param {(valA:A, valB:B, valC:C)=>void} callback
+     * @param {(valA:A, valB:B, valC:C)=>R} callback
+     * @returns {R?}
      */
     apply3(keyA,keyB,keyC,callback){
-        let valA=this.get(keyA); if(valA==null)return
-        let valB=this.get(keyB); if(valB==null)return
-        let valC=this.get(keyC); if(valC==null)return
-        callback(valA,valB,valC)
+        let valA=this.get(keyA); if(valA==null)return null
+        let valB=this.get(keyB); if(valB==null)return null
+        let valC=this.get(keyC); if(valC==null)return null
+        return callback(valA,valB,valC)
     }
 
     /**
-     * @template A,B,C,D
+     * @template A,B,C,D,R
      * @param {AnyModelKey<A>} keyA @param {AnyModelKey<B>} keyB @param {AnyModelKey<C>} keyC @param {AnyModelKey<D>} keyD
-     * @param {(valA:A, valB:B, valC:C, valD:D)=>void} callback
+     * @param {(valA:A, valB:B, valC:C, valD:D)=>R} callback
+     * @returns {R?}
      */
     apply4(keyA,keyB,keyC,keyD,callback){
-        let valA=this.get(keyA); if(valA==null)return
-        let valB=this.get(keyB); if(valB==null)return
-        let valC=this.get(keyC); if(valC==null)return
-        let valD=this.get(keyD); if(valD==null)return
-        callback(valA,valB,valC,valD)
+        let valA=this.get(keyA); if(valA==null)return null
+        let valB=this.get(keyB); if(valB==null)return null
+        let valC=this.get(keyC); if(valC==null)return null
+        let valD=this.get(keyD); if(valD==null)return null
+        return callback(valA,valB,valC,valD)
     }
 
     /**
-     * @template A,B,C,D,E
+     * @template A,B,C,D,E,R
      * @param {AnyModelKey<A>} keyA @param {AnyModelKey<B>} keyB @param {AnyModelKey<C>} keyC @param {AnyModelKey<D>} keyD @param {AnyModelKey<E>} keyE
-     * @param {(valA:A, valB:B, valC:C, valD:D, valE:E)=>void} callback
+     * @param {(valA:A, valB:B, valC:C, valD:D, valE:E)=>R} callback
+     * @returns {R?}
      */
     apply5(keyA,keyB,keyC,keyD,keyE,callback){
-        let valA=this.get(keyA); if(valA==null)return
-        let valB=this.get(keyB); if(valB==null)return
-        let valC=this.get(keyC); if(valC==null)return
-        let valD=this.get(keyD); if(valD==null)return
-        let valE=this.get(keyE); if(valE==null)return
-        callback(valA,valB,valC,valD,valE)
+        let valA=this.get(keyA); if(valA==null)return null
+        let valB=this.get(keyB); if(valB==null)return null
+        let valC=this.get(keyC); if(valC==null)return null
+        let valD=this.get(keyD); if(valD==null)return null
+        let valE=this.get(keyE); if(valE==null)return null
+        return callback(valA,valB,valC,valD,valE)
     }
 
     /**
-     * @template A,B,C,D,E,F
+     * @template A,B,C,D,E,F,R
      * @param {AnyModelKey<A>} keyA @param {AnyModelKey<B>} keyB @param {AnyModelKey<C>} keyC @param {AnyModelKey<D>} keyD @param {AnyModelKey<E>} keyE @param {AnyModelKey<F>} keyF
-     * @param {(valA:A, valB:B, valC:C, valD:D, valE:E, valF:F)=>void} callback
+     * @param {(valA:A, valB:B, valC:C, valD:D, valE:E, valF:F)=>R} callback
+     * @returns {R?}
      */
     apply6(keyA,keyB,keyC,keyD,keyE,keyF,callback){
-        let valA=this.get(keyA); if(valA==null)return
-        let valB=this.get(keyB); if(valB==null)return
-        let valC=this.get(keyC); if(valC==null)return
-        let valD=this.get(keyD); if(valD==null)return
-        let valE=this.get(keyE); if(valE==null)return
-        let valF=this.get(keyF); if(valF==null)return
-        callback(valA,valB,valC,valD,valE,valF)
+        let valA=this.get(keyA); if(valA==null)return null
+        let valB=this.get(keyB); if(valB==null)return null
+        let valC=this.get(keyC); if(valC==null)return null
+        let valD=this.get(keyD); if(valD==null)return null
+        let valE=this.get(keyE); if(valE==null)return null
+        let valF=this.get(keyF); if(valF==null)return null
+        return callback(valA,valB,valC,valD,valE,valF)
     }
 
     /**
-     * @template A,B,C,D,E,F,G
+     * @template A,B,C,D,E,F,G,R
      * @param {AnyModelKey<A>} keyA @param {AnyModelKey<B>} keyB @param {AnyModelKey<C>} keyC @param {AnyModelKey<D>} keyD @param {AnyModelKey<E>} keyE @param {AnyModelKey<F>} keyF @param {AnyModelKey<G>} keyG
-     * @param {(valA:A, valB:B, valC:C, valD:D, valE:E, valF:F, valG:G)=>void} callback
+     * @param {(valA:A, valB:B, valC:C, valD:D, valE:E, valF:F, valG:G)=>R} callback
+     * @returns {R?}
      */
     apply7(keyA,keyB,keyC,keyD,keyE,keyF,keyG,callback){
-        let valA=this.get(keyA); if(valA==null)return
-        let valB=this.get(keyB); if(valB==null)return
-        let valC=this.get(keyC); if(valC==null)return
-        let valD=this.get(keyD); if(valD==null)return
-        let valE=this.get(keyE); if(valE==null)return
-        let valF=this.get(keyF); if(valF==null)return
-        let valG=this.get(keyG); if(valG==null)return
-        callback(valA,valB,valC,valD,valE,valF,valG)
+        let valA=this.get(keyA); if(valA==null)return null
+        let valB=this.get(keyB); if(valB==null)return null
+        let valC=this.get(keyC); if(valC==null)return null
+        let valD=this.get(keyD); if(valD==null)return null
+        let valE=this.get(keyE); if(valE==null)return null
+        let valF=this.get(keyF); if(valF==null)return null
+        let valG=this.get(keyG); if(valG==null)return null
+        return callback(valA,valB,valC,valD,valE,valF,valG)
     }
 
 

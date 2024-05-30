@@ -2,6 +2,7 @@ import { Behaviour } from "../Behaviour.mjs"
 import { ModelKey } from "../../world/ModelHolder.mjs"
 import { ObjectQuery, World } from "../../world/World.mjs"
 import { TRANSFORM } from "../../model/TransformModel.mjs"
+import { removeEquip, removeTag } from "../../model/SlotModel.mjs"
 
 export class AppearBehaviour extends Behaviour{
 
@@ -21,10 +22,14 @@ export class AppearBehaviour extends Behaviour{
      */
     init(world, objects, targets, ...rest){
         for(const obj of objects){
-            obj.getOrSet([APPEAR,this.uid],()=>({lifetime:this.appearing_time}))
-            obj.apply(TRANSFORM, t=>t.scale.scaleInPlace(1/20))
+            obj.apply(TRANSFORM, t=>{
+                const mindim=Math.min(t.scale.x,t.scale.y,t.scale.z)
+                const growth=mindim/(this.appearing_time+1)
+                obj.getOrSet([APPEAR,this.uid],()=>({lifetime:this.appearing_time, growth}))
+                t.scale.subtractFromFloatsToRef(growth*this.appearing_time, growth*this.appearing_time, growth*this.appearing_time, t.scale)
+                console.log(growth)
+            })
         }
-            
     }
 
     /**
@@ -36,10 +41,10 @@ export class AppearBehaviour extends Behaviour{
         for(let obj of objects){
             obj.apply2([APPEAR,this.uid], TRANSFORM, (d,t)=>{
                 if(d.lifetime<=0){
-                    obj.kill()
+                    removeTag(obj, ...obj.tags)
                 }
                 else{
-                    t.scale.scaleInPlace(20/this.appearing_time)
+                    t.scale.addInPlaceFromFloats(d.growth,d.growth,d.growth)
                     d.lifetime--
                 }
             })
@@ -57,5 +62,5 @@ export class AppearBehaviour extends Behaviour{
 }
 
 
-/** @type {ModelKey<{lifetime:number}>} */
+/** @type {ModelKey<{lifetime:number, growth:number}>} */
 export const APPEAR=new ModelKey("appear")

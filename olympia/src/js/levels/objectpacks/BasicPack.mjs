@@ -88,7 +88,7 @@ export class BasicPack extends ObjectPack{
             "#-": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.1,1,1), rotation:()=>[0,Math.PI/2,0]},
             "#|": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.1,1,1), rotation:()=>[0,0,0]},
             "#H": { tags:[...physic.STATIC(), model.pipe.id]},
-            "#O": { tags:[...physic.STATIC(), model.sewer.id]},
+            "#O": { tags:[...physic.STATIC(), model.sewer.id], size:it=>it.multiplyByFloats(1,.5,1)},
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},

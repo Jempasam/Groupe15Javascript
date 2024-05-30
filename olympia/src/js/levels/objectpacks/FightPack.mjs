@@ -80,9 +80,10 @@ export class FightPack extends ObjectPack{
     slowing=this.behav(behaviourOnContact({target:ContactTarget.ONLY_ENNEMIES}, (o,t)=>t.addTag(this._effect.timed_slowed.id)))
     explode=this.behav(behaviourTimeout(40,(o,world)=>{
         o.kill()
-        const boom=world.add(this.EXPLOSION())
-        o.apply(TRANSFORM, tf=>boom.setAuto(new TransformModel({copied:tf,scale:tf.scale.scale(3)})))
-        o.apply(TEAM,t=>boom.setAuto(Team.HATEFUL))
+        const boom=world.add(this.EXPLOSION(),
+            o.apply(TRANSFORM, tf=>new TransformModel({copied:tf,scale:tf.scale.scale(3)})),
+            o.apply(TEAM, t=>Team.HATEFUL)
+        )
     }))
 
     // Compilations
@@ -90,12 +91,12 @@ export class FightPack extends ObjectPack{
     PINGPONG= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.large_knockback.id, this._particle.vanish_after_one.id, this._models.pingpong.id])
     LARGE_SLASH= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.medium_damage.id, this.large_knockback.id, this._particle.vanish_after_one.id, this._models.slash.id])
     FIREBALL= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this.medium_damage.id, this.small_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id, this.flaming.id, this._models.fire.id])
-    EXPLOSION= this.lazy(()=>[...this._physic.STATIC_GHOST(), this._models.sphere_explosion.id, this.small_damage.id, this.medium_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id])
+    EXPLOSION= this.lazy(()=>[...this._physic.STATIC_GHOST(), this._particle.appear.id, this._models.sphere_explosion.id, this.small_damage.id, this.medium_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id])
     BOMB= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), this.explode.id, this._models.bomb.id])
     DROPLET= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), this._models.water.id, this.medium_knockback.id, this._particle.vanish_on_collision.id, this._particle.vanish_after_four.id])
 
     // Invocation
-    droplet_summoner=this.behav(behaviourInterval(40,behaviourEach( (o,w) =>{
+    droplet_summoner=this.behav(behaviourInterval(60,behaviourEach( (o,w) =>{
         const tf= o.get(TRANSFORM); if(!tf)return
         const under= tf.position.add(new Vector3(0,-tf.scale.y-0.2,0))
         w.add(this.DROPLET(), new TransformModel({copied:tf,position:under}), Team.HATEFUL)
