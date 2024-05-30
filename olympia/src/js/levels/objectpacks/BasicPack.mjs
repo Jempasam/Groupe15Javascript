@@ -87,6 +87,8 @@ export class BasicPack extends ObjectPack{
             "#v": { tags:[...physic.STATIC(), model.volcano.id]},
             "#-": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.1,1,1), rotation:()=>[0,Math.PI/2,0]},
             "#|": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.1,1,1), rotation:()=>[0,0,0]},
+            "#H": { tags:[...physic.STATIC(), model.pipe.id]},
+            "#O": { tags:[...physic.STATIC(), model.sewer.id]},
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},
@@ -161,17 +163,18 @@ export class BasicPack extends ObjectPack{
             "+O": { tags:[...physic.STATIC(), model.pannier.id, model.flame.id, monster.super_basketball_summoner.id], models:()=>[fight.bad] },
             "+d": { tags:[...physic.STATIC(), model.hole.id, monster.demon_summoner.id], models:()=>[fight.bad]},
             "+B": { tags:[...physic.STATIC(), model.hole.id, monster.firebird_summoner.id], models:()=>[fight.bad]},
+            "+g": { tags:[...physic.STATIC(), model.pipe.id, fight.droplet_summoner.id], rotation: ()=>[Math.PI,0,0]},
 
             "PC": {
                 tags:[...player.CLASSIC_PLAYER(), model.bonnet.id],
                 models:()=>[new LivingModel(3), fight.good, [NAME,"Frigeosaure"]],
-                size: it=>it.multiplyByFloats(.7,1.2,.7)
+                size: it=>it.multiplyByFloats(.65,1.1,.65)
             },
 
             "PP": {
                 tags:[...player.CLASSIC_PLAYER(), model.bonnet.id, ...(options.editor_mode ? [] : [living.reload_on_death.id])],
                 models:()=>[new LivingModel(3), fight.good, [NAME,"Frigeosaure"]],
-                size: it=>it.multiplyByFloats(.7,1.2,.7)
+                size: it=>it.multiplyByFloats(.65,1.1,.65)
             },
 
             "Pp": {

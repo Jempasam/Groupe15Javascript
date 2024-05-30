@@ -14,7 +14,9 @@ import { DisappearBehaviour } from "../../objects/behaviour/size/DisappearBehavi
 import { TEAM, Team } from "../../objects/model/TeamModel.mjs";
 import { EffectPack } from "./EffectPack.mjs";
 import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mjs";
-import { Vector2 } from "../../../../../babylonjs/core/index.js";
+import { Vector2, Vector3 } from "../../../../../babylonjs/core/index.js";
+import { behaviourInterval } from "../../objects/behaviour/generic/IntervalBehaviour.mjs";
+import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
 
 
 
@@ -90,5 +92,12 @@ export class FightPack extends ObjectPack{
     FIREBALL= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this.medium_damage.id, this.small_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id, this.flaming.id, this._models.fire.id])
     EXPLOSION= this.lazy(()=>[...this._physic.STATIC_GHOST(), this._models.sphere_explosion.id, this.small_damage.id, this.medium_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id])
     BOMB= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), this.explode.id, this._models.bomb.id])
+    DROPLET= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), this._models.water.id, this.medium_knockback.id, this._particle.vanish_on_collision.id, this._particle.vanish_after_four.id])
 
+    // Invocation
+    droplet_summoner=this.behav(behaviourInterval(40,behaviourEach( (o,w) =>{
+        const tf= o.get(TRANSFORM); if(!tf)return
+        const under= tf.position.add(new Vector3(0,-tf.scale.y-0.2,0))
+        w.add(this.DROPLET(), new TransformModel({copied:tf,position:under}), Team.HATEFUL)
+    })))
 }
