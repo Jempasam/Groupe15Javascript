@@ -33,6 +33,7 @@ import { PlayerBonusPack } from "./PlayerBonusPack.mjs";
 import { FlyingParis } from "../city/FlyingParis.mjs";
 import { HubLevel } from "../HubLevel.mjs";
 import { VolcanoField } from "../lava/VolcanoField.mjs";
+import { LongSewer } from "../city/LongSewer.mjs";
 
 
 
@@ -193,6 +194,7 @@ export class BasicPack extends ObjectPack{
             "@v": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new VolcanoField()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             
             "@p": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new FlyingParis()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@s": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LongSewer()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             
             "@h": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new HubLevel()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 

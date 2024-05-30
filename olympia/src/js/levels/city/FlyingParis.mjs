@@ -73,7 +73,7 @@ export class FlyingParis extends Level{
             17 ]
             18 ]
             19 ]                                                                                                    #xH0
-            20 ]                @hI2
+            20 ]                @sI2
             21 ]                                                                                                        
             22 ]                                                                                                        ?jH3
             23 ]                                                                                                    $PH3

@@ -24,14 +24,23 @@ export class CameraBehaviour extends Behaviour{
             for(let player of players){
                 let player_transform=player.get(TRANSFORM); if(!player_transform) continue
                 const offset=transform.position.subtract(player_transform.position).normalize().scale(1.5)
-                
-                // Target
-                const target= Vector3.Lerp(camera.getTarget()??player_transform.position, player_transform.position, 0.2)
-                camera.setTarget(target)
+
+                // Distance
+                const distance=Vector3.Distance(camera.position, transform.position)
 
                 // Position
-                const position= Vector3.Lerp(camera.position??transform.position.add(offset), transform.position.add(offset), 0.2)
+                const position= (()=>{
+                    if(distance<5)return Vector3.Lerp(camera.position??transform.position.add(offset), transform.position.add(offset), 0.2)
+                    else return transform.position.add(offset)
+                })()
                 camera.position.copyFrom(position)
+
+                // Target
+                const target= (()=>{
+                    if(distance<5)return Vector3.Lerp(camera.getTarget()??player_transform.position, player_transform.position, 0.2)
+                    else return player_transform.position
+                })()
+                camera.setTarget(target)
 
                 break
             }
