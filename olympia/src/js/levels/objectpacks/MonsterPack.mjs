@@ -132,6 +132,7 @@ export class MonsterPack extends ObjectPack{
 
     // Invocations
     panda_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.PANDA(), size:[.5,.5,.5]}, 3, 100, 15, 30))
+    big_panda_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.PANDA(), size:[1,1,1]}, 1, 100, 15, 30))
     kangaroo_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.KANGAROO(), size:[.5,.5,.5]}, 3, 100, 15, 30))
     bird_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.EAGLE(), size:[.3,.3,.3]}, 3, 100, 15, 30))
     basketball_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.BASKETBALL(), size:[.3,.3,.3]}, 4, 30, 15, 30))

@@ -18,7 +18,7 @@ export class EquipperBehaviour extends CollectableBehaviour{
     }
 
     /** @type {CollectableBehaviour['on_collection']} */
-    on_collection(collectable, collecter, world, ...queries){
+    on_collection(collectable, collecter){
         giveEquip(collecter,this.given,this.slot)
         collectable.observers(ON_EQUIP).notify({equipped:collecter, equipper:this})
         collecter.observers(ON_EQUIPPED).notify({giver:collectable, equipper:this})

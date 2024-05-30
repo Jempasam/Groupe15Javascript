@@ -7,6 +7,7 @@ import { SceneOptimizer, SceneOptimizerOptions } from "../../../babylonjs/core/M
 import { MeshBuilder } from "../../../babylonjs/core/index.js";
 import { Scene } from "../../../babylonjs/core/scene.js";
 import { adom, create } from "../../../samlib/DOM.mjs";
+import { HubLevel } from "./levels/HubLevel.mjs";
 import { Level, LevelContext } from "./levels/Level.mjs";
 import { SamLevel } from "./levels/SamLevel.mjs";
 import { MessageManager } from "./messages/MessageManager.mjs";
@@ -98,7 +99,7 @@ async function main(){
         sceneToRender.render();
     });
 
-    levelContext.switchTo(new SamLevel())
+    levelContext.switchTo(new HubLevel())
     
 }
 main()

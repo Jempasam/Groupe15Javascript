@@ -5,7 +5,7 @@ import { World } from "../../objects/world/World.mjs";
 import { PhysicPack } from "./PhysicPack.mjs";
 import { ModelPack } from "./ModelPack.mjs";
 import { ObjectPack } from "./ObjectPack.mjs";
-import { DisappearBehaviour } from "../../objects/behaviour/DisappearBehaviour.mjs";
+import { DisappearBehaviour } from "../../objects/behaviour/size/DisappearBehaviour.mjs";
 import { behaviourTimeout } from "../../objects/behaviour/generic/TimeoutBehaviour.mjs";
 import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
 import { ON_COLLISION } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
@@ -13,6 +13,7 @@ import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs
 import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
 import { behaviourInit } from "../../objects/behaviour/Behaviour.mjs";
 import { MOVEMENT } from "../../objects/model/MovementModel.mjs";
+import { AppearBehaviour } from "../../objects/behaviour/size/AppearBehaviour.mjs";
 
 /**
  * Un pack de behaviours de base avec des comportements de particules
@@ -56,6 +57,12 @@ export class ParticlePack extends ObjectPack{
     vanish_after_sixteen= this.behav(behaviourTimeout(320, o=>o.addTag(this.vanish.id) ))
 
     vanish_on_collision= this.behav(behaviourObserve(ON_COLLISION, o=>o.addTag(this.vanish.id) ))
+
+    // Appear
+    appear= this.behav(new AppearBehaviour({appearing_time:5}))
+    appear_while_half= this.behav(new AppearBehaviour({appearing_time:10}))
+    appear_while_one= this.behav(new AppearBehaviour({appearing_time:20}))
+    appear_while_two= this.behav(new AppearBehaviour({appearing_time:40}))
 
     // Size
     random_size=this.behav(behaviourInit((w,os)=>{ for(let o of os) o.get(TRANSFORM)?.scale?.scaleInPlace(.2+Math.random()*.8)  }))

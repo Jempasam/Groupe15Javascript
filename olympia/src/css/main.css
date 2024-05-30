@@ -58,10 +58,15 @@
         &>textarea{
             display: flex;
             font-size: 0.9em;
+            word-spacing: 0em;
+            letter-spacing: 0em;
+            padding: 0em;
             border: none;
             margin: 1%;
             height: 100%;;
-            font-weight: bold;
+            font-weight: bolder;
+            text-size-adjust: none;
+            font-size-adjust: none;
             line-height: 2.18em;
             font-family: monospace !important;
             background: local linear-gradient(

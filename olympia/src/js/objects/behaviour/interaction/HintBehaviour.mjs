@@ -19,7 +19,7 @@ export class HintBehaviour extends CollectableBehaviour{
     }
 
     /** @type {CollectableBehaviour['on_collection']} */
-    on_collection(collectable, collecter,world){
+    on_collection(collectable, collecter, data, world){
         world.model.get(MESSAGE)?.send(this.message, 5000, this.message_slot)
         return true
     }

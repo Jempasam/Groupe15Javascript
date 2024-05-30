@@ -12,7 +12,7 @@ import { ObjectPack } from "./objectpacks/ObjectPack.mjs";
 
 export const LIVE_EDITOR_SETTINGS={
    tile_size: [new Vector3(1.5,0.5,1.5), new Vector3(1.5,0.5,1.5), new Vector3(1.5,0.5,1.5), new Vector3(6,2,6)],
-   position: [Vector3.Zero(), Vector3.Zero(), Vector3.Zero(), new Vector3(12,-12,-12)],
+   position: [Vector3.Zero(), Vector3.Zero(), Vector3.Zero(), new Vector3(12,-12,-16)],
    name_length: 2,
 }
 
@@ -99,8 +99,9 @@ export class LiveEditor extends Level{
                //const size=Vector3.FromArray(array)
                createLevel({
                   ...LIVE_EDITOR_SETTINGS,
-                  world, objects: pack.objects,
-                  maps:areas.map(it=>it.value)
+                  world, 
+                  objects: pack.objects,
+                  maps:areas.map(it=>"\n"+it.value)
                })
 
                localStorage.setItem("editormap",save())

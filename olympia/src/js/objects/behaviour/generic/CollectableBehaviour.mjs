@@ -33,7 +33,7 @@ export class CollectableBehaviour extends Behaviour{
             obj.observers(ON_COLLISION).add(this.uid,(_,{object})=>{
                 obj.apply([COLLECTABLE,this.uid], it=>{
                     if(it.equippedTime!=0 || it.reloading!=0 || (targets && !targets.match(object)))return
-                    if(this.on_collection(obj,object,world,objects,targets,...rest)){
+                    if(this.on_collection(obj,object,it,world,objects.all(),targets.all(),...rest.map(a=>a.all()))){
                         it.equippedTime=it.remaining_use!=1 ? 10 : 20
                         obj.observers(ON_COLLECT).notify({collecter:object, equipper:this})
                         object.observers(ON_COLLECTED).notify({collectable:obj, equipper:this})
@@ -47,11 +47,12 @@ export class CollectableBehaviour extends Behaviour{
      * 
      * @param {GameObject} collectable
      * @param {GameObject} collecter
+     * @param {CollectableData} data
      * @param {World} world
      * @param {...ObjectQuery} queries
      * @returns {boolean}
      */
-    on_collection(collectable, collecter, world, ...queries){
+    on_collection(collectable, collecter, data, world, ...queries){
         throw new Error("Undefined on_collection method")
     }
 
@@ -127,8 +128,9 @@ export function behaviourInfiniteEquipper(tags,slot){
     return behaviourCollectable({use_count:Infinity},(_,o)=>(giveEquip(o,tags,slot),true))
 }
 
-/** @type {ModelKey<{equippedTime:number, remaining_use:number, reloading:number}>} */
-const COLLECTABLE=new ModelKey("collectable")
+/** @typedef {{equippedTime:number, remaining_use:number, reloading:number}} CollectableData */
+/** @type {ModelKey<CollectableData>} */
+export const COLLECTABLE=new ModelKey("collectable")
 
 /** @type {ObserverKey<{collecter:GameObject, equipper:CollectableBehaviour}>} */
 export const ON_COLLECT=new ObserverKey("on_collect")

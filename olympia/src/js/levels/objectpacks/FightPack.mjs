@@ -10,7 +10,7 @@ import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehavio
 import { ON_COLLISION } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { MOVEMENT, accelerate } from "../../objects/model/MovementModel.mjs";
 import { GameObject } from "../../objects/world/GameObject.mjs";
-import { DisappearBehaviour } from "../../objects/behaviour/DisappearBehaviour.mjs";
+import { DisappearBehaviour } from "../../objects/behaviour/size/DisappearBehaviour.mjs";
 import { TEAM, Team } from "../../objects/model/TeamModel.mjs";
 import { EffectPack } from "./EffectPack.mjs";
 import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mjs";

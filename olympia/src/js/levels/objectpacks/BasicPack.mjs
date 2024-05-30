@@ -30,6 +30,9 @@ import { BurningCity } from "../lava/BurningCity.mjs";
 import { LavaHole } from "../lava/LavaHole.mjs";
 import { BirdOfFire } from "../lava/BirdOfFire.mjs";
 import { PlayerBonusPack } from "./PlayerBonusPack.mjs";
+import { FlyingParis } from "../city/FlyingParis.mjs";
+import { HubLevel } from "../HubLevel.mjs";
+import { VolcanoField } from "../lava/VolcanoField.mjs";
 
 
 
@@ -147,8 +150,10 @@ export class BasicPack extends ObjectPack{
 
             "$h": { tags:[...physic.STATIC_GHOST(), model.heart.id, living.health_giver.id] },
             "$P": { tags:[...physic.STATIC_GHOST(), model.checkpoint.id, living.checkpoint.id], size: it=>it.multiplyByFloats(.05,1,.05) },
+            "&T": { tags:[...physic.STATIC_GHOST(), model.darkness.id, physic.teleporter.id], size:it=>it.scale(1.5)},
 
             "+p": { tags:[...physic.STATIC(), model.hole.id, monster.panda_summoner.id], models:()=>[fight.bad] },
+            "+P": { tags:[...physic.STATIC(), model.hole.id, monster.big_panda_summoner.id], models:()=>[fight.bad] },
             "+k": { tags:[...physic.STATIC(), model.hole.id, monster.kangaroo_summoner.id], models:()=>[fight.bad] },
             "+b": { tags:[...physic.STATIC(), model.hole.id, monster.bird_summoner.id], models:()=>[fight.bad] },
             "+s": { tags:[...physic.STATIC(), model.hole.id, monster.sphinx_summoner.id], models:()=>[fight.bad] },
@@ -177,9 +182,15 @@ export class BasicPack extends ObjectPack{
 
             "()":{ tags: [...physic.STATIC(), model.portal.id, ...this.NEXT_LEVEL], size:it=>it.multiplyByFloats(1,1,.2) },
             ")(":{ tags: [...physic.STATIC(), model.portal.id, ...this.NEXT_LEVEL], size:it=>it.multiplyByFloats(1,1,.2), rotation: ()=>new Vector3(0,Math.PI/2,0) },
+            
             "@I": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BurningCity()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@_": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LavaHole()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@b": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BirdOfFire()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@v": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new VolcanoField()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            
+            "@p": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new FlyingParis()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            
+            "@h": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new HubLevel()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
             "?1": { tags:[...physic.STATIC(), model.question_mark.id] },
             "?2": { tags:[...physic.STATIC(), model.question_mark.id] },
