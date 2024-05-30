@@ -22,7 +22,7 @@ import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs
 import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mjs";
 import { PATH, PathModel } from "../../objects/model/PathModel.mjs";
 import { MOVEMENT, accelerate } from "../../objects/model/MovementModel.mjs";
-import { PathNoFallBehaviour } from "../../objects/behaviour/controls/PathNoFallBehaviour.mjs"
+import { PathNoFallBehaviour } from "../../objects/behaviour/path/PathNoFallBehaviour.mjs"
 import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
 import { ON_DEATH } from "../../objects/behaviour/life/LivingBehaviour.mjs";
 import { ModelKey } from "../../objects/world/ModelHolder.mjs";
@@ -111,7 +111,7 @@ export class PlayerPack extends ObjectPack{
     )
 
     // Packs
-    LIVING_PLAYER= this.lazy(()=>[...this._living.LIVING(), this.player.id])
+    LIVING_PLAYER= this.lazy(()=>[...this._living.LIVING(), this.player.id, this._models.shadow.id])
 
     CLASSIC_PLAYER= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this.LIVING_PLAYER(), this.move.id, this._living.respawn.id])
 

@@ -76,6 +76,7 @@ export async function loadModels(scene){
         CACTUS3: await model(scene,"cactus3","decoration"),
 
         BALLOON: await model(scene,"balloon","detail"),
+        SHADOW: await model(scene,"shadow","detail"),
         
         ARTIFACT: await model(scene,"Artifact"),
         BOMB: await model(scene,"bomb"),

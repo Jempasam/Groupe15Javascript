@@ -21,6 +21,11 @@ export class PathModel{
         this.minimum=minimum
         this.maximum=maximum
         this.size=maximum.subtract(minimum)
+        this.tile_size=new Vector3(
+            this.size.x/(content.length-0.0001),
+            this.size.y/(content[0].length-0.0001),
+            this.size.z/(content[0][0].length-0.0001)
+        )
         this.content=content
     }
 
@@ -43,10 +48,21 @@ export class PathModel{
         }
         this.min_access.minimizeInPlace(position)
         this.max_access.maximizeInPlace(position)
-        target[0]=Math.floor((position.x-this.minimum.x)/this.size.x*(this.content.length-0.0001))
-        target[1]=Math.floor((position.y-this.minimum.y)/this.size.y*(this.content[0].length-0.0001))
-        target[2]=Math.floor((position.z-this.minimum.z)/this.size.z*(this.content[0][0].length-0.0001))
+        target[0]=Math.floor((position.x-this.minimum.x)/this.tile_size.x)
+        target[1]=Math.floor((position.y-this.minimum.y)/this.tile_size.y)
+        target[2]=Math.floor((position.z-this.minimum.z)/this.tile_size.z)
         return inside
+    }
+
+    /**
+     * @param {Vector3} position
+     * @return {[number,number,number]} target
+     */
+    getTilePos(position){
+        /** @type {[number,number,number]} */
+        let target=[0,0,0]
+        this._getPos(position,target)
+        return target
     }
 
     /**
@@ -67,6 +83,44 @@ export class PathModel{
         let target=[0,0,0]
         this._getPos(position,target)
         this.content[target[0]][target[1]][target[2]]=value
+    }
+
+    /**
+     * Check if the tile is in the path model.
+     * @param {[number,number,number]} position
+     */
+    containsTile([x,y,z]){
+        return x>=0 && y>=0 && z>=0 && x<this.content.length && y<this.content[0].length && z<this.content[0][0].length
+    }
+
+    /**
+     * Get the content of the tile.
+     * @param {[number,number,number]} position 
+     * @returns {1|2|3}
+     */
+    getTile([x,y,z]){
+        return this.content[x][y][z]
+    }
+
+    /**
+     * Set the content of the tile
+     * @param {[number,number,number]} position
+     * @param {1|2|3} value
+     */
+    setTile([x,y,z],value){
+        this.content[x][y][z]=value
+    }
+
+    /**
+     * Get the position in the tile given a tile and his position in the tile.
+     * @param {[number,number,number]} position 
+     * @param {Vector3} internal The position in the tile between 0 and 1
+     */
+    getPosInTile([x,y,z],internal){
+        const internal_vec=new Vector3(x+internal.x, y+internal.y, z+internal.z)
+        internal_vec.multiplyInPlace(this.tile_size)
+        internal_vec.addInPlace(this.minimum)
+        return internal_vec
     }
 
     /**

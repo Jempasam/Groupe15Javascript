@@ -8,11 +8,12 @@ import { ConstantForceBehaviour } from "../../objects/behaviour/ConstantForceBeh
 import { PushCollisionBehaviour } from "../../objects/behaviour/PushCollisionBehaviour.mjs";
 import { SimpleCollisionBehaviour } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
-import { PathBehaviour } from "../../objects/behaviour/PathBehaviour.mjs";
+import { PathBehaviour } from "../../objects/behaviour/path/PathBehaviour.mjs";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
 import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
 import { TeleportationBehaviour } from "../../objects/behaviour/teleportation/TeleportationBehaviour.mjs";
 import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
+import { PathShadowBehaviour } from "../../objects/behaviour/path/PathShadowBehaviour.mjs";
 
 
 /**
@@ -51,10 +52,8 @@ export class PhysicPack extends ObjectPack{
     anti_gravity= this.behav(new ConstantForceBehaviour(new Vector3(0,0.015,0)))
     high_anti_gravity= this.behav(new ConstantForceBehaviour(new Vector3(0,0.03,0)))
 
-    // Teleporter
+    // Misc
     teleporter= this.behav(tags(()=>this.pushable.id), new TeleportationBehaviour({use_count:Infinity,reload_time:60}))
-
-    // Out of world
     out_of_world_suppression= this.behav(behaviourEach(o=>o.apply(TRANSFORM, tf=>{if(tf.position.y<-100)o.kill()})))
 
     // Compilations

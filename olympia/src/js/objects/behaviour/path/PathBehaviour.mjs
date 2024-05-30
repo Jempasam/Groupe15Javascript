@@ -1,10 +1,10 @@
-import { Behaviour } from "./Behaviour.mjs"
-import { ModelKey } from "../world/ModelHolder.mjs"
-import { ObjectQuery, World } from "../world/World.mjs"
-import { TRANSFORM } from "../model/TransformModel.mjs"
-import { PATH, PathModel } from "../model/PathModel.mjs"
-import { Vector3 } from "../../../../../babylonjs/core/index.js"
-import { SCENE } from "../model/MeshModel.mjs"
+import { Behaviour } from "../Behaviour.mjs"
+import { ModelKey } from "../../world/ModelHolder.mjs"
+import { ObjectQuery, World } from "../../world/World.mjs"
+import { TRANSFORM } from "../../model/TransformModel.mjs"
+import { PATH, PathModel } from "../../model/PathModel.mjs"
+import { Vector3 } from "../../../../../../babylonjs/core/index.js"
+import { SCENE } from "../../model/MeshModel.mjs"
 
 /**
  * Un behaviour de base pour la création et le maintien d'un PathModel, une carte de chemin

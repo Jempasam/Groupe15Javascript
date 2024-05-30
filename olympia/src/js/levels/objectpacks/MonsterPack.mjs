@@ -79,11 +79,11 @@ export class MonsterPack extends ObjectPack{
     MISSILLING= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this._living.hitable.id, this._ia.follow_fast.id])
     WOLF_LIKE= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this._living.LIVING(), this._ia.rotate_and_jump.id, this._ia.dodge_void.id])
     EAGLE_LIKE= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), ...this._living.LIVING(), this._ia.fly_and_attack.id])
-    FLY_FOLLOWING= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), ...this._living.LIVING(), this._ia.fly_and_follow.id])
-    FLY_FOLLOWING_FAST= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), ...this._living.LIVING(), this._ia.fly_and_follow_fast.id])
-    FLY_FOLLOWING_FAST_DOWN= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), ...this._living.LIVING(), this._ia.fly_and_follow_fast_down.id])
-    MANTA_LIKE= this.lazy(()=>[...this._physic.PHYSIC(), ...this._living.LIVING(), this._ia.fly_through_from_far.id])
-    SMALL_MANTA_LIKE= this.lazy(()=>[...this._physic.PHYSIC(), ...this._living.LIVING(), this._ia.rotate_and_jump.id])
+    FLY_FOLLOWING= this.lazy(()=>[this._models.shadow.id, ...this._physic.PHYSIC_SLIDE(), ...this._living.LIVING(), this._ia.fly_and_follow.id])
+    FLY_FOLLOWING_FAST= this.lazy(()=>[this._models.shadow.id, ...this._physic.PHYSIC_SLIDE(), ...this._living.LIVING(), this._ia.fly_and_follow_fast.id])
+    FLY_FOLLOWING_FAST_DOWN= this.lazy(()=>[this._models.shadow.id, ...this._physic.PHYSIC_SLIDE(), ...this._living.LIVING(), this._ia.fly_and_follow_fast_down.id])
+    MANTA_LIKE= this.lazy(()=>[this._models.shadow.id, ...this._physic.PHYSIC(), ...this._living.LIVING(), this._ia.fly_through_from_far.id])
+    SMALL_MANTA_LIKE= this.lazy(()=>[this._models.shadow.id, ...this._physic.PHYSIC(), ...this._living.LIVING(), this._ia.rotate_and_jump.id])
 
     // Phases
     demon_phases=this.behav(()=>new PhaseBehaviour(

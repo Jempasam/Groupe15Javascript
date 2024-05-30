@@ -10,6 +10,7 @@ import { Vector3 } from "../../../../../babylonjs/core/index.js";
 import { SimpleCollisionBehaviour } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { ObjectPack } from "./ObjectPack.mjs";
 import { MeshBehaviour } from "../../objects/behaviour/MeshBehaviour.mjs";
+import { PathShadowBehaviour } from "../../objects/behaviour/path/PathShadowBehaviour.mjs";
 
 
 /**
@@ -92,6 +93,7 @@ export class ModelPack extends ObjectPack{
 
     // Details
     balloon= this.behav(()=>new MeshBehaviour(this.models.BALLOON))
+    shadow= this.behav(()=>new PathShadowBehaviour(this.models.SHADOW))
 
     // Particles
     cloud= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_CLOUD))

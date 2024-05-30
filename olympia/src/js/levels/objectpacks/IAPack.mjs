@@ -3,7 +3,7 @@ import { FOLLOW, FOLLOW_RELATIVE, STAY, TargetChainBehaviour } from "../../objec
 import { World } from "../../objects/world/World.mjs";
 import { LivingPack } from "./LivingPack.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
-import { PathNoFallBehaviour } from "../../objects/behaviour/controls/PathNoFallBehaviour.mjs";
+import { PathNoFallBehaviour } from "../../objects/behaviour/path/PathNoFallBehaviour.mjs";
 
 
 
