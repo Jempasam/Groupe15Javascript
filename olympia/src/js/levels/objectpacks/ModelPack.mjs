@@ -67,6 +67,7 @@ export class ModelPack extends ObjectPack{
     lava= this.behav(()=>new MeshBehaviour(this.models.LAVA))
     mud= this.behav(()=>new MeshBehaviour(this.models.MUD))
     ice= this.behav(()=>new MeshBehaviour(this.models.ICE))
+    water= this.behav(()=>new MeshBehaviour(this.models.WATER))
 
     question_mark= this.behav(()=>new MeshBehaviour(this.models.QUESTION_MARK))
     exclamation_mark= this.behav(()=>new MeshBehaviour(this.models.EXCLAMATION_MARK))
@@ -99,7 +100,7 @@ export class ModelPack extends ObjectPack{
     cloud= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_CLOUD))
     fire= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_FIRE))
     rock= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_ROCK))
-    water= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_WATER))
+    droplet= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_WATER))
     wind= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_WIND))
     bats= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_BATS))
     vortex= this.behav(()=>new MeshBehaviour(this.models.PARTICLE_VORTEX))

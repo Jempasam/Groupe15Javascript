@@ -85,6 +85,7 @@ export async function loadModels(scene){
         LAVA: await model(scene,"lava"),
         MUD: await model(scene,"mud"),
         ICE: await model(scene,"ice"),
+        WATER: await model(scene,"water"),
 
         QUESTION_MARK: await model(scene,"questionmark"),
         EXCLAMATION_MARK: await model(scene,"exclamationmark"),

@@ -96,7 +96,7 @@ export class ParticlePack extends ObjectPack{
     BIG_SMOKE= this.lazy(()=>[...this.STAY(), this._models.smoke.id])
     WIND= this.lazy(()=>[...this.SPREAD(), this._models.wind.id])
     PROPULSION= this.lazy(()=>[...this.DOWN_GROW(), this._models.smoke.id])
-    WATER= this.lazy(()=>[...this.DOWN_VANISH(), this._models.water.id])
+    WATER= this.lazy(()=>[...this.DOWN_VANISH(), this._models.droplet.id])
     DUST= this.lazy(()=>[...this.DOWN_VANISH(), this._models.smoke.id])
     BLOOD= this.lazy(()=>[...this.PHYSIC_LIKE(), this._models.blood.id, this.spread_animation.id])
     SLASH= this.lazy(()=>[...this.STAY(), this._models.slash.id])

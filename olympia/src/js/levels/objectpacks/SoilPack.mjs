@@ -49,6 +49,15 @@ export class SoilPack extends ObjectPack{
 
     slowing= this.behav(behaviourObserve(ON_COLLISION,(_,{object})=>object.apply(MOVEMENT, m=>m.inertia.scaleInPlace(0.5))))
 
+    watery= this.behav(behaviourObserve(ON_COLLISION,(_,{object})=>{
+        object.apply(MOVEMENT, m=>{
+            m.inertia.x*=0.9
+            if(m.inertia.y<0)m.inertia.y*=0.7
+            m.inertia.z*=0.9
+        })
+        object.forAll(JUMP, j=>j.remaining_jump=Math.max(j.remaining_jump,1))
+    }))
+
     damaging= this.behav( tags(()=>this._living.living.id), behaviourOnContact({},(_,o)=>o.apply(LIVING, l=>{
         l.damage(1)
     })))
@@ -62,6 +71,7 @@ export class SoilPack extends ObjectPack{
     GROUND= this.lazy(()=>[this._models.block.id])
     LAVA= this.lazy(()=>[this.damaging.id, this._models.lava.id])
     MUD= this.lazy(()=>[this.slowing.id, this._models.mud.id])
+    WATER= this.lazy(()=>[this.watery.id, this._models.water.id])
     ICE= this.lazy(()=>[this.slidable.id, this._models.ice.id])
     FIRE= this.lazy(()=>[this._models.flame.id, this._effect.give_burning.id, this._particle.smoke_emitter.id])
     TRAMPOLINE= this.lazy(()=>[this.jumping.id, this._models.trampoline.id])

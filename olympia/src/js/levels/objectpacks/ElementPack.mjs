@@ -40,7 +40,7 @@ export class ElementPack extends ObjectPack{
 
     // Elemental Affliction
     FLAME_EFFECT= this.lazy(()=>[this._effect.give_burning.id, this._particle.fire_emitter.id, this._models.flame.id, this.fire_summoner.id])
-    WATER_EFFECT= this.lazy(()=>[this._effect.give_slowed.id, this._particle.water_emitter.id, this._models.water.id])
+    WATER_EFFECT= this.lazy(()=>[this._effect.give_slowed.id, this._particle.water_emitter.id, this._models.droplet.id])
     AIR_EFFECT= this.lazy(()=>[this._fight.large_knockback.id, this._particle.smoke_emitter.id, this._models.wind.id])
     
     // Elemental Affliction Timed

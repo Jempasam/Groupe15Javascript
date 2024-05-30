@@ -81,8 +81,8 @@ export class FightPack extends ObjectPack{
     explode=this.behav(behaviourTimeout(40,(o,world)=>{
         o.kill()
         const boom=world.add(this.EXPLOSION(),
-            o.apply(TRANSFORM, tf=>new TransformModel({copied:tf,scale:tf.scale.scale(3)})),
-            o.apply(TEAM, t=>Team.HATEFUL)
+            o.apply(TRANSFORM, tf=>new TransformModel({copied:tf,scale:tf.scale.scale(3)}))??null,
+            o.apply(TEAM, t=>Team.HATEFUL)??null
         )
     }))
 
@@ -93,7 +93,7 @@ export class FightPack extends ObjectPack{
     FIREBALL= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this.medium_damage.id, this.small_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id, this.flaming.id, this._models.fire.id])
     EXPLOSION= this.lazy(()=>[...this._physic.STATIC_GHOST(), this._particle.appear.id, this._models.sphere_explosion.id, this.small_damage.id, this.medium_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id])
     BOMB= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), this.explode.id, this._models.bomb.id])
-    DROPLET= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), this._models.water.id, this.medium_knockback.id, this._particle.vanish_on_collision.id, this._particle.vanish_after_four.id])
+    DROPLET= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), this._models.droplet.id, this.medium_knockback.id, this._particle.vanish_on_collision.id, this._particle.vanish_after_four.id])
 
     // Invocation
     droplet_summoner=this.behav(behaviourInterval(60,behaviourEach( (o,w) =>{

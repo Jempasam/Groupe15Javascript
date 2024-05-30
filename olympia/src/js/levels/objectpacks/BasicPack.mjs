@@ -96,6 +96,7 @@ export class BasicPack extends ObjectPack{
             ":m": { tags:[...monster.FIREBIRD()], models:()=>[fight.bad, new LivingModel(20), [NAME,"Firebird"]]},
 
             "#~": { tags:[...physic.STATIC(), ...soil.MUD()] },
+            "#W": { tags:[...physic.STATIC_GHOST(), ...soil.WATER()] },
             "#x": { tags:[...physic.STATIC(), ...soil.LAVA()] },
             "#i": { tags:[...physic.STATIC(), ...soil.ICE()] },
             
