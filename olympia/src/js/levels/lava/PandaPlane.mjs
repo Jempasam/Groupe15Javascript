@@ -54,7 +54,7 @@ export class PandaPlane extends BaseLevel{
 8  ]            0a72                                                                                          
 9  ]                                                
 10 ]                                                                                                                                            
-11 ]            <>K0                                            #w42-.-                                                                         +P60            ()94-.-
+11 ]            <>K0                                            #w42-.-                                                                         +P60            @n94-.-
 12 ]                            #w51
 13 ]                            |                                                                               $h32
 14 ]                            |                                               #q48                                                            

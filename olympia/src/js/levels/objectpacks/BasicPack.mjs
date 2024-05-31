@@ -7,6 +7,7 @@ import { HubLevel } from "../HubLevel.mjs";
 import { Level, NEXT_LEVEL } from "../Level.mjs";
 import { FlyingParis } from "../city/FlyingParis.mjs";
 import { LongSewer } from "../city/LongSewer.mjs";
+import { BirdBridge } from "../lava/BirdBridge.mjs";
 import { BirdOfFire } from "../lava/BirdOfFire.mjs";
 import { BurningCity } from "../lava/BurningCity.mjs";
 import { LavaHole } from "../lava/LavaHole.mjs";
@@ -194,6 +195,7 @@ export class BasicPack extends ObjectPack{
             "@b": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BirdOfFire()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@v": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new VolcanoField()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@P": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new PandaPlane()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@n": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BirdBridge()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
             "@p": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new FlyingParis()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@s": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LongSewer()).id], size:it=>it.multiplyByFloats(1,1,.2)},
