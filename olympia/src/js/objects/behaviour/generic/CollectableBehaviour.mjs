@@ -35,7 +35,7 @@ export class CollectableBehaviour extends Behaviour{
                     if(it.equippedTime!=0 || it.reloading!=0 || (targets && !targets.match(object)))return
                     if(this.on_collection(obj,object,it,world,objects.all(),targets.all(),...rest.map(a=>a.all()))){
                         it.equippedTime=it.remaining_use!=1 ? 10 : 20
-                        obj.observers(ON_COLLECT).notify({collecter:object, equipper:this})
+                        obj.observers(ON_COLLECT).notify({collectable:obj,collecter:object, equipper:this})
                         object.observers(ON_COLLECTED).notify({collectable:obj, equipper:this})
                     }
                 })
@@ -132,7 +132,7 @@ export function behaviourInfiniteEquipper(tags,slot){
 /** @type {ModelKey<CollectableData>} */
 export const COLLECTABLE=new ModelKey("collectable")
 
-/** @type {ObserverKey<{collecter:GameObject, equipper:CollectableBehaviour}>} */
+/** @type {ObserverKey<{collectable:GameObject, collecter:GameObject, equipper:CollectableBehaviour}>} */
 export const ON_COLLECT=new ObserverKey("on_collect")
 
 /** @type {ObserverKey<{collectable:GameObject, equipper:CollectableBehaviour}>} */

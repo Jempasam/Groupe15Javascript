@@ -178,8 +178,8 @@ export class MonsterPack extends ObjectPack{
     FIREBIRD=this.lazy(()=>[this.firebird_phases.id, this._models.aigle_feu_moche.id, this._living.lifebar.id, this._fight.small_damage.id, this._fight.small_knockback.id, this._effect.fire_immune.id])
 
     // Monsters Definition
-    $FIREBIRD=this.lazyDef(()=>({tags:this.FIREBIRD(), models:()=>[new LivingModel(20),[NAME,"Oiseau de Feu - Champion du Basket"]]}))
-    $SPHINX=this.lazyDef(()=>({tags:this.SPHINX(), models:()=>[new LivingModel(20),[NAME,"Le Sphinx - Champion du 100m"]]}))
+    $FIREBIRD=this.lazyDef(()=>({tags:this.FIREBIRD(), models:()=>[new LivingModel(20),[NAME,"Oiseau de Feu, Roi du Basket"]]}))
+    $SPHINX=this.lazyDef(()=>({tags:this.SPHINX(), models:()=>[new LivingModel(20),[NAME,"Le Sphinx, Roi du 100m"]]}))
 
     // Invocations
     panda_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.PANDA(), size:[.5,.5,.5]}, 3, 100, 15, 30))

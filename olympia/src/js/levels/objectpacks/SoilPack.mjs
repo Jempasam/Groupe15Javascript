@@ -99,4 +99,5 @@ export class SoilPack extends ObjectPack{
     
     // Slow Door
     slow_door4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,3,0)], 0.1, 0.001, 0.0015))
+    door4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,3,0)], 0.1, 0.002, 0.005))
 }

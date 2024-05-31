@@ -10,6 +10,7 @@ import { LongSewer } from "../city/LongSewer.mjs";
 import { BirdOfFire } from "../lava/BirdOfFire.mjs";
 import { BurningCity } from "../lava/BurningCity.mjs";
 import { LavaHole } from "../lava/LavaHole.mjs";
+import { PandaPlane } from "../lava/PandaPlane.mjs";
 import { VolcanoField } from "../lava/VolcanoField.mjs";
 import { SandMonster } from "../sand/SandMonster.mjs";
 import { EffectPack } from "./EffectPack.mjs";
@@ -120,6 +121,7 @@ export class BasicPack extends ObjectPack{
             "ox": {tags:[...physic.MOVING(), ...soil.LAVA(), soil.elevator4.id]},
 
             "d#": { tags:[...physic.MOVING(), model.block.id, soil.slow_door4.id] },
+            "D#": { tags:[...physic.MOVING(), model.block.id, soil.door4.id] },
 
             "%#": { tags:[...physic.PHYSIC_FALLING(), model.block.id] },
             "%8": {
@@ -191,7 +193,8 @@ export class BasicPack extends ObjectPack{
             "@_": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LavaHole()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@b": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BirdOfFire()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@v": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new VolcanoField()).id], size:it=>it.multiplyByFloats(1,1,.2)},
-            
+            "@P": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new PandaPlane()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+
             "@p": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new FlyingParis()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@s": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LongSewer()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             
@@ -211,6 +214,7 @@ export class BasicPack extends ObjectPack{
             "?%": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_movable.id] },
             "?x": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_damage.id] },
             "?j": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_jump.id] },
+            "?d": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_door.id] },
 
             ":c": { tags:[...physic.STATIC_NOCOLLISION(), model.big_cloud.id] },
 

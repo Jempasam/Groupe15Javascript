@@ -33,7 +33,7 @@ export class LivingBehaviour extends Behaviour{
                 if(living.life!=living._previous_life){
                     const offset=living.life-living._previous_life
                     living._previous_life=living.life
-                    obj.observers(ON_LIVE_CHANGE).notify(offset)
+                    obj.observers(ON_LIVE_CHANGE).notify({affected:obj,offset})
                     if(living.life<=0){
                         obj.observers(ON_DEATH).notify(obj)
                         if(living.life<=0)obj.kill()
@@ -57,7 +57,7 @@ export class LivingBehaviour extends Behaviour{
     get order(){ return 2 }
 }
 
-/** @type {ObserverKey<number>} */
+/** @type {ObserverKey<{affected:GameObject, offset:number}>} */
 export const ON_LIVE_CHANGE=new ObserverKey("on_live_change")
 
 /** @type {ObserverKey<GameObject>} */

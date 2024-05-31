@@ -28,8 +28,8 @@ export class ParticleLivingBehaviour extends Behaviour{
     init(world,objects){
         this.eventid=ObserverGroup.generateName("particleliving")
         for(const obj of objects){
-            obj.observers(ON_LIVE_CHANGE).add(this.eventid, (target,change)=>{
-                if(change<0)obj.apply(TRANSFORM, tf=>{
+            obj.observers(ON_LIVE_CHANGE).add(this.eventid, (target,{offset})=>{
+                if(offset<0)obj.apply(TRANSFORM, tf=>{
                     for(let i=0; i<4; i++)generateParticle(world,tf,this.tags,this.size.clone())
                 })
             })
