@@ -13,18 +13,17 @@ export class HubLevel extends BaseLevel{
 
    /** @override @type {BaseLevel['start']} */
    start(context,world,options){
+      const base=new BasicPack(world)
+      this.init(world,base)
       message.send("Bienvenue dans Olympia! Entrez dans un portail pour commencer votre aventure!",6000,"info")
-      
-      const base=new BasicPack(world, { next_levels: ()=>new VolcanoField() })
-      const player=base.player
       createLevel({
          ...LIVE_EDITOR_SETTINGS,
          world,
          objects: base.objects,
          maps:[
             `
-            1  ]                    #i3B----------------
-            2  ]    ##39            ##39#i12--------##39            ##39
+            1  ]                    ##3B----------------
+            2  ]    ##39            ##39##12--------##39            ##39
             3  ]    |  |#x1B--------|  ||           |  |#b1B--------|  |
             4  ]    |__||___________|__||___________|__||___________|__|
             5  ]#x1B##12#m12--------##12----------------#%12--------##12#b3G----
@@ -51,15 +50,17 @@ export class HubLevel extends BaseLevel{
             2  ]
             3  ]
             4  ]
-            5  ]    #I49@I52    @v52#I49            #I49%842    @p52#I49
-            6  ]                                    
-            7  ]                            PP41
+            5  ]    #I49@I52    @v52#I49%b42--------#I49%842    @p52#I49
+            6  ]                            
+            7  ]                                
             8  ]         
             9  ]    #I49@b52        #I49%842        #I49@S52    @s52#I49
-            10 ]                            
-            11 ]                            <>A1
-            12 ]                    
+            10 ]                                #=46----
+            11 ]                            PP41
+            12 ]                        
             13 ]                    #I49            #I49
+            14 ]
+            15 ]                            <>A1
             `
             ,
             `

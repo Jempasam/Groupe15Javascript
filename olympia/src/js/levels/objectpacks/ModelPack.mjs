@@ -56,6 +56,8 @@ export class ModelPack extends ObjectPack{
     car= this.behav(()=>new MeshBehaviour(this.models.CAR))
     track= this.behav(()=>new MeshBehaviour(this.models.TRACK))
     gradin= this.behav(()=>new MeshBehaviour(this.models.GRADIN))
+    pancarte= this.behav(()=>new MeshBehaviour(this.models.PANCARTE))
+    boombox= this.behav(()=>new MeshBehaviour(this.models.BOOMBOX))
 
     big_cloud= this.behav(()=>new MeshBehaviour(this.models.CLOUD))
 

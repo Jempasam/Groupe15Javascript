@@ -46,6 +46,7 @@ export async function loadSounds(){
         // Music
         ASH_PLANKS: await createSound("music/ash-planks.mp3"),
         LIMBO: await createSound("music/limbo.mp3"),
+        HARD_KEYBOARD_SURFER: await createSound("music/keyboard.wav"),
     }
 }
 

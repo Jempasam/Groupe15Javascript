@@ -45,7 +45,7 @@ export class LongSewer extends BaseLevel{
             ,
             `
             1  ]
-            2  ]                    %o42                                                                                            @h42
+            2  ]                    %o42                                                                                            @S42
             3  ]    PC41            |__|    #O40----                                                                                &TD0
             4  ]            0j42            |______|
             5  ]    

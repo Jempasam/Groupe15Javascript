@@ -84,6 +84,7 @@ export class BasicPack extends ObjectPack{
             "#O": { tags:[...physic.STATIC(), model.sewer.id], size:it=>it.multiplyByFloats(1,.5,1)},
             "#t": { tags:[...physic.STATIC(), model.track.id] },
             "#g": { tags:[...physic.STATIC(), model.gradin.id] },
+            "#=": { tags:[...physic.STATIC(), model.pancarte.id] },
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},
@@ -131,6 +132,7 @@ export class BasicPack extends ObjectPack{
                 models:()=>[fight.bad, new LivingModel(3)],
                 size: it=>it.multiplyInPlace(new Vector3(1,1,1))
             },
+            "%b": { tags:[...physic.PHYSIC_FALLING(), model.boombox.id], size:it=>it.scale(0.5) },
 
             "&b": { tags:[...player.POTION_SLOW_FALLING()], size: it=>it.scale(.6) },
             "&t": { tags:[...player.POTION_TORNADO()], size: it=>it.scale(.6) },

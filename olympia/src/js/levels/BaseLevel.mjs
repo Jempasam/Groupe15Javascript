@@ -69,6 +69,8 @@ export class BaseLevel extends Level{
 
         setSound("+g", pack.sound.music.id, sounds.LIQUIDE)
 
+        setSound("%b", pack.sound.music.id, sounds.HARD_KEYBOARD_SURFER)
+
         // Music on Spawn
         world.observers(ON_INVOCATION).addAuto((w,{invocation})=>{
             // Firebird
