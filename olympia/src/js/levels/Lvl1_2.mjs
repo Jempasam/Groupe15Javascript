@@ -31,11 +31,7 @@ export class Lvl1_2 extends Level{
 
    static playerPos=new Vector3(1.5, 3, 3)
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    start(context, world,options){
 
       message.send("Bienvenue dans le niveau de Sam",6000,"info")
@@ -95,11 +91,7 @@ export class Lvl1_2 extends Level{
       })
    }
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    tick(context,world,options){
       if(isKeyPressed("Digit9"))context.switchTo(new SamLevel())
    }

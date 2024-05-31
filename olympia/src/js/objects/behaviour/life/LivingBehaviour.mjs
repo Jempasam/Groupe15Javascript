@@ -1,5 +1,6 @@
 import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { LIVING, LivingModel } from "../../model/LivingModel.mjs";
+import { GameObject } from "../../world/GameObject.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
 import { NAME } from "./LifeBarBehaviour.mjs";
@@ -34,7 +35,7 @@ export class LivingBehaviour extends Behaviour{
                     living._previous_life=living.life
                     obj.observers(ON_LIVE_CHANGE).notify(offset)
                     if(living.life<=0){
-                        obj.observers(ON_DEATH).notify()
+                        obj.observers(ON_DEATH).notify(obj)
                         if(living.life<=0)obj.kill()
                     }
                 }
@@ -59,5 +60,5 @@ export class LivingBehaviour extends Behaviour{
 /** @type {ObserverKey<number>} */
 export const ON_LIVE_CHANGE=new ObserverKey("on_live_change")
 
-/** @type {ObserverKey<void>} */
+/** @type {ObserverKey<GameObject>} */
 export const ON_DEATH=new ObserverKey("on_death")

@@ -17,6 +17,7 @@ import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mj
 import { Vector2, Vector3 } from "../../../../../babylonjs/core/index.js";
 import { behaviourInterval } from "../../objects/behaviour/generic/IntervalBehaviour.mjs";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
+import { ObserverKey } from "../../../../../samlib/observers/ObserverGroup.mjs";
 
 
 
@@ -84,6 +85,7 @@ export class FightPack extends ObjectPack{
             o.apply(TRANSFORM, tf=>new TransformModel({copied:tf,scale:tf.scale.scale(3)}))??null,
             o.apply(TEAM, t=>Team.HATEFUL)??null
         )
+        o.observers(ON_EXPLODE).notify(boom)
     }))
 
     // Compilations
@@ -100,6 +102,13 @@ export class FightPack extends ObjectPack{
         const tf= o.get(TRANSFORM); if(!tf)return
         const size=Math.min(tf.scale.x,tf.scale.z)*0.5
         const under= tf.position.add(new Vector3(0,-tf.scale.y/2-size/2-0.2,0))
-        w.add(this.DROPLET(), new TransformModel({copied:tf,position:under,scale:new Vector3(size,size,size)}), Team.HATEFUL)
+        const obj=w.add(this.DROPLET(), new TransformModel({copied:tf,position:under,scale:new Vector3(size,size,size)}), Team.HATEFUL)
+        o.observers(ON_SUMMON_DROPLET).notify(obj)
     })))
 }
+
+/** @type {ObserverKey<GameObject>} */
+export const ON_SUMMON_DROPLET=new ObserverKey("summon_droplet") 
+
+/** @type {ObserverKey<GameObject>} */
+export const ON_EXPLODE=new ObserverKey("explode") 

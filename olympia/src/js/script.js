@@ -13,10 +13,12 @@ import { SamLevel } from "./levels/SamLevel.mjs";
 import { MessageManager } from "./messages/MessageManager.mjs";
 import { CAMERA } from "./objects/behaviour/CameraBehaviour.mjs";
 import { DOCUMENT } from "./objects/behaviour/InventoryBehaviour.mjs";
+import { SOUND_BANK } from "./objects/behaviour/MusicBehaviour.mjs";
 import { MESSAGE } from "./objects/behaviour/interaction/HintBehaviour.mjs";
 import { SCENE } from "./objects/model/MeshModel.mjs";
 import { World } from "./objects/world/World.mjs";
 import { loadModels } from "./ressources/Models.mjs";
+import { loadSounds } from "./ressources/SoundBank.mjs";
 
 /** Récupère et crée la fenêtre de jeu */
 const gameElement = document.getElementById("olympia");
@@ -52,6 +54,7 @@ async function createScene() {
     world.persistent_model.set(SCENE,scene)
     world.persistent_model.set(MESSAGE,message)
     world.models=await loadModels(scene)
+    world.persistent_model.set(SOUND_BANK,await loadSounds())
     const camY = 10;
     const camZ = -10;
 

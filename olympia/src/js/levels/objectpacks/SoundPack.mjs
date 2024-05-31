@@ -20,5 +20,8 @@ export class SoundPack extends ObjectPack {
     }
 
     // Movements
-    music = this.behav(tags(() => this._player.player.id), new MusicBehaviour())
+    music_near= this.behav(tags(() => this._player.player.id), new MusicBehaviour(5,0.25))
+    music= this.behav(tags(() => this._player.player.id), new MusicBehaviour(10,0.5))
+    music_far = this.behav(tags(() => this._player.player.id), new MusicBehaviour(20,1))
+    music_ultra_far = this.behav(tags(() => this._player.player.id), new MusicBehaviour(60,0.8))
 }

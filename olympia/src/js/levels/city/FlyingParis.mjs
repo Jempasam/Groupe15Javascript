@@ -1,27 +1,19 @@
-import { Camera } from "../../../../../babylonjs/core/Cameras/camera.js";
-import { UniversalCamera } from "../../../../../babylonjs/core/index.js";
-import { World } from "../../objects/world/World.mjs";
 import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { message } from "../../script.js";
-import { Level, LevelContext } from "../Level.mjs";
+import { BaseLevel } from "../BaseLevel.mjs";
 import { LIVE_EDITOR_SETTINGS } from "../LiveEditor.mjs";
-import { LavaHole } from "../lava/LavaHole.mjs";
 import { BasicPack } from "../objectpacks/BasicPack.mjs";
 
 
-export class FlyingParis extends Level{
+export class FlyingParis extends BaseLevel{
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    start(context, world,options){
-
+      const pack=new BasicPack(world)
+      super.init(world,pack)
+      
       message.send("J'ai un peu le vertige!",6000,"info")
 
-      const pack=new BasicPack(world, { next_levels:()=>new LavaHole() })
-      const player=pack.player
       createLevel({
          ...LIVE_EDITOR_SETTINGS,
          world,
@@ -101,18 +93,5 @@ export class FlyingParis extends Level{
          ]
       })
    }
-
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
-   tick(context,world,options){ }
-
-   /**
-    * @param {World} world 
-    * @param {{camera:Camera}} options 
-    */
-   stop(world,options){ }
 
 }

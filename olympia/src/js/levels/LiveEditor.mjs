@@ -5,6 +5,7 @@ import "../../../../samlib/gui/SamTextArea.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
+import { BaseLevel } from "./BaseLevel.mjs";
 import { Level, LevelContext } from "./Level.mjs";
 import { SamLevel } from "./SamLevel.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
@@ -16,18 +17,15 @@ export const LIVE_EDITOR_SETTINGS={
    name_length: 2,
 }
 
-export class LiveEditor extends Level{
+export class LiveEditor extends BaseLevel{
 
    static viewPos=new Vector3(0, 0, 0)
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    start(context,world,options){
 
       const pack=new BasicPack(world,{editor_mode:true})
+      this.init(world,pack)
 
       const container=document.querySelector("#olympia")
       if(container){
@@ -199,11 +197,7 @@ export class LiveEditor extends Level{
 
    camerapos=new Vector3(0,6,8)
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    tick(context,world,options){
       this.camerapos=options.camera.position
       if(isKeyPressed("ArrowUp")){

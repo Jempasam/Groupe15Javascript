@@ -1,39 +1,30 @@
 import { Vector3 } from "../../../../../babylonjs/core/index.js";
-import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
-import { LivingBehaviour } from "../../objects/behaviour/life/LivingBehaviour.mjs";
-import { ParticleLivingBehaviour } from "../../objects/behaviour/life/ParticleLivingBehaviour.mjs";
-import { RespawnBehaviour } from "../../objects/behaviour/life/RespawnBehaviour.mjs";
-import { LIVING, LivingModel } from "../../objects/model/LivingModel.mjs";
-import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
+import { SOUND } from "../../objects/behaviour/MusicBehaviour.mjs";
+import { NAME } from "../../objects/behaviour/life/LifeBarBehaviour.mjs";
+import { LivingModel } from "../../objects/model/LivingModel.mjs";
 import { World } from "../../objects/world/World.mjs";
+import { HubLevel } from "../HubLevel.mjs";
+import { Level, NEXT_LEVEL } from "../Level.mjs";
+import { FlyingParis } from "../city/FlyingParis.mjs";
+import { LongSewer } from "../city/LongSewer.mjs";
+import { BirdOfFire } from "../lava/BirdOfFire.mjs";
+import { BurningCity } from "../lava/BurningCity.mjs";
+import { LavaHole } from "../lava/LavaHole.mjs";
+import { VolcanoField } from "../lava/VolcanoField.mjs";
+import { EffectPack } from "./EffectPack.mjs";
+import { ElementPack } from "./ElementPack.mjs";
+import { FightPack } from "./FightPack.mjs";
+import { IAPack } from "./IAPack.mjs";
+import { LivingPack } from "./LivingPack.mjs";
 import { ModelPack } from "./ModelPack.mjs";
+import { MonsterPack } from "./MonsterPack.mjs";
 import { ObjectPack } from "./ObjectPack.mjs";
 import { ParticlePack } from "./ParticlePack.mjs";
 import { PhysicPack } from "./PhysicPack.mjs";
-import { FightPack } from "./FightPack.mjs";
+import { PlayerBonusPack } from "./PlayerBonusPack.mjs";
 import { PlayerPack } from "./PlayerPack.mjs";
 import { SoilPack } from "./SoilPack.mjs";
-import { IAPack } from "./IAPack.mjs";
-import { MonsterPack } from "./MonsterPack.mjs";
-import { LivingPack } from "./LivingPack.mjs";
-import { EffectPack } from "./EffectPack.mjs";
-import { createLevel } from "../../objects/world/WorldUtils.mjs";
-import { Team } from "../../objects/model/TeamModel.mjs";
-import { MessageManager } from "../../messages/MessageManager.mjs";
-import { ElementPack } from "./ElementPack.mjs";
-import { Level, LevelContext, NEXT_LEVEL } from "../Level.mjs";
-import { NAME } from "../../objects/behaviour/life/LifeBarBehaviour.mjs";
 import { SoundPack } from "./SoundPack.mjs";
-import { SOUND } from "../../objects/behaviour/MusicBehaviour.mjs";
-import { Sounds } from "../../ressources/SoundBank.mjs";
-import { BurningCity } from "../lava/BurningCity.mjs";
-import { LavaHole } from "../lava/LavaHole.mjs";
-import { BirdOfFire } from "../lava/BirdOfFire.mjs";
-import { PlayerBonusPack } from "./PlayerBonusPack.mjs";
-import { FlyingParis } from "../city/FlyingParis.mjs";
-import { HubLevel } from "../HubLevel.mjs";
-import { VolcanoField } from "../lava/VolcanoField.mjs";
-import { LongSewer } from "../city/LongSewer.mjs";
 
 
 
@@ -188,15 +179,15 @@ export class BasicPack extends ObjectPack{
             "()":{ tags: [...physic.STATIC(), model.portal.id, ...this.NEXT_LEVEL], size:it=>it.multiplyByFloats(1,1,.2) },
             ")(":{ tags: [...physic.STATIC(), model.portal.id, ...this.NEXT_LEVEL], size:it=>it.multiplyByFloats(1,1,.2), rotation: ()=>new Vector3(0,Math.PI/2,0) },
             
-            "@I": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BurningCity()).id], size:it=>it.multiplyByFloats(1,1,.2)},
-            "@_": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LavaHole()).id], size:it=>it.multiplyByFloats(1,1,.2)},
-            "@b": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BirdOfFire()).id], size:it=>it.multiplyByFloats(1,1,.2)},
-            "@v": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new VolcanoField()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@I": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BurningCity()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@_": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LavaHole()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@b": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BirdOfFire()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@v": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new VolcanoField()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             
-            "@p": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new FlyingParis()).id], size:it=>it.multiplyByFloats(1,1,.2)},
-            "@s": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LongSewer()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@p": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new FlyingParis()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@s": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LongSewer()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             
-            "@h": { tags:[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new HubLevel()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@h": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new HubLevel()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
             "?1": { tags:[...physic.STATIC(), model.question_mark.id] },
             "?2": { tags:[...physic.STATIC(), model.question_mark.id] },
@@ -218,8 +209,6 @@ export class BasicPack extends ObjectPack{
             "'s": { tags:[...physic.STATIC_NOCOLLISION(), model.sand.id] },
 
             "<>": { tags:[...physic.MOVING_GHOST_FRICTION(), physic.pushable.id, player.camera_movement.id, player.camera.id], size:it=>it.scale(1.4)},
-
-            "Ma": { tags:[sound.music.id], models:()=>[[SOUND, Sounds.ASH_PLANKS]] },
 
         }
     }

@@ -3,18 +3,15 @@ import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
 import { message } from "../script.js";
+import { BaseLevel } from "./BaseLevel.mjs";
 import { Level, LevelContext } from "./Level.mjs";
 import { LIVE_EDITOR_SETTINGS, LiveEditor } from "./LiveEditor.mjs";
 import { VolcanoField } from "./lava/VolcanoField.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
 
-export class HubLevel extends Level{
+export class HubLevel extends BaseLevel{
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    start(context,world,options){
       message.send("Bienvenue dans Olympia! Entrez dans un portail pour commencer votre aventure!",6000,"info")
       
@@ -81,11 +78,7 @@ export class HubLevel extends Level{
 
    }
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    tick(context,world,options){
       if(isKeyPressed("Digit7"))context.switchTo(new LiveEditor())
    }

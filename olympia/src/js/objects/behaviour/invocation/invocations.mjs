@@ -1,5 +1,6 @@
 import { Vector3 } from "../../../../../../babylonjs/core/index.js"
 import { fastRemove } from "../../../../../../samlib/Array.mjs"
+import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs"
 import { fromVectorLike } from "../../../typeutils/VectorLike.mjs"
 import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs"
 import { TEAM, Team } from "../../model/TeamModel.mjs"
@@ -51,5 +52,10 @@ export function invocate(world, invoker, invocation, ...models){
 
     // Rotation
     if(copyRotation)obj.apply(TRANSFORM, tf=> invoker.apply(TRANSFORM, tfi=> tf.rotation.copyFrom(tfi.rotation)))
+    
+    invoker.observers(ON_INVOCATION).notify({invoker,invocation:obj})
     return obj
 }
+
+/** @type {ObserverKey<{invoker:GameObject, invocation: GameObject}>} */
+export const ON_INVOCATION=new ObserverKey("on_invocation")

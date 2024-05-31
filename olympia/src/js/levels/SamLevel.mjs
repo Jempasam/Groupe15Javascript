@@ -16,11 +16,7 @@ import { BasicPack } from "./objectpacks/BasicPack.mjs";
 
 export class SamLevel extends Level{
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    start(context,world,options){
 
       message.send("Bienvenue dans le niveau de Sam",6000,"info")
@@ -111,11 +107,7 @@ export class SamLevel extends Level{
 
    }
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    tick(context,world,options){
       if(isKeyPressed("Digit8"))context.switchTo(new Lvl1_2())
       if(isKeyPressed("Digit7"))context.switchTo(new LiveEditor())

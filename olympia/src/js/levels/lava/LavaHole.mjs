@@ -1,35 +1,17 @@
-import { Camera } from "../../../../../babylonjs/core/Cameras/camera.js";
-import { UniversalCamera, Vector3 } from "../../../../../babylonjs/core/index.js";
-import { isKeyPressed } from "../../controls/Keyboard.mjs";
-import { MessageManager } from "../../messages/MessageManager.mjs";
-import { ON_DEATH, ON_LIVE_CHANGE } from "../../objects/behaviour/life/LivingBehaviour.mjs";
-import { ON_EQUIPPED } from "../../objects/behaviour/slot/EquipperBehaviour.mjs";
-import { HITBOX } from "../../objects/model/HitboxModel.mjs";
-import { LIVING } from "../../objects/model/LivingModel.mjs";
-import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
-import { World } from "../../objects/world/World.mjs";
 import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { message } from "../../script.js";
-import { Level, LevelContext } from "../Level.mjs";
+import { BaseLevel } from "../BaseLevel.mjs";
 import { LIVE_EDITOR_SETTINGS } from "../LiveEditor.mjs";
-import { SamLevel } from "../SamLevel.mjs";
 import { BasicPack } from "../objectpacks/BasicPack.mjs";
-import { BirdOfFire } from "./BirdOfFire.mjs";
 
-export class LavaHole extends Level{
+export class LavaHole extends BaseLevel{
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    start(context, world,options){
-
+      const pack=new BasicPack(world)
+      super.init(world,pack)
+      
       message.send("Il fait chaud ici...",6000,"info")
-      message.send("PV: 3", MessageManager.FOREVER, "pv")
-
-      const pack=new BasicPack(world, { next_levels:()=>new BirdOfFire() })
-      const player=pack.player
       
       createLevel({
          ...LIVE_EDITOR_SETTINGS,
@@ -96,36 +78,6 @@ export class LavaHole extends Level{
             `
          ]
       })
-
-      this.player=world.objects.get(player.player.id)?.[0]
-      if(this.player==null)window.alert("Player not found")
-
-      this.player.observers(ON_LIVE_CHANGE).add("Lvl1_4",(obj,{})=>{
-         message.send("PV: "+(obj.get(LIVING)?.life ?? 0), MessageManager.FOREVER, "pv")
-      })
-
-      this.player.observers(ON_DEATH).add("Lvl1_4",(obj)=>{
-         context.switchTo(new LavaHole())
-      })
-   }
-
-   camerapos=new Vector3(0,6,8)
-
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
-   tick(context,world,options){
-      if(isKeyPressed("Digit9"))context.switchTo(new SamLevel())
-   }
-
-   /**
-    * @param {World} world 
-    * @param {{camera:Camera}} options 
-    */
-   stop(world,options){
-      message.clearAll()
    }
 
 }

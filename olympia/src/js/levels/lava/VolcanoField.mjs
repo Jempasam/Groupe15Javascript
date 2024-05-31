@@ -1,35 +1,18 @@
-import { Camera } from "../../../../../babylonjs/core/Cameras/camera.js";
-import { UniversalCamera, Vector3 } from "../../../../../babylonjs/core/index.js";
-import { isKeyPressed } from "../../controls/Keyboard.mjs";
-import { MessageManager } from "../../messages/MessageManager.mjs";
-import { ON_LIVE_CHANGE } from "../../objects/behaviour/life/LivingBehaviour.mjs";
-import { ON_EQUIPPED } from "../../objects/behaviour/slot/EquipperBehaviour.mjs";
-import { HITBOX } from "../../objects/model/HitboxModel.mjs";
-import { LIVING } from "../../objects/model/LivingModel.mjs";
-import { TRANSFORM } from "../../objects/model/TransformModel.mjs";
-import { World } from "../../objects/world/World.mjs";
 import { createLevel } from "../../objects/world/WorldUtils.mjs";
 import { message } from "../../script.js";
-import { Level, LevelContext } from "../Level.mjs";
+import { BaseLevel } from "../BaseLevel.mjs";
 import { LIVE_EDITOR_SETTINGS } from "../LiveEditor.mjs";
-import { SamLevel } from "../SamLevel.mjs";
 import { BasicPack } from "../objectpacks/BasicPack.mjs";
-import { LavaHole } from "./LavaHole.mjs";
 
 
-export class VolcanoField extends Level{
+export class VolcanoField extends BaseLevel{
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
+   /** @override @type {BaseLevel['start']} */
    start(context, world,options){
+      const pack=new BasicPack(world)
+      super.init(world,pack)
 
       message.send("Il fait chaud ici...",6000,"info")
-
-      const pack=new BasicPack(world, { next_levels:()=>new LavaHole() })
-      const player=pack.player
       
       createLevel({
          ...LIVE_EDITOR_SETTINGS,
@@ -126,24 +109,7 @@ export class VolcanoField extends Level{
             `
          ]
       })
-
-      this.player=world.objects.get(player.player.id)?.[0]
-      if(this.player==null)window.alert("Player not found")
    }
 
-   /**
-    * @param {LevelContext} context
-    * @param {World} world 
-    * @param {{camera:UniversalCamera}} options 
-    */
-   tick(context,world,options){ }
-
-   /**
-    * @param {World} world 
-    * @param {{camera:Camera}} options 
-    */
-   stop(world,options){
-      message.clearAll()
-   }
 
 }

@@ -65,6 +65,8 @@ export async function loadModels(scene){
         SEWER: await model(scene,"sewer"),
         PIPE: await model(scene,"pipe"),
         CAR: await model(scene,"car"),
+        GRADIN: await model(scene,"gradin"),
+        TRACK: await model(scene,"track"),
 
         CLOUD: await model(scene,"cloud"),
         ENV_SKY: await model(scene,"sky","environment"),

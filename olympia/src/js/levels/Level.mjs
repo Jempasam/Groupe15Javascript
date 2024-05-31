@@ -63,7 +63,6 @@ export class Level{
      * @param {{camera:Camera}} options 
      */
     start(context,world,options){
-        throw new Error("Not implemented")
     }
 
     /**
@@ -73,7 +72,6 @@ export class Level{
      * @param {{camera:Camera}} options 
      */
     tick(context,world,options){
-        throw new Error("Not implemented")
     }
 
     /**
@@ -83,6 +81,5 @@ export class Level{
      * @param {{camera:Camera}} options 
      */
     stop(world,options){
-        throw new Error("Not implemented")
     }
 }
