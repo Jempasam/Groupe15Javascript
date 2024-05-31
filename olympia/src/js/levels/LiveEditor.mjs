@@ -151,7 +151,6 @@ export class LiveEditor extends BaseLevel{
                const taglist= (Array.isArray(val.tags) ? val.tags : val.tags?.())
                   ?.map(it=> [ ObjectPack.getName(it)??"", ObjectPack.getColor(it)??"#FFFFFF" ])
                   ?.filter(it=>it.length>0) ?? []
-               console.log(taglist)
                
                const small_name= taglist
                   .flatMap(it=>it[0].split("_"))

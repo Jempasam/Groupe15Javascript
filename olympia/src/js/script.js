@@ -76,7 +76,6 @@ async function main(){
 
     window.addEventListener('keydown', function(evt) {
         if (evt.code == "KeyP"){
-            console.log("pause");
             pause = !pause;
             if (pause){
                 message.send("PAUSE", MessageManager.FOREVER, "pause");

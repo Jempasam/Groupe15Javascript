@@ -34,7 +34,9 @@ export class BaseLevel extends Level{
 
         world.observers(ON_JUMP).addAuto((w,jump)=>play(sounds.TOP))
 
-        world.observers(ON_SHOOT).addAuto((w,attack)=>play(sounds.SWORD))
+        world.observers(ON_SHOOT).addAuto((w,{shooter})=>{
+            if(shooter.tags.includes(pack.player.player.id)) play(sounds.SWORD)
+        })
 
         world.observers(ON_COLLECT).addAuto((w,collectable)=>play(sounds.POP))
 
@@ -72,6 +74,12 @@ export class BaseLevel extends Level{
             // Firebird
             if(invocation.tags.includes(pack.monster.firebird_phases.id)){
                 invocation.set(SOUND,sounds.LIMBO)
+                giveTag(invocation,pack.sound.music_far.id)
+            }
+            // Sphinx
+            // Firebird
+            if(invocation.tags.includes(pack.monster.sphinx_phases.id)){
+                invocation.set(SOUND,sounds.ASH_PLANKS)
                 giveTag(invocation,pack.sound.music_far.id)
             }
         })

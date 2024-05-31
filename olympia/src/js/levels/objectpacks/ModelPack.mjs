@@ -54,6 +54,8 @@ export class ModelPack extends ObjectPack{
     pipe= this.behav(()=>new MeshBehaviour(this.models.PIPE))
     sewer= this.behav(()=>new MeshBehaviour(this.models.SEWER))
     car= this.behav(()=>new MeshBehaviour(this.models.CAR))
+    track= this.behav(()=>new MeshBehaviour(this.models.TRACK))
+    gradin= this.behav(()=>new MeshBehaviour(this.models.GRADIN))
 
     big_cloud= this.behav(()=>new MeshBehaviour(this.models.CLOUD))
 

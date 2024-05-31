@@ -27,7 +27,6 @@ export class AppearBehaviour extends Behaviour{
                 const growth=mindim/(this.appearing_time+1)
                 obj.getOrSet([APPEAR,this.uid],()=>({lifetime:this.appearing_time, growth}))
                 t.scale.subtractFromFloatsToRef(growth*this.appearing_time, growth*this.appearing_time, growth*this.appearing_time, t.scale)
-                console.log(growth)
             })
         }
     }

@@ -55,7 +55,6 @@ export class MusicBehaviour extends Behaviour{
                     const offset=objtf.position.subtract(center)
                     const distance=offset.length()
                     offset.normalize()
-                    console.log(distance)
 
                     // Volume
                     if(distance>this.max_distance*1.5){

@@ -78,7 +78,8 @@ export class ParticlePack extends ObjectPack{
     // Animation
     spread_animation=this.behav(behaviourEach(o=>o.apply(TRANSFORM, t=>t.scale.multiplyInPlace(new Vector3(1.01,0.97,1.01)) )))
     spread_animation_slow=this.behav(behaviourEach(o=>o.apply(TRANSFORM, t=>t.scale.multiplyInPlace(new Vector3(1.003,0.99,1.003)) )))
-
+    grow_animation=this.behav(behaviourEach(o=>o.apply(TRANSFORM, t=>t.scale.multiplyInPlace(new Vector3(1.01,1.01,1.01)) )))
+    fast_grow_animation=this.behav(behaviourEach(o=>o.apply(TRANSFORM, t=>t.scale.multiplyInPlace(new Vector3(1.02,1.02,1.02)) )))
     // Bases
     UP_GROW= this.lazy(()=>[...this._physic.MOVING_NOCOLLISION(), this.up_grow.id])
     UP_GROW_PHYSIC= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.up_grow.id, this._physic.pushable.id])

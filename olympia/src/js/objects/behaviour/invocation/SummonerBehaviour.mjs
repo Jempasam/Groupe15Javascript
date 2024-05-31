@@ -55,7 +55,7 @@ export class SummonerBehaviour extends Behaviour{
         for(let obj of objects){
             obj.apply2([LOCAL,this.uid],TRANSFORM, (summoner,tf)=>{
                 summoner.loading++
-                if(summoner.invocated>this.max_invocation && summoner.objects.length<=0){
+                if(summoner.invocated>=this.max_invocation && summoner.objects.length<=0){
                     summoner.invocated=-20
                 }
                 else if(summoner.invocated<0){

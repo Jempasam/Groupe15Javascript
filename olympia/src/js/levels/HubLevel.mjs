@@ -55,7 +55,7 @@ export class HubLevel extends BaseLevel{
             6  ]                                    
             7  ]                            PP41
             8  ]         
-            9  ]    #I49@b52        #I49%842        #I49        @s52#I49
+            9  ]    #I49@b52        #I49%842        #I49@S52    @s52#I49
             10 ]                            
             11 ]                            <>A1
             12 ]                    

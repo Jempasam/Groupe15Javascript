@@ -11,6 +11,7 @@ import { BirdOfFire } from "../lava/BirdOfFire.mjs";
 import { BurningCity } from "../lava/BurningCity.mjs";
 import { LavaHole } from "../lava/LavaHole.mjs";
 import { VolcanoField } from "../lava/VolcanoField.mjs";
+import { SandMonster } from "../sand/SandMonster.mjs";
 import { EffectPack } from "./EffectPack.mjs";
 import { ElementPack } from "./ElementPack.mjs";
 import { FightPack } from "./FightPack.mjs";
@@ -81,6 +82,8 @@ export class BasicPack extends ObjectPack{
             "#|": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.1,1,1), rotation:()=>[0,0,0]},
             "#H": { tags:[...physic.STATIC(), model.pipe.id]},
             "#O": { tags:[...physic.STATIC(), model.sewer.id], size:it=>it.multiplyByFloats(1,.5,1)},
+            "#t": { tags:[...physic.STATIC(), model.track.id] },
+            "#g": { tags:[...physic.STATIC(), model.gradin.id] },
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},
@@ -113,6 +116,7 @@ export class BasicPack extends ObjectPack{
             "vx": {tags:[...physic.MOVING(), ...soil.LAVA(), soil.backward2.id]},
             "<x": {tags:[...physic.MOVING(), ...soil.LAVA(), soil.left2.id]},
             ">x": {tags:[...physic.MOVING(), ...soil.LAVA(), soil.right2.id]},
+            "ox": {tags:[...physic.MOVING(), ...soil.LAVA(), soil.elevator4.id]},
 
             "d#": { tags:[...physic.MOVING(), model.block.id, soil.slow_door4.id] },
 
@@ -140,6 +144,7 @@ export class BasicPack extends ObjectPack{
             "0d": { tags:[...player.DASH_EQUIPPER(), model.artifact.id] },
             "0b": { tags:[...player.BOMB_EQUIPPER(), model.artifact.id] },
             "0p": { tags:[...player.PINGPONG_EQUIPPER(), model.artifact.id] },
+            "0^": { tags:[...player.SPIKE_EQUIPPER(), model.artifact.id] },
 
             "*j": { tags:[...bonus.JUMP_GIVER(), model.sphere.id], size:it=>it.scale(.5) },
 
@@ -156,6 +161,7 @@ export class BasicPack extends ObjectPack{
             "+O": { tags:[...physic.STATIC(), model.pannier.id, model.flame.id, monster.super_basketball_summoner.id], models:()=>[fight.bad] },
             "+d": { tags:[...physic.STATIC(), model.hole.id, monster.demon_summoner.id], models:()=>[fight.bad]},
             "+B": { tags:[...physic.STATIC(), model.hole.id, monster.firebird_summoner.id], models:()=>[fight.bad]},
+            "+S": { tags:[...physic.STATIC(), model.hole.id, monster.sphinx_summoner.id], models:()=>[fight.bad]},
             "+g": { tags:[...physic.STATIC(), model.pipe.id, fight.droplet_summoner.id], rotation: ()=>[Math.PI,0,0]},
 
             "PC": {
@@ -187,6 +193,8 @@ export class BasicPack extends ObjectPack{
             "@p": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new FlyingParis()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@s": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LongSewer()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             
+            "@S": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new SandMonster()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+
             "@h": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new HubLevel()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
             "?1": { tags:[...physic.STATIC(), model.question_mark.id] },

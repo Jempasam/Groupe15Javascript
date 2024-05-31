@@ -26,6 +26,7 @@ import { PathNoFallBehaviour } from "../../objects/behaviour/path/PathNoFallBeha
 import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
 import { ON_DEATH } from "../../objects/behaviour/life/LivingBehaviour.mjs";
 import { ModelKey } from "../../objects/world/ModelHolder.mjs";
+import { ShootAroundBehaviour } from "../../objects/behaviour/invocation/ShootAroundBehaviour.mjs";
 
 /**
  * Un pack de behaviours de base de joueur et de ses pouvoirs
@@ -82,6 +83,10 @@ export class PlayerPack extends ObjectPack{
         { tags:this._fight.PINGPONG(), size: new Vector3(1,1,1) },
         { strength:0.03, reloading_time: 40, shoot_count: 2, cadency: 20, knockback: 0.1 }
     ))
+    spike= this.behav(()=>new ShootAroundBehaviour("KeyE",
+        { tags:this._fight.SPIKE(), size: new Vector3(1,1,1) },
+        { strength:0.1, reloading_time: 100, shoot_count: 1, cadency: 20 },
+    ))
 
 
     // Equipper
@@ -109,6 +114,10 @@ export class PlayerPack extends ObjectPack{
         ()=>new EquipperBehaviour([this.pingpong.id],{slot:"attack"}),
         new HintBehaviour("Tapez avec la raquette avec la touche E!","unlock"),
     )
+    spike_equipper=this.behav( tags(()=>this.player.id),
+        ()=>new EquipperBehaviour([this.spike.id],{slot:"attack"}),
+        new HintBehaviour("Créer un cercle de roche en appuyant sur E","unlock"),
+    )
 
     // Packs
     LIVING_PLAYER= this.lazy(()=>[...this._living.LIVING(), this.player.id, this._models.shadow.id])
@@ -121,7 +130,7 @@ export class PlayerPack extends ObjectPack{
     SHOOT_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.shoot_equipper.id, this._particle.fire_emitter.id])
     BOMB_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.bomb_equipper.id, this._models.bomb.id])
     PINGPONG_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.pingpong_equipper.id, this._models.pingpong.id])
-    
+    SPIKE_EQUIPPER= this.lazy(()=>[...this._physic.STATIC_GHOST(), this.spike_equipper.id, this._models.rock.id])
 
     // Potion
     potion_slow_falling= this.behav( tags(()=>this.player.id), ()=>behaviourInfiniteEquipper(this._effect.SLOW_FALLING()) )

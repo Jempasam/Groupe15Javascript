@@ -93,6 +93,8 @@ export class FightPack extends ObjectPack{
     PINGPONG= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.large_knockback.id, this._particle.vanish_after_one.id, this._models.pingpong.id])
     LARGE_SLASH= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.medium_damage.id, this.large_knockback.id, this._particle.vanish_after_one.id, this._models.slash.id])
     FIREBALL= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this.medium_damage.id, this.small_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id, this.flaming.id, this._models.fire.id])
+    STONEBALL= this.lazy(()=>[...this._physic.PHYSIC_FALLING_SLIDE(), this.small_damage.id, this.small_knockback.id, this._particle.vanish_after_four.id, this._particle.smoke_emitter.id, this._models.rock.id])
+    SPIKE= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.small_damage.id, this.medium_knockback.id, this._particle.vanish_after_four.id, this._particle.appear.id, this._models.stone.id])
     EXPLOSION= this.lazy(()=>[...this._physic.STATIC_GHOST(), this._particle.appear.id, this._models.sphere_explosion.id, this.small_damage.id, this.medium_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id])
     BOMB= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), this.explode.id, this._models.bomb.id])
     DROPLET= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), this._models.droplet.id, this.large_knockback.id, this._particle.vanish_on_collision.id, this._particle.vanish_after_four.id])

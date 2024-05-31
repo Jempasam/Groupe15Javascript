@@ -16,6 +16,8 @@ import { ObjectPack, tags } from "./ObjectPack.mjs";
 import { PlayerPack } from "./PlayerPack.mjs";
 import { SoilPack } from "./SoilPack.mjs";
 import { NAME } from "../../objects/behaviour/life/LifeBarBehaviour.mjs";
+import { ShootAroundBehaviour } from "../../objects/behaviour/invocation/ShootAroundBehaviour.mjs";
+import { ShootBehaviour } from "../../objects/behaviour/invocation/ShootBehaviour.mjs";
 
 /**
  * Un pack de behaviours de modèles de base
@@ -85,6 +87,22 @@ export class MonsterPack extends ObjectPack{
     MANTA_LIKE= this.lazy(()=>[this._models.shadow.id, ...this._physic.PHYSIC(), ...this._living.LIVING(), this._ia.fly_through_from_far.id])
     SMALL_MANTA_LIKE= this.lazy(()=>[this._models.shadow.id, ...this._physic.PHYSIC(), ...this._living.LIVING(), this._ia.rotate_and_jump.id])
 
+    // Attaque
+    spike_attack= this.behav(()=>new ShootAroundBehaviour(null,
+        { tags:this._fight.SPIKE(), size: new Vector3(.5,.3,.5) },
+        { strength:0.1, reloading_time: 80, shoot_count: 1, cadency: 20 },
+    ))
+
+    panda_shoot= this.behav(()=>new ShootBehaviour(null,
+        { tags:[...this.RUNNING(), this._models.panda.id, this._fight.small_damage.id], size: new Vector3(.3,.3,.3) },
+        { strength:0.1, reloading_time: 40, shoot_count: 1, cadency: 20 , knockback:0.1},
+    ))
+
+    stone_shoot= this.behav(()=>new ShootBehaviour(null,
+        { tags:this._fight.STONEBALL(), size: new Vector3(.3,.3,.3) },
+        { strength:0.2, reloading_time: 60, shoot_count: 4, cadency: 10 , knockback:0.02},
+    ))
+
     // Phases
     demon_phases=this.behav(()=>new PhaseBehaviour(
         {tags:[...this.WALKING_FAST()], duration:100},
@@ -116,6 +134,38 @@ export class MonsterPack extends ObjectPack{
         {tags:[...this.FLY_FOLLOWING(), this.lava_summoner.id, this.super_basketball_summoner.id], duration: 400},
     ))
 
+    sphinx_phases=this.behav(()=>new PhaseBehaviour(
+        // Shoot
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.smoke_emitter.id], duration:60},
+        {tags:[...this.WALKING(), this.stone_shoot.id], duration:130},
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.smoke_emitter.id], duration:60},
+        {tags:[...this.WALKING(), this.stone_shoot.id], duration:130},
+
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.water_emitter.id], duration:150},
+
+        // Invocation de pandas
+        {tags:[...this.WALKING(), this.panda_shoot.id], duration:100},
+        {tags:[...this._physic.PHYSIC_FALLING()], duration:100},
+
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.water_emitter.id], duration:150},
+
+        // Charge
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.smoke_emitter.id], duration:50},
+        {tags:[...this.RUNNING()], duration:200},
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.smoke_emitter.id], duration:50},
+        {tags:[...this.RUNNING()], duration:200},
+
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.water_emitter.id], duration:150},
+
+        // Onde de choc
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.smoke_emitter.id], duration:100},
+        {tags:[...this.WALKING(), this.spike_attack.id], duration:170},
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.smoke_emitter.id], duration:100},
+        {tags:[...this.WALKING(), this.spike_attack.id], duration:170},
+
+        {tags:[...this._physic.PHYSIC_FALLING(), this._particle.water_emitter.id], duration:150},
+    ))
+
     // Monsters
     PANDA=this.lazy(()=>[...this.RUNNING(), this._models.panda.id, this._fight.small_damage.id, this._fight.small_knockback.id])
     KANGAROO=this.lazy(()=>[...this.WOLF_LIKE(), this._models.bad_kangaroo.id, this._fight.small_damage.id, this._fight.small_knockback.id])
@@ -124,11 +174,12 @@ export class MonsterPack extends ObjectPack{
     SUPER_BASKETBALL=this.lazy(()=>[...this.MISSILLING(), this._models.basketball.id, this._particle.fire_emitter.id, this.fire_summoner.id, this._fight.medium_damage.id, this._fight.medium_knockback.id, this._particle.vanish_after_sixteen.id])
 
     DEMON=this.lazy(()=>[this.demon_phases.id, this._models.demon.id, this._fight.small_damage.id, this._fight.medium_knockback.id])
-    SPHINX=this.lazy(()=>[...this.WALKING(), this._models.sphinx.id, this._fight.medium_damage.id, this._fight.large_knockback.id])
+    SPHINX=this.lazy(()=>[this.sphinx_phases.id, ...this._living.LIVING(), this._models.sphinx.id, this._living.lifebar.id, this._fight.small_damage.id, this._fight.small_knockback.id])
     FIREBIRD=this.lazy(()=>[this.firebird_phases.id, this._models.aigle_feu_moche.id, this._living.lifebar.id, this._fight.small_damage.id, this._fight.small_knockback.id, this._effect.fire_immune.id])
 
     // Monsters Definition
-    $FIREBIRD=this.lazyDef(()=>({tags:this.FIREBIRD(), models:()=>[new LivingModel(20),[NAME,"Firebird"]]}))
+    $FIREBIRD=this.lazyDef(()=>({tags:this.FIREBIRD(), models:()=>[new LivingModel(20),[NAME,"Oiseau de Feu - Champion du Basket"]]}))
+    $SPHINX=this.lazyDef(()=>({tags:this.SPHINX(), models:()=>[new LivingModel(20),[NAME,"Le Sphinx - Champion du 100m"]]}))
 
     // Invocations
     panda_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.PANDA(), size:[.5,.5,.5]}, 3, 100, 15, 30))
@@ -139,8 +190,8 @@ export class MonsterPack extends ObjectPack{
     super_basketball_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.SUPER_BASKETBALL(), size:[.5,.5,.5]}, 1, 100, 20, 60))
     
     demon_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.DEMON(), size:[.5,.75,.5]}, 1, 100, 20, 60))
-    sphinx_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.SPHINX(), models:()=>[new LivingModel(10)], size:[1,1,1]}, 1, 100, 20, 60))
 
     // Boss invocations
-    firebird_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {...this.$FIREBIRD(), size:[1,1,1]}, 1, 100, 20, 60, 1))
+    sphinx_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {...this.$SPHINX(), size:[1.5,1.5,1.5]}, 1, 100, 20, 60, 1))
+    firebird_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {...this.$FIREBIRD(), size:[.8,.8,.8]}, 1, 100, 20, 60, 1))
 }
