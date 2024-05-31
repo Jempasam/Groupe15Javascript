@@ -23,6 +23,7 @@ export class MusicBehaviour extends Behaviour{
         for(const obj of objects){
             obj.apply(SOUND, sound=>{
                 const volume=audioContext.createGain()
+                volume.gain.value=0
                 const pan=audioContext.createStereoPanner()
                 volume.connect(pan)
                 obj.set(SOUND_INFO,{node:play(sound, true, [volume,pan]),volume,pan})
