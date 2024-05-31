@@ -1,12 +1,15 @@
-import { MusicBehaviour, SOUND, SOUND_BANK } from "../objects/behaviour/MusicBehaviour.mjs"
+import { Vector3 } from "../../../../babylonjs/core/Maths/math.vector.js"
+import { MusicBehaviour, SOUND, SOUND_BANK, playSound } from "../objects/behaviour/MusicBehaviour.mjs"
 import { ON_JUMP } from "../objects/behaviour/controls/PlayerJumpBehaviour.mjs"
 import { ON_COLLECT } from "../objects/behaviour/generic/CollectableBehaviour.mjs"
 import { ON_SHOOT } from "../objects/behaviour/invocation/ShootBehaviour.mjs"
 import { ON_INVOCATION } from "../objects/behaviour/invocation/invocations.mjs"
 import { ON_DEATH, ON_LIVE_CHANGE } from "../objects/behaviour/life/LivingBehaviour.mjs"
 import { giveTag } from "../objects/model/SlotModel.mjs"
+import { TRANSFORM } from "../objects/model/TransformModel.mjs"
+import { GameObject } from "../objects/world/GameObject.mjs"
 import { World } from "../objects/world/World.mjs"
-import { loadSounds, play } from "../ressources/SoundBank.mjs"
+import { loadSounds } from "../ressources/SoundBank.mjs"
 import { Level } from "./Level.mjs"
 import { ON_EXPLODE, ON_SUMMON_DROPLET } from "./objectpacks/FightPack.mjs"
 
@@ -20,29 +23,37 @@ export class BaseLevel extends Level{
     init(world,pack){
         const sounds=world.model.get(SOUND_BANK); if(!sounds)return
 
+        /** @param {AudioBuffer} sound @param {GameObject} emetter */
+        function play(sound,emetter){
+            const pos=emetter.get(TRANSFORM)?.position; if(!pos)return
+            playSound(world,sound,pack.player.player.id,pos,10,0.8)
+        }
+
         // Sound observers
-        world.observers(ON_LIVE_CHANGE).addAuto((w,offset)=>{
-            if(offset<0)play(sounds.TCHI)
-            if(offset>0)play(sounds.GUITARE)
+        world.observers(ON_LIVE_CHANGE).addAuto((w,{affected,offset})=>{
+            if(offset<0)play(sounds.TCHI,affected)
+            if(offset>0)play(sounds.GUITARE,affected)
         })
 
         world.observers(ON_DEATH).addAuto((w,dead)=>{
-            if(dead.tags.includes(pack.player.player.id))play(sounds.GUITARE2)
-            if(dead.tags.includes(pack.living.damage_junk.id))play(sounds.CROCK)
-            if(dead.tags.includes(pack.living.damage_cloud.id))play(sounds.POURH)
+            if(dead.tags.includes(pack.player.player.id))play(sounds.GUITARE2,dead)
+            if(dead.tags.includes(pack.living.damage_junk.id))play(sounds.CROCK,dead)
+            if(dead.tags.includes(pack.living.damage_cloud.id))play(sounds.POURH,dead)
         })
 
-        world.observers(ON_JUMP).addAuto((w,jump)=>play(sounds.TOP))
+        world.observers(ON_JUMP).addAuto((w,{jumper})=>play(sounds.TOP,jumper))
 
         world.observers(ON_SHOOT).addAuto((w,{shooter})=>{
-            if(shooter.tags.includes(pack.player.player.id)) play(sounds.SWORD)
+            if(shooter.tags.includes(pack.player.player.id)) play(sounds.SWORD,shooter)
         })
 
-        world.observers(ON_COLLECT).addAuto((w,collectable)=>play(sounds.POP))
+        world.observers(ON_COLLECT).addAuto((w,{collectable})=>play(sounds.POP,collectable))
 
-        world.observers(ON_EXPLODE).addAuto((w,collectable)=>play(sounds.BOMB))
+        world.observers(ON_EXPLODE).addAuto((w,exploded)=>play(sounds.BOMB,exploded))
 
-        world.observers(ON_INVOCATION).addAuto((w)=>play(sounds.POP))
+        world.observers(ON_INVOCATION).addAuto((w,{invoker,invocation})=>{
+            if(!invoker.tags.includes(pack.player.player.id))play(sounds.POP,invocation)
+        })
 
         // Music Behaviours
         /**

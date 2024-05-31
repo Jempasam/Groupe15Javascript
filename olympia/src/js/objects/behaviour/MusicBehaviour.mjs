@@ -86,6 +86,49 @@ export class MusicBehaviour extends Behaviour{
 
 }
 
+/**
+ * Joue un localisé à un endroit du monde avec une distance d'écoute max et un volume max
+ * @param {World} world Le monde 
+ * @param {AudioBuffer} sound Le son
+ * @param {import("../world/TaggedDict.mjs").Tag} hearers Ceux qui peuvent entendre le son
+ * @param {Vector3} location L'emplacement du son
+ * @param {number} max_distance 
+ * @param {number} max_volume 
+ */
+export function playSound(world, sound, hearers, location, max_distance, max_volume){
+    // Get center of hearers
+    let center=Vector3.Zero()
+    let count=0;
+    for(const hearer of world.objects.get(hearers)){
+        hearer.apply(TRANSFORM, tf=>{
+            center.addInPlace(tf.position)
+            count++
+        })
+    }
+    center.scale(1/count)
+
+    const offset=location.subtract(center)
+    const distance=offset.length()
+    offset.normalize()
+
+    console.log("Info:",location.asArray(),center.asArray(),offset.asArray(),distance)
+
+    // Volume
+    const volume=audioContext.createGain()
+    if(distance>max_distance*1.5) return
+    else{
+        volume.gain.value=Math.max(0,1-distance/max_distance)*max_volume
+    }
+
+    // Pan
+    const pan=audioContext.createStereoPanner()
+    pan.pan.value=-offset.x
+
+    volume.connect(pan)
+
+    play(sound, false, [volume,pan])
+}
+
 
 /** @type {ModelKey<AudioBuffer>} */
 export const SOUND=new ModelKey("sound")

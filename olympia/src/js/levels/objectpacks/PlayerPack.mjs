@@ -161,6 +161,9 @@ export class PlayerPack extends ObjectPack{
     hint_jump=this.behav( tags(()=>this.player.id),
         new HintBehaviour("Les sphère de saut vous redonne un saut lorsque vous les touchez comme si vous touchiez le sol!","hint")
     )
+    hint_door=this.behav( tags(()=>this.player.id),
+        new HintBehaviour("Il faut attendre que la porte finisse de se lever pour passer!","hint")
+    )
 
     // Camera
     camera_movement=this.behav( tags(()=>this.player.id), new CameraLikeBehaviour())

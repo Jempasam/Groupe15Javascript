@@ -73,9 +73,11 @@ export class SummonerBehaviour extends Behaviour{
 
                     // Summon
                     if(summoner.invocated<this.max_invocation && summoner.objects.length<this.max_count){
-                        const invoked=invocate(world, obj, this.invocation)
+                        const invoked=invocate(world, obj, this.invocation,
+                            new TransformModel({position:tf.position})
+                        )
                         invoked.apply(TRANSFORM, tfnew=>{
-                            tfnew.position.copyFrom(tf.position.clone().addInPlaceFromFloats(0,(tf.scale.y+tfnew.scale.y)/2,0))
+                            tfnew.position.addInPlaceFromFloats(0,(tf.scale.y+tfnew.scale.y)/2,0)
                         })
                         obj.apply(MOVEMENT, mv=>mv.inertia.y+=0.2)
                         summoner.objects.push(invoked)
