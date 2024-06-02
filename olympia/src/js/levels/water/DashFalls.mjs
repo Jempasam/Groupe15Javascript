@@ -55,7 +55,7 @@ export class DashFalls extends BaseLevel{
             `
             1  ]
             2  ]
-            3  ]        ()B2
+            3  ]        @hB2
             4  ]
             5  ]
             6  ]

@@ -120,7 +120,7 @@ export class PlayerPack extends ObjectPack{
     )
 
     // Packs
-    LIVING_PLAYER= this.lazy(()=>[...this._living.LIVING(), this.player.id, this._models.shadow.id])
+    LIVING_PLAYER= this.lazy(()=>[...this._living.LIVING(), this.player.id, this._living.life_message.id, this._models.shadow.id])
 
     CLASSIC_PLAYER= this.lazy(()=>[...this._physic.PHYSIC_FALLING(), ...this.LIVING_PLAYER(), this.move.id, this._living.respawn.id])
 

@@ -12,6 +12,7 @@ import { behaviourCollectable } from "../../objects/behaviour/generic/Collectabl
 import { LifeBarBehaviour } from "../../objects/behaviour/life/LifeBarBehaviour.mjs";
 import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
 import { CURRENT_LEVEL, LEVEL_CONTEXT, NEXT_LEVEL } from "../Level.mjs";
+import { LifeMessageBehaviour } from "../../objects/behaviour/life/LifeMessageBehaviour.mjs";
 
 
 
@@ -47,6 +48,7 @@ export class LivingPack extends ObjectPack{
         })
     }))
     lifebar=this.behav(new LifeBarBehaviour())
+    life_message=this.behav(new LifeMessageBehaviour())
 
     // Items
     health_giver=this.behav(tags(()=>this.living.id), behaviourCollectable({use_count:Infinity, reload_time:200},(_,obj)=>{
