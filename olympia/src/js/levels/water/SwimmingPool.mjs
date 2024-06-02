@@ -146,7 +146,7 @@ export class SwimmingPool extends BaseLevel{
             59 ]
             60 ]
             61 ]
-            62 ]        @M6----
+            62 ]        @MD6----
             63 ]        |
             `
             ,
