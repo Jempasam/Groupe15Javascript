@@ -33,6 +33,7 @@ import { PlayerBonusPack } from "./PlayerBonusPack.mjs";
 import { PlayerPack } from "./PlayerPack.mjs";
 import { SoilPack } from "./SoilPack.mjs";
 import { SoundPack } from "./SoundPack.mjs";
+import { SwimmingPool } from "../water/SwimmingPool.mjs";
 
 
 
@@ -222,6 +223,7 @@ export class BasicPack extends ObjectPack{
 
             "@F": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new DashFalls()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@M": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BambooMaze()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@N": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new SwimmingPool()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
             "@h": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new HubLevel()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 

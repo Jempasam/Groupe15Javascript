@@ -7,6 +7,7 @@ import { SceneOptimizer, SceneOptimizerOptions } from "../../../babylonjs/core/M
 import { MeshBuilder } from "../../../babylonjs/core/index.js";
 import { Scene } from "../../../babylonjs/core/scene.js";
 import { adom, create } from "../../../samlib/DOM.mjs";
+import { GameMenu } from "../../../samlib/gui/GameMenu.mjs";
 import { HubLevel } from "./levels/HubLevel.mjs";
 import { Level, LevelContext } from "./levels/Level.mjs";
 import { SamLevel } from "./levels/SamLevel.mjs";
@@ -88,20 +89,28 @@ async function main(){
 
     engine.hideLoadingUI()
 
-    // Boucle de tick
-    setInterval(function(){
-        if (!pause){
-            world.tick()
-            levelContext.tick()
-        }
-    }, 30);
+    // Menu
+    const game_menu=new GameMenu()
+    game_menu.onplay=()=>{
+        console.log("Play")
+        // Boucle de tick
+        setInterval(function(){
+            if (!pause){
+                world.tick()
+                levelContext.tick()
+            }
+        }, 30);
 
-    //boucle de rendu
-    engine.runRenderLoop(function () {
-        sceneToRender.render();
-    });
-
-    levelContext.switchTo(new HubLevel())
+        //boucle de rendu
+        engine.runRenderLoop(function () {
+            sceneToRender.render();
+        });
+        levelContext.switchTo(new HubLevel())
+        game_menu.remove()
+        engine.resize()
+    }
+    gameElement?.append(game_menu)
+    
     
 }
 main()

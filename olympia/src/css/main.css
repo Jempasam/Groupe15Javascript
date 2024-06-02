@@ -265,4 +265,15 @@
             }
         }
     }
+
+    sam-gamemenu{
+        background-image: url("../../images/titre.png");
+        background-size: contain;
+        background-color: black;
+        background-repeat: no-repeat;
+        background-position: center;
+        .shop{
+            display: none;
+        }
+    }
 }
