@@ -69,6 +69,7 @@ export async function loadModels(scene){
         TRACK: await model(scene,"track"),
         PANCARTE: await model(scene,"pancarte"),
         BOOMBOX: await model(scene,"boombox"),
+        CANON: await model(scene,"canon"),
 
         CLOUD: await model(scene,"cloud"),
         ENV_SKY: await model(scene,"sky","environment"),
@@ -117,6 +118,14 @@ export async function loadModels(scene){
         PARTICLE_BLOOD: await model(scene,"blood","particle"),
         PARTICLE_WOOD: await model(scene,"wood","particle"),
         PARTICLE_DARKNESS: await model(scene,"darkness","particle"),
+
+        BUTTON_ON: await model(scene,"button_on","electronic"),
+        BUTTON_OFF: await model(scene,"button_off","electronic"),
+        BUTTON_DEAD: await model(scene,"button_dead","electronic"),
+
+        LED_ON: await model(scene,"led_on","electronic"),
+        LED_OFF: await model(scene,"led_off","electronic"),
+        LED_DEAD: await model(scene,"led_dead","electronic"),
 
         _nothing: scene.createDefaultEnvironment({createSkybox:false,createGround:false,toneMappingEnabled:false})
     }

@@ -89,7 +89,7 @@ export class MonsterPack extends ObjectPack{
 
     // Attaque
     spike_attack= this.behav(()=>new ShootAroundBehaviour(null,
-        { tags:this._fight.SPIKE(), size: new Vector3(.5,.3,.5) },
+        { tags:this._fight.SPIKE(), size: new Vector3(.4,.2,.4) },
         { strength:0.1, reloading_time: 80, shoot_count: 1, cadency: 20 },
     ))
 
@@ -178,8 +178,8 @@ export class MonsterPack extends ObjectPack{
     FIREBIRD=this.lazy(()=>[this.firebird_phases.id, this._models.aigle_feu_moche.id, this._living.lifebar.id, this._fight.small_damage.id, this._fight.small_knockback.id, this._effect.fire_immune.id])
 
     // Monsters Definition
-    $FIREBIRD=this.lazyDef(()=>({tags:this.FIREBIRD(), models:()=>[new LivingModel(20),[NAME,"Oiseau de Feu, Roi du Basket"]]}))
-    $SPHINX=this.lazyDef(()=>({tags:this.SPHINX(), models:()=>[new LivingModel(20),[NAME,"Le Sphinx, Roi du 100m"]]}))
+    $FIREBIRD=this.lazyDef(()=>({tags:this.FIREBIRD(), models:()=>[new LivingModel(20),[NAME,"Phoenix Roi du Basket"]]}))
+    $SPHINX=this.lazyDef(()=>({tags:this.SPHINX(), models:()=>[new LivingModel(20),[NAME,"Sphinx Roi du 100m"]]}))
 
     // Invocations
     panda_summoner=this.behav(tags(()=>this._player.player.id), ()=>new SummonerBehaviour( {tags:this.PANDA(), size:[.5,.5,.5]}, 3, 100, 15, 30))

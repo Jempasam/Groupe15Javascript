@@ -58,6 +58,7 @@ export class ModelPack extends ObjectPack{
     gradin= this.behav(()=>new MeshBehaviour(this.models.GRADIN))
     pancarte= this.behav(()=>new MeshBehaviour(this.models.PANCARTE))
     boombox= this.behav(()=>new MeshBehaviour(this.models.BOOMBOX))
+    canon= this.behav(()=>new MeshBehaviour(this.models.CANON))
 
     big_cloud= this.behav(()=>new MeshBehaviour(this.models.CLOUD))
 
@@ -120,5 +121,14 @@ export class ModelPack extends ObjectPack{
     sphere_explosion= this.behav(()=>new MeshBehaviour(this.models.SPHERE_EXPLOSION))
     sphere_explosion2= this.behav(()=>new MeshBehaviour(this.models.SPHERE_EXPLOSION2))
     sphere_explosion3= this.behav(()=>new MeshBehaviour(this.models.SPHERE_EXPLOSION3))
+
+    // Electronic
+    button_on= this.behav(()=>new MeshBehaviour(this.models.BUTTON_ON))
+    button_off= this.behav(()=>new MeshBehaviour(this.models.BUTTON_OFF))
+    button_dead= this.behav(()=>new MeshBehaviour(this.models.BUTTON_DEAD))
+
+    led_on= this.behav(()=>new MeshBehaviour(this.models.LED_ON))
+    led_off= this.behav(()=>new MeshBehaviour(this.models.LED_OFF))
+    led_dead= this.behav(()=>new MeshBehaviour(this.models.LED_DEAD))
 
 }

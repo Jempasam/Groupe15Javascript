@@ -8,7 +8,7 @@ import { Behaviour } from "../Behaviour.mjs";
 import { TEAM } from "../../model/TeamModel.mjs";
 import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { GameObject } from "../../world/GameObject.mjs";
-import { invocate } from "./invocations.mjs";
+import { invocate, invocateToward } from "./invocations.mjs";
 
 /**
  * Fait tirer un objet lors de l'appui sur une touche
@@ -62,17 +62,9 @@ export class ShootAroundBehaviour extends Behaviour{
                             const direction=new Vector3(dx,0,dy)
                             direction.normalize()
                             const inertia=direction.scale(this.strength)
-
-                            const projectile=invocate(world, obj, this.invocation,
-                                new MovementModel(inertia),
-                            )
-                            
+                            const projectile=invocateToward(world, obj, this.invocation, direction, new MovementModel(inertia))
                             projectile.apply(TRANSFORM, tfproj=>{
-                                tfproj.position.copyFrom(tf.position.clone().addInPlaceFromFloats(
-                                    (tf.scale.x/2+tfproj.scale.x/2)*direction.x,
-                                    (-tf.scale.y/2+tfproj.scale.y/2),
-                                    (tf.scale.z/2+tfproj.scale.z/2)*direction.z,
-                                ))
+                                tfproj.position.y= tf.position.y -tf.scale.y/2 +tfproj.scale.y/2
                             })
                             
                             obj.observers(ON_SHOOT).notify({shooter:obj, shooted:projectile, model:shooting})

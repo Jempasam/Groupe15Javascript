@@ -19,6 +19,10 @@ import { EffectPack } from "./EffectPack.mjs";
 import { PathBehaviour } from "../../objects/behaviour/movement/PathBehaviour.mjs";
 import { LivingPack } from "./LivingPack.mjs";
 import { giveTag } from "../../objects/model/SlotModel.mjs";
+import { ElectronicPack } from "./ElectronicPack.mjs";
+import { invocateToward } from "../../objects/behaviour/invocation/invocations.mjs";
+import { ElectronicBehaviour, ON_POWERED } from "../../objects/behaviour/electronics/ElectronicBehaviours.mjs";
+import { ON_HITTED } from "../../objects/behaviour/life/ProjectileBehaviour.mjs";
 
 
 /**
@@ -29,13 +33,12 @@ export class SoilPack extends ObjectPack{
     /**
      * @param {World} world
      * @param {EffectPack} effect
-     * @param {LivingPack} living
      */
-    constructor(world,effect,living){
+    constructor(world,effect){
         super(world)
         this._effect=effect
         this._physic=effect._particle._physic
-        this._living=living
+        this._living=effect._living
         this._models=effect._particle._models
         this._particle=effect._particle
         this._registerNames()
@@ -75,6 +78,7 @@ export class SoilPack extends ObjectPack{
     ICE= this.lazy(()=>[this.slidable.id, this._models.ice.id])
     FIRE= this.lazy(()=>[this._models.flame.id, this._effect.give_burning.id, this._particle.smoke_emitter.id])
     TRAMPOLINE= this.lazy(()=>[this.jumping.id, this._models.trampoline.id])
+    WOOD= this.lazy(()=>[...this._living.WOOD_DESTRUCTIBLE(), this._models.wood.id])
 
 
     // Moving
@@ -82,6 +86,9 @@ export class SoilPack extends ObjectPack{
     elevator4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,2,0)], 0.1, 0.01, 0.02))
     elevator8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,4,0)], 0.1, 0.01, 0.02))
     elevatorG=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,8,0)], 0.1, 0.01, 0.02))
+    delevator2=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,-1,0)], 0.1, 0.01, 0.02))
+    delevator4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,-2,0)], 0.1, 0.01, 0.02))
+    delevator8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,-4,0)], 0.1, 0.01, 0.02))
     forward2=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,0,-3)], 0.1, 0.01, 0.02))
     forward4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,0,-6)], 0.1, 0.01, 0.02))
     forward8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,0,-12)], 0.1, 0.01, 0.02))
@@ -96,8 +103,9 @@ export class SoilPack extends ObjectPack{
     left8=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(12,0,0)], 0.1, 0.01, 0.02))
     rotate_side4=this.behav(new PathBehaviour([new Vector3(2,0,0),new Vector3(2,4,0),new Vector3(-2,4,0),new Vector3(-2,0,0)], 0.1, 0.01, 0.02))
     rotate_side8=this.behav(new PathBehaviour([new Vector3(4,0,0),new Vector3(4,8,0),new Vector3(-4,8,0),new Vector3(-4,0,0)], 0.1, 0.01, 0.02))
-    
+
     // Slow Door
     slow_door4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,3,0)], 0.1, 0.001, 0.0015))
     door4=this.behav(new PathBehaviour([new Vector3(0,0,0),new Vector3(0,3,0)], 0.1, 0.002, 0.005))
+
 }

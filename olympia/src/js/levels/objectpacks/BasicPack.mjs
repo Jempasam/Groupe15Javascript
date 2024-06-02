@@ -14,7 +14,10 @@ import { LavaHole } from "../lava/LavaHole.mjs";
 import { PandaPlane } from "../lava/PandaPlane.mjs";
 import { VolcanoField } from "../lava/VolcanoField.mjs";
 import { SandMonster } from "../sand/SandMonster.mjs";
+import { DashFalls } from "../water/DashFalls.mjs";
+import { DipolePack } from "./DipolePack.mjs";
 import { EffectPack } from "./EffectPack.mjs";
+import { ElectronicPack } from "./ElectronicPack.mjs";
 import { ElementPack } from "./ElementPack.mjs";
 import { FightPack } from "./FightPack.mjs";
 import { IAPack } from "./IAPack.mjs";
@@ -51,13 +54,15 @@ export class BasicPack extends ObjectPack{
         let living= this.living= new LivingPack(world, particle)
         let effect= this.effect= new EffectPack(world, living)
         let fight= this.fight= new FightPack(world, living, effect)
-        let soil= this.soil= new SoilPack(world, effect,living)
+        let electronic= this.electronic= new ElectronicPack(world, model, physic)
+        let soil= this.soil= new SoilPack(world, effect)
         let element= this.element= new ElementPack(world, soil, fight)
         let player= this.player= new PlayerPack(world, element)
         let ia= this.ia= new IAPack(world, living)
         let monster= this.monster= new MonsterPack(world, fight, ia, player,soil)
         let sound= this.sound= new SoundPack(world,player)
         let bonus= this.bonus= new PlayerBonusPack(world,player)
+        let dipole= this.dipole= new DipolePack(world,fight,soil,electronic)
 
         this.NEXT_LEVEL= options.next_levels==null ? [] : [player.createLevelChange(options.next_levels).id]
         if(options.next_levels!=null)world.model.set(NEXT_LEVEL,options.next_levels)
@@ -151,6 +156,11 @@ export class BasicPack extends ObjectPack{
             "0p": { tags:[...player.PINGPONG_EQUIPPER(), model.artifact.id] },
             "0^": { tags:[...player.SPIKE_EQUIPPER(), model.artifact.id] },
 
+            "§r": { tags:[...dipole.REPEATER()], size: it=>it.scale(.5), position:(p,s)=>p.subtractFromFloats(0, s.y/4, 0) },
+            "§d": { tags:[...dipole.OPENABLE_DOOR(), model.block.id] },
+            "§b": { tags:[...dipole.BUTTON()], size: it=>it.multiplyByFloats(1,1,1) },
+
+
             "*j": { tags:[...bonus.JUMP_GIVER(), model.sphere.id], size:it=>it.scale(.5) },
 
             "$h": { tags:[...physic.STATIC_GHOST(), model.heart.id, living.health_giver.id] },
@@ -201,6 +211,8 @@ export class BasicPack extends ObjectPack{
             "@s": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LongSewer()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             
             "@S": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new SandMonster()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+
+            "@F": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new DashFalls()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
             "@h": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new HubLevel()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 

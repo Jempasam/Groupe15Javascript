@@ -65,8 +65,8 @@ export class World{
         const added_tags=[...tags]
         fastRemoveValueAll(added_tags,object.tags)
         this.objects.add(added_tags,object)
-        this.forBehav(added_tags, behaviour=>{
-            behaviour.behaviour.init(this,...this.#getParamsOf(behaviour,added_tags,[object]))
+        this.forBehav(added_tags, (behaviour,tag)=>{
+            behaviour.behaviour.init(this,...this.#getParamsOf(behaviour,[tag],[object]))
         })
     }
 
@@ -108,8 +108,8 @@ export class World{
             addeds.push(object)
         }
         // Init behaviours
-        this.forBehav(tags, behaviour=>{
-            behaviour.behaviour.init(this,...this.#getParamsOf(behaviour,tags,addeds))
+        this.forBehav(tags, (behaviour,tag)=>{
+            behaviour.behaviour.init(this,...this.#getParamsOf(behaviour,[tag],addeds))
         })
 
         this.obj_state_age++
@@ -130,7 +130,7 @@ export class World{
     /**
      * Ajoute un objet au monde à partir d'une définition
      * @param {ObjectDefinition} definition
-     * @param {...ModelAndKey} data Les données de l'objet
+     * @param {...(ModelAndKey|null)} data Les données de l'objet
      * @returns {GameObject}
      */
     addDef(definition,...data){
@@ -282,14 +282,14 @@ export class World{
     /**
      * Execute sur fonctions sur les behaviours associés à des tags
      * @param {Tag[]} tags
-     * @param {(behaviour:BehaviourEntry)=>void} callback
+     * @param {(behaviour:BehaviourEntry,tag:Tag)=>void} callback
      */
     forBehav(tags, callback){
         for(let tag of tags){
             let list=this.behaviours.get(tag)
             if(list!==undefined){
                 for(let behaviour of list){
-                    callback(behaviour)
+                    callback(behaviour,tag)
                 }
             }
         }

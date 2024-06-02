@@ -7,6 +7,7 @@ import { ObserverGroup, ObserverKey, observers } from "../../../../../../samlib/
 import { ModelKey } from "../../world/ModelHolder.mjs";
 import { ON_COLLISION } from "../collision/SimpleCollisionBehaviour.mjs";
 import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs"
+import { GameObject } from "../../world/GameObject.mjs";
 
 
 export class ProjectileBehaviour extends Behaviour{
@@ -39,6 +40,8 @@ export class ProjectileBehaviour extends Behaviour{
             obj.observers(ON_COLLISION).add(this.eventid, (_,{object,self_hitbox,hitbox})=>{
                 if(!shootable.match(object))return
                 if(obj.get(PROJECTILE)?.dying??false)return
+                
+                object.observers(ON_HITTED).notify({hitter:obj,hitted:object})
 
                 object.apply(LIVING,living=>{
                     living.damage(this.damage)
@@ -89,8 +92,8 @@ export class ProjectileBehaviour extends Behaviour{
     }
 }
 
-/** @type {ObserverKey<number>} */
-export const ON_ATTACK=new ObserverKey("on_attack")
+/** @type {ObserverKey<{hitter:GameObject, hitted:GameObject}>} */
+export const ON_HITTED=new ObserverKey("on_hitted")
 
 /** @type {ModelKey<{age:number,dying:boolean}>} */
 export const PROJECTILE=new ModelKey("projectile")

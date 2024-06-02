@@ -111,8 +111,6 @@ export function playSound(world, sound, hearers, location, max_distance, max_vol
     const distance=offset.length()
     offset.normalize()
 
-    console.log("Info:",location.asArray(),center.asArray(),offset.asArray(),distance)
-
     // Volume
     const volume=audioContext.createGain()
     if(distance>max_distance*1.5) return

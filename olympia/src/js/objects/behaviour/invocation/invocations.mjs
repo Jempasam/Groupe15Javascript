@@ -26,7 +26,7 @@ import { Behaviour } from "../Behaviour.mjs"
  * @param {World} world 
  * @param {GameObject} invoker 
  * @param {Invocation} invocation
- * @param {...import("../../world/ModelHolder.mjs").ModelAndKey} models
+ * @param {...(import("../../world/ModelHolder.mjs").ModelAndKey|null)} models
  */
 export function invocate(world, invoker, invocation, ...models){
     let size= fromVectorLike(invocation.size)
@@ -37,6 +37,7 @@ export function invocate(world, invoker, invocation, ...models){
     obj.getOrSet(TRANSFORM,()=>new TransformModel({}))
 
     // Team
+    if(obj.get(TEAM)!=null){}
     if(team===undefined)invoker.apply(TEAM, team=>obj.set(TEAM,team))
     else if(team!==null)obj.set(TEAM,team)
 
@@ -55,6 +56,33 @@ export function invocate(world, invoker, invocation, ...models){
     
     invoker.observers(ON_INVOCATION).notify({invoker,invocation:obj})
     return obj
+}
+
+/**
+ * 
+ * @param {World} world 
+ * @param {GameObject} invoker 
+ * @param {Invocation} invocation 
+ * @param {Vector3} direction 
+ * @param  {...any} models 
+ */
+export function invocateToward(world, invoker, invocation, direction, ...models){
+    // Summon the invocation
+    const summoned=invocate(world, invoker, invocation,
+        invoker.apply(TRANSFORM, tf=>new TransformModel({position:tf.position}))??null,
+        ...models
+    )
+
+    // Move it in the direction
+    direction=direction.normalizeToNew()
+    const invokerTf= invoker.get(TRANSFORM)
+    const summonedTf= summoned.get(TRANSFORM)
+    if(invokerTf && summonedTf){
+        summonedTf.position
+            .copyFrom(invokerTf.position.clone())
+            .addInPlace(invokerTf.scale .add(summonedTf.scale) .multiply(direction) .scale(0.6))
+    }
+    return summoned
 }
 
 /** @type {ObserverKey<{invoker:GameObject, invocation: GameObject}>} */

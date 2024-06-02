@@ -17,6 +17,7 @@ export function giveTag(obj, ...tags){
     for(const tag of tags){
         let count=slots.counters[tag] ?? (obj.tags.includes(tag)?1:0)
         count++
+        console.log(tag,count)
         slots.counters[tag]=count
         obj.addTag(tag)
     }

@@ -8,7 +8,7 @@ import { Behaviour } from "../Behaviour.mjs";
 import { TEAM } from "../../model/TeamModel.mjs";
 import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { GameObject } from "../../world/GameObject.mjs";
-import { invocate } from "./invocations.mjs";
+import { invocate, invocateToward } from "./invocations.mjs";
 
 /**
  * Fait tirer un objet lors de l'appui sur une touche
@@ -67,16 +67,7 @@ export class ShootBehaviour extends Behaviour{
                         accelerateX(move.inertia, knockback.x*2, Math.abs(knockback.x))
                         accelerateZ(move.inertia, knockback.z*2, Math.abs(knockback.z))
                         
-                        const projectile=invocate(world, obj, this.invocation,
-                            new MovementModel(inertia),
-                        )
-                        projectile.apply(TRANSFORM, tfproj=>{
-                            tfproj.position.copyFrom(tf.position.clone().addInPlaceFromFloats(
-                                (tf.scale.x/2+tfproj.scale.x/2)*direction.x,
-                                0,
-                                (tf.scale.z/2+tfproj.scale.z/2)*direction.z,
-                            ))
-                        })
+                        const projectile=invocateToward(world, obj, this.invocation, direction, new MovementModel(inertia))
                         
                         obj.observers(ON_SHOOT).notify({shooter:obj, shooted:projectile, model:shooting})
                     })

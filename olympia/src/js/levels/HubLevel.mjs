@@ -1,12 +1,8 @@
-import { UniversalCamera } from "../../../../babylonjs/core/index.js";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
-import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
 import { message } from "../script.js";
 import { BaseLevel } from "./BaseLevel.mjs";
-import { Level, LevelContext } from "./Level.mjs";
 import { LIVE_EDITOR_SETTINGS, LiveEditor } from "./LiveEditor.mjs";
-import { VolcanoField } from "./lava/VolcanoField.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
 
 export class HubLevel extends BaseLevel{
@@ -23,9 +19,9 @@ export class HubLevel extends BaseLevel{
          maps:[
             `
             1  ]                    ##3B----------------
-            2  ]    ##39            ##39##12--------##39            ##39
+            2  ]    ##39            ##39##02--------##39            ##39
             3  ]    |  |#x1B--------|  ||           |  |#b1B--------|  |        *jJ2
-            4  ]    |__||___________|__|d#19--------|__||___________|__|
+            4  ]    |__||___________|__||           |__||___________|__|
             5  ]#x1B##12#m12--------##12----------------#%12--------##12#b3G----*jE2
             6  ]|  ||   |           |                   |           |  ||  
             7  ]|  ||   |           |                   |           |  ||       *jA2
@@ -49,11 +45,11 @@ export class HubLevel extends BaseLevel{
             ,
             `
             1  ]
-            2  ]                        @P46--------
-            3  ]
-            4  ]
-            5  ]    #I49            #I49%b42--------#I49%842        #I49
-            6  ]            @v52                            @p52
+            2  ]                        #W12--------    @PD5----
+            3  ]                        |               
+            4  ]                        |
+            5  ]    #I49            #I49            #I49%842        #I49
+            6  ]            @v52        %b42--------        @p52
             7  ]                                                
             8  ]         
             9  ]    #I49            #I49%842        #I49            #I49
@@ -67,6 +63,7 @@ export class HubLevel extends BaseLevel{
             ,
             `
             1  ]
+            2  ]                            @F42
             `
             ,
             `

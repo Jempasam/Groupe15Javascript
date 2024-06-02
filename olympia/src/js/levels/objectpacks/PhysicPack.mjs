@@ -65,6 +65,7 @@ export class PhysicPack extends ObjectPack{
     PHYSIC_FALLING_SLIDE= this.lazy(()=>[...this.PHYSIC_SLIDE(), ...this._FALLING()])
 
     MOVING= this.lazy(()=>[this.transform.id, this.no_friction_move.id, this.collision.id, this.solid.id])
+    MOVING_FRICTION= this.lazy(()=>[this.transform.id, this.high_friction_move.id, this.collision.id, this.solid.id])
     MOVING_GHOST= this.lazy(()=>[this.transform.id, this.no_friction_move.id, this.collision.id])
     MOVING_GHOST_FRICTION= this.lazy(()=>[this.transform.id, this.high_friction_move.id, this.collision.id])
     MOVING_NOCOLLISION= this.lazy(()=>[this.transform.id, this.no_friction_move.id])

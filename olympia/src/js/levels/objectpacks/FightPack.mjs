@@ -1,5 +1,5 @@
 import { behaviourTimeout } from "../../objects/behaviour/generic/TimeoutBehaviour.mjs";
-import { ProjectileBehaviour } from "../../objects/behaviour/life/ProjectileBehaviour.mjs";
+import { ON_HITTED, ProjectileBehaviour } from "../../objects/behaviour/life/ProjectileBehaviour.mjs";
 import { World } from "../../objects/world/World.mjs";
 import { LivingPack } from "./LivingPack.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
@@ -18,6 +18,7 @@ import { Vector2, Vector3 } from "../../../../../babylonjs/core/index.js";
 import { behaviourInterval } from "../../objects/behaviour/generic/IntervalBehaviour.mjs";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
 import { ObserverKey } from "../../../../../samlib/observers/ObserverGroup.mjs";
+import { invocateToward } from "../../objects/behaviour/invocation/invocations.mjs";
 
 
 
@@ -44,6 +45,13 @@ export class FightPack extends ObjectPack{
     // Teams
     good=new Team("good")
     bad=new Team("bad")
+
+    // On hit
+    hitter= this.behav( tags(()=>this._living.hitable.id),
+        behaviourOnContact({target:ContactTarget.NOT_ALLIES}, (o,t)=>{
+            t.observers(ON_HITTED).notify({hitter:o,hitted:t})
+        })
+    )
 
     // Contact Damage
     small_damage= this.behav( tags(()=>this._living.living.id),
@@ -89,9 +97,9 @@ export class FightPack extends ObjectPack{
     }))
 
     // Compilations
-    SMALL_SLASH= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.small_damage.id, this.small_knockback.id, this._particle.vanish_after_half.id, this._models.slash.id])
-    PINGPONG= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.large_knockback.id, this._particle.vanish_after_one.id, this._models.pingpong.id])
-    LARGE_SLASH= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.medium_damage.id, this.large_knockback.id, this._particle.vanish_after_one.id, this._models.slash.id])
+    SMALL_SLASH= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.hitter.id, this.small_damage.id, this.small_knockback.id, this._particle.vanish_after_half.id, this._models.slash.id])
+    PINGPONG= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.hitter.id, this.large_knockback.id, this._particle.vanish_after_one.id, this._models.pingpong.id])
+    LARGE_SLASH= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.hitter.id, this.medium_damage.id, this.large_knockback.id, this._particle.vanish_after_one.id, this._models.slash.id])
     FIREBALL= this.lazy(()=>[...this._physic.PHYSIC_SLIDE(), this.medium_damage.id, this.small_knockback.id, this._particle.vanish_after_one.id, this._particle.smoke_emitter.id, this._particle.fire_emitter.id, this.flaming.id, this._models.fire.id])
     STONEBALL= this.lazy(()=>[...this._physic.PHYSIC_FALLING_SLIDE(), this.small_damage.id, this.small_knockback.id, this._particle.vanish_after_four.id, this._particle.smoke_emitter.id, this._models.rock.id])
     SPIKE= this.lazy(()=>[...this._physic.MOVING_GHOST(), this.small_damage.id, this.medium_knockback.id, this._particle.vanish_after_four.id, this._particle.appear.id, this._models.stone.id])
@@ -101,10 +109,7 @@ export class FightPack extends ObjectPack{
 
     // Invocation
     droplet_summoner=this.behav(behaviourInterval(60,behaviourEach( (o,w) =>{
-        const tf= o.get(TRANSFORM); if(!tf)return
-        const size=Math.min(tf.scale.x,tf.scale.z)*0.5
-        const under= tf.position.add(new Vector3(0,-tf.scale.y/2-size/2-0.2,0))
-        const obj=w.add(this.DROPLET(), new TransformModel({copied:tf,position:under,scale:new Vector3(size,size,size)}), Team.HATEFUL)
+        const obj=invocateToward(w,o, this.DROPLET(), new Vector3(0,-1,0), Team.HATEFUL)
         o.observers(ON_SUMMON_DROPLET).notify(obj)
     })))
 }
