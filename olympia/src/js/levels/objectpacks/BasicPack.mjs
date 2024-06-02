@@ -5,6 +5,7 @@ import { LivingModel } from "../../objects/model/LivingModel.mjs";
 import { World } from "../../objects/world/World.mjs";
 import { HubLevel } from "../HubLevel.mjs";
 import { Level, NEXT_LEVEL } from "../Level.mjs";
+import { CityRace } from "../city/CityRace.mjs";
 import { FlyingParis } from "../city/FlyingParis.mjs";
 import { LongSewer } from "../city/LongSewer.mjs";
 import { BirdBridge } from "../lava/BirdBridge.mjs";
@@ -85,8 +86,10 @@ export class BasicPack extends ObjectPack{
             "#p": { tags:[...physic.STATIC(), model.pannier_basket.id], size: it=>it.multiplyByFloats(.1,1,.1), rotation:()=>[0,-Math.PI/2,0]},
             "#q": { tags:[...physic.STATIC(), model.pannier_basket.id], size: it=>it.multiplyByFloats(.1,1,.1), rotation:()=>[0,Math.PI/2,0]},
             "#v": { tags:[...physic.STATIC(), model.volcano.id]},
-            "#-": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.1,1,1), rotation:()=>[0,Math.PI/2,0]},
-            "#|": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.1,1,1), rotation:()=>[0,0,0]},
+            "#-": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.2,1,1), rotation:()=>[0,Math.PI/2,0]},
+            "#|": { tags:[...physic.STATIC(), model.barrier.id], size: it=>it.multiplyByFloats(.2,1,1), rotation:()=>[0,0,0]},
+            "N-": { tags:[...physic.STATIC(), model.barrier2.id], rotation:()=>[0,Math.PI/2,0]},
+            "N|": { tags:[...physic.STATIC(), model.barrier2.id], rotation:()=>[0,0,0]},
             "#H": { tags:[...physic.STATIC(), model.pipe.id]},
             "#O": { tags:[...physic.STATIC(), model.sewer.id], size:it=>it.multiplyByFloats(1,.5,1)},
             "#t": { tags:[...physic.STATIC(), model.track.id] },
@@ -212,7 +215,8 @@ export class BasicPack extends ObjectPack{
 
             "@p": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new FlyingParis()).id], size:it=>it.multiplyByFloats(1,1,.2)},
             "@s": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new LongSewer()).id], size:it=>it.multiplyByFloats(1,1,.2)},
-            
+            "@r": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new CityRace()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+
             "@S": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new SandMonster()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
             "@F": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new DashFalls()).id], size:it=>it.multiplyByFloats(1,1,.2)},

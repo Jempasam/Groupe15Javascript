@@ -48,6 +48,7 @@ export class ModelPack extends ObjectPack{
     pannier_basket= this.behav(()=>new MeshBehaviour(this.models.PANNIER_BASKET))
     volcano= this.behav(()=>new MeshBehaviour(this.models.VOLCANO))
     barrier= this.behav(()=>new MeshBehaviour(this.models.BARRIER))
+    barrier2= this.behav(()=>new MeshBehaviour(this.models.BARRIER2))
     pipe= this.behav(()=>new MeshBehaviour(this.models.PIPE))
     sewer= this.behav(()=>new MeshBehaviour(this.models.SEWER))
     car= this.behav(()=>new MeshBehaviour(this.models.CAR))

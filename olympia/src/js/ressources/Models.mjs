@@ -62,6 +62,7 @@ export async function loadModels(scene){
         PANNIER_BASKET: await model(scene,"pannier_basket"),
         VOLCANO: await model(scene,"volcano"),
         BARRIER: await model(scene,"barrier"),
+        BARRIER2: await model(scene,"barrier2"),
         SEWER: await model(scene,"sewer"),
         PIPE: await model(scene,"pipe"),
         CAR: await model(scene,"car"),

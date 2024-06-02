@@ -70,7 +70,7 @@ export class SoilPack extends ObjectPack{
         object.apply(MOVEMENT, m=> accelerateY(m.inertia, 1, 0.5))
     }))
 
-    following= this.behav(tags(()=>this._living.living.id), new FollowStraightBehaviour(50, .02, .05))
+    following= this.behav(tags(()=>this._living.living.id), new FollowStraightBehaviour(50, .01, .08))
 
 
     // Soil
