@@ -16,6 +16,7 @@ import { PandaPlane } from "../lava/PandaPlane.mjs";
 import { VolcanoField } from "../lava/VolcanoField.mjs";
 import { SandMonster } from "../sand/SandMonster.mjs";
 import { DashFalls } from "../water/DashFalls.mjs";
+import { BambooMaze } from "../water/BambooMaze.mjs";
 import { DipolePack } from "./DipolePack.mjs";
 import { EffectPack } from "./EffectPack.mjs";
 import { ElectronicPack } from "./ElectronicPack.mjs";
@@ -220,6 +221,7 @@ export class BasicPack extends ObjectPack{
             "@S": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new SandMonster()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
             "@F": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new DashFalls()).id], size:it=>it.multiplyByFloats(1,1,.2)},
+            "@M": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new BambooMaze()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
             "@h": { tags:()=>[...physic.STATIC(), model.portal.id, player.createLevelChange(()=>new HubLevel()).id], size:it=>it.multiplyByFloats(1,1,.2)},
 
