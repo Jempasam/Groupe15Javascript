@@ -20,7 +20,7 @@ export class BambooMaze extends BaseLevel{
          objects: pack.objects,
          maps: [
             `
-1  ]#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8@hZ8#uZ8
+1  ]#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8@FZ8#uZ8
 2  ]#uZ8                        #uZ8            #uZ8            #uZ8            #uZ8                    #uZ8
 3  ]#uZ8    #uZ8#uZ8#uZ8#uZ8            #uZ8            #uZ8            #uZ8    #uZ8    #uZ8#uZ8#uZ8#uZ8#uZ8
 4  ]#uZ8    #uZ8        #uZ8    #uZ8    #uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8    #uZ8    #uZ8            #uZ8
