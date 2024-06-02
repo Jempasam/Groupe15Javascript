@@ -44,9 +44,6 @@ export class ModelPack extends ObjectPack{
     barril= this.behav(()=>new MeshBehaviour(this.models.BARRIL))
     trampoline= this.behav(()=>new MeshBehaviour(this.models.TRAMPOLINE))
     pannier= this.behav(()=>new MeshBehaviour(this.models.PANNIER))
-    cactus= this.behav(()=>new MeshBehaviour(this.models.CACTUS))
-    cactus2= this.behav(()=>new MeshBehaviour(this.models.CACTUS2))
-    cactus3= this.behav(()=>new MeshBehaviour(this.models.CACTUS3))
     portal= this.behav(()=>new MeshBehaviour(this.models.PORTAL))
     pannier_basket= this.behav(()=>new MeshBehaviour(this.models.PANNIER_BASKET))
     volcano= this.behav(()=>new MeshBehaviour(this.models.VOLCANO))
@@ -61,6 +58,11 @@ export class ModelPack extends ObjectPack{
     canon= this.behav(()=>new MeshBehaviour(this.models.CANON))
 
     big_cloud= this.behav(()=>new MeshBehaviour(this.models.CLOUD))
+
+    cactus= this.behav(()=>new MeshBehaviour(this.models.CACTUS))
+    cactus2= this.behav(()=>new MeshBehaviour(this.models.CACTUS2))
+    cactus3= this.behav(()=>new MeshBehaviour(this.models.CACTUS3))
+    bamboo= this.behav(()=>new MeshBehaviour(this.models.BAMBOO))
 
     // Environments
     sky= this.behav(()=>new MeshBehaviour(this.models.ENV_SKY))

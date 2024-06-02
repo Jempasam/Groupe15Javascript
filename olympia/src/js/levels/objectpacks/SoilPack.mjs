@@ -23,6 +23,7 @@ import { ElectronicPack } from "./ElectronicPack.mjs";
 import { invocateToward } from "../../objects/behaviour/invocation/invocations.mjs";
 import { ElectronicBehaviour, ON_POWERED } from "../../objects/behaviour/electronics/ElectronicBehaviours.mjs";
 import { ON_HITTED } from "../../objects/behaviour/life/ProjectileBehaviour.mjs";
+import { FollowStraightBehaviour } from "../../objects/behaviour/controls/FollowStraightBehaviour.mjs";
 
 
 /**
@@ -69,6 +70,8 @@ export class SoilPack extends ObjectPack{
         object.apply(MOVEMENT, m=> accelerateY(m.inertia, 1, 0.5))
     }))
 
+    following= this.behav(tags(()=>this._living.living.id), new FollowStraightBehaviour(50, .02, .05))
+
 
     // Soil
     GROUND= this.lazy(()=>[this._models.block.id])
@@ -79,6 +82,7 @@ export class SoilPack extends ObjectPack{
     FIRE= this.lazy(()=>[this._models.flame.id, this._effect.give_burning.id, this._particle.smoke_emitter.id])
     TRAMPOLINE= this.lazy(()=>[this.jumping.id, this._models.trampoline.id])
     WOOD= this.lazy(()=>[...this._living.WOOD_DESTRUCTIBLE(), this._models.wood.id])
+    FOLLOWING= this.lazy(()=>[...this._physic.MOVING_FRICTION(), this.following.id])
 
 
     // Moving

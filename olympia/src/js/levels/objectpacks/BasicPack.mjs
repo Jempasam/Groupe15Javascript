@@ -92,6 +92,9 @@ export class BasicPack extends ObjectPack{
             "#t": { tags:[...physic.STATIC(), model.track.id] },
             "#g": { tags:[...physic.STATIC(), model.gradin.id] },
             "#=": { tags:[...physic.STATIC(), model.pancarte.id] },
+            "#u": { tags:[...physic.STATIC(), model.bamboo.id ], size:it=>it.multiplyByFloats(.7,1,.7)},
+
+            "Ox": { tags:[...soil.FOLLOWING(), ...soil.LAVA()] },
 
             ":f": { tags:[...soil.FIRE()] },
             ":b": { tags:[...fight.BOMB()], models:()=>[fight.bad]},

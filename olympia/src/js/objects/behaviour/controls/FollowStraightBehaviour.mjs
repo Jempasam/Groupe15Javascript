@@ -76,20 +76,20 @@ export class FollowStraightBehaviour extends Behaviour{
                 const strength=offset.multiply(offset)
                 const direction=Vector3.Zero()
                 if(strength.x>strength.y){
-                    if(strength.x>strength.z)strength.x=1
-                    else strength.z=1
+                    if(strength.x>strength.z)direction.x=1
+                    else direction.z=1
                 }
                 else{
-                    if(strength.y>strength.z)strength.y=1
-                    else strength.z=1
+                    if(strength.y>strength.z)direction.y=1
+                    else direction.z=1
                 }
                 accelerate(movement.inertia,
-                    direction.x*this.acceleration,
-                    direction.y*this.acceleration,
-                    direction.z*this.acceleration,
-                    direction.x*Math.sign(offset.x)*this.max_speed,
-                    direction.y*Math.sign(offset.y)*this.max_speed,
-                    direction.z*Math.sign(offset.z)*this.max_speed,
+                    direction.x*Math.sign(offset.x)*this.acceleration,
+                    direction.y*Math.sign(offset.y)*this.acceleration,
+                    direction.z*Math.sign(offset.z)*this.acceleration,
+                    direction.x*this.max_speed,
+                    direction.y*this.max_speed,
+                    direction.z*this.max_speed,
                 )
             })
         }
