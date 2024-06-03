@@ -1,6 +1,6 @@
 import { ObjectQuery, World } from "../world/World.mjs";
 import { Behaviour } from "./Behaviour.mjs";
-import { Vector3 } from "../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
 import { TRANSFORM } from "../model/TransformModel.mjs";
 import { ModelKey } from "../world/ModelHolder.mjs";
 import { audioContext, loadSounds, play } from "../../ressources/SoundBank.mjs";

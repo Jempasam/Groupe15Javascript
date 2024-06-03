@@ -1,4 +1,4 @@
-import { Vector3 } from "../../../../../../babylonjs/core/index.js"
+import { Vector3 } from "../../../../../../babylonjs/core/Maths/math.vector.js";
 import { fastRemove } from "../../../../../../samlib/Array.mjs"
 import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs"
 import { fromVectorLike } from "../../../typeutils/VectorLike.mjs"

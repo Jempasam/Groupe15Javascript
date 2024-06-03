@@ -3,7 +3,7 @@ import { ModelKey } from "../../world/ModelHolder.mjs"
 import { ObjectQuery, World } from "../../world/World.mjs"
 import { TRANSFORM } from "../../model/TransformModel.mjs"
 import { PATH, PathModel } from "../../model/PathModel.mjs"
-import { Vector3 } from "../../../../../../babylonjs/core/index.js"
+import { Vector3 } from "../../../../../../babylonjs/core/Maths/math.vector.js";
 import { SCENE } from "../../model/MeshModel.mjs"
 
 /**

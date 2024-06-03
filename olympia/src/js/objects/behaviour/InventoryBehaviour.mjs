@@ -1,7 +1,7 @@
 import { MOVEMENT, MovementModel } from "../model/MovementModel.mjs";
 import { ObjectQuery, World } from "../world/World.mjs";
 import { Behaviour } from "./Behaviour.mjs";
-import { Vector3 } from "../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
 import { TRANSFORM } from "../model/TransformModel.mjs";
 import { eatKeyPress, isKeyPressed} from "../../controls/Keyboard.mjs"
 import { ModelKey } from "../world/ModelHolder.mjs";

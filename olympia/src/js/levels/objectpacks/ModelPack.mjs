@@ -6,7 +6,7 @@ import { HitboxBehaviour } from "../../objects/behaviour/HitboxBehaviour.mjs";
 import { GridCollisionBehaviour } from "../../objects/behaviour/collision/GridCollisionBehaviour.mjs";
 import { ConstantForceBehaviour } from "../../objects/behaviour/ConstantForceBehaviour.mjs";
 import { PushCollisionBehaviour } from "../../objects/behaviour/PushCollisionBehaviour.mjs";
-import { Vector3 } from "../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
 import { SimpleCollisionBehaviour } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
 import { ObjectPack } from "./ObjectPack.mjs";
 import { MeshBehaviour } from "../../objects/behaviour/MeshBehaviour.mjs";

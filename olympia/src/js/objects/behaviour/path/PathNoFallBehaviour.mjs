@@ -4,7 +4,7 @@ import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";
 import { PATH, PathModel } from "../../model/PathModel.mjs"
 import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs"
-import { Vector3 } from "../../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../../babylonjs/core/Maths/math.vector.js";;
 
 
 /**

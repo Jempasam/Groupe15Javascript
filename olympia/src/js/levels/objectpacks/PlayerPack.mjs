@@ -1,32 +1,21 @@
-import { Size, Vector2, Vector3 } from "../../../../../babylonjs/core/index.js";
-import { MessageManager } from "../../messages/MessageManager.mjs";
-import { MeshBehaviour } from "../../objects/behaviour/MeshBehaviour.mjs";
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
+import { LEVEL_CONTEXT, Level, LevelContext } from "../../levels/Level.mjs";
+import { CameraBehaviour } from "../../objects/behaviour/CameraBehaviour.mjs";
+import { CameraLikeBehaviour } from "../../objects/behaviour/controls/CameraLikeBehaviour.mjs";
 import { PlayerBehaviour } from "../../objects/behaviour/controls/PlayerBehaviour.mjs";
-import { ON_DASH, PlayerDashBehaviour } from "../../objects/behaviour/controls/PlayerDashBehaviour.mjs";
+import { PlayerDashBehaviour } from "../../objects/behaviour/controls/PlayerDashBehaviour.mjs";
 import { PlayerJumpBehaviour } from "../../objects/behaviour/controls/PlayerJumpBehaviour.mjs";
-import { ShootBehaviour } from "../../objects/behaviour/invocation/ShootBehaviour.mjs";
 import { behaviourCollectable, behaviourInfiniteEquipper } from "../../objects/behaviour/generic/CollectableBehaviour.mjs";
+import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
+import { HintBehaviour } from "../../objects/behaviour/interaction/HintBehaviour.mjs";
+import { ShootAroundBehaviour } from "../../objects/behaviour/invocation/ShootAroundBehaviour.mjs";
+import { ShootBehaviour } from "../../objects/behaviour/invocation/ShootBehaviour.mjs";
+import { ON_DEATH } from "../../objects/behaviour/life/LivingBehaviour.mjs";
 import { EmitterBehaviour } from "../../objects/behaviour/particle/EmitterBehaviour.mjs";
 import { EquipperBehaviour } from "../../objects/behaviour/slot/EquipperBehaviour.mjs";
-import { BehaviourEntry, World } from "../../objects/world/World.mjs";
-import { FightPack } from "./FightPack.mjs";
-import { ObjectPack, tags } from "./ObjectPack.mjs";
-import { LEVEL_CONTEXT, Level, LevelContext } from "../../levels/Level.mjs";
-import { HintBehaviour } from "../../objects/behaviour/interaction/HintBehaviour.mjs";
-import { CameraLikeBehaviour } from "../../objects/behaviour/controls/CameraLikeBehaviour.mjs";
-import { CameraBehaviour } from "../../objects/behaviour/CameraBehaviour.mjs";
-import { InventoryBehaviour } from "../../objects/behaviour/InventoryBehaviour.mjs";
-import { giveTag } from "../../objects/model/SlotModel.mjs";
+import { World } from "../../objects/world/World.mjs";
 import { ElementPack } from "./ElementPack.mjs";
-import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
-import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mjs";
-import { PATH, PathModel } from "../../objects/model/PathModel.mjs";
-import { MOVEMENT, accelerate } from "../../objects/model/MovementModel.mjs";
-import { PathNoFallBehaviour } from "../../objects/behaviour/path/PathNoFallBehaviour.mjs"
-import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
-import { ON_DEATH } from "../../objects/behaviour/life/LivingBehaviour.mjs";
-import { ModelKey } from "../../objects/world/ModelHolder.mjs";
-import { ShootAroundBehaviour } from "../../objects/behaviour/invocation/ShootAroundBehaviour.mjs";
+import { ObjectPack, tags } from "./ObjectPack.mjs";
 
 /**
  * Un pack de behaviours de base de joueur et de ses pouvoirs

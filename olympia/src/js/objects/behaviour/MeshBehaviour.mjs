@@ -3,7 +3,7 @@ import { MESH, MeshModel, SCENE } from "../model/MeshModel.mjs";
 import { ObjectQuery, World } from "../world/World.mjs";
 import { Behaviour } from "./Behaviour.mjs";
 import { Scene } from "../../../../../babylonjs/core/scene.js";
-import { AbstractMesh, BoundingBox, Mesh, TransformNode } from "../../../../../babylonjs/core/index.js";
+import { AbstractMesh } from "../../../../../babylonjs/core/Meshes/abstractMesh.js";
 
 
 

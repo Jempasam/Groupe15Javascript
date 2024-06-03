@@ -1,4 +1,4 @@
-import { Vector3 } from "../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
 import { FOLLOW, FOLLOW_RELATIVE, STAY, TargetChainBehaviour } from "../../objects/behaviour/controls/TargetChainBehaviour.mjs";
 import { World } from "../../objects/world/World.mjs";
 import { LivingPack } from "./LivingPack.mjs";

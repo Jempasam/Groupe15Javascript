@@ -1,4 +1,4 @@
-import { Vector3 } from "../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
 import { behaviourInit } from "../../objects/behaviour/Behaviour.mjs";
 import { SummonerBehaviour } from "../../objects/behaviour/invocation/SummonerBehaviour.mjs";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";

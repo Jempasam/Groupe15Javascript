@@ -1,4 +1,4 @@
-import { Vector3 } from "../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
 import { ConstantForceBehaviour } from "../../objects/behaviour/ConstantForceBehaviour.mjs";
 import { PoisonBehaviour } from "../../objects/behaviour/effect/PoisonBehaviour.mjs";
 import { EmitterBehaviour } from "../../objects/behaviour/particle/EmitterBehaviour.mjs";

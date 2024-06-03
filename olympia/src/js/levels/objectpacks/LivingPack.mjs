@@ -1,4 +1,4 @@
-import { Vector3 } from "../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
 import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
 import { LivingBehaviour, ON_DEATH } from "../../objects/behaviour/life/LivingBehaviour.mjs";
 import { ParticleLivingBehaviour } from "../../objects/behaviour/life/ParticleLivingBehaviour.mjs";

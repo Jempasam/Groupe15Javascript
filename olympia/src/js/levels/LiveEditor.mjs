@@ -1,5 +1,5 @@
 import { Camera } from "../../../../babylonjs/core/Cameras/camera.js";
-import { UniversalCamera, Vector3 } from "../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../babylonjs/core/Maths/math.vector.js";
 import { adom, create } from "../../../../samlib/DOM.mjs";
 import "../../../../samlib/gui/SamTextArea.mjs";
 import { isKeyPressed } from "../controls/Keyboard.mjs";

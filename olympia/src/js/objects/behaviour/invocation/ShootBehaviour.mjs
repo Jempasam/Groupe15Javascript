@@ -1,4 +1,4 @@
-import { Vector3 } from "../../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../../babylonjs/core/Maths/math.vector.js";;
 import { isKeyPressed } from "../../../controls/Keyboard.mjs";
 import { MOVEMENT, MovementModel, accelerateX, accelerateZ } from "../../model/MovementModel.mjs";
 import { TRANSFORM, TransformModel } from "../../model/TransformModel.mjs";

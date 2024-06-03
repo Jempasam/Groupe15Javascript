@@ -1,7 +1,7 @@
 import { Behaviour } from "../Behaviour.mjs"
 import { ObjectQuery, World } from "../../world/World.mjs"
 import { TRANSFORM } from "../../model/TransformModel.mjs"
-import { Vector3 } from "../../../../../../babylonjs/core/index.js"
+import { Vector3 } from "../../../../../../babylonjs/core/Maths/math.vector.js";
 import { MOVEMENT } from "../../model/MovementModel.mjs"
 import { ModelKey } from "../../world/ModelHolder.mjs"
 

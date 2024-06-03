@@ -1,5 +1,4 @@
 import { Camera } from "../../../../babylonjs/core/Cameras/camera.js";
-import { UniversalCamera } from "../../../../babylonjs/core/index.js";
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { MessageManager } from "../messages/MessageManager.mjs";
 import { Behaviour } from "../objects/behaviour/Behaviour.mjs";
@@ -8,7 +7,7 @@ import { LIVING } from "../objects/model/LivingModel.mjs";
 import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
 import { message } from "../script.js";
-import { Level, LevelContext } from "./Level.mjs";
+import { Level } from "./Level.mjs";
 import { LIVE_EDITOR_SETTINGS, LiveEditor } from "./LiveEditor.mjs";
 import { Lvl1_2 } from "./Lvl1_2.mjs";
 import { VolcanoField } from "./lava/VolcanoField.mjs";

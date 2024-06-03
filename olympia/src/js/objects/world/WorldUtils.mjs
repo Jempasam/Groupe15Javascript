@@ -1,4 +1,4 @@
-import { Vector3 } from "../../../../../babylonjs/core/index.js"
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js"
 import { fromVectorLike } from "../../typeutils/VectorLike.mjs"
 import { TransformModel } from "../model/TransformModel.mjs"
 import { World } from "./World.mjs"

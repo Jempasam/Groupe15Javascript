@@ -1,24 +1,20 @@
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
+import { ObserverKey } from "../../../../../samlib/observers/ObserverGroup.mjs";
+import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
+import { behaviourInterval } from "../../objects/behaviour/generic/IntervalBehaviour.mjs";
+import { ContactTarget, behaviourOnContact } from "../../objects/behaviour/generic/OnContactBehaviour.mjs";
 import { behaviourTimeout } from "../../objects/behaviour/generic/TimeoutBehaviour.mjs";
-import { ON_HITTED, ProjectileBehaviour } from "../../objects/behaviour/life/ProjectileBehaviour.mjs";
+import { invocateToward } from "../../objects/behaviour/invocation/invocations.mjs";
+import { ON_HITTED } from "../../objects/behaviour/life/ProjectileBehaviour.mjs";
+import { LIVING } from "../../objects/model/LivingModel.mjs";
+import { MOVEMENT, accelerate } from "../../objects/model/MovementModel.mjs";
+import { TEAM, Team } from "../../objects/model/TeamModel.mjs";
+import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mjs";
+import { GameObject } from "../../objects/world/GameObject.mjs";
 import { World } from "../../objects/world/World.mjs";
+import { EffectPack } from "./EffectPack.mjs";
 import { LivingPack } from "./LivingPack.mjs";
 import { ObjectPack, tags } from "./ObjectPack.mjs";
-import { ContactTarget, behaviourOnContact } from "../../objects/behaviour/generic/OnContactBehaviour.mjs";
-import { LIVING } from "../../objects/model/LivingModel.mjs";
-import { behaviour } from "../../objects/behaviour/Behaviour.mjs";
-import { behaviourObserve } from "../../objects/behaviour/generic/ObserveBehaviour.mjs";
-import { ON_COLLISION } from "../../objects/behaviour/collision/SimpleCollisionBehaviour.mjs";
-import { MOVEMENT, accelerate } from "../../objects/model/MovementModel.mjs";
-import { GameObject } from "../../objects/world/GameObject.mjs";
-import { DisappearBehaviour } from "../../objects/behaviour/size/DisappearBehaviour.mjs";
-import { TEAM, Team } from "../../objects/model/TeamModel.mjs";
-import { EffectPack } from "./EffectPack.mjs";
-import { TRANSFORM, TransformModel } from "../../objects/model/TransformModel.mjs";
-import { Vector2, Vector3 } from "../../../../../babylonjs/core/index.js";
-import { behaviourInterval } from "../../objects/behaviour/generic/IntervalBehaviour.mjs";
-import { behaviourEach } from "../../objects/behaviour/generic/EachBehaviour.mjs";
-import { ObserverKey } from "../../../../../samlib/observers/ObserverGroup.mjs";
-import { invocateToward } from "../../objects/behaviour/invocation/invocations.mjs";
 
 
 

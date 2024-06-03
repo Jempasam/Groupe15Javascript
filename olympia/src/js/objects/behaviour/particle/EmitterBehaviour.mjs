@@ -1,4 +1,4 @@
-import { Vector3 } from "../../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../../babylonjs/core/Maths/math.vector.js";;
 import { TRANSFORM } from "../../model/TransformModel.mjs";
 import { ObjectQuery, World } from "../../world/World.mjs";
 import { Behaviour } from "../Behaviour.mjs";

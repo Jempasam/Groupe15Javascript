@@ -1,16 +1,13 @@
 import { UniversalCamera } from "../../../babylonjs/core/Cameras/universalCamera.js";
 import { Engine } from "../../../babylonjs/core/Engines/engine.js";
-import { HemisphericLight } from "../../../babylonjs/core/Lights/hemisphericLight.js";
 import { Color3 } from "../../../babylonjs/core/Maths/math.color.js";
 import { Vector3 } from "../../../babylonjs/core/Maths/math.vector.js";
 import { SceneOptimizer, SceneOptimizerOptions } from "../../../babylonjs/core/Misc/sceneOptimizer.js";
-import { MeshBuilder } from "../../../babylonjs/core/index.js";
 import { Scene } from "../../../babylonjs/core/scene.js";
 import { adom, create } from "../../../samlib/DOM.mjs";
 import { GameMenu } from "../../../samlib/gui/GameMenu.mjs";
 import { HubLevel } from "./levels/HubLevel.mjs";
-import { Level, LevelContext } from "./levels/Level.mjs";
-import { SamLevel } from "./levels/SamLevel.mjs";
+import { LevelContext } from "./levels/Level.mjs";
 import { MessageManager } from "./messages/MessageManager.mjs";
 import { CAMERA } from "./objects/behaviour/CameraBehaviour.mjs";
 import { DOCUMENT } from "./objects/behaviour/InventoryBehaviour.mjs";

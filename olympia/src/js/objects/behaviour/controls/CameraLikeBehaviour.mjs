@@ -1,9 +1,9 @@
-import { Vector2, Vector3 } from "../../../../../../babylonjs/core/index.js";
 import { TRANSFORM } from "../../model/TransformModel.mjs";
 import { ModelKey } from "../../world/ModelHolder.mjs";
 import { Behaviour } from "../Behaviour.mjs";
 import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs";
 import { GameObject } from "../../world/GameObject.mjs";
+import { Vector3 } from "../../../../../../babylonjs/core/Maths/math.vector.js";
 
 export class CameraLikeBehaviour extends Behaviour{
     

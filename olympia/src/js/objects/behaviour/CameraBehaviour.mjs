@@ -1,8 +1,8 @@
+import { UniversalCamera } from "../../../../../babylonjs/core/Cameras/universalCamera.js"
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js"
+import { TRANSFORM } from "../model/TransformModel.mjs"
 import { ModelKey } from "../world/ModelHolder.mjs"
 import { Behaviour } from "./Behaviour.mjs"
-import { Camera } from "../../../../../babylonjs/core/Cameras/camera.js"
-import { TRANSFORM } from "../model/TransformModel.mjs"
-import { UniversalCamera, Vector3 } from "../../../../../babylonjs/core/index.js"
 
 /** @type {ModelKey<UniversalCamera>} */
 export const CAMERA=new ModelKey("camera")

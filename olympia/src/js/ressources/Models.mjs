@@ -70,7 +70,7 @@ export async function loadModels(scene){
         TRACK: await model(scene,"track"),
         PANCARTE: await model(scene,"pancarte"),
         BOOMBOX: await model(scene,"boombox"),
-        CANON: await model(scene,"canon"),
+        CANON: await model(scene,"canon2"),
 
         CLOUD: await model(scene,"cloud"),
         ENV_SKY: await model(scene,"sky","environment"),

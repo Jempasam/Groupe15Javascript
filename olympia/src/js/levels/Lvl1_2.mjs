@@ -1,30 +1,17 @@
 import { Camera } from "../../../../babylonjs/core/Cameras/camera.js";
-import { UniversalCamera, Vector3 } from "../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../babylonjs/core/Maths/math.vector.js";
+
 import { isKeyPressed } from "../controls/Keyboard.mjs";
 import { MessageManager } from "../messages/MessageManager.mjs";
-import { Behaviour } from "../objects/behaviour/Behaviour.mjs";
 import { ON_LIVE_CHANGE } from "../objects/behaviour/life/LivingBehaviour.mjs";
-import { PathBehaviour } from "../objects/behaviour/movement/PathBehaviour.mjs";
-import { HITBOX } from "../objects/model/HitboxModel.mjs";
-import { LIVING, LivingModel } from "../objects/model/LivingModel.mjs";
-import { TRANSFORM } from "../objects/model/TransformModel.mjs";
+import { LIVING } from "../objects/model/LivingModel.mjs";
 import { World } from "../objects/world/World.mjs";
 import { createLevel } from "../objects/world/WorldUtils.mjs";
 import { message } from "../script.js";
-import { Level, LevelContext } from "./Level.mjs";
+import { Level } from "./Level.mjs";
 import { LIVE_EDITOR_SETTINGS } from "./LiveEditor.mjs";
 import { SamLevel } from "./SamLevel.mjs";
 import { BasicPack } from "./objectpacks/BasicPack.mjs";
-import { EffectPack } from "./objectpacks/EffectPack.mjs";
-import { FightPack } from "./objectpacks/FightPack.mjs";
-import { IAPack } from "./objectpacks/IAPack.mjs";
-import { LivingPack } from "./objectpacks/LivingPack.mjs";
-import { ModelPack } from "./objectpacks/ModelPack.mjs";
-import { MonsterPack } from "./objectpacks/MonsterPack.mjs";
-import { ParticlePack } from "./objectpacks/ParticlePack.mjs";
-import { PhysicPack } from "./objectpacks/PhysicPack.mjs";
-import { PlayerPack } from "./objectpacks/PlayerPack.mjs";
-import { SoilPack } from "./objectpacks/SoilPack.mjs";
 
 
 export class Lvl1_2 extends Level{

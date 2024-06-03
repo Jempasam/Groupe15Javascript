@@ -1,4 +1,4 @@
-import { Vector3 } from "../../../../../../babylonjs/core/index.js";
+import { Vector3 } from "../../../../../../babylonjs/core/Maths/math.vector.js";;
 import { ObserverGroup } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { LIVING } from "../../model/LivingModel.mjs";
 import { MOVEMENT, accelerate } from "../../model/MovementModel.mjs";

@@ -1,4 +1,4 @@
-import { Vector3 } from "../../../../../babylonjs/core/index.js"
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js"
 import { fastRemove } from "../../../../../samlib/Array.mjs"
 import { MOVEMENT, accelerate } from "../model/MovementModel.mjs"
 import { TRANSFORM, TransformModel } from "../model/TransformModel.mjs"

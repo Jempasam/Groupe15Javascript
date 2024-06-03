@@ -1,4 +1,3 @@
-import { Vector3 } from "../../../../../babylonjs/core/index.js";
 import { SOUND } from "../../objects/behaviour/MusicBehaviour.mjs";
 import { NAME } from "../../objects/behaviour/life/LifeBarBehaviour.mjs";
 import { LivingModel } from "../../objects/model/LivingModel.mjs";
@@ -34,6 +33,7 @@ import { PlayerPack } from "./PlayerPack.mjs";
 import { SoilPack } from "./SoilPack.mjs";
 import { SoundPack } from "./SoundPack.mjs";
 import { SwimmingPool } from "../water/SwimmingPool.mjs";
+import { Vector3 } from "../../../../../babylonjs/core/Maths/math.vector.js";
 
 
 
