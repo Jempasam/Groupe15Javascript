@@ -1,4 +1,6 @@
+import { ObserverKey } from "../../../../../../samlib/observers/ObserverGroup.mjs";
 import { MessageManager } from "../../../messages/MessageManager.mjs";
+import { GameObject } from "../../world/GameObject.mjs";
 import { ModelKey } from "../../world/ModelHolder.mjs";
 import { CollectableBehaviour } from "../generic/CollectableBehaviour.mjs";
 
@@ -20,7 +22,11 @@ export class HintBehaviour extends CollectableBehaviour{
 
     /** @type {CollectableBehaviour['on_collection']} */
     on_collection(collectable, collecter, data, world){
+        collecter.observers(ON_HINT).notify({hinter:collectable, hinted:collecter, hint:this})
         world.model.get(MESSAGE)?.send(this.message, 5000, this.message_slot)
         return true
     }
 }
+
+/** @type {ObserverKey<{hinter:GameObject, hinted:GameObject, hint:HintBehaviour}>} */
+export const ON_HINT=new ObserverKey("on_hint")

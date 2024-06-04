@@ -240,6 +240,9 @@ export class BasicPack extends ObjectPack{
             "?x": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_damage.id] },
             "?j": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_jump.id] },
             "?d": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_door.id] },
+            "?D": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_dash_jump.id] },
+            "?e": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_escalade.id] },
+            "?u": { tags:[...physic.STATIC(), model.question_mark.id, player.hint_under.id] },
 
             ":c": { tags:[...physic.STATIC_NOCOLLISION(), model.big_cloud.id] },
 

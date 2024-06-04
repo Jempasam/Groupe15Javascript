@@ -106,7 +106,7 @@ export class SwimmingPool extends BaseLevel{
             19 ]    
             20 ]    
             21 ]    
-            22 ]    
+            22 ]            ?uA3
             23 ]    
             24 ]    
             25 ]#xA8--------------------
@@ -146,7 +146,7 @@ export class SwimmingPool extends BaseLevel{
             59 ]
             60 ]
             61 ]
-            62 ]        @MD6----
+            62 ]        @FD6----
             63 ]        |
             `
             ,

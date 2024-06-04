@@ -111,9 +111,9 @@ export class CityRace extends BaseLevel{
             11 ]
             12 ]        0j22
             13 ]#-21
-            14 ]    
+            14 ]    <>K1
             15 ]#-21N-21N-21N-21
-            16 ]    <>H1
+            16 ]    
             17 ]
             18 ]
             19 ]N-21#-21N-26N-26:c51

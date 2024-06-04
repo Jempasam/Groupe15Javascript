@@ -19,8 +19,8 @@ export class BambooMaze extends BaseLevel{
          world,
          objects: pack.objects,
          maps: [
-            `
-1  ]#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8@FZ8#uZ8
+`
+1  ]#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8@NZ8#uZ8
 2  ]#uZ8                        #uZ8            #uZ8            #uZ8            #uZ8                    #uZ8
 3  ]#uZ8    #uZ8#uZ8#uZ8#uZ8            #uZ8            #uZ8            #uZ8    #uZ8    #uZ8#uZ8#uZ8#uZ8#uZ8
 4  ]#uZ8    #uZ8        #uZ8    #uZ8    #uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8#uZ8    #uZ8    #uZ8            #uZ8
@@ -67,13 +67,18 @@ export class BambooMaze extends BaseLevel{
 13 ]                            #rG7#rI7#rL5-.-.#rI7#rG7                                    ^2N1
 14 ]                            |   |   |       |   |                                       |       
 15 ]                            |   |   |       |   |        
-16 ]                            |   |   |       |   |        
+16 ]                            |   |   |       |   |           ?DG3
 17 ]                PP21                                        
-18 ]                                                0dG1    
+18 ]                                                    0dG1    
 19 ]
 20 ]                0j21
 21 ]
 22 ]                <>G1
+23 ]
+24 ]
+25 ]
+26 ]
+27 ]                                                            ?e33
 `
 ,
 `
@@ -111,6 +116,13 @@ export class BambooMaze extends BaseLevel{
 1  ]'a0M-.-.-.-.
 2  ]|
 3  ]|
+4  ]
+5  ]
+6  ]    :c31----
+7  ]    |
+8  ]
+9  ]    :c32----    #W04
+10 ]    |           :c30
 `
          ]
       })

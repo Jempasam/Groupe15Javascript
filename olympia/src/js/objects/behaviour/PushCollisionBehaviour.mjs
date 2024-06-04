@@ -28,14 +28,21 @@ export class PushCollisionBehaviour extends Behaviour{
                         if(depth>0)accelerateY(movement.inertia, depth/3*2, depth/3)
 
                         // Friction
-                        const under=object.get(MOVEMENT)
+                        const under=object.get(MOVEMENT)?.inertia ?? new Vector3(0,0,0)
                         if(under){
-                            movement.inertia.multiplyInPlace(new Vector3(0.98,0.98,0.98))
+                            //movement.inertia.multiplyInPlace(new Vector3(0.98,0.98,0.98))
+                            const inertia_offset=under.subtract(movement.inertia)
+                            const inertia_force=inertia_offset.normalize().scale(0.005)
                             accelerate(
+                                movement.inertia,
+                                inertia_force.x, inertia_force.y, inertia_force.z,
+                                Math.abs(inertia_offset.x), Math.abs(inertia_offset.y), Math.abs(inertia_offset.z)
+                            )
+                            /*accelerate(
                                 movement.inertia, 
                                 Math.sign(under.inertia.x)*0.01, Math.sign(under.inertia.y)*0.01, Math.sign(under.inertia.z)*0.01,
                                 Math.abs(under.inertia.x), Math.abs(under.inertia.y), Math.abs(under.inertia.z)
-                            )
+                            )*/
                         }
                     }
                     else{

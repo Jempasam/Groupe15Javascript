@@ -153,6 +153,15 @@ export class PlayerPack extends ObjectPack{
     hint_door=this.behav( tags(()=>this.player.id),
         new HintBehaviour("Il faut attendre que la porte finisse de se lever pour passer!","hint")
     )
+    hint_escalade=this.behav( tags(()=>this.player.id),
+        new HintBehaviour("Avancez vers le bord d'un mur pour l'esclader si vous êtes assez haut.","hint")
+    )
+    hint_dash_jump=this.behav( tags(()=>this.player.id),
+        new HintBehaviour("Combinez le saut et le dash pour attendre des endroits inaccessibles.","hint")
+    )
+    hint_under=this.behav( tags(()=>this.player.id),
+        new HintBehaviour("Je peux passer en dessous des obstacles en nageant.","hint")
+    )
 
     // Camera
     camera_movement=this.behav( tags(()=>this.player.id), new CameraLikeBehaviour())

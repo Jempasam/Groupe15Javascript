@@ -2,6 +2,7 @@ import { Vector3 } from "../../../../babylonjs/core/Maths/math.vector.js"
 import { MusicBehaviour, SOUND, SOUND_BANK, playSound } from "../objects/behaviour/MusicBehaviour.mjs"
 import { ON_JUMP } from "../objects/behaviour/controls/PlayerJumpBehaviour.mjs"
 import { ON_COLLECT } from "../objects/behaviour/generic/CollectableBehaviour.mjs"
+import { ON_HINT } from "../objects/behaviour/interaction/HintBehaviour.mjs"
 import { ON_SHOOT } from "../objects/behaviour/invocation/ShootBehaviour.mjs"
 import { ON_INVOCATION } from "../objects/behaviour/invocation/invocations.mjs"
 import { ON_DEATH, ON_LIVE_CHANGE } from "../objects/behaviour/life/LivingBehaviour.mjs"
@@ -33,6 +34,10 @@ export class BaseLevel extends Level{
         world.observers(ON_LIVE_CHANGE).addAuto((w,{affected,offset})=>{
             if(offset<0)play(sounds.TCHI,affected)
             if(offset>0)play(sounds.GUITARE,affected)
+        })
+
+        world.observers(ON_HINT).addAuto((w,{hinter})=>{
+            play(sounds.GUITARE,hinter)
         })
 
         world.observers(ON_DEATH).addAuto((w,dead)=>{
