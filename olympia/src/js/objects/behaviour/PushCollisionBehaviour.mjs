@@ -3,6 +3,7 @@ import { Behaviour } from "./Behaviour.mjs";
 import { ON_COLLISION } from "./collision/SimpleCollisionBehaviour.mjs";
 import { MOVEMENT, accelerate, accelerateX, accelerateY, accelerateZ } from "../model/MovementModel.mjs";
 import {  Vector3 } from "../../../../../babylonjs/core/index.js";
+import { ModelKey } from "../world/ModelHolder.mjs";
 
 
 export class PushCollisionBehaviour extends Behaviour{
@@ -16,7 +17,9 @@ export class PushCollisionBehaviour extends Behaviour{
      */
     init(world,objects,collidables){
         for(let obj of objects){
+            obj.getOrSet(PUSH_COLLISION,()=>({floor_inertia:new Vector3(0,0,0), floor_time:0, floor_count:0}))
             obj.observers(ON_COLLISION).add("PushCollisionBehaviour",(self,{self_hitbox,object,hitbox})=>{
+                const push_collision=self.get(PUSH_COLLISION)
                 if(collidables && !collidables.match(object))return
                 const movement=obj.get(MOVEMENT)
                 if(movement){
@@ -28,21 +31,10 @@ export class PushCollisionBehaviour extends Behaviour{
                         if(depth>0)accelerateY(movement.inertia, depth/3*2, depth/3)
 
                         // Friction
-                        const under=object.get(MOVEMENT)?.inertia ?? new Vector3(0,0,0)
-                        if(under){
-                            //movement.inertia.multiplyInPlace(new Vector3(0.98,0.98,0.98))
-                            const inertia_offset=under.subtract(movement.inertia)
-                            const inertia_force=inertia_offset.normalize().scale(0.005)
-                            accelerate(
-                                movement.inertia,
-                                inertia_force.x, inertia_force.y, inertia_force.z,
-                                Math.abs(inertia_offset.x), Math.abs(inertia_offset.y), Math.abs(inertia_offset.z)
-                            )
-                            /*accelerate(
-                                movement.inertia, 
-                                Math.sign(under.inertia.x)*0.01, Math.sign(under.inertia.y)*0.01, Math.sign(under.inertia.z)*0.01,
-                                Math.abs(under.inertia.x), Math.abs(under.inertia.y), Math.abs(under.inertia.z)
-                            )*/
+                        if(push_collision){
+                            const under=object.get(MOVEMENT)?.inertia ?? new Vector3(0,0,0)
+                            push_collision.floor_inertia.addInPlace(under)
+                            push_collision.floor_count++
                         }
                     }
                     else{
@@ -68,9 +60,32 @@ export class PushCollisionBehaviour extends Behaviour{
             })
         }
     }
-
-    doTick=false
     
+    /** @type {Behaviour['tick']} */
+    tick(world,objects){
+        for(const obj of objects){
+            const push_collision=obj.get(PUSH_COLLISION)
+            if(!push_collision)continue
+            if(push_collision.floor_count>0){
+                push_collision.floor_inertia.scaleInPlace(1/push_collision.floor_count)
+                push_collision.floor_time++
+                obj.apply(MOVEMENT, movement=>{
+                    const inertia_offset=push_collision.floor_inertia.subtract(movement.inertia)
+                    const inertia_force=inertia_offset.normalize().scale(0.005)
+                    accelerate(
+                        movement.inertia,
+                        inertia_force.x, inertia_force.y, inertia_force.z,
+                        Math.abs(inertia_offset.x), Math.abs(inertia_offset.y), Math.abs(inertia_offset.z)
+                    )
+                })
+            }
+            else push_collision.floor_time=0
+            
+            push_collision.floor_inertia.set(0,0,0)
+            push_collision.floor_count=0
+        }
+    }
+
     /**
      * @override
      * @param {World} world
@@ -80,3 +95,6 @@ export class PushCollisionBehaviour extends Behaviour{
         for(let obj of objects) obj.observers(ON_COLLISION).remove("PushCollisionBehaviour")
     }
 }
+
+/** @type {ModelKey<{floor_inertia:Vector3, floor_time:number, floor_count:number}>} */
+export const PUSH_COLLISION=new ModelKey("push_collision")
