@@ -199,18 +199,14 @@ export class LiveEditor extends BaseLevel{
    /** @override @type {BaseLevel['start']} */
    tick(context,world,options){
       this.camerapos=options.camera.position
-      if(isKeyPressed("ArrowUp")){
-         if(isKeyPressed("ShiftRight"))this.camerapos.y+=0.2
-         else this.camerapos.z-=0.2
-      }
-      if(isKeyPressed("ArrowDown")){
-         if(isKeyPressed("ShiftRight"))this.camerapos.y-=0.2
-         else this.camerapos.z+=0.2
-      }
-      if(isKeyPressed("ArrowLeft"))this.camerapos.x+=0.2
-      if(isKeyPressed("ArrowRight"))this.camerapos.x-=0.2
-      //options.camera.position.copyFrom(this.camerapos)
-
+      if(isKeyPressed("ArrowUp")) this.camerapos.z-=0.2
+      if(isKeyPressed("ArrowDown")) this.camerapos.z+=0.2
+      if(isKeyPressed("ArrowLeft")) this.camerapos.x+=0.2
+      if(isKeyPressed("ArrowRight")) this.camerapos.x-=0.2
+      if(isKeyPressed("Enter")) this.camerapos.y+=0.2
+      if(isKeyPressed("ShiftRight")) this.camerapos.y-=0.2
+         //if(isKeyPressed("")) this.camerapos.y+=0.2
+      
       if(isKeyPressed("Escape"))context.switchTo(new SamLevel())
    }
 

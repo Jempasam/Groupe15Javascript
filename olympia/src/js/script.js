@@ -76,7 +76,7 @@ async function main(){
     let sceneToRender = await createScene();
 
     window.addEventListener('keydown', function(evt) {
-        if (evt.code == "KeyP"){
+        if (evt.code == "KeyP" && evt.target===document.body){
             pause = !pause;
             if (pause){
                 message.send("PAUSE", MessageManager.FOREVER, "pause");

@@ -248,6 +248,7 @@ export class BasicPack extends ObjectPack{
             "'s": { tags:[...physic.STATIC_NOCOLLISION(), model.sand.id] },
 
             "<>": { tags:[...physic.MOVING_GHOST_FRICTION(), physic.pushable.id, player.camera_movement.id, player.camera.id], size:it=>it.scale(1.4)},
+            "<]": { tags:[...physic.STATIC(), player.camera.id], size:it=>it.scale(1.4)},
 
         }
     }

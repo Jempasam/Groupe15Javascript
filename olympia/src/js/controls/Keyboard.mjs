@@ -3,6 +3,7 @@ let keyPresseds={}
 
 document.addEventListener("keydown",(e)=>{
     if(isKeyPressed("Equal") && isKeyPressed("Minus"))console.log(e.code)
+    if (e.target != document.body) return;
     if(!keyPresseds[e.code])keyPresseds[e.code]=1
 })
 
